@@ -1,0 +1,16 @@
+FROM node:18-alpine
+
+# DIRECTORIO DE TRABAJO
+WORKDIR /app
+
+# ARCHIVOS NECESARIOS
+COPY package.json package-lock.json ./
+
+# INSTALAR DEPENDENCIAS
+RUN npm install
+
+# EXPONER PUERTO DESARROLLO
+EXPOSE 3000
+
+# COMNADO PARA INICIAR DESARROLLO
+CMD ["npm", "run", "dev"]
