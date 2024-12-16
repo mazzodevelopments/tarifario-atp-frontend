@@ -13,24 +13,39 @@ export default function AuthLayout({
         </div>
         <div className="flex justify-center items-center">
           <div className="w-20 justify-center">
-            <h3 className="text-white">Inicio</h3>
+            <a className="text-white hover:text-primary hover:cursor-pointer">
+              Inicio
+            </a>
           </div>
           <div className="w-20 justify-center">
-            <h3 className="text-white">Inicio</h3>
+            <a className="text-white hover:text-primary hover:cursor-pointer">
+              Inicio
+            </a>
           </div>
           <div className="w-20 justify-center">
-            <h3 className="text-white">Inicio</h3>
+            <a className="text-white hover:text-primary hover:cursor-pointer">
+              Inicio
+            </a>
           </div>
           <div className="w-20 justify-center">
-            <h3 className="text-white">Inicio</h3>
+            <a className="text-white hover:text-primary hover:cursor-pointer">
+              Inicio
+            </a>
           </div>
-          <div className="w-10 h-10 rounded-xl border-[0.5px] border-neutral-400 overflow-hidden">
-            <Image
-              src={"/DEFAULT_PROFILE_PIC.png"}
-              width={1000}
-              height={1000}
-              alt="LOGO"
-            />
+          {/* DATOS USUARIO */}
+          <div className="flex justify-center items-center gap-2 h-14 px-2 rounded-2xl hover:bg-[#1E3A50] hover:cursor-pointer">
+            <div className="w-10 h-10 rounded-xl border-[0.5px] border-neutral-400 overflow-hidden">
+              <Image
+                src={"/DEFAULT_PROFILE_PIC.png"}
+                width={1000}
+                height={1000}
+                alt="LOGO"
+              />
+            </div>
+            <div className="flex flex-col pr-1">
+              <h3 className="font-semibold text-white">Tomás Matteozzi</h3>
+              <span className="text-xs text-gray-200">Administrador</span>
+            </div>
           </div>
         </div>
       </div>
