@@ -12,8 +12,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Team Tasker",
-  description: "Gestor de proyectos y tareas",
+  title: "ATP Solutions - Tarifario",
+  description: "Tarifario web",
 };
 
 export default function RootLayout({
