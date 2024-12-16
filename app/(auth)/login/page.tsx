@@ -9,10 +9,10 @@ export default function Register() {
     console.log("Submitted");
   };
   return (
-    <div className="w-screen h-screen justify-center items-center flex bg-secondary">
+    <div className="w-[55%] h-[100%] justify-center items-center flex bg-white">
       <form
         onSubmit={handleSubmit}
-        className="w-1/4 h-auto bg-white rounded-2xl flex justify-start p-10 flex-col shadow-2xl gap-4"
+        className="w-1/2 h-1/2 bg-white rounded-2xl flex justify-start p-10 flex-col shadow-2xl gap-4"
       >
         <h2 className="font-bold text-4xl">Log In</h2>
         <div>
