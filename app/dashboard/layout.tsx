@@ -11,27 +11,16 @@ export default function AuthLayout({
         <div className="w-44">
           <Image src={"/logo-nav.png"} width={1000} height={1000} alt="LOGO" />
         </div>
-        <div className="flex justify-center items-center">
-          <div className="w-20 justify-center">
-            <a className="text-white hover:text-primary hover:cursor-pointer">
-              Inicio
-            </a>
-          </div>
-          <div className="w-20 justify-center">
-            <a className="text-white hover:text-primary hover:cursor-pointer">
-              Inicio
-            </a>
-          </div>
-          <div className="w-20 justify-center">
-            <a className="text-white hover:text-primary hover:cursor-pointer">
-              Inicio
-            </a>
-          </div>
-          <div className="w-20 justify-center">
-            <a className="text-white hover:text-primary hover:cursor-pointer">
-              Inicio
-            </a>
-          </div>
+        <div className="flex justify-center items-center gap-8">
+          <a className="text-white hover:text-primary hover:cursor-pointer">
+            Inicio
+          </a>
+          <a className="text-white hover:text-primary hover:cursor-pointer">
+            Importar
+          </a>
+          <a className="text-white hover:text-primary hover:cursor-pointer">
+            Exportar
+          </a>
           {/* DATOS USUARIO */}
           <div className="flex justify-center items-center gap-2 h-14 px-2 rounded-2xl hover:bg-[#1E3A50] hover:cursor-pointer">
             <div className="w-10 h-10 rounded-xl border-[0.5px] border-neutral-400 overflow-hidden">
