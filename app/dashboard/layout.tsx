@@ -45,7 +45,7 @@ export default function AuthLayout({
           </a>
         </div>
       </div>
-      <div className="w-full h-full relative flex justify-center items-center flex-col rounded-2xl overflow-hidden">
+      <div className="w-full h-full relative flex justify-center items-center flex-col rounded-[40px] overflow-hidden">
         <div className="flex w-[100%] px-[2%] h-28  bg-white justify-end items-center absolute top-0 left-0">
           <div className="flex justify-end items-center gap-8">
             {/* DATOS USUARIO */}
