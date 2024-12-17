@@ -7,7 +7,7 @@ export default function AuthLayout({
 }>) {
   return (
     <div className="w-screen h-screen bg-secondary flex justify-center items-center flex-col">
-      <div className="w-full h-28 bg-secondary justify-between items-center flex px-[10vw]">
+      <div className="flex w-[80%] h-28 bg-secondary justify-between items-center ">
         <div className="w-44">
           <Image src={"/logo-nav.png"} width={1000} height={1000} alt="LOGO" />
         </div>
