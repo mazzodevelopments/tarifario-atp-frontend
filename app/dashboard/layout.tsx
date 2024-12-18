@@ -16,38 +16,35 @@ export default function AuthLayout({
   return (
     <div className="w-screen relative h-screen bg-neutral-50 flex justify-center items-center flex-row px-[1vw] py-[1vw]">
       <div className="w-full h-full flex justify-center items-center flex-row rounded-[16px] shadow-md overflow-hidden border-[1px] border-neutral-200">
-        <div className="w-[14vw] h-full flex justify-between items-center flex-col bg-neutral-50 z-20">
+        <div className="w-[14vw] h-full flex justify-between items-center flex-col bg-secondary z-20">
           <div className="flex justify-start w-full pl-[1.5vw] items-center flex-col">
-            <div className="w-full flex flex-row items-center gap-1">
-              <div className="w-[2vw] py-10 justify-start items-center flex saturate-[1]">
-                <Image
-                  src={"/logo-nav.png"}
-                  width={1000}
-                  height={1000}
-                  alt="LOGO"
-                />
-              </div>
-              <h3 className="text-2xl font-bold text-primary">Tarifario</h3>
+            <div className="w-full  py-10 flex flex-row items-end">
+              <h3 className="text-xl font-bold text-primary leading-[1]">
+                atp
+              </h3>
+              <h3 className="text-lg font-semibold uppercase leading-[1] text-white">
+                solutions
+              </h3>
             </div>
             <div className="w-full flex justify-center items-start gap-[1.2vw] flex-col">
-              <a className="text-black flex items-center hover:text-primary hover:cursor-pointer">
+              <a className="text-white flex items-center hover:text-primary hover:cursor-pointer">
                 <Home size={20} />
                 <span className="ml-2 mt-1">Home</span>
               </a>
-              <a className="text-black flex items-center hover:text-primary hover:cursor-pointer">
+              <a className="text-white flex items-center hover:text-primary hover:cursor-pointer">
                 <PlusSquare size={20} />
                 <span className="ml-2 mt-1">Crear</span>
               </a>
-              <a className="text-black flex items-center hover:text-primary hover:cursor-pointer">
+              <a className="text-white flex items-center hover:text-primary hover:cursor-pointer">
                 <Clock size={20} />
                 <span className="ml-2 mt-1">Cotizaciones</span>
               </a>
-              <a className="text-black flex items-center hover:text-primary hover:cursor-pointer">
+              <a className="text-white flex items-center hover:text-primary hover:cursor-pointer">
                 <Users size={20} />
                 <span className="ml-2 mt-1">Proveedores</span>
                 {/* Estos se cambian */}
               </a>
-              <a className="text-black flex items-center hover:text-primary hover:cursor-pointer">
+              <a className="text-white flex items-center hover:text-primary hover:cursor-pointer">
                 <CornerRightUp size={20} />
                 <span className="ml-2 mt-1">Home</span>
                 {/* Estos se cambian */}
@@ -55,7 +52,7 @@ export default function AuthLayout({
             </div>
           </div>
           <div className="w-full pl-[1.5vw] h-28 justify-start items-center flex">
-            <a className="text-black flex items-center hover:text-primary hover:cursor-pointer">
+            <a className="text-white flex items-center hover:text-primary hover:cursor-pointer">
               <LogOut size={20} />
               <span className="ml-2 mt-1">Logout</span>
             </a>
