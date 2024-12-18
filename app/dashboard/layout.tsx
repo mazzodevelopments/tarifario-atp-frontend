@@ -1,9 +1,7 @@
 import Image from "next/image";
 import {
   Clock,
-  CornerLeftDown,
   CornerRightUp,
-  FilePlus,
   Home,
   LogOut,
   PlusSquare,
@@ -20,15 +18,16 @@ export default function AuthLayout({
       <div className="w-full h-full flex justify-center items-center flex-row rounded-[16px] shadow-md overflow-hidden border-[1px] border-neutral-200">
         <div className="w-[14vw] h-full flex justify-between items-center flex-col bg-neutral-50 z-20">
           <div className="flex justify-start w-full pl-[1.5vw] items-center flex-col">
-            <div className="w-full flex flex-row">
-              <div className="w-[6vw] py-10 justify-start items-center flex saturate-[1]">
+            <div className="w-full flex flex-row items-center gap-1">
+              <div className="w-[2vw] py-10 justify-start items-center flex saturate-[1]">
                 <Image
-                  src={"/newlogo.png"}
+                  src={"/logo-nav.png"}
                   width={1000}
                   height={1000}
                   alt="LOGO"
                 />
               </div>
+              <h3 className="text-2xl font-bold text-primary">Tarifario</h3>
             </div>
             <div className="w-full flex justify-center items-start gap-[1.2vw] flex-col">
               <a className="text-black flex items-center hover:text-primary hover:cursor-pointer">
