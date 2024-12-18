@@ -7,6 +7,7 @@ import {
   Home,
   LogOut,
   PlusSquare,
+  Users,
 } from "react-feather";
 
 export default function AuthLayout({
@@ -15,42 +16,52 @@ export default function AuthLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="w-screen relative h-screen bg-secondary flex justify-center items-center flex-row px-[1vw] py-[1vw]">
-      <div className="w-[10vw] h-full flex justify-between items-center flex-col">
-        <div className="w-[4vw] h-28 justify-center items-center flex">
-          <Image src={"/logo-nav.png"} width={1000} height={1000} alt="LOGO" />
+    <div className="w-screen relative h-screen bg-neutral-50 flex justify-center items-center flex-row px-[1vw] py-[1vw]">
+      <div className="w-[14vw] h-full flex justify-between items-center flex-col">
+        <div className="flex justify-start w-full pl-[1.5vw] items-center flex-col">
+          <div className="w-full flex flex-row">
+            <div className="w-[6vw] py-10 justify-start items-center flex saturate-[1]">
+              <Image
+                src={"/newlogo.png"}
+                width={1000}
+                height={1000}
+                alt="LOGO"
+              />
+            </div>
+          </div>
+          <div className="w-full flex justify-center items-start gap-[1.2vw] flex-col">
+            <a className="text-black flex items-center hover:text-primary hover:cursor-pointer">
+              <Home size={20} />
+              <span className="ml-2 mt-1">Home</span>
+            </a>
+            <a className="text-black flex items-center hover:text-primary hover:cursor-pointer">
+              <PlusSquare size={20} />
+              <span className="ml-2 mt-1">Crear</span>
+            </a>
+            <a className="text-black flex items-center hover:text-primary hover:cursor-pointer">
+              <Clock size={20} />
+              <span className="ml-2 mt-1">Cotizaciones</span>
+            </a>
+            <a className="text-black flex items-center hover:text-primary hover:cursor-pointer">
+              <Users size={20} />
+              <span className="ml-2 mt-1">Proveedores</span>
+              {/* Estos se cambian */}
+            </a>
+            <a className="text-black flex items-center hover:text-primary hover:cursor-pointer">
+              <CornerRightUp size={20} />
+              <span className="ml-2 mt-1">Home</span>
+              {/* Estos se cambian */}
+            </a>
+          </div>
         </div>
-        <div className="flex justify-center items-center gap-[3vw] flex-col">
-          <a className="text-white hover:text-primary hover:cursor-pointer">
-            <Home size={28} />
-            <span>Home</span>
-          </a>
-          <a className="text-white hover:text-primary hover:cursor-pointer">
-            <PlusSquare size={28} />
-            <span>Crear</span>
-          </a>
-          <a className="text-white hover:text-primary hover:cursor-pointer">
-            <Clock size={28} />
-            <span>Cotizaciones</span>
-          </a>
-          <a className="text-white hover:text-primary hover:cursor-pointer">
-            <CornerLeftDown size={28} />
-            <span>Home</span>
-            {/* Estos se cambian */}
-          </a>
-          <a className="text-white hover:text-primary hover:cursor-pointer">
-            <CornerRightUp size={28} />
-            <span>Home</span>
-            {/* Estos se cambian */}
-          </a>
-        </div>
-        <div className="w-[5vw] h-28 justify-center items-center flex">
-          <a className="text-white hover:text-primary hover:cursor-pointer">
-            <LogOut size={28} />
+        <div className="w-full pl-[1.5vw] h-28 justify-start items-center flex">
+          <a className="text-black flex items-center hover:text-primary hover:cursor-pointer">
+            <LogOut size={20} />
+            <span className="ml-2 mt-1">Logout</span>
           </a>
         </div>
       </div>
-      <div className="w-full h-full relative flex justify-center items-center flex-col rounded-[40px] overflow-hidden">
+      <div className="w-full h-full relative flex justify-center items-center flex-col rounded-[16px] border-[1px] border-neutral-200 overflow-hidden">
         <div className="flex w-[100%] px-[2%] h-28  bg-white justify-end items-center absolute top-0 left-0">
           <div className="flex justify-end items-center gap-8">
             {/* DATOS USUARIO */}
