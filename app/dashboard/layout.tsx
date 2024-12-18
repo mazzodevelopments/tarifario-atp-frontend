@@ -23,19 +23,24 @@ export default function AuthLayout({
         <div className="flex justify-center items-center gap-[3vw] flex-col">
           <a className="text-white hover:text-primary hover:cursor-pointer">
             <Home size={28} />
+            <span>Home</span>
           </a>
           <a className="text-white hover:text-primary hover:cursor-pointer">
             <PlusSquare size={28} />
+            <span>Crear</span>
           </a>
           <a className="text-white hover:text-primary hover:cursor-pointer">
             <Clock size={28} />
+            <span>Cotizaciones</span>
           </a>
           <a className="text-white hover:text-primary hover:cursor-pointer">
             <CornerLeftDown size={28} />
+            <span>Home</span>
             {/* Estos se cambian */}
           </a>
           <a className="text-white hover:text-primary hover:cursor-pointer">
             <CornerRightUp size={28} />
+            <span>Home</span>
             {/* Estos se cambian */}
           </a>
         </div>
