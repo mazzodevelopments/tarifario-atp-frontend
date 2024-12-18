@@ -17,9 +17,13 @@ export default function Cotizacion({
   phase,
 }: CotizacionProps) {
   return (
-    <tr className="cursor-pointer">
-      <td className="py-4 font-bold">{name}</td>
-      <td className="py-4 font-semibold">{client}</td>
+    <tr>
+      <td className="py-4 font-bold hover:cursor-pointer hover:underline">
+        {name}
+      </td>
+      <td className="text-gray-700 py-4 font-semibold hover:cursor-pointer hover:underline">
+        {client}
+      </td>
       <td className="py-4">
         <div className="flex -space-x-3">
           {users.slice(0, 3).map((user, index) => (
@@ -43,7 +47,7 @@ export default function Cotizacion({
           {phase}
         </span>
       </td>
-      <td className="py-4 font-semibold text-gray-500">
+      <td className="py-4 font-semibold text-gray-700">
         {new Date(date).toLocaleDateString()}
       </td>
     </tr>
