@@ -9,6 +9,7 @@ import {
   LogOut,
   PlusSquare,
   Users,
+  ChevronRight,
 } from "react-feather";
 
 export default function AuthLayout({
@@ -29,7 +30,7 @@ export default function AuthLayout({
   return (
     <div className="w-screen relative h-screen bg-gray-50 flex justify-center items-center flex-row p-[1.5vw]">
       <div className="w-full h-full flex justify-center items-center flex-row rounded-3xl shadow-lg overflow-hidden border-[2px] border-gray-100">
-        <div className="w-[14vw] h-full flex justify-between items-center flex-col bg-background z-20 p-6">
+        <div className="w-[16vw] h-full flex justify-between items-center flex-col bg-background z-20 p-6">
           <div className="flex justify-start w-full items-start flex-col">
             <div className="w-full flex flex-row items-end pb-6 border-b-[2px] border-gray-100">
               <h3 className="text-xl font-bold text-primary leading-[1]">
@@ -46,21 +47,26 @@ export default function AuthLayout({
               {menuItems.map((item) => (
                 <a
                   key={item.id}
-                  className={`text-black flex items-center  hover:cursor-pointer transition-all duration-300 ease-in-out w-full font-medium px-2 py-2 rounded-lg ${
+                  className={`text-sm text-black flex items-center justify-between hover:cursor-pointer transition-all duration-300 ease-in-out w-full font-medium px-3 py-1 rounded-lg ${
                     selectedItem === item.id
                       ? " bg-sky-50"
                       : "hover:bg-gray-100 opacity-55"
                   }`}
                   onClick={() => setSelectedItem(item.id)}
                 >
-                  <item.icon
-                    size={18}
-                    fontWeight="bold"
-                    className={`transition-all duration-300 ${
-                      selectedItem === item.id ? " text-primary" : ""
-                    }`}
-                  />
-                  <span className="text-md ml-2 flex mt-1">{item.label}</span>
+                  <div className="flex items-center">
+                    <item.icon
+                      size={18}
+                      fontWeight="bold"
+                      className={`transition-all duration-300 ${
+                        selectedItem === item.id ? " text-primary" : ""
+                      }`}
+                    />
+                    <span className="text-md ml-2 flex mt-1">{item.label}</span>
+                  </div>
+                  {selectedItem === item.id && (
+                    <ChevronRight className="h-4 w-4 opacity-55 transition duration-300" />
+                  )}
                 </a>
               ))}
             </div>
