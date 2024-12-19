@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Clock,
   CornerRightUp,
@@ -11,6 +11,7 @@ import {
   Users,
   ChevronRight,
 } from "react-feather";
+import { usePathname } from "next/navigation";
 
 export default function AuthLayout({
   children,
@@ -18,14 +19,23 @@ export default function AuthLayout({
   children: React.ReactNode;
 }>) {
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
-
+  const pathname = usePathname();
   const menuItems = [
-    { icon: Home, label: "Home", id: "home" },
+    { icon: Home, label: "Home", id: "dashboard" },
     { icon: PlusSquare, label: "Crear", id: "crear" },
     { icon: Clock, label: "Cotizaciones", id: "cotizaciones" },
     { icon: Users, label: "Proveedores", id: "proveedores" },
     { icon: CornerRightUp, label: "Reportes", id: "reportes" },
   ];
+
+  useEffect(() => {
+    const matchedItem = menuItems.find(
+      (item) => item.id === pathname.split("/")[1],
+    );
+    if (matchedItem) {
+      setSelectedItem(matchedItem.id);
+    }
+  }, [pathname]);
 
   return (
     <div className="w-screen relative h-screen bg-gray-50 flex justify-center items-center flex-row p-[1.5vw]">
