@@ -50,7 +50,7 @@ export default function AuthLayout({
                 solutions
               </h3>
             </div>
-            <div className="w-full mt-6 flex justify-center items-start gap-2 flex-col">
+            <div className="w-full mt-6 flex justify-between items-start gap-2 flex-col">
               <label className="uppercase text-gray-400 text-xs font-medium">
                 General
               </label>
@@ -81,35 +81,38 @@ export default function AuthLayout({
               ))}
             </div>
           </div>
-          <div className="w-full pl-[1.5vw] h-28 justify-start items-center flex">
-            <a className="text-gray-900 flex items-center hover:text-primary hover:cursor-pointer">
-              <LogOut size={20} />
-              <span className="ml-2 mt-1">Logout</span>
+          <div className="w-full flex flex-col justify-end">
+            <a className="text-sm text-black flex items-center justify-between hover:cursor-pointer transition-all duration-300 ease-in-out w-full font-medium px-3 py-1 rounded-lg hover:bg-gray-100 opacity-55 mb-4">
+              <div className="flex items-center">
+                <LogOut size={18} fontWeight="bold" />
+                <span className="text-md ml-2 flex mt-1">Logout</span>
+              </div>
             </a>
-          </div>
-        </div>
-        <div className="w-full h-full relative flex justify-center items-center flex-col overflow-hidden border-l-[2px] border-gray-100">
-          <div className="flex w-[100%] px-[2%] h-28  bg-white justify-end items-center absolute top-0 left-0">
-            <div className="flex justify-end items-center gap-8">
-              {/* DATOS USUARIO */}
-              <div className="flex justify-end items-center gap-2 h-14 px-2 rounded-2xl hover:bg-[#1E3A50] hover:cursor-pointer">
-                <div className="w-10 h-10 rounded-xl border-[0.5px] border-gray-400 overflow-hidden">
-                  <Image
-                    src={"/DEFAULT_PROFILE_PIC.png"}
-                    width={1000}
-                    height={1000}
-                    alt="LOGO"
-                  />
-                </div>
-                <div className="flex flex-col pr-1">
-                  <h3 className="font-semibold text-gray-900">
-                    Tomás Matteozzi
-                  </h3>
-                  <span className="text-xs text-gray-900">Administrador</span>
+            <div className="flex w-full h-auto justify-start items-center border-t-[2px] border-gray-100">
+              <div className="flex justify-end items-center gap-8 mt-4">
+                {/* DATOS USUARIO */}
+                <div className="flex justify-end items-center gap-2 h-14 px-2 hover:cursor-pointer">
+                  <div className="w-8 h-8 rounded-xl overflow-hidden">
+                    <Image
+                      src={"/DEFAULT_PROFILE_PIC.png"}
+                      width={1000}
+                      height={1000}
+                      alt="LOGO"
+                    />
+                  </div>
+                  <div className="flex flex-col pr-1">
+                    <h3 className="text-sm font-semibold text-gray-800">
+                      Tomás Matteozzi
+                    </h3>
+                    <span className="text-xs text-gray-600">Administrador</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+        <div className="w-full h-full relative flex justify-center items-center flex-col overflow-hidden border-l-[2px] border-gray-100">
+          <div className="flex w-[100%] px-[2%] h-28  bg-white justify-end items-center absolute top-0 left-0"></div>
           {children}
         </div>
       </div>
