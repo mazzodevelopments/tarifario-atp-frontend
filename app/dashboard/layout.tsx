@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
 import {
   Clock,
   CornerRightUp,
@@ -13,57 +16,68 @@ export default function AuthLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [selectedItem, setSelectedItem] = useState<string | null>(null);
+
+  const menuItems = [
+    { icon: Home, label: "Home", id: "home" },
+    { icon: PlusSquare, label: "Crear", id: "crear" },
+    { icon: Clock, label: "Cotizaciones", id: "cotizaciones" },
+    { icon: Users, label: "Proveedores", id: "proveedores" },
+    { icon: CornerRightUp, label: "Reportes", id: "reportes" },
+  ];
+
   return (
-    <div className="w-screen relative h-screen bg-neutral-50 flex justify-center items-center flex-row px-[1vw] py-[1vw]">
-      <div className="w-full h-full flex justify-center items-center flex-row rounded-[16px] shadow-md overflow-hidden border-[1px] border-neutral-200">
-        <div className="w-[14vw] h-full flex justify-between items-center flex-col bg-secondary z-20">
-          <div className="flex justify-start w-full pl-[1.5vw] items-center flex-col">
-            <div className="w-full  py-10 flex flex-row items-end">
+    <div className="w-screen relative h-screen bg-gray-50 flex justify-center items-center flex-row p-[1.5vw]">
+      <div className="w-full h-full flex justify-center items-center flex-row rounded-3xl shadow-lg overflow-hidden border-[2px] border-gray-100">
+        <div className="w-[14vw] h-full flex justify-between items-center flex-col bg-background z-20 p-6">
+          <div className="flex justify-start w-full items-start flex-col">
+            <div className="w-full flex flex-row items-end pb-6 border-b-[2px] border-gray-100">
               <h3 className="text-xl font-bold text-primary leading-[1]">
                 atp
               </h3>
-              <h3 className="text-lg font-semibold uppercase leading-[1] text-white">
+              <h3 className="text-lg font-semibold uppercase leading-[1] text-gray-900">
                 solutions
               </h3>
             </div>
-            <div className="w-full flex justify-center items-start gap-[1.2vw] flex-col">
-              <a className="text-white flex items-center hover:text-primary hover:cursor-pointer">
-                <Home size={20} />
-                <span className="ml-2 mt-1">Home</span>
-              </a>
-              <a className="text-white flex items-center hover:text-primary hover:cursor-pointer">
-                <PlusSquare size={20} />
-                <span className="ml-2 mt-1">Crear</span>
-              </a>
-              <a className="text-white flex items-center hover:text-primary hover:cursor-pointer">
-                <Clock size={20} />
-                <span className="ml-2 mt-1">Cotizaciones</span>
-              </a>
-              <a className="text-white flex items-center hover:text-primary hover:cursor-pointer">
-                <Users size={20} />
-                <span className="ml-2 mt-1">Proveedores</span>
-                {/* Estos se cambian */}
-              </a>
-              <a className="text-white flex items-center hover:text-primary hover:cursor-pointer">
-                <CornerRightUp size={20} />
-                <span className="ml-2 mt-1">Home</span>
-                {/* Estos se cambian */}
-              </a>
+            <div className="w-full mt-6 flex justify-center items-start gap-2 flex-col">
+              <label className="uppercase text-gray-400 text-xs font-medium">
+                General
+              </label>
+              {menuItems.map((item) => (
+                <a
+                  key={item.id}
+                  className={`text-black flex items-center  hover:cursor-pointer transition-all duration-300 ease-in-out w-full font-medium px-2 py-2 rounded-lg ${
+                    selectedItem === item.id
+                      ? " bg-sky-50"
+                      : "hover:bg-gray-100 opacity-55"
+                  }`}
+                  onClick={() => setSelectedItem(item.id)}
+                >
+                  <item.icon
+                    size={18}
+                    fontWeight="bold"
+                    className={`transition-all duration-300 ${
+                      selectedItem === item.id ? " text-primary" : ""
+                    }`}
+                  />
+                  <span className="text-md ml-2 flex mt-1">{item.label}</span>
+                </a>
+              ))}
             </div>
           </div>
           <div className="w-full pl-[1.5vw] h-28 justify-start items-center flex">
-            <a className="text-white flex items-center hover:text-primary hover:cursor-pointer">
+            <a className="text-gray-900 flex items-center hover:text-primary hover:cursor-pointer">
               <LogOut size={20} />
               <span className="ml-2 mt-1">Logout</span>
             </a>
           </div>
         </div>
-        <div className="w-full h-full relative flex justify-center items-center flex-col overflow-hidden border-l-[1px] border-neutral-200 rounded-l-[16px]">
+        <div className="w-full h-full relative flex justify-center items-center flex-col overflow-hidden border-l-[2px] border-gray-100">
           <div className="flex w-[100%] px-[2%] h-28  bg-white justify-end items-center absolute top-0 left-0">
             <div className="flex justify-end items-center gap-8">
               {/* DATOS USUARIO */}
               <div className="flex justify-end items-center gap-2 h-14 px-2 rounded-2xl hover:bg-[#1E3A50] hover:cursor-pointer">
-                <div className="w-10 h-10 rounded-xl border-[0.5px] border-neutral-400 overflow-hidden">
+                <div className="w-10 h-10 rounded-xl border-[0.5px] border-gray-400 overflow-hidden">
                   <Image
                     src={"/DEFAULT_PROFILE_PIC.png"}
                     width={1000}
@@ -72,12 +86,10 @@ export default function AuthLayout({
                   />
                 </div>
                 <div className="flex flex-col pr-1">
-                  <h3 className="font-semibold text-neutral-900">
+                  <h3 className="font-semibold text-gray-900">
                     Tomás Matteozzi
                   </h3>
-                  <span className="text-xs text-neutral-900">
-                    Administrador
-                  </span>
+                  <span className="text-xs text-gray-900">Administrador</span>
                 </div>
               </div>
             </div>
