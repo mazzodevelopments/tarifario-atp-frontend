@@ -32,7 +32,7 @@ export default function AuthLayout({
 
   useEffect(() => {
     const matchedItem = menuItems.find(
-      (item) => item.id === pathname.split("/")[1],
+      (item) => item.id === pathname.split("/")[1]
     );
     if (matchedItem) {
       setSelectedItem(matchedItem.id);
@@ -42,7 +42,7 @@ export default function AuthLayout({
   return (
     <div className="w-screen relative h-screen bg-gray-50 flex justify-center items-center flex-row p-[1.5vw]">
       <div className="w-full h-full flex justify-center items-center flex-row rounded-3xl shadow-lg overflow-hidden border-[2px] border-gray-100">
-        <div className="w-[16vw] h-full flex justify-between items-center flex-col bg-background z-20 p-6">
+        <div className="w-[16vw] h-full flex justify-between items-center flex-col bg-background z-20 p-6 pt-10">
           <div className="flex justify-start w-full items-start flex-col">
             <div className="w-full flex flex-row items-end pb-6 border-b-[2px] border-gray-100">
               <h3 className="text-xl font-bold text-primary leading-[1]">
