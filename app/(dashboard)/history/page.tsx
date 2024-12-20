@@ -40,9 +40,9 @@ const cotizaciones = [
   },
 ];
 
-export default function Dashboard() {
+export default function History() {
   return (
-    <div className="flex justify-center items-center w-full h-full bg-background p-6">
+    <div className="flex justify-center w-full h-full bg-background pt-20 pl-6">
       <div className="w-full px-6">
         <h2 className="font-bold text-3xl">Cotizaciones</h2>
         <table className="w-full table-auto overflow-hidden">

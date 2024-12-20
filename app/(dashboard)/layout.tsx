@@ -12,7 +12,7 @@ import {
   ChevronRight,
   Settings,
 } from "react-feather";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function AuthLayout({
   children,
@@ -20,11 +20,12 @@ export default function AuthLayout({
   children: React.ReactNode;
 }>) {
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
+  const router = useRouter();
   const pathname = usePathname();
   const menuItems = [
-    { icon: Home, label: "Home", id: "dashboard" },
+    { icon: Home, label: "Home", id: "" },
     { icon: PlusSquare, label: "Crear", id: "crear" },
-    { icon: Clock, label: "Cotizaciones", id: "cotizaciones" },
+    { icon: Clock, label: "Cotizaciones", id: "history" },
     { icon: Users, label: "Proveedores", id: "proveedores" },
     { icon: CornerRightUp, label: "Reportes", id: "reportes" },
   ];
@@ -63,7 +64,10 @@ export default function AuthLayout({
                       ? " bg-sky-50"
                       : "hover:bg-gray-100 opacity-55"
                   }`}
-                  onClick={() => setSelectedItem(item.id)}
+                  onClick={() => {
+                    setSelectedItem(item.id);
+                    router.push(`/${item.id}`);
+                  }}
                 >
                   <div className="flex items-center">
                     <item.icon
