@@ -10,6 +10,7 @@ import {
   PlusSquare,
   Users,
   ChevronRight,
+  Settings,
 } from "react-feather";
 import { usePathname } from "next/navigation";
 
@@ -57,7 +58,7 @@ export default function AuthLayout({
               {menuItems.map((item) => (
                 <a
                   key={item.id}
-                  className={`text-sm text-black flex items-center justify-between hover:cursor-pointer transition-all duration-300 ease-in-out w-full font-medium px-3 py-1 rounded-lg ${
+                  className={`text-sm text-black flex items-center justify-between hover:cursor-pointer transition-all duration-300 ease-in-out w-full font-medium px-3 py-1.5 rounded-lg ${
                     selectedItem === item.id
                       ? " bg-sky-50"
                       : "hover:bg-gray-100 opacity-55"
@@ -72,7 +73,7 @@ export default function AuthLayout({
                         selectedItem === item.id ? " text-primary" : ""
                       }`}
                     />
-                    <span className="text-md ml-2 flex mt-1">{item.label}</span>
+                    <span className="text-md ml-2 flex">{item.label}</span>
                   </div>
                   {selectedItem === item.id && (
                     <ChevronRight className="h-4 w-4 opacity-55 transition duration-300" />
@@ -82,10 +83,16 @@ export default function AuthLayout({
             </div>
           </div>
           <div className="w-full flex flex-col justify-end">
-            <a className="text-sm text-black flex items-center justify-between hover:cursor-pointer transition-all duration-300 ease-in-out w-full font-medium px-3 py-1 rounded-lg hover:bg-gray-100 opacity-55 mb-4">
+            <a className="text-sm text-black flex items-center justify-between hover:cursor-pointer transition-all duration-300 ease-in-out w-full font-medium px-3 py-1.5 rounded-lg hover:bg-gray-100 opacity-55 mb-4">
               <div className="flex items-center">
                 <LogOut size={18} fontWeight="bold" />
-                <span className="text-md ml-2 flex mt-1">Logout</span>
+                <span className="text-md ml-2">Logout</span>
+              </div>
+            </a>
+            <a className="text-sm text-black flex items-center justify-between hover:cursor-pointer transition-all duration-300 ease-in-out w-full font-medium px-3 py-1.5 rounded-lg hover:bg-gray-100 opacity-55 mb-4">
+              <div className="flex items-center">
+                <Settings size={18} fontWeight="bold" />
+                <span className="text-md ml-2">Ajustes</span>
               </div>
             </a>
             <div className="flex w-full h-auto justify-start items-center border-t-[2px] border-gray-100">
