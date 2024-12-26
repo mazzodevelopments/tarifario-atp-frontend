@@ -61,10 +61,10 @@ export default function AuthLayout({
               {menuItems.map((item) => (
                 <Link
                   key={item.id}
-                  className={`text-sm text-black flex items-center justify-between hover:cursor-pointer transition-all duration-300 ease-in-out w-full font-medium px-3 py-1.5 rounded-lg ${
+                  className={`text-sm text-black flex items-center justify-between hover:cursor-pointer transition-all duration-300 ease-in-out w-full font-medium py-1.5 rounded-lg ${
                     selectedItem === item.id
-                      ? " bg-sky-50"
-                      : "hover:bg-gray-100 opacity-55"
+                      ? " bg-sky-50 px-3"
+                      : "hover:bg-gray-100 opacity-55 px-1"
                   }`}
                   href={`/${item.id}`}
                 >
@@ -95,7 +95,7 @@ export default function AuthLayout({
             <div className="flex w-full h-auto justify-start items-center border-t-[2px] border-gray-100">
               <div className="flex justify-between items-center gap-8 mt-4 w-full">
                 {/* DATOS USUARIO */}
-                <div className="flex justify-end items-center gap-2 h-14 hover:cursor-pointer">
+                <div className="flex justify-end items-center gap-1 h-14 hover:cursor-pointer px-1">
                   <div className="w-8 h-8 rounded-xl overflow-hidden">
                     <Image
                       src={"/DEFAULT_PROFILE_PIC.png"}
@@ -104,7 +104,7 @@ export default function AuthLayout({
                       alt="LOGO"
                     />
                   </div>
-                  <div className="flex flex-col pr-1">
+                  <div className="flex flex-col">
                     <h3 className="text-sm font-semibold text-gray-800">
                       Tomás Matteozzi
                     </h3>
