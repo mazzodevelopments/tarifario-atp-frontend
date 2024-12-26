@@ -11,6 +11,7 @@ import {
   Users,
   ChevronRight,
   Settings,
+  MoreHorizontal,
 } from "react-feather";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
@@ -28,7 +29,7 @@ export default function AuthLayout({
     { icon: PlusSquare, label: "Crear", id: "create" },
     { icon: Clock, label: "Cotizaciones", id: "history" },
     { icon: Users, label: "Proveedores", id: "proveedores" },
-    { icon: CornerRightUp, label: "Reportes", id: "reportes" },
+    { icon: CornerRightUp, label: "Reportes", id: "reports" },
   ];
 
   useEffect(() => {
@@ -85,22 +86,16 @@ export default function AuthLayout({
             </div>
           </div>
           <div className="w-full flex flex-col justify-end">
-            <a className="text-sm text-black flex items-center justify-between hover:cursor-pointer transition-all duration-300 ease-in-out w-full font-medium px-3 py-1.5 rounded-lg hover:bg-gray-100 opacity-55 mb-4">
-              <div className="flex items-center">
-                <LogOut size={18} fontWeight="bold" />
-                <span className="text-md ml-2">Logout</span>
-              </div>
-            </a>
-            <a className="text-sm text-black flex items-center justify-between hover:cursor-pointer transition-all duration-300 ease-in-out w-full font-medium px-3 py-1.5 rounded-lg hover:bg-gray-100 opacity-55 mb-4">
+            <a className="text-sm text-black flex items-center justify-between hover:cursor-pointer transition-all duration-300 ease-in-out w-full font-medium px-3 py-1.5 rounded-lg hover:bg-gray-100 opacity-55 mb-3">
               <div className="flex items-center">
                 <Settings size={18} fontWeight="bold" />
                 <span className="text-md ml-2">Ajustes</span>
               </div>
             </a>
             <div className="flex w-full h-auto justify-start items-center border-t-[2px] border-gray-100">
-              <div className="flex justify-end items-center gap-8 mt-4">
+              <div className="flex justify-between items-center gap-8 mt-4 w-full">
                 {/* DATOS USUARIO */}
-                <div className="flex justify-end items-center gap-2 h-14 px-2 hover:cursor-pointer">
+                <div className="flex justify-end items-center gap-2 h-14 hover:cursor-pointer">
                   <div className="w-8 h-8 rounded-xl overflow-hidden">
                     <Image
                       src={"/DEFAULT_PROFILE_PIC.png"}
@@ -115,6 +110,9 @@ export default function AuthLayout({
                     </h3>
                     <span className="text-xs text-gray-600">Administrador</span>
                   </div>
+                </div>
+                <div className="w-6 h-6 rounded-3xl border-[1px] border-neutral-200 flex justify-center items-center">
+                  <MoreHorizontal size={16} />
                 </div>
               </div>
             </div>
