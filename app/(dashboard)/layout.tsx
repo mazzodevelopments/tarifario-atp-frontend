@@ -13,6 +13,7 @@ import {
   Settings,
 } from "react-feather";
 import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function AuthLayout({
   children,
@@ -24,7 +25,7 @@ export default function AuthLayout({
   const pathname = usePathname();
   const menuItems = [
     { icon: Home, label: "Home", id: "" },
-    { icon: PlusSquare, label: "Crear", id: "crear" },
+    { icon: PlusSquare, label: "Crear", id: "create" },
     { icon: Clock, label: "Cotizaciones", id: "history" },
     { icon: Users, label: "Proveedores", id: "proveedores" },
     { icon: CornerRightUp, label: "Reportes", id: "reportes" },
@@ -57,17 +58,14 @@ export default function AuthLayout({
                 General
               </label>
               {menuItems.map((item) => (
-                <a
+                <Link
                   key={item.id}
                   className={`text-sm text-black flex items-center justify-between hover:cursor-pointer transition-all duration-300 ease-in-out w-full font-medium px-3 py-1.5 rounded-lg ${
                     selectedItem === item.id
                       ? " bg-sky-50"
                       : "hover:bg-gray-100 opacity-55"
                   }`}
-                  onClick={() => {
-                    setSelectedItem(item.id);
-                    router.push(`/${item.id}`);
-                  }}
+                  href={`/${item.id}`}
                 >
                   <div className="flex items-center">
                     <item.icon
@@ -82,7 +80,7 @@ export default function AuthLayout({
                   {selectedItem === item.id && (
                     <ChevronRight className="h-4 w-4 opacity-55 transition duration-300" />
                   )}
-                </a>
+                </Link>
               ))}
             </div>
           </div>
