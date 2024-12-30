@@ -13,6 +13,7 @@ import {
 } from "react-feather";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import defaultProfilePic from "@/public/default-profile-pic.png";
 
 export default function AuthLayout({
   children,
@@ -98,7 +99,7 @@ export default function AuthLayout({
                 <div className="flex justify-end items-center gap-2 h-14 hover:cursor-pointer px-1">
                   <div className="w-8 h-8 rounded-xl overflow-hidden">
                     <Image
-                      src={"/DEFAULT_PROFILE_PIC.png"}
+                      src={defaultProfilePic.src}
                       width={1000}
                       height={1000}
                       alt="LOGO"

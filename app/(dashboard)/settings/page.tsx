@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { UploadCloud } from "react-feather";
+import defaultProfilePic from "@/public/default-profile-pic.png";
 
 export default function Reports() {
   return (
@@ -13,7 +14,7 @@ export default function Reports() {
           <div className="flex justify-start items-center flex-row">
             <Image
               className="w-24 h-24 rounded-[28px]"
-              src="/DEFAULT_PROFILE_PIC.png"
+              src={defaultProfilePic.src}
               alt="Settings"
               width={200}
               height={200}

@@ -1,5 +1,5 @@
 import Cotizacion from "@/components/dashboard/Cotizacion";
-import DEFAULT_PROFILE_PIC from "@/public/DEFAULT_PROFILE_PIC.png";
+import DEFAULT_PROFILE_PIC from "@/public/default-profile-pic.png";
 
 const cotizaciones = [
   {
