@@ -18,13 +18,13 @@ export default function Register() {
           Ingresar
         </h2>
         <div className="w-full">
-          <span className="text-sm font-semibold text-gray-800 leading-[1]">
+          <span className="text-sm font-semibold text-gray-600 leading-[1]">
             Correo electrónico
           </span>
           <input className={inputStyles} />
         </div>
         <div className="w-full">
-          <span className="text-sm font-semibold text-gray-800 leading-[1]">
+          <span className="text-sm font-semibold text-gray-600 leading-[1]">
             Contraseña
           </span>
           <input className={inputStyles}></input>
