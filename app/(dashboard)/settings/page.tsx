@@ -8,9 +8,11 @@ export default function Reports() {
       <div className="flex mb-4 items-center text-neutral-900">
         <h2 className="font-semibold text-3xl mt-[1px] ml-2">Ajustes</h2>
       </div>
-      <div className="flex justify-start items-start w-full h-full flex-row gap-2 bg-white rounded-[40px] px-2 py-2">
+      <div className="flex justify-start items-start w-full h-full flex-row gap-2 bg-white rounded-[40px] px-2 pb-2">
         <div className="border-2 border-neutral-100 w-[50%] p-6 rounded-2xl">
-          <h3 className="text-md uppercase mb-2  opacity-40">Foto de perfil</h3>
+          <h3 className="text-md font-semibold mb-2  opacity-40">
+            Foto de perfil
+          </h3>
           <div className="flex justify-start items-center flex-row">
             <Image
               className="w-24 h-24 rounded-[28px]"
