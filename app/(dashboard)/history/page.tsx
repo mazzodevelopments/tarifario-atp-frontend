@@ -1,6 +1,5 @@
 import Cotizacion from "@/components/dashboard/Cotizacion";
 import DEFAULT_PROFILE_PIC from "@/public/DEFAULT_PROFILE_PIC.png";
-import { Clock } from "react-feather";
 
 const cotizaciones = [
   {
@@ -45,8 +44,7 @@ export default function History() {
   return (
     <div className="flex justify-start w-full h-full flex-col bg-background py-8 px-6">
       <div className="flex mb-4 items-center text-neutral-900">
-        <Clock size={26} />
-        <h2 className="font-semibold text-3xl mt-[1px] ml-1">Cotizaciones</h2>
+        <h2 className="font-semibold text-3xl mt-[1px] ml-2">Cotizaciones</h2>
       </div>
       <div className="w-full p-4 border-[2px] border-neutral-100 rounded-3xl">
         <table className="w-full table-auto overflow-hidden">

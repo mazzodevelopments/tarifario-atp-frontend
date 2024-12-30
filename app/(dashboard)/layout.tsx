@@ -6,14 +6,12 @@ import {
   Clock,
   CornerRightUp,
   Home,
-  LogOut,
   PlusSquare,
   Users,
   ChevronRight,
   Settings,
-  MoreHorizontal,
 } from "react-feather";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 
 export default function AuthLayout({
@@ -22,7 +20,6 @@ export default function AuthLayout({
   children: React.ReactNode;
 }>) {
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
-  const router = useRouter();
   const pathname = usePathname();
   const menuItems = [
     { icon: Home, label: "Home", id: "" },
@@ -34,7 +31,7 @@ export default function AuthLayout({
 
   useEffect(() => {
     const matchedItem = menuItems.find(
-      (item) => item.id === pathname.split("/")[1]
+      (item) => item.id === pathname.split("/")[1],
     );
     if (matchedItem) {
       setSelectedItem(matchedItem.id);
@@ -61,10 +58,10 @@ export default function AuthLayout({
               {menuItems.map((item) => (
                 <Link
                   key={item.id}
-                  className={`text-sm text-black flex items-center justify-between hover:cursor-pointer transition-all duration-300 ease-in-out w-full font-medium py-1.5 rounded-lg ${
+                  className={`text-sm text-black flex items-center justify-between hover:cursor-pointer transition-all duration-300 ease-in-out w-full font-medium py-1.5 rounded-lg px-2 ${
                     selectedItem === item.id
-                      ? " bg-sky-50 px-3"
-                      : "hover:bg-gray-100 opacity-55 px-1"
+                      ? " bg-sky-50"
+                      : "hover:bg-gray-100 opacity-55"
                   }`}
                   href={`/${item.id}`}
                 >
@@ -93,9 +90,9 @@ export default function AuthLayout({
               </div>
             </a>
             <div className="flex w-full h-auto justify-start items-center border-t-[2px] border-gray-100">
-              <div className="flex justify-between items-center gap-8 mt-4 w-full">
+              <div className="flex justify-between items-center gap-8 mt-4 w-full text-gray-800 hover:text-primary">
                 {/* DATOS USUARIO */}
-                <div className="flex justify-end items-center gap-1 h-14 hover:cursor-pointer px-1">
+                <div className="flex justify-end items-center gap-2 h-14 hover:cursor-pointer px-1">
                   <div className="w-8 h-8 rounded-xl overflow-hidden">
                     <Image
                       src={"/DEFAULT_PROFILE_PIC.png"}
@@ -105,14 +102,13 @@ export default function AuthLayout({
                     />
                   </div>
                   <div className="flex flex-col">
-                    <h3 className="text-sm font-semibold text-gray-800">
+                    <h3 className="text-sm font-semibold  w-full">
                       Tomás Matteozzi
                     </h3>
-                    <span className="text-xs text-gray-600">Administrador</span>
+                    <span className="text-[0.65vw] text-gray-600">
+                      Administrador
+                    </span>
                   </div>
-                </div>
-                <div className="w-6 h-6 rounded-3xl border-[1px] border-neutral-200 flex justify-center items-center">
-                  <MoreHorizontal size={16} />
                 </div>
               </div>
             </div>
