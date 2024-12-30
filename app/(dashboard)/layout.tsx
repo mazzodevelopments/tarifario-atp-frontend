@@ -31,7 +31,7 @@ export default function AuthLayout({
 
   useEffect(() => {
     const matchedItem = menuItems.find(
-      (item) => item.id === pathname.split("/")[1],
+      (item) => item.id === pathname.split("/")[1]
     );
     if (matchedItem) {
       setSelectedItem(matchedItem.id);
@@ -83,12 +83,15 @@ export default function AuthLayout({
             </div>
           </div>
           <div className="w-full flex flex-col justify-end">
-            <a className="text-sm text-black flex items-center justify-between hover:cursor-pointer transition-all duration-300 ease-in-out w-full font-medium px-3 py-1.5 rounded-lg hover:bg-gray-100 opacity-55 mb-3">
+            <Link
+              href={"/settings"}
+              className="text-sm text-black flex items-center justify-between hover:cursor-pointer transition-all duration-300 ease-in-out w-full font-medium px-3 py-1.5 rounded-lg hover:bg-gray-100 opacity-55 mb-3"
+            >
               <div className="flex items-center">
                 <Settings size={18} fontWeight="bold" />
                 <span className="text-md ml-2">Ajustes</span>
               </div>
-            </a>
+            </Link>
             <div className="flex w-full h-auto justify-start items-center border-t-[2px] border-gray-100">
               <div className="flex justify-between items-center gap-8 mt-4 w-full text-gray-800 hover:text-primary">
                 {/* DATOS USUARIO */}
