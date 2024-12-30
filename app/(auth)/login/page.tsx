@@ -2,7 +2,7 @@
 import Button from "@/components/Button";
 
 const inputStyles =
-  "w-full rounded-lg h-12 bg-gray-100 p-4 focus:outline-none focus:border-white mt-1";
+  "w-full rounded-lg h-12 bg-gray-100 p-4 mt-1 focus:outline-none";
 
 export default function Register() {
   const handleSubmit = () => {
