@@ -10,7 +10,7 @@ export default function Reports() {
       </div>
       <div className="flex justify-start items-start w-full h-full flex-row gap-2 bg-white rounded-[40px] px-2 py-2">
         <div className="border-2 border-neutral-100 w-[50%] p-6 rounded-2xl">
-          <h3 className="text-lg mb-2">Foto de perfil</h3>
+          <h3 className="text-md uppercase mb-2  opacity-40">Foto de perfil</h3>
           <div className="flex justify-start items-center flex-row">
             <Image
               className="w-24 h-24 rounded-[28px]"
@@ -19,31 +19,33 @@ export default function Reports() {
               width={200}
               height={200}
             />
-            <button className="bg-primary text-white ml-4 rounded-3xl px-4 py-2 flex items-center">
-              <UploadCloud className="mr-2" size={20} />
-              Nueva foto de perfil
-            </button>
-            <button className="bg-neutral-100 text-neutral-900 ml-2 rounded-3xl px-4 py-2">
-              Eliminar
-            </button>
+            <div className="flex flex-col gap-2 ml-4">
+              <button className="w-full text-sm bg-primary text-white rounded-3xl px-3.5 py-1.5 flex items-center">
+                <UploadCloud className="mr-2" size={20} />
+                Nueva foto de perfil
+              </button>
+              <button className="text-sm bg-neutral-100 text-neutral-900 rounded-3xl px-3.5 py-1.5">
+                Eliminar
+              </button>
+            </div>
           </div>
           <div className="w-full mt-6 rounded-2xl flex flex-col">
             <div className="w-full flex flex-col">
-              <label className="text-lg opacity-40">Nombre</label>
+              <label className="text-md font-semibold opacity-40">Nombre</label>
               <div className="flex flex-row items-center">
-                <h3 className="text-lg">Matias Monzalvo</h3>
-                <button className="bg-neutral-100 text-primary text-sm  ml-4 rounded-3xl px-3 py-2">
+                <h3 className="text-sm">Matias Monzalvo</h3>
+                <button className="bg-neutral-100 text-primary text-xs ml-2 rounded-3xl px-2 py-1.5">
                   Modificar
                 </button>
               </div>
             </div>
             <div className="w-full mt-4 flex flex-col">
-              <label className="text-lg opacity-40">Email</label>
+              <label className="text-md font-semibold opacity-40">Email</label>
               <div className="flex flex-row items-center">
-                <h3 className="text-lg">
+                <h3 className="text-sm">
                   matiasmonzalvo@mazzodevelopments.com
                 </h3>
-                <button className="bg-neutral-100 text-primary text-sm  ml-4 rounded-3xl px-3 py-2">
+                <button className="bg-neutral-100 text-primary text-xs ml-2 rounded-3xl px-2 py-1.5">
                   Modificar
                 </button>
               </div>
