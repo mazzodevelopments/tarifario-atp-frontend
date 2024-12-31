@@ -30,7 +30,11 @@ export default function Register() {
           <input className={inputStyles}></input>
         </div>
         <div className="w-full">
-          <Button className="h-12 w-full mt-4" variant="primary" type="submit">
+          <Button
+            className="h-12 w-full mt-4 rounded-lg"
+            variant="primary"
+            type="submit"
+          >
             Log In
           </Button>
         </div>

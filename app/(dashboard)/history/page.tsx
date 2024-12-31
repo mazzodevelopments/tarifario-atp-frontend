@@ -43,10 +43,10 @@ const cotizaciones = [
 export default function History() {
   return (
     <div className="flex justify-start w-full h-full flex-col bg-background py-8 px-6">
-      <div className="flex mb-4 items-center text-neutral-900">
+      <div className="flex mb-4 items-center text-gray-900">
         <h2 className="font-semibold text-3xl mt-[1px] ml-2">Cotizaciones</h2>
       </div>
-      <div className="w-full p-4 border-[2px] border-neutral-100 rounded-3xl">
+      <div className="w-full p-4 border-[2px] border-gray-100 rounded-3xl">
         <table className="w-full table-auto overflow-hidden">
           <thead className="text-left text-gray-500 border-b">
             <tr>
