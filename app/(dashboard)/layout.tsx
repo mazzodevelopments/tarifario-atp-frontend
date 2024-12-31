@@ -31,11 +31,12 @@ export default function AuthLayout({
   ];
 
   useEffect(() => {
-    const matchedItem = menuItems.find(
-      (item) => item.id === pathname.split("/")[1]
-    );
-    if (matchedItem) {
-      setSelectedItem(matchedItem.id);
+    const pathSegment = pathname.split("/")[1];
+    if (pathSegment === "settings") {
+      setSelectedItem("settings");
+    } else {
+      const matchedItem = menuItems.find((item) => item.id === pathSegment);
+      setSelectedItem(matchedItem ? matchedItem.id : null);
     }
   }, [pathname]);
 
@@ -85,18 +86,31 @@ export default function AuthLayout({
           </div>
           <div className="w-full flex flex-col justify-end">
             <Link
-              href={"/settings"}
-              className="text-sm text-black flex items-center justify-between hover:cursor-pointer transition-all duration-300 ease-in-out w-full font-medium px-3 py-1.5 rounded-lg hover:bg-gray-100 opacity-55 mb-3"
+              href="/settings"
+              className={`text-sm text-black flex items-center justify-between hover:cursor-pointer transition-all duration-300 ease-in-out w-full font-medium py-1.5 rounded-lg px-2 mb-3 ${
+                selectedItem === "settings"
+                  ? "bg-sky-50"
+                  : "hover:bg-gray-100 opacity-55"
+              }`}
             >
               <div className="flex items-center">
-                <Settings size={18} fontWeight="bold" />
-                <span className="text-md ml-2">Ajustes</span>
+                <Settings
+                  size={18}
+                  fontWeight="bold"
+                  className={`transition-all duration-300 ${
+                    selectedItem === "settings" ? "text-primary" : ""
+                  }`}
+                />
+                <span className="text-md ml-2 flex">Ajustes</span>
               </div>
+              {selectedItem === "settings" && (
+                <ChevronRight className="h-4 w-4 opacity-55 transition duration-300" />
+              )}
             </Link>
             <div className="flex w-full h-auto justify-start items-center border-t-[2px] border-gray-100">
               <div className="flex justify-between items-center gap-8 mt-4 w-full text-gray-800 hover:text-primary">
                 {/* DATOS USUARIO */}
-                <div className="flex justify-end items-center gap-2 h-14 hover:cursor-pointer px-1">
+                <div className="flex w-full items-center gap-2 h-14 hover:cursor-pointer px-1">
                   <div className="w-8 h-8 rounded-xl overflow-hidden">
                     <Image
                       src={defaultProfilePic.src}

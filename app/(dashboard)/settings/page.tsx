@@ -5,7 +5,7 @@ import Button from "@/components/Button";
 
 export default function Reports() {
   return (
-    <div className="flex justify-start w-full h-full flex-col bg-background py-8 px-6">
+    <div className="flex flex-col justify-start w-full h-full bg-background py-8 px-6">
       <div className="flex mb-4 items-center">
         <h2 className="text-3xl font-semibold text-gray mt-[1px] ml-2">
           Ajustes
@@ -24,14 +24,14 @@ export default function Reports() {
               width={200}
               height={200}
             />
-            <div className="flex flex-col gap-2 ml-4">
-              <Button className="rounded-full w-full text-sm  px-3.5 py-1.5 flex items-center">
+            <div className="flex gap-2 ml-4">
+              <Button className="flex items-center text-xs w-full rounded-xl px-3.5 py-2.5 ">
                 <UploadCloud className="mr-2" size={20} />
                 Nueva foto de perfil
               </Button>
               <Button
                 variant="outline"
-                className="text-sm bg-gray-100 text-gray-900 rounded-3xl px-3.5 py-1.5"
+                className="text-xs rounded-xl px-3.5 py-1.5"
               >
                 Eliminar
               </Button>
@@ -45,11 +45,11 @@ export default function Reports() {
               <input
                 type="name"
                 value="Matías Monzalvo"
-                className="w-full p-2 font-medium text-gray-600 text-sm outline-none"
+                className="w-full p-1.5 font-medium text-gray-600 text-sm outline-none"
                 readOnly
               />
               <Button
-                className="absolute right-0 top-0 bottom-0 text-xs rounded-l-none rounded-lg px-2"
+                className="absolute right-0 top-0 bottom-0 text-xs rounded-l-none rounded-xl px-2"
                 variant="primary"
               >
                 Modificar
@@ -64,11 +64,11 @@ export default function Reports() {
               <input
                 type="email"
                 value="matiasmonzalvo@mazzodevelopments.com"
-                className="w-full p-2 font-medium text-gray-600 text-sm outline-none"
+                className="w-full p-1.5 font-medium text-gray-600 text-sm outline-none"
                 readOnly
               />
               <Button
-                className="absolute right-0 top-0 bottom-0 text-xs rounded-l-none rounded-lg px-2"
+                className="absolute right-0 top-0 bottom-0 text-xs rounded-l-none rounded-xl px-2"
                 variant="primary"
               >
                 Modificar
