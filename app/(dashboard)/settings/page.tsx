@@ -24,20 +24,20 @@ export default function Reports() {
               width={200}
               height={200}
             />
-            <div className="flex gap-2 ml-4">
-              <Button className="flex items-center text-xs w-full rounded-xl px-3.5 py-2.5 ">
+            <div className="flex flex-col gap-2 ml-4">
+              <Button className="flex items-center text-xs w-full rounded-xl px-3.5 py-2">
                 <UploadCloud className="mr-2" size={20} />
                 Nueva foto de perfil
               </Button>
               <Button
                 variant="outline"
-                className="text-xs rounded-xl px-3.5 py-1.5"
+                className="text-xs rounded-xl px-3.5 py-2"
               >
                 Eliminar
               </Button>
             </div>
           </div>
-          <div className="w-full mt-4 flex flex-col">
+          <div className="w-full mt-6 flex flex-col">
             <label className="text-sm font-semibold text-gray-700 mb-2">
               Nombre
             </label>
@@ -64,6 +64,44 @@ export default function Reports() {
               <input
                 type="email"
                 value="matiasmonzalvo@mazzodevelopments.com"
+                className="w-full p-1.5 font-medium text-gray-600 text-sm outline-none"
+                readOnly
+              />
+              <Button
+                className="absolute right-0 top-0 bottom-0 text-xs rounded-l-none rounded-xl px-2"
+                variant="primary"
+              >
+                Modificar
+              </Button>
+            </div>
+          </div>
+          <div className="w-full mt-4 flex flex-col">
+            <label className="text-sm font-semibold text-gray-700 mb-2">
+              Teléfono
+            </label>
+            <div className="relative w-full p-1 rounded-xl border-2 border-gray-100">
+              <input
+                type="phone"
+                value="+542944723412"
+                className="w-full p-1.5 font-medium text-gray-600 text-sm outline-none"
+                readOnly
+              />
+              <Button
+                className="absolute right-0 top-0 bottom-0 text-xs rounded-l-none rounded-xl px-2"
+                variant="primary"
+              >
+                Modificar
+              </Button>
+            </div>
+          </div>
+          <div className="w-full mt-4 flex flex-col">
+            <label className="text-sm font-semibold text-gray-700 mb-2">
+              Dirección
+            </label>
+            <div className="relative w-full p-1 rounded-xl border-2 border-gray-100">
+              <input
+                type="address"
+                value="Soldado de la Independencia 1468"
                 className="w-full p-1.5 font-medium text-gray-600 text-sm outline-none"
                 readOnly
               />
