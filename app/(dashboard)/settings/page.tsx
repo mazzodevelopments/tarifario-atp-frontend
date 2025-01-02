@@ -30,7 +30,7 @@ export default function Reports() {
   }) => (
     <div className="w-full mt-4 flex flex-col">
       <label className="text-sm font-semibold text-gray-700">{label}</label>
-      <div className="relative w-full p-1 border-b-2 border-gray-100">
+      <div className="relative w-full pb-1 pr-1 border-b-2 border-gray-100">
         <input
           type={type}
           value={value}
