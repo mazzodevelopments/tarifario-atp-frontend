@@ -1,5 +1,6 @@
 import Cotizacion from "@/components/dashboard/Cotizacion";
 import DEFAULT_PROFILE_PIC from "@/public/default-profile-pic.png";
+import { Search } from "react-feather";
 
 const cotizaciones = [
   {
@@ -43,8 +44,18 @@ const cotizaciones = [
 export default function History() {
   return (
     <div className="flex justify-start w-full h-full flex-col bg-background py-8 px-6">
-      <div className="flex mb-4 items-center text-gray-900">
-        <h2 className="font-semibold text-3xl mt-[1px] ml-2">Cotizaciones</h2>
+      <div className="flex mb-4 items-center ">
+        <div className="rounded-3xl flex bg-sky-50 h-10 px-4 items-center justify-start">
+          <Search
+            className="text-primary mr-2 opacity-50"
+            fontWeight="bold"
+            size={20}
+          />
+          <input
+            className="text-lg font-regular text-primary bg-transparent outline-none placeholder:text-primary placeholder:opacity-50"
+            placeholder="Buscar cotización"
+          />
+        </div>
       </div>
       <div className="w-full p-4 border-[2px] border-gray-100 rounded-3xl">
         <table className="w-full table-auto overflow-hidden">
