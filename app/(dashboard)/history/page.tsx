@@ -43,9 +43,19 @@ const cotizaciones = [
 
 export default function History() {
   return (
-    <div className="flex justify-start w-full h-full flex-col bg-background py-8 px-6">
+    <div className="flex justify-start w-full h-full flex-col bg-background p-[20px]">
+      <div className="w-full h-36 rounded-[10px]  mb-4 bg-gradient-to-r from-primary to-sky-200">
+        <div className="flex flex-col justify-end items-start h-full px-4 py-6">
+          <h2 className="text-[2vw] leading-[1] font-semibold text-white">
+            Cotizaciones
+          </h2>
+          <p className="text-[0.85vw] font-regular leading-[1] ml-1 text-white mt-2 opacity-90">
+            Historial de cotizaciones realizadas
+          </p>
+        </div>
+      </div>
       <div className="flex mb-4 items-center ">
-        <div className="rounded-3xl flex bg-sky-50 h-10 px-4 items-center justify-start">
+        <div className="rounded-[10px] flex bg-sky-50 h-10 px-4 items-center justify-start">
           <Search
             className="text-primary mr-2 opacity-50"
             fontWeight="bold"
@@ -57,7 +67,7 @@ export default function History() {
           />
         </div>
       </div>
-      <div className="w-full p-4 border-[2px] border-gray-100 rounded-3xl">
+      <div className="w-full p-4 border-[2px] border-gray-100 rounded-[10px]">
         <table className="w-full table-auto overflow-hidden">
           <thead className="text-left text-gray-500 border-b">
             <tr>
