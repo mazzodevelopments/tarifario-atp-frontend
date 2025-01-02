@@ -46,7 +46,7 @@ export default function History() {
     <div className="flex justify-start w-full h-full flex-col bg-background p-[20px]">
       <div className="w-full h-[7vw] rounded-[10px] mb-4 bg-gradient-to-r from-primary to-sky-200">
         <div className="flex flex-col justify-end items-start h-full p-4">
-          <h2 className="text-[2vw] leading-[0.75] font-semibold text-white">
+          <h2 className="text-[2vw] leading-[0.85] font-semibold text-white">
             Cotizaciones
           </h2>
           <p className="text-[0.8vw] leading-[1] ml-1 text-white mt-2 opacity-90">
@@ -67,16 +67,15 @@ export default function History() {
           />
         </div>
       </div>
-      <div className="w-full p-4 border-[2px] border-gray-100 rounded-[10px]">
+      <div className="w-full py-2 px-4 border-[2px] border-gray-100 rounded-[10px]">
         <table className="w-full table-auto overflow-hidden">
-          <thead className="text-left text-gray-500 border-b">
+          <thead className="text-left text-gray-600 p-4 border-b">
             <tr>
-              <th className="py-4">Nombre</th>
-
-              <th className="py-4">Cliente</th>
-              <th className="py-4">Usuarios</th>
-              <th className="py-4">Fase</th>
-              <th className="py-4">Fecha</th>
+              <th className="text-sm font-semibold pb-2">Nombre</th>
+              <th className="text-sm font-semibold pb-2">Cliente</th>
+              <th className="text-sm font-semibold pb-2">Usuarios</th>
+              <th className="text-sm font-semibold pb-2">Fase</th>
+              <th className="text-sm font-semibold pb-2">Fecha</th>
             </tr>
           </thead>
           <tbody>
