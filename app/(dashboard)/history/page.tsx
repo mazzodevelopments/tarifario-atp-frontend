@@ -55,14 +55,14 @@ export default function History() {
         </div>
       </div>
       <div className="flex mb-4 items-center ">
-        <div className="w-[30%] rounded-[10px] flex bg-sky-50 h-8 px-4 items-center justify-start">
+        <div className="w-auto rounded-[10px] flex bg-sky-50 h-10 px-4 items-center justify-start">
           <Search
             className="text-primary mr-2 opacity-50"
             fontWeight="bold"
             size={20}
           />
           <input
-            className="text-sm font-regular text-primary bg-transparent outline-none placeholder:text-primary placeholder:opacity-50"
+            className="text-[0.9vw] font-regular text-primary bg-transparent outline-none placeholder:text-primary placeholder:opacity-50"
             placeholder="Buscar cotización"
           />
         </div>
