@@ -49,7 +49,7 @@ export default function History() {
           <h2 className="text-[2vw] leading-[0.75] font-semibold text-white">
             Cotizaciones
           </h2>
-          <p className="text-[0.85vw] leading-[1] ml-1 text-white mt-2 opacity-90">
+          <p className="text-[0.8vw] leading-[1] ml-1 text-white mt-2 opacity-90">
             Historial de cotizaciones realizadas
           </p>
         </div>
@@ -57,12 +57,12 @@ export default function History() {
       <div className="flex mb-4 items-center ">
         <div className="w-auto rounded-[10px] flex bg-sky-50 h-10 px-4 items-center justify-start">
           <Search
-            className="text-primary mr-2 opacity-50"
+            className="text-primary mr-2 opacity-65 ml-1"
             fontWeight="bold"
-            size={20}
+            size={18}
           />
           <input
-            className="text-[0.9vw] font-regular text-primary bg-transparent outline-none placeholder:text-primary placeholder:opacity-50"
+            className="text-[0.8vw] font-regular text-primary bg-transparent outline-none placeholder:text-primary placeholder:opacity-65"
             placeholder="Buscar cotización"
           />
         </div>
