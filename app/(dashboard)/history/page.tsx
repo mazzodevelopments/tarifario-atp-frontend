@@ -6,7 +6,7 @@ const cotizaciones = [
   {
     id: "1",
     name: "A25R-1",
-    client: "Marcelo Alvear",
+    client: "John Doe",
     users: [
       { id: "1", profilePic: DEFAULT_PROFILE_PIC.src },
       { id: "2", profilePic: DEFAULT_PROFILE_PIC.src },
@@ -17,8 +17,8 @@ const cotizaciones = [
   },
   {
     id: "2",
-    name: "B34Q-5",
-    client: "Ricardo Fort",
+    name: "A25R-2",
+    client: "Emily Johnson",
     users: [
       { id: "1", profilePic: DEFAULT_PROFILE_PIC.src },
       { id: "2", profilePic: DEFAULT_PROFILE_PIC.src },
@@ -28,8 +28,8 @@ const cotizaciones = [
   },
   {
     id: "3",
-    name: "C78T-2",
-    client: "Tomás Mazza",
+    name: "A25R-3",
+    client: "Michael Brown",
     users: [
       { id: "1", profilePic: DEFAULT_PROFILE_PIC.src },
       { id: "2", profilePic: DEFAULT_PROFILE_PIC.src },
