@@ -10,6 +10,7 @@ import {
   Users,
   ChevronRight,
   Settings,
+  Truck,
 } from "react-feather";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -26,7 +27,8 @@ export default function AuthLayout({
     { icon: Home, label: "Home", id: "" },
     { icon: PlusSquare, label: "Crear", id: "create" },
     { icon: Clock, label: "Cotizaciones", id: "history" },
-    { icon: Users, label: "Proveedores", id: "proveedores" },
+    { icon: Users, label: "Clientes", id: "clients" },
+    { icon: Truck, label: "Proveedores", id: "proveedores" },
     { icon: CornerRightUp, label: "Reportes", id: "reports" },
   ];
 
