@@ -1,21 +1,17 @@
-import { Plus } from "react-feather";
-
 export default function Create() {
   return (
     <div className="flex justify-start w-full h-full flex-col bg-background p-[20px]">
-      <div className="w-full h-full flex justify-center items-center rounded-[10px]  bg-secondary">
-        <div className="flex flex-col justify-center w-full items-center h-full p-4">
-          <div className="bg-slate-800 rounded-full p-6">
-            <Plus size={48} className="text-white " />
-          </div>
+      <div className="w-full h-[7vw] rounded-[10px] mb-4 bg-gradient-to-r from-green-600 to-emerald-200">
+        <div className="flex flex-col justify-end items-start h-full p-4">
           <h2 className="text-[2vw] leading-[0.85] font-semibold text-white">
-            Crear cotización
+            Nueva Cotización
           </h2>
           <p className="text-[0.8vw] leading-[1] ml-1 text-white mt-2 opacity-90">
-            Lista de proveedores oficiales
+            Crea una nueva cotización
           </p>
         </div>
       </div>
+      <div className="flex gap-6 w-full h-full py-2 px-4 border-[2px] border-gray-100 rounded-[10px] justify-center items-center"></div>
     </div>
   );
 }
