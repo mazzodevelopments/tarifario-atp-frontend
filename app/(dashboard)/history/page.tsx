@@ -1,4 +1,4 @@
-import Cotizacion from "@/components/dashboard/Cotizacion";
+import Cotizacion from "@/app/(dashboard)/components/Cotizacion";
 import DEFAULT_PROFILE_PIC from "@/public/default-profile-pic.png";
 import { Search } from "react-feather";
 
