@@ -16,7 +16,7 @@ export default function Button({
   disabled = false,
   ...props
 }: ButtonProps) {
-  const baseClasses = "font-semibold transition-colors";
+  const baseClasses = "font-medium transition-colors";
 
   const variantClasses = {
     primary: "bg-primary text-white hover:bg-primary/90",

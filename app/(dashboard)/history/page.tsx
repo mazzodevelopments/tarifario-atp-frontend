@@ -44,7 +44,7 @@ const cotizaciones = [
 export default function History() {
   return (
     <div className="flex justify-start w-full h-full flex-col bg-background p-[20px]">
-      <div className="w-full h-[7vw] rounded-[10px] mb-4 bg-gradient-to-r from-primary to-sky-200">
+      <div className="w-full h-[7vw] rounded-[10px] mb-4 bg-gradient-to-r from-green-600 to-emerald-200">
         <div className="flex flex-col justify-end items-start h-full p-4">
           <h2 className="text-[2vw] leading-[0.85] font-semibold text-white">
             Cotizaciones
