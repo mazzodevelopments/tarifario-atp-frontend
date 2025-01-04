@@ -1,6 +1,6 @@
 /**
- Este es un componente de botón reutilizable que puede ser personalizado con diferentes variantes.
- **/
+ * Este es un componente de botón reutilizable que puede ser personalizado con diferentes variantes.
+ */
 
 import React, { ButtonHTMLAttributes } from "react";
 
@@ -13,6 +13,7 @@ export default function Button({
   variant = "primary",
   children,
   className = "",
+  disabled = false,
   ...props
 }: ButtonProps) {
   const baseClasses = "font-semibold transition-colors";
@@ -24,10 +25,14 @@ export default function Button({
       "bg-transparent border border-primary text-primary hover:bg-primary/10",
   };
 
-  const classes = `${baseClasses} ${variantClasses[variant]}  ${className}`;
+  const disabledClasses = "bg-primary/20 text-secondary/60";
+
+  const classes = `${baseClasses} ${
+    disabled ? disabledClasses : variantClasses[variant]
+  } ${className}`;
 
   return (
-    <button className={classes} {...props}>
+    <button className={classes} disabled={disabled} {...props}>
       {children}
     </button>
   );
