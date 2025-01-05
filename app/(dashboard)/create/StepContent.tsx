@@ -15,9 +15,9 @@ export default function StepContent({ step }: StepContentProps) {
   };
 
   return (
-    <div className="flex-grow flex flex-col">
+    <div className="h-full relative flex flex-col">
       <h3 className="text-xl font-semibold mb-4">Etapa {step + 1}</h3>
-      <div className="flex justify-center items-center w-full mx-auto">
+      <div className="flex justify-center relative pt-[10%] items-center w-full mx-auto">
         {renderStep()}
       </div>
     </div>

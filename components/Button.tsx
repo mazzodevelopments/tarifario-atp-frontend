@@ -29,7 +29,7 @@ export default function Button({
 
   const classes = `${baseClasses} ${
     disabled ? disabledClasses : variantClasses[variant]
-  } ${className}`;
+  } ${className}`.trim();
 
   return (
     <button className={classes} disabled={disabled} {...props}>

@@ -55,9 +55,9 @@ export default function Create() {
             </div>
             <div className="flex justify-between mt-auto">
               <Button
+                className="px-4 py-2 bg-neutral-200 text-neutral-600 rounded-md hover:bg-neutral-300 disabled:opacity-50"
                 onClick={handlePrevious}
                 disabled={currentStep === 0}
-                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md disabled:opacity-50"
               >
                 Anterior
               </Button>

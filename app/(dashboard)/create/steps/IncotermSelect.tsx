@@ -18,7 +18,7 @@ export default function IncotermSelect() {
   const [selectedValue, setSelectedValue] = useState("");
 
   return (
-    <div className="flex flex-col items-center justify-center p-4">
+    <div className="flex flex-col items-center justify-center">
       <h2 className="text-center text-xl font-medium text-secondary mb-4">
         Seleccionar que Incoterm desea cotizar
       </h2>
