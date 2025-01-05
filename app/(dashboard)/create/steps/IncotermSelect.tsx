@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 export default function IncotermSelect() {
   const incoterms = [
     { value: "EXW", label: "EXW - Ex Works" },
@@ -13,12 +15,18 @@ export default function IncotermSelect() {
     { value: "CIF", label: "CIF - Cost, Insurance, and Freight" },
   ];
 
+  const [selectedValue, setSelectedValue] = useState("");
+
   return (
     <div className="flex flex-col items-center justify-center p-4">
       <h2 className="text-center text-xl font-medium text-secondary mb-4">
         Seleccionar que Incoterm desea cotizar
       </h2>
-      <select className="w-full p-2 border-2 border-gray-200 rounded-md text-sm focus:outline-none">
+      <select
+        className="w-full p-2 border-2 border-gray-200 rounded-md text-sm focus:outline-none"
+        value={selectedValue}
+        onChange={(e) => setSelectedValue(e.target.value)}
+      >
         <option value="" disabled>
           Seleccione un Incoterm
         </option>
@@ -28,6 +36,11 @@ export default function IncotermSelect() {
           </option>
         ))}
       </select>
+      {selectedValue && (
+        <p className="mt-4 text-sm text-gray-600">
+          Incoterm seleccionado: <strong>{selectedValue}</strong>
+        </p>
+      )}
     </div>
   );
 }
