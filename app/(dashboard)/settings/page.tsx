@@ -2,6 +2,7 @@ import Image from "next/image";
 import { UploadCloud } from "react-feather";
 import defaultProfilePic from "@/public/default-profile-pic.png";
 import Button from "@/components/Button";
+import Header from "@/app/(dashboard)/components/Header";
 
 export default function Reports() {
   const inputFields = [
@@ -49,16 +50,11 @@ export default function Reports() {
 
   return (
     <div className="flex flex-col justify-start w-full h-full bg-background p-[20px]">
-      <div className="w-full h-[7vw] rounded-[10px] mb-4 bg-gradient-to-r from-gray-800 to-gray-600">
-        <div className="flex flex-col justify-end items-start h-full p-4">
-          <h2 className="text-[2vw] leading-[0.85] font-semibold text-white">
-            Ajustes
-          </h2>
-          <p className="text-[0.8vw] leading-[1] ml-1 text-white mt-2 opacity-90">
-            Lista de proveedores oficiales
-          </p>
-        </div>
-      </div>
+      <Header
+        title="Ajustes"
+        description="Lista de proveedores oficiales"
+        className="bg-gradient-to-r from-gray-800 to-gray-600"
+      />
       <div className="flex flex-row w-full h-auto justify-start items-start gap-2 bg-white rounded-[10px] px-2 pb-2 border-2 border-gray-100">
         <div className="flex flex-col w-[60%] p-4">
           <label className="text-md font-semibold text-gray-700 mb-2">

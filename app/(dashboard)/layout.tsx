@@ -4,13 +4,13 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import {
   Clock,
-  CornerRightUp,
   Home,
   PlusSquare,
   Users,
   ChevronRight,
   Settings,
   Truck,
+  BarChart2,
 } from "react-feather";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -27,9 +27,9 @@ export default function AuthLayout({
     { icon: Home, label: "Home", id: "" },
     { icon: PlusSquare, label: "Crear", id: "create" },
     { icon: Clock, label: "Cotizaciones", id: "history" },
+    { icon: BarChart2, label: "Comparar", id: "compare" },
     { icon: Users, label: "Clientes", id: "clients" },
-    { icon: Truck, label: "Proveedores", id: "proveedores" },
-    { icon: CornerRightUp, label: "Reportes", id: "reports" },
+    { icon: Truck, label: "Proveedores", id: "suppliers" },
   ];
 
   useEffect(() => {

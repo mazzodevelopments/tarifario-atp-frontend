@@ -1,6 +1,7 @@
 import Cotizacion from "@/app/(dashboard)/components/Cotizacion";
 import DEFAULT_PROFILE_PIC from "@/public/default-profile-pic.png";
 import { Search } from "react-feather";
+import Header from "@/app/(dashboard)/components/Header";
 
 const cotizaciones = [
   {
@@ -44,16 +45,11 @@ const cotizaciones = [
 export default function History() {
   return (
     <div className="flex justify-start w-full h-full flex-col bg-background p-[20px]">
-      <div className="w-full h-[7vw] rounded-[10px] mb-4 bg-gradient-to-r from-green-600 to-emerald-200">
-        <div className="flex flex-col justify-end items-start h-full p-4">
-          <h2 className="text-[2vw] leading-[0.85] font-semibold text-white">
-            Cotizaciones
-          </h2>
-          <p className="text-[0.8vw] leading-[1] ml-1 text-white mt-2 opacity-90">
-            Historial de cotizaciones realizadas
-          </p>
-        </div>
-      </div>
+      <Header
+        title="Cotizaciones"
+        description="Historial de cotizaciones realizadas"
+        className="bg-gradient-to-r from-green-600 to-emerald-200"
+      />
       <div className="flex mb-4 items-center ">
         <div className="w-auto rounded-[10px] flex bg-sky-50 h-10 px-4 items-center justify-start">
           <Search

@@ -4,9 +4,9 @@ export default function Proveedores() {
   return (
     <div className="flex justify-start w-full h-full flex-col bg-background p-[20px]">
       <Header
-        title="Clientes"
-        description="Lista de clientes"
-        className="bg-gradient-to-r from-purple-600 to-purple-300"
+        title="Comparar"
+        description="Sección para comparar cotizaciones"
+        className="bg-gradient-to-r from-red-500 to-orange-300"
       />
     </div>
   );

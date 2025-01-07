@@ -1,5 +1,5 @@
 "use client";
-import { ChevronRight, Plus } from "react-feather";
+import { ChevronRight } from "react-feather";
 import { User, Calendar, DollarSign } from "react-feather";
 
 export default function Dashboard() {
@@ -30,7 +30,7 @@ export default function Dashboard() {
   const handleNavigateToCreate = () => {};
 
   return (
-    <div className="flex justify-start w-full h-full flex-col bg-background py-8 px-6">
+    <div className="flex justify-start w-full h-full flex-col bg-background p-[20px]">
       <div className="w-full h-[7vw] rounded-[10px] mb-4 bg-gradient-to-r from-primary to-sky-200 flex-shrink-0">
         <div className="flex flex-col justify-end items-start h-full p-4">
           <h2 className="text-[2vw] leading-[0.85] font-semibold text-white">
@@ -60,7 +60,7 @@ export default function Dashboard() {
             onClick={handleNavigateToCreate}
             className="flex items-center justify-between rounded-lg gap-2 p-2 bg-background"
           >
-            <label className="pl-4 font-medium">Cotizar</label>
+            <label className="pl-4 font-medium ">Cotizar</label>
             <ChevronRight size={30} className="text-secondary" />
           </button>
         </div>

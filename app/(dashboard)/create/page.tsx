@@ -5,6 +5,7 @@ import ProgressBar from "./ProgressBar";
 import StepContent from "./StepContent";
 import SuccessAnimation from "./SuccesAnimation";
 import Button from "@/components/Button";
+import Header from "@/app/(dashboard)/components/Header";
 
 export default function Create() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -34,16 +35,11 @@ export default function Create() {
 
   return (
     <div className="flex flex-col w-full h-full bg-background p-[20px]">
-      <div className="w-full h-[7vw] rounded-[10px] mb-4 bg-gradient-to-r from-primary to-sky-200 flex-shrink-0">
-        <div className="flex flex-col justify-end items-start h-full p-4">
-          <h2 className="text-[2vw] leading-[0.85] font-semibold text-white">
-            Nueva Cotización
-          </h2>
-          <p className="text-[0.8vw] leading-[1] ml-1 text-white mt-2 opacity-90">
-            Crea una nueva cotización
-          </p>
-        </div>
-      </div>
+      <Header
+        title="Nueva Cotización"
+        description="Crea una nueva cotización"
+        className="bg-gradient-to-r from-primary to-sky-200"
+      />
       <div className="flex-grow flex flex-col gap-6 w-full p-[20px] border-[2px] border-gray-100 rounded-[10px] relative">
         {isCreating || isSuccess ? (
           <SuccessAnimation isCreating={isCreating} isSuccess={isSuccess} />
