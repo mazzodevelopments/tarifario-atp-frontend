@@ -1,5 +1,5 @@
 "use client";
-import { ChevronRight, Plus, RefreshCcw, Server } from "react-feather";
+import { Plus, Server } from "react-feather";
 import { User, Calendar, DollarSign } from "react-feather";
 
 export default function Dashboard() {
@@ -27,8 +27,6 @@ export default function Dashboard() {
     },
   ];
 
-  const handleNavigateToCreate = () => {};
-
   return (
     <div className="flex justify-start w-full h-full flex-col bg-background p-[20px]">
       <div className="w-full h-[7vw] rounded-[18px] mb-3 bg-gradient-to-r from-secondary to-primary flex-shrink-0">
@@ -48,11 +46,11 @@ export default function Dashboard() {
             <div className="flex flex-col justify-between w-auto mb-3 h-full">
               <div className="rounded-[18px] flex bg-sky-100 w-[12vw] h-full px-6 items-center justify-center flex-col">
                 <Plus
-                  className="text-primary mr-1 mt-[1vw]"
+                  className="text-secondary mr-1 mt-[1vw]"
                   fontWeight="bold"
                   size={"4vw"}
                 />
-                <h3 className="text-[1vw] font-medium mt-[1vw] text-primary bg-transparent outline-none">
+                <h3 className="text-[1vw] font-semibold mt-[1vw] text-secondary bg-transparent outline-none">
                   Crear cotización
                 </h3>
               </div>
@@ -62,11 +60,11 @@ export default function Dashboard() {
             <div className="flex flex-col justify-between w-auto mb-3 h-full">
               <div className="rounded-[18px] flex bg-sky-100 w-[12vw] h-full px-6 items-center justify-center flex-col">
                 <Server
-                  className="text-primary mr-1 mt-[1.25vw]"
+                  className="text-secondary mr-1 mt-[1.25vw]"
                   fontWeight="bold"
                   size={"3.5vw"}
                 />
-                <h3 className="text-[1vw] font-medium mt-[1.25vw] text-primary bg-transparent outline-none">
+                <h3 className="text-[1vw] font-semibold mt-[1.25vw] text-secondary bg-transparent outline-none">
                   Comparar
                 </h3>
               </div>
