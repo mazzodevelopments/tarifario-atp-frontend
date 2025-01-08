@@ -13,7 +13,7 @@ export default function Header({
   description,
   className = "",
 }: HeaderProps) {
-  const baseClasses = "w-full h-[7vw] rounded-[10px] mb-4";
+  const baseClasses = "w-full h-[7vw] rounded-[18px] mb-4";
   const combinedClasses = `${baseClasses} ${className}`.trim();
 
   return (

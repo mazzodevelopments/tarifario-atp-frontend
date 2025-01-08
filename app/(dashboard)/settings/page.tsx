@@ -55,7 +55,7 @@ export default function Reports() {
         description="Lista de proveedores oficiales"
         className="bg-gradient-to-r from-gray-800 to-gray-600"
       />
-      <div className="flex flex-row w-full h-auto justify-start items-start gap-2 bg-white rounded-[10px] px-2 pb-2 border-2 border-gray-100">
+      <div className="flex flex-row w-full h-auto justify-start items-start gap-2 bg-white rounded-[18px] px-2 pb-2 border-2 border-gray-100">
         <div className="flex flex-col w-[60%] p-4">
           <label className="text-md font-semibold text-gray-700 mb-2">
             Mi cuenta

@@ -51,7 +51,7 @@ export default function History() {
         className="bg-gradient-to-r from-green-600 to-emerald-200"
       />
       <div className="flex mb-4 items-center ">
-        <div className="w-auto rounded-[10px] flex bg-sky-50 h-10 px-4 items-center justify-start">
+        <div className="w-auto rounded-[18px] flex bg-sky-50 h-10 px-4 items-center justify-start">
           <Search
             className="text-primary mr-2 opacity-65 ml-1"
             fontWeight="bold"
@@ -63,7 +63,7 @@ export default function History() {
           />
         </div>
       </div>
-      <div className="w-full py-2 px-4 border-[2px] border-gray-100 rounded-[10px]">
+      <div className="w-full py-2 px-4 border-[2px] border-gray-100 rounded-[18px]">
         <table className="w-full table-auto overflow-hidden">
           <thead className="text-left text-gray-600 p-4 border-b">
             <tr>
