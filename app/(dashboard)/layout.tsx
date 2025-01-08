@@ -11,6 +11,7 @@ import {
   Settings,
   Truck,
   BarChart2,
+  LogOut,
 } from "react-feather";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -47,7 +48,7 @@ export default function AuthLayout({
       <div className="w-full h-full flex justify-center items-center flex-row overflow-hidden">
         <div className="w-[308px] h-full flex justify-between items-center flex-col bg-background z-20 p-6 pt-10">
           <div className="flex justify-start w-full items-start flex-col">
-            <div className="w-full flex flex-row items-end pb-6 border-b-[2px] border-gray-100">
+            <div className="w-full flex flex-row items-end pb-6">
               <h3 className="text-xl font-bold text-primary leading-[1]">
                 atp
               </h3>
@@ -55,7 +56,7 @@ export default function AuthLayout({
                 solutions
               </h3>
             </div>
-            <div className="w-full mt-6 flex justify-between items-start gap-2 flex-col">
+            <div className="w-full flex justify-between mt-2 items-start gap-2 flex-col">
               <label className="uppercase text-gray-400 text-xs font-medium">
                 General
               </label>
@@ -87,32 +88,10 @@ export default function AuthLayout({
             </div>
           </div>
           <div className="w-full flex flex-col justify-end">
-            <Link
-              href="/settings"
-              className={`text-sm text-black flex items-center justify-between hover:cursor-pointer transition-all duration-300 ease-in-out w-full font-medium py-1.5 rounded-lg px-2 mb-3 ${
-                selectedItem === "settings"
-                  ? "bg-sky-50"
-                  : "hover:bg-gray-100 opacity-55"
-              }`}
-            >
-              <div className="flex items-center">
-                <Settings
-                  size={18}
-                  fontWeight="bold"
-                  className={`transition-all duration-300 ${
-                    selectedItem === "settings" ? "text-primary" : ""
-                  }`}
-                />
-                <span className="text-md ml-2 flex">Ajustes</span>
-              </div>
-              {selectedItem === "settings" && (
-                <ChevronRight className="h-4 w-4 opacity-55 transition duration-300" />
-              )}
-            </Link>
-            <div className="flex w-full h-auto justify-start items-center border-t-[2px] border-gray-100">
-              <div className="flex justify-between items-center gap-8 mt-4 w-full text-gray-800 hover:text-primary">
+            <div className="flex w-full h-auto justify-start items-center">
+              <div className="flex flex-col gap-2 items-center py-2 px-4 rounded-[18px] w-full text-gray-800 bg-sky-50">
                 {/* DATOS USUARIO */}
-                <div className="flex w-full items-center gap-2 h-14 hover:cursor-pointer px-1">
+                <div className="flex w-full items-center gap-2 h-14 hover:cursor-pointer">
                   <div className="w-8 h-8 rounded-xl overflow-hidden">
                     <Image
                       src={defaultProfilePic.src}
@@ -122,13 +101,27 @@ export default function AuthLayout({
                     />
                   </div>
                   <div className="flex flex-col">
-                    <h3 className="text-sm font-semibold  w-full">
+                    <h3 className="text-sm font-semibold w-full text-primary">
                       Tomás Matteozzi
                     </h3>
                     <span className="text-[0.65vw] text-gray-600">
                       Administrador
                     </span>
                   </div>
+                </div>
+                <div className="flex justify-between w-full gap-2">
+                  <Link
+                    className="flex w-1/2 gap-2 py-2 items-center text-xs"
+                    href="/settings"
+                  >
+                    <Settings size={18} fontWeight="bold" /> Ajustes
+                  </Link>
+                  <Link
+                    className="flex w-1/2 gap-2 py-2 items-center text-xs "
+                    href="/logout"
+                  >
+                    <LogOut size={18} fontWeight="bold" /> Log out
+                  </Link>
                 </div>
               </div>
             </div>
