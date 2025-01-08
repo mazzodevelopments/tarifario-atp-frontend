@@ -88,7 +88,7 @@ export default function Dashboard() {
                     >
                       <div className="flex-1">
                         <div className="flex gap-3">
-                          <h3 className="text-base font-semibold text-gray-700">
+                          <h3 className="text-secondary font-semibold text-gray-700">
                             {cotizacion.name}
                           </h3>
                           <div className="text-sm text-gray-500 flex items-center gap-2">
