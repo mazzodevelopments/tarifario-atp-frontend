@@ -111,13 +111,13 @@ export default function AuthLayout({
                 </div>
                 <div className="flex justify-between w-full gap-2">
                   <Link
-                    className="flex w-1/2 gap-2 py-2 items-center text-xs"
+                    className="flex w-1/2 gap-2 py-2 items-center text-xs hover:text-primary"
                     href="/settings"
                   >
                     <Settings size={18} fontWeight="bold" /> Ajustes
                   </Link>
                   <Link
-                    className="flex w-1/2 gap-2 py-2 items-center text-xs "
+                    className="flex w-1/2 gap-2 py-2 items-center text-xs hover:text-primary"
                     href="/logout"
                   >
                     <LogOut size={18} fontWeight="bold" /> Log out
