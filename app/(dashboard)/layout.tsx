@@ -46,7 +46,7 @@ export default function AuthLayout({
   return (
     <div className="w-screen relative h-screen bg-gray-50 flex justify-center items-center flex-row">
       <div className="w-full h-full flex justify-center items-center flex-row overflow-hidden">
-        <div className="w-[308px] h-full flex justify-between items-center flex-col bg-background z-20 p-6 pt-10">
+        <div className="w-[328px] h-full flex justify-between items-center flex-col bg-background z-20 px-[30px] pb-[20px] pt-10">
           <div className="flex justify-start w-full items-start flex-col">
             <div className="w-full flex flex-row items-end pb-6">
               <h3 className="text-xl font-bold text-primary leading-[1]">
