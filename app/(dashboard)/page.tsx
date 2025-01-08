@@ -1,6 +1,8 @@
 "use client";
 import { Plus, Server } from "react-feather";
 import { User, Calendar, DollarSign } from "react-feather";
+import Image from "next/image";
+import defaultProfilePic from "@/public/default-profile-pic.png";
 
 export default function Dashboard() {
   const cotizaciones = [
@@ -29,14 +31,27 @@ export default function Dashboard() {
 
   return (
     <div className="flex justify-start w-full h-full flex-col bg-background p-[20px]">
-      <div className="w-full h-[7vw] rounded-[18px] mb-3 bg-gradient-to-r from-secondary to-primary flex-shrink-0">
-        <div className="flex flex-col justify-end items-start h-full p-4">
-          <h2 className="text-[2vw] leading-[0.85] font-semibold text-white">
+      <div className="w-full h-[3.5vw] rounded-[18px] mb-2 flex-shrink-0">
+        <div className="flex justify-between items-center h-full">
+          <h2 className="text-[2vw] leading-[0.85] font-semibold text-secondary">
             General
           </h2>
-          <p className="text-[0.8vw] leading-[1] ml-1 text-white mt-2 opacity-90">
-            Vista general del tarifario
-          </p>
+          <div className="flex items-center gap-2 h-14 hover:cursor-pointer pr-2">
+            <div className="w-9 h-9 rounded-xl overflow-hidden">
+              <Image
+                src={defaultProfilePic.src}
+                width={1000}
+                height={1000}
+                alt="LOGO"
+              />
+            </div>
+            <div className="flex flex-col">
+              <h3 className="text-md font-semibold w-full text-secondary">
+                Tomás Matteozzi
+              </h3>
+              <span className="text-xs text-gray-600">Administrador</span>
+            </div>
+          </div>
         </div>
       </div>
       <div className="flex flex-row gap-3 items-start text-gray-900 h-full">
@@ -44,7 +59,7 @@ export default function Dashboard() {
           <div className="gap-3 w-full h-1/2 flex flex-row">
             {/* CREAR COTIZACION */}
             <div className="flex flex-col justify-between w-auto mb-3 h-full">
-              <div className="rounded-[18px] flex bg-sky-100 w-[12vw] h-full px-6 items-center justify-center flex-col">
+              <div className="rounded-[18px] flex bg-sky-50 w-[12vw] h-full px-6 items-center justify-center flex-col">
                 <Plus
                   className="text-secondary mr-1 mt-[1vw]"
                   fontWeight="bold"
@@ -58,7 +73,7 @@ export default function Dashboard() {
 
             {/* COMPARAR COTIZACION */}
             <div className="flex flex-col justify-between w-auto mb-3 h-full">
-              <div className="rounded-[18px] flex bg-sky-100 w-[12vw] h-full px-6 items-center justify-center flex-col">
+              <div className="rounded-[18px] flex bg-sky-50 w-[12vw] h-full px-6 items-center justify-center flex-col">
                 <Server
                   className="text-secondary mr-1 mt-[1.25vw]"
                   fontWeight="bold"
