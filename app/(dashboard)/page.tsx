@@ -31,9 +31,9 @@ export default function Dashboard() {
 
   return (
     <div className="flex justify-start w-full h-full flex-col bg-background p-[20px]">
-      <div className="w-full h-[3.5vw] rounded-[18px] mb-2 flex-shrink-0">
+      <div className="w-full h-auto  rounded-[18px] mb-2 flex-shrink-0">
         <div className="flex justify-between items-center h-full">
-          <h2 className="text-[2vw] leading-[0.85] font-semibold text-secondary">
+          <h2 className="text-[2vw] leading-[0.85] font-semibold text-black">
             General
           </h2>
           <div className="flex items-center gap-2 h-14 hover:cursor-pointer pr-2">
