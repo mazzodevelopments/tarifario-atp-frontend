@@ -28,7 +28,7 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="flex justify-start w-full h-full flex-col bg-background p-[20px]">
+    <div className="flex justify-start w-full h-full flex-col bg-background px-[20px]">
       <div className="w-full h-auto  rounded-[18px] mb-2 flex-shrink-0">
         <div className="flex justify-between items-center h-full">
           <h2 className="flex h-14 items-center text-[2vw] leading-[0.85] font-semibold text-black">
