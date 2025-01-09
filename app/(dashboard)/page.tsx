@@ -40,10 +40,10 @@ export default function Dashboard() {
             <div className="relative w-[12vw]">
               <Search
                 size={20}
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary"
               />
               <input
-                className="w-full h-[2vw] rounded-xl pl-10 pr-4 bg-background text-sm focus:outline-none"
+                className="w-full h-[2.25vw] rounded-xl pl-10 pr-4 bg-background text-sm focus:outline-none placeholder-secondary"
                 placeholder="Buscar cotización"
               />
             </div>
