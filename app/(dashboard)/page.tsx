@@ -1,6 +1,8 @@
 "use client";
 import { Plus, Server } from "react-feather";
-import { User, Calendar, DollarSign } from "react-feather";
+import { User, Calendar, DollarSign, Search } from "react-feather";
+import Image from "next/image";
+import defaultProfilePic from "@/public/default-profile-pic.png";
 
 export default function Dashboard() {
   const cotizaciones = [
@@ -28,12 +30,32 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="flex justify-start w-full h-full flex-col bg-background px-[20px]">
+    <div className="flex justify-start w-full h-full flex-col bg-slate-100 px-[20px]">
       <div className="w-full h-auto  rounded-[18px] mb-2 flex-shrink-0">
         <div className="flex justify-between items-center h-full">
           <h2 className="flex h-14 items-center text-[2vw] leading-[0.85] font-semibold text-black">
-            General
+            Bienvenido de nuevo Tomás!
           </h2>
+          <div className="flex items-center gap-2 h-14 hover:cursor-pointer">
+            <div className="relative w-[12vw]">
+              <Search
+                size={20}
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              />
+              <input
+                className="w-full h-[2vw] rounded-full pl-10 pr-4 bg-background text-sm focus:outline-none"
+                placeholder="Buscar cotización"
+              />
+            </div>
+            <div className="w-10 h-10 rounded-full overflow-hidden">
+              <Image
+                src={defaultProfilePic.src}
+                width={1000}
+                height={1000}
+                alt="LOGO"
+              />
+            </div>
+          </div>
         </div>
       </div>
       <div className="flex flex-row gap-3 items-start text-gray-900 h-full">
@@ -41,7 +63,7 @@ export default function Dashboard() {
           <div className="gap-3 w-full h-1/2 flex flex-row">
             {/* CREAR COTIZACION */}
             <div className="flex flex-col justify-between w-auto mb-3 h-full">
-              <div className="rounded-[18px] flex bg-sky-50 w-[12vw] h-full px-6 items-center justify-center flex-col">
+              <div className="rounded-[18px] flex bg-background w-[12vw] h-full px-6 items-center justify-center flex-col">
                 <Plus
                   className="text-secondary mr-1 mt-[1vw]"
                   fontWeight="bold"
@@ -55,7 +77,7 @@ export default function Dashboard() {
 
             {/* COMPARAR COTIZACION */}
             <div className="flex flex-col justify-between w-auto mb-3 h-full">
-              <div className="rounded-[18px] flex bg-sky-50 w-[12vw] h-full px-6 items-center justify-center flex-col">
+              <div className="rounded-[18px] flex bg-background w-[12vw] h-full px-6 items-center justify-center flex-col">
                 <Server
                   className="text-secondary mr-1 mt-[1.25vw]"
                   fontWeight="bold"
@@ -67,12 +89,12 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-          <div className="w-[calc(24vw+0.75rem)] h-full bg-sky-50 rounded-[18px]"></div>
+          <div className="w-[calc(24vw+0.75rem)] h-full bg-background rounded-[18px]"></div>
         </div>
         <div className="h-full w-full flex flex-col">
           <div className="w-1/2 h-full flex flex-col">
             {/* LISTADO DE COTIZACIONES */}
-            <div className="w-full h-full rounded-[18px] mb-3 bg-sky-50">
+            <div className="w-full h-full rounded-[18px] mb-3 bg-background">
               <div className="flex flex-col p-4">
                 <h2 className="text-lg font-semibold text-secondary mb-2">
                   Últimas cotizaciones
@@ -81,7 +103,7 @@ export default function Dashboard() {
                   {cotizaciones.map((cotizacion) => (
                     <div
                       key={cotizacion.id}
-                      className="flex items-center bg-background rounded-lg p-3 cursor-pointer hover:bg-gray-50"
+                      className="flex items-center bg-slate-50 rounded-lg p-3 cursor-pointer hover:bg-gray-50"
                     >
                       <div className="flex-1">
                         <div className="flex gap-3">
@@ -111,7 +133,7 @@ export default function Dashboard() {
             </div>
             <div className="gap-3 w-full h-1/2 flex flex-row">
               <div className="flex flex-col justify-between w-full mb-3 h-full">
-                <div className="w-full h-full bg-sky-50 rounded-[18px]"></div>
+                <div className="w-full h-full bg-background rounded-[18px]"></div>
               </div>
             </div>
           </div>
