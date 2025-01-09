@@ -90,34 +90,33 @@ export default function AuthLayout({
           <div className="w-full flex flex-col justify-end">
             <div className="flex w-full h-auto justify-start items-center">
               <div className="flex flex-col gap-2 items-center py-2 px-4 rounded-[18px] w-full text-gray-800 bg-primary">
-                {/* DATOS USUARIO */}
-                {/*<div className="flex w-full items-center gap-2 h-14 hover:cursor-pointer">*/}
-                {/*  <div className="w-8 h-8 rounded-xl overflow-hidden">*/}
-                {/*    <Image*/}
-                {/*      src={defaultProfilePic.src}*/}
-                {/*      width={1000}*/}
-                {/*      height={1000}*/}
-                {/*      alt="LOGO"*/}
-                {/*    />*/}
-                {/*  </div>*/}
-                {/*  <div className="flex flex-col">*/}
-                {/*    <h3 className="text-sm font-semibold w-full text-background">*/}
-                {/*      Tomás Matteozzi*/}
-                {/*    </h3>*/}
-                {/*    <span className="text-[0.65vw] text-background">*/}
-                {/*      Administrador*/}
-                {/*    </span>*/}
-                {/*  </div>*/}
-                {/*</div>*/}
+                <div className="flex w-full items-center gap-2 h-14 hover:cursor-pointer">
+                  <div className="w-8 h-8 rounded-xl overflow-hidden">
+                    <Image
+                      src={defaultProfilePic.src}
+                      width={1000}
+                      height={1000}
+                      alt="LOGO"
+                    />
+                  </div>
+                  <div className="flex flex-col">
+                    <h3 className="text-sm font-semibold w-full text-background">
+                      Tomás Matteozzi
+                    </h3>
+                    <span className="text-[0.65vw] text-background">
+                      Administrador
+                    </span>
+                  </div>
+                </div>
                 <div className="flex justify-between w-full gap-2 text-background py-1.5 rounded-lg">
                   <Link
-                    className="flex w-1/2 gap-2 justify-center items-center text-xs hover:text-secondary"
+                    className="flex w-1/2 gap-2 items-center text-xs hover:text-secondary"
                     href="/settings"
                   >
                     <Settings size={18} fontWeight="bold" /> Ajustes
                   </Link>
                   <Link
-                    className="flex w-1/2 gap-2 justify-center items-center text-xs hover:text-secondary"
+                    className="flex w-1/2 gap-2 items-center text-xs hover:text-secondary"
                     href="/logout"
                   >
                     <LogOut size={18} fontWeight="bold" /> Log out

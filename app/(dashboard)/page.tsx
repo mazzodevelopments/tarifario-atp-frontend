@@ -43,16 +43,8 @@ export default function Dashboard() {
                 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
               />
               <input
-                className="w-full h-[2vw] rounded-full pl-10 pr-4 bg-background text-sm focus:outline-none"
+                className="w-full h-[2vw] rounded-xl pl-10 pr-4 bg-background text-sm focus:outline-none"
                 placeholder="Buscar cotización"
-              />
-            </div>
-            <div className="w-10 h-10 rounded-full overflow-hidden">
-              <Image
-                src={defaultProfilePic.src}
-                width={1000}
-                height={1000}
-                alt="LOGO"
               />
             </div>
           </div>
