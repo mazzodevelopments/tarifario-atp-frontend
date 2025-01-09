@@ -44,9 +44,9 @@ export default function AuthLayout({
   }, [pathname]);
 
   return (
-    <div className="w-screen relative h-screen bg-gray-50 flex justify-center items-center flex-row">
-      <div className="w-full h-full flex justify-center items-center flex-row overflow-hidden">
-        <div className="w-[328px] h-full flex justify-between items-center flex-col bg-background z-20 px-[30px] pb-[20px] pt-10">
+    <div className="w-screen relative h-screen flex justify-center items-center flex-row">
+      <div className="w-full h-full flex justify-center items-center flex-row overflow-hidden p-4">
+        <div className="w-[328px] h-full flex justify-between items-center flex-col bg-sky-50 z-20 p-[20px] pt-10 rounded-[18px]">
           <div className="flex justify-start w-full items-start flex-col">
             <div className="w-full flex flex-row items-end pb-6">
               <h3 className="text-xl font-bold text-primary leading-[1]">
@@ -65,7 +65,7 @@ export default function AuthLayout({
                   key={item.id}
                   className={`text-sm text-black flex items-center justify-between hover:cursor-pointer transition-all duration-300 ease-in-out w-full font-medium py-1.5 rounded-lg px-2 ${
                     selectedItem === item.id
-                      ? " bg-sky-50"
+                      ? " bg-sky-100"
                       : "hover:bg-gray-100 opacity-55"
                   }`}
                   href={`/${item.id}`}
@@ -89,7 +89,7 @@ export default function AuthLayout({
           </div>
           <div className="w-full flex flex-col justify-end">
             <div className="flex w-full h-auto justify-start items-center">
-              <div className="flex flex-col gap-2 items-center py-2 px-4 rounded-[18px] w-full text-gray-800 bg-sky-50">
+              <div className="flex flex-col gap-2 items-center py-2 px-4 rounded-[18px] w-full text-gray-800 bg-sky-100">
                 {/* DATOS USUARIO */}
                 <div className="flex w-full items-center gap-2 h-14 hover:cursor-pointer">
                   <div className="w-8 h-8 rounded-xl overflow-hidden">
