@@ -127,7 +127,7 @@ export default function AuthLayout({
             </div>
           </div>
         </div>
-        <div className="w-full h-full relative flex justify-center items-center flex-col overflow-hidden border-l-[2px] border-gray-100">
+        <div className="w-full h-full relative flex justify-center items-center flex-col overflow-hidden">
           {children}
         </div>
       </div>

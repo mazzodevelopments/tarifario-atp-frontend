@@ -30,28 +30,12 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="flex justify-start w-full h-full flex-col bg-background p-[20px]">
+    <div className="flex justify-start w-full h-full flex-col bg-gray-50 p-[20px]">
       <div className="w-full h-auto  rounded-[18px] mb-2 flex-shrink-0">
         <div className="flex justify-between items-center h-full">
-          <h2 className="text-[2vw] leading-[0.85] font-semibold text-black">
+          <h2 className="flex h-14 items-center text-[2vw] leading-[0.85] font-semibold text-black">
             General
           </h2>
-          <div className="flex items-center gap-2 h-14 hover:cursor-pointer pr-2">
-            <div className="w-9 h-9 rounded-xl overflow-hidden">
-              <Image
-                src={defaultProfilePic.src}
-                width={1000}
-                height={1000}
-                alt="LOGO"
-              />
-            </div>
-            <div className="flex flex-col">
-              <h3 className="text-md font-semibold w-full text-secondary">
-                Tomás Matteozzi
-              </h3>
-              <span className="text-xs text-gray-600">Administrador</span>
-            </div>
-          </div>
         </div>
       </div>
       <div className="flex flex-row gap-3 items-start text-gray-900 h-full">
@@ -59,7 +43,7 @@ export default function Dashboard() {
           <div className="gap-3 w-full h-1/2 flex flex-row">
             {/* CREAR COTIZACION */}
             <div className="flex flex-col justify-between w-auto mb-3 h-full">
-              <div className="rounded-[18px] flex bg-sky-50 w-[12vw] h-full px-6 items-center justify-center flex-col">
+              <div className="rounded-[18px] flex bg-sky-100 w-[12vw] h-full px-6 items-center justify-center flex-col">
                 <Plus
                   className="text-secondary mr-1 mt-[1vw]"
                   fontWeight="bold"
@@ -73,7 +57,7 @@ export default function Dashboard() {
 
             {/* COMPARAR COTIZACION */}
             <div className="flex flex-col justify-between w-auto mb-3 h-full">
-              <div className="rounded-[18px] flex bg-sky-50 w-[12vw] h-full px-6 items-center justify-center flex-col">
+              <div className="rounded-[18px] flex bg-sky-100 w-[12vw] h-full px-6 items-center justify-center flex-col">
                 <Server
                   className="text-secondary mr-1 mt-[1.25vw]"
                   fontWeight="bold"
@@ -85,12 +69,12 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-          <div className="w-[calc(24vw+0.75rem)] h-full bg-sky-50 rounded-[18px]"></div>
+          <div className="w-[calc(24vw+0.75rem)] h-full bg-sky-100 rounded-[18px]"></div>
         </div>
         <div className="h-full w-full flex flex-col">
           <div className="w-1/2 h-full flex flex-col">
             {/* LISTADO DE COTIZACIONES */}
-            <div className="w-full h-full rounded-[18px] mb-3 bg-sky-50">
+            <div className="w-full h-full rounded-[18px] mb-3 bg-sky-100">
               <div className="flex flex-col p-4">
                 <h2 className="text-lg font-semibold text-secondary mb-2">
                   Últimas cotizaciones
@@ -129,7 +113,7 @@ export default function Dashboard() {
             </div>
             <div className="gap-3 w-full h-1/2 flex flex-row">
               <div className="flex flex-col justify-between w-full mb-3 h-full">
-                <div className="w-full h-full bg-sky-50 rounded-[18px]"></div>
+                <div className="w-full h-full bg-sky-100 rounded-[18px]"></div>
               </div>
             </div>
           </div>
