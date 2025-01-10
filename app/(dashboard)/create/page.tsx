@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import ProgressBar from "./ProgressBar";
 import SuccessAnimation from "./SuccesAnimation";
 import Button from "@/components/Button";
 import Header from "@/app/(dashboard)/components/Header";
+
 import IncotermSelect from "@/app/(dashboard)/create/steps/IncotermSelect";
 import LocationSelect from "@/app/(dashboard)/create/steps/LocationSelect";
 import { incoterms, vias, paises } from "@/app/(dashboard)/create/data";
@@ -16,10 +17,10 @@ export interface DropdownOption {
 
 export default function Create() {
   const [currentStep, setCurrentStep] = useState(0);
+  const [totalSteps, setTotalSteps] = useState(0);
   const [isCreating, setIsCreating] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [selectedIncoterm, setSelectedIncoterm] = useState("");
-  const [totalSteps, setTotalSteps] = useState(0);
   const [selectedLocation, setSelectedLocation] = useState({
     via: "",
     origen: "",
@@ -36,6 +37,36 @@ export default function Create() {
       }
     }
   }, [selectedIncoterm]);
+
+  // FILTRADO DE VÍAS SEGÚN INCOTERM
+  const filteredVias = useMemo(() => {
+    if (!selectedIncoterm) return vias;
+
+    switch (selectedIncoterm) {
+      case "EXW":
+        return vias;
+      case "FCA":
+      case "FOB":
+      case "CFR":
+      case "CIF":
+        return vias.filter((via) => via.value !== "COURIER");
+      case "DAT":
+      case "DAP":
+      case "DDP":
+        return vias.filter(
+          (via) => via.value !== "COURIER" && via.value !== "MARÍTIMA",
+        );
+      default:
+        return vias;
+    }
+  }, [selectedIncoterm]);
+
+  // VERIFICAR SI LA VIA SELECCIONADA SIGUE SIENDO VALIDA DESPUES DE CAMBIAR EL INCOTERM
+  useEffect(() => {
+    if (!filteredVias.some((via) => via.value === selectedLocation.via)) {
+      setSelectedLocation((prev) => ({ ...prev, via: "" }));
+    }
+  }, [selectedIncoterm, filteredVias, selectedLocation.via]);
 
   const handleNext = () => {
     if (currentStep < totalSteps - 1) {
@@ -84,7 +115,7 @@ export default function Create() {
       case 1:
         return (
           <LocationSelect
-            vias={vias}
+            vias={filteredVias}
             origenes={paises}
             destinos={paises}
             selectedLocation={selectedLocation}
