@@ -68,7 +68,7 @@ export default function AuthLayout({
                   className={`text-sm flex items-center justify-between hover:cursor-pointer transition-all duration-300 ease-in-out w-full font-medium py-1.5 rounded-lg px-2 ${
                     selectedItem === item.id
                       ? " bg-sky-50 text-primary"
-                      : "hover:bg-sky-50 text-black"
+                      : "hover:bg-sky-50 text-gray-500 hover:text-primary"
                   }`}
                   href={`/${item.id}`}
                 >
@@ -76,7 +76,7 @@ export default function AuthLayout({
                     <item.icon
                       size={18}
                       fontWeight="bold"
-                      className={`transition-all duration-300 ${
+                      className={` ${
                         selectedItem === item.id ? " text-primary" : ""
                       }`}
                     />
