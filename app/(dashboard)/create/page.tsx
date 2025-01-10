@@ -17,15 +17,12 @@ export default function Create() {
   const incoterms = [
     { value: "EXW", label: "EXW - Ex Works", steps: 5 },
     { value: "FCA", label: "FCA - Free Carrier", steps: 6 },
-    { value: "CPT", label: "CPT - Carriage Paid To", steps: 7 },
-    { value: "CIP", label: "CIP - Carriage and Insurance Paid To", steps: 8 },
-    { value: "DAP", label: "DAP - Delivered At Place", steps: 7 },
-    { value: "DPU", label: "DPU - Delivered at Place Unloaded", steps: 8 },
-    { value: "DDP", label: "DDP - Delivered Duty Paid", steps: 9 },
-    { value: "FAS", label: "FAS - Free Alongside Ship", steps: 6 },
     { value: "FOB", label: "FOB - Free On Board", steps: 7 },
     { value: "CFR", label: "CFR - Cost and Freight", steps: 8 },
     { value: "CIF", label: "CIF - Cost, Insurance, and Freight", steps: 9 },
+    { value: "DAT", label: "DAT - Delivered At Terminal", steps: 7 },
+    { value: "DAP", label: "DAP - Delivered At Place", steps: 7 },
+    { value: "DDP", label: "DDP - Delivered Duty Paid", steps: 9 },
   ];
 
   useEffect(() => {
