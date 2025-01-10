@@ -6,24 +6,25 @@ import SuccessAnimation from "./SuccesAnimation";
 import Button from "@/components/Button";
 import Header from "@/app/(dashboard)/components/Header";
 import IncotermSelect from "@/app/(dashboard)/create/steps/IncotermSelect";
+import LocationSelect from "@/app/(dashboard)/create/steps/LocationSelect";
+import { incoterms, vias, paises } from "@/app/(dashboard)/create/data";
+
+export interface DropdownOption {
+  value: string;
+  label: string;
+}
 
 export default function Create() {
   const [currentStep, setCurrentStep] = useState(0);
   const [isCreating, setIsCreating] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [selectedIncoterm, setSelectedIncoterm] = useState("");
-  const [totalSteps, setTotalSteps] = useState(1);
-
-  const incoterms = [
-    { value: "EXW", label: "EXW - Ex Works", steps: 5 },
-    { value: "FCA", label: "FCA - Free Carrier", steps: 6 },
-    { value: "FOB", label: "FOB - Free On Board", steps: 7 },
-    { value: "CFR", label: "CFR - Cost and Freight", steps: 8 },
-    { value: "CIF", label: "CIF - Cost, Insurance, and Freight", steps: 9 },
-    { value: "DAT", label: "DAT - Delivered At Terminal", steps: 7 },
-    { value: "DAP", label: "DAP - Delivered At Place", steps: 7 },
-    { value: "DDP", label: "DDP - Delivered Duty Paid", steps: 9 },
-  ];
+  const [totalSteps, setTotalSteps] = useState(0);
+  const [selectedLocation, setSelectedLocation] = useState({
+    via: "",
+    origen: "",
+    destino: "",
+  });
 
   useEffect(() => {
     if (selectedIncoterm) {
@@ -56,6 +57,20 @@ export default function Create() {
     setIsSuccess(true);
   };
 
+  const isNextButtonDisabled = () => {
+    if (currentStep === 0) {
+      return !selectedIncoterm;
+    }
+    if (currentStep === 1) {
+      return (
+        !selectedLocation.via ||
+        !selectedLocation.origen ||
+        !selectedLocation.destino
+      );
+    }
+    return false;
+  };
+
   const renderStepContent = () => {
     switch (currentStep) {
       case 0:
@@ -64,6 +79,16 @@ export default function Create() {
             incoterms={incoterms}
             selectedValue={selectedIncoterm}
             setSelectedValue={setSelectedIncoterm}
+          />
+        );
+      case 1:
+        return (
+          <LocationSelect
+            vias={vias}
+            origenes={paises}
+            destinos={paises}
+            selectedLocation={selectedLocation}
+            setSelectedLocation={setSelectedLocation}
           />
         );
       default:
@@ -116,7 +141,7 @@ export default function Create() {
                 <Button
                   onClick={handleNext}
                   className="px-4 py-2 bg-primary text-white rounded-[6px]"
-                  disabled={currentStep === 0 && !selectedIncoterm}
+                  disabled={isNextButtonDisabled()}
                 >
                   Siguiente
                 </Button>
