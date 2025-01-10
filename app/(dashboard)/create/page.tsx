@@ -30,7 +30,7 @@ export default function Create() {
   useEffect(() => {
     if (selectedIncoterm) {
       const selectedIncotermData = incoterms.find(
-        (inco) => inco.value === selectedIncoterm
+        (inco) => inco.value === selectedIncoterm,
       );
       if (selectedIncotermData) {
         setTotalSteps(selectedIncotermData.steps);
@@ -46,16 +46,34 @@ export default function Create() {
       case "EXW":
         return vias;
       case "FCA":
+        return vias;
       case "FOB":
-      case "CFR":
-      case "CIF":
-        return vias.filter((via) => via.value !== "COURIER");
-      case "DAT":
-      case "DAP":
-      case "DDP":
         return vias.filter(
-          (via) => via.value !== "COURIER" && via.value !== "MARÍTIMA"
+          (via) =>
+            via.value !== "COURIER" &&
+            via.value !== "TERRESTRE" &&
+            via.value !== "AÉREO",
         );
+      case "CFR":
+        return vias.filter(
+          (via) =>
+            via.value !== "COURIER" &&
+            via.value !== "TERRESTRE" &&
+            via.value !== "AÉREO",
+        );
+      case "CIF":
+        return vias.filter(
+          (via) =>
+            via.value !== "COURIER" &&
+            via.value !== "TERRESTRE" &&
+            via.value !== "AÉREO",
+        );
+      case "DAT":
+        return vias;
+      case "DAP":
+        return vias;
+      case "DDP":
+        return vias;
       default:
         return vias;
     }
