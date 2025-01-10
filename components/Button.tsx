@@ -1,39 +1,30 @@
-/**
- * Este es un componente de botón reutilizable que puede ser personalizado con diferentes variantes.
- */
-
 import React, { ButtonHTMLAttributes } from "react";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "outline";
-  children: React.ReactNode;
+  className?: string;
 }
 
-export default function Button({
-  variant = "primary",
+const Button: React.FC<ButtonProps> = ({
   children,
   className = "",
-  disabled = false,
   ...props
-}: ButtonProps) {
-  const baseClasses = "font-medium transition-colors";
-
-  const variantClasses = {
-    primary: "bg-primary text-white hover:bg-primary/90",
-    secondary: "bg-secondary text-white hover:bg-secondary/90",
-    outline:
-      "bg-transparent border border-primary text-primary hover:bg-primary/10",
-  };
-
-  const disabledClasses = "bg-primary/20 text-secondary/60";
-
-  const classes = `${baseClasses} ${
-    disabled ? disabledClasses : variantClasses[variant]
-  } ${className}`.trim();
-
+}) => {
   return (
-    <button className={classes} disabled={disabled} {...props}>
-      {children}
+    <button
+      className={`
+        relative overflow-hidden px-4 py-2 rounded-3xl font-semibold text-white
+        transition-all duration-300 ease-out
+        transform hover:scale-105 hover:shadow-lg
+        before:absolute before:top-0 before:left-0 before:w-full before:h-full
+        before:bg-white before:opacity-0 before:transition-opacity before:duration-300
+        hover:before:opacity-20
+        ${className}
+      `}
+      {...props}
+    >
+      <span className="relative z-10">{children}</span>
     </button>
   );
-}
+};
+
+export default Button;
