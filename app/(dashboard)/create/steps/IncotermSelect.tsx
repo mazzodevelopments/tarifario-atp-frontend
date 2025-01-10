@@ -1,22 +1,20 @@
-import { useState } from "react";
+export interface Incoterm {
+  value: string;
+  label: string;
+  steps: number;
+}
 
-export default function IncotermSelect() {
-  const incoterms = [
-    { value: "EXW", label: "EXW - Ex Works" },
-    { value: "FCA", label: "FCA - Free Carrier" },
-    { value: "CPT", label: "CPT - Carriage Paid To" },
-    { value: "CIP", label: "CIP - Carriage and Insurance Paid To" },
-    { value: "DAP", label: "DAP - Delivered At Place" },
-    { value: "DPU", label: "DPU - Delivered at Place Unloaded" },
-    { value: "DDP", label: "DDP - Delivered Duty Paid" },
-    { value: "FAS", label: "FAS - Free Alongside Ship" },
-    { value: "FOB", label: "FOB - Free On Board" },
-    { value: "CFR", label: "CFR - Cost and Freight" },
-    { value: "CIF", label: "CIF - Cost, Insurance, and Freight" },
-  ];
+export interface IncotermSelectProps {
+  incoterms: Incoterm[];
+  selectedValue: string;
+  setSelectedValue: (value: string) => void;
+}
 
-  const [selectedValue, setSelectedValue] = useState("");
-
+export default function IncotermSelect({
+  incoterms,
+  selectedValue,
+  setSelectedValue,
+}: IncotermSelectProps) {
   return (
     <div className="flex flex-col items-center justify-center">
       <h2 className="text-center text-xl font-medium text-secondary mb-4">
