@@ -38,10 +38,7 @@ export default function Reports() {
           className="w-full pr-1.5 pt-2.5 font-medium text-gray-600 text-sm outline-none"
           readOnly
         />
-        <Button
-          className="absolute right-0 top-0 text-xs rounded-xl px-3.5 py-2"
-          variant="primary"
-        >
+        <Button className="absolute right-0 top-0 text-xs rounded-xl px-3.5 py-2">
           Editar
         </Button>
       </div>
@@ -49,12 +46,8 @@ export default function Reports() {
   );
 
   return (
-    <div className="flex flex-col justify-start w-full h-full bg-background p-[20px]">
-      <Header
-        title="Ajustes"
-        description="Lista de proveedores oficiales"
-        className="bg-gradient-to-r from-gray-800 to-gray-600"
-      />
+    <div className="flex flex-col justify-start w-full h-full bg-transparent px-[20px]">
+      <Header title="Ajustes" description="Lista de proveedores oficiales" />
       <div className="flex flex-row w-full h-auto justify-start items-start gap-2 bg-white rounded-[18px] px-2 pb-2 border-2 border-gray-100">
         <div className="flex flex-col w-[60%] p-4">
           <label className="text-md font-semibold text-gray-700 mb-2">
@@ -79,10 +72,7 @@ export default function Reports() {
               </div>
             </div>
             <div className="flex gap-2 ml-4">
-              <Button
-                variant="outline"
-                className="text-xs rounded-xl px-3.5 py-1.5"
-              >
+              <Button className="text-xs rounded-xl px-3.5 py-1.5">
                 Eliminar
               </Button>
               <Button className="flex items-center text-xs w-full rounded-xl px-3.5 py-1.5">

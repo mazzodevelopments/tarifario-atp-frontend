@@ -3,6 +3,7 @@ import { Plus, Server } from "react-feather";
 import { User, Calendar, DollarSign, Search } from "react-feather";
 import Image from "next/image";
 import defaultProfilePic from "@/public/default-profile-pic.png";
+import Header from "./components/Header";
 
 export default function Dashboard() {
   const cotizaciones = [
@@ -30,38 +31,24 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="flex justify-start w-full h-full flex-col bg-white px-[20px]">
-      <div className="w-full h-auto  rounded-[18px] mb-2 flex-shrink-0">
-        <div className="flex justify-between items-center h-full">
-          <h2 className="flex h-14 items-center text-[2vw] leading-[0.85] font-semibold text-black">
-            Bienvenido de nuevo Tomás!
-          </h2>
-          <div className="flex items-center gap-2 h-14 hover:cursor-pointer">
-            <div className="relative w-[12vw]">
-              <Search
-                size={20}
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary"
-              />
-              <input
-                className="w-full h-[2.25vw] rounded-xl pl-10 pr-4 bg-sky-50 text-sm focus:outline-none placeholder-secondary"
-                placeholder="Buscar cotización"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="flex justify-start w-full h-full flex-col bg-gray-50 px-[20px]">
+      <Header
+        title="General"
+        description="Vista general del Tarifario"
+        searchInput={true}
+      />
       <div className="flex flex-row gap-3 items-start text-gray-900 h-full">
         <div className="flex flex-col gap-3 items-start text-gray-900 w-auto h-full">
           <div className="gap-3 w-full h-1/2 flex flex-row">
             {/* CREAR COTIZACION */}
             <div className="flex flex-col justify-between w-auto mb-3 h-full">
-              <div className="rounded-[18px] flex bg-sky-50 w-[12vw] h-full px-6 items-center justify-center flex-col">
+              <div className="rounded-[18px] flex bg-white shadow-sm w-[12vw] h-full px-6 items-center justify-center flex-col">
                 <Plus
-                  className="text-secondary mr-1 mt-[1vw]"
+                  className="text-black mr-1 mt-[1vw]"
                   fontWeight="bold"
                   size={"4vw"}
                 />
-                <h3 className="text-[1vw] font-semibold mt-[1vw] text-secondary bg-transparent outline-none">
+                <h3 className="text-[1vw] font-semibold mt-[1vw] text-black bg-transparent outline-none">
                   Crear cotización
                 </h3>
               </div>
@@ -69,37 +56,37 @@ export default function Dashboard() {
 
             {/* COMPARAR COTIZACION */}
             <div className="flex flex-col justify-between w-auto mb-3 h-full">
-              <div className="rounded-[18px] flex bg-sky-50 w-[12vw] h-full px-6 items-center justify-center flex-col">
+              <div className="rounded-[18px] flex bg-white shadow-sm w-[12vw] h-full px-6 items-center justify-center flex-col">
                 <Server
-                  className="text-secondary mr-1 mt-[1.25vw]"
+                  className="text-black mr-1 mt-[1.25vw]"
                   fontWeight="bold"
                   size={"3.5vw"}
                 />
-                <h3 className="text-[1vw] font-semibold mt-[1.25vw] text-secondary bg-transparent outline-none">
+                <h3 className="text-[1vw] font-semibold mt-[1.25vw] text-black bg-transparent outline-none">
                   Comparar
                 </h3>
               </div>
             </div>
           </div>
-          <div className="w-[calc(24vw+0.75rem)] h-full bg-sky-50 rounded-[18px]"></div>
+          <div className="w-[calc(24vw+0.75rem)] h-full bg-white shadow-sm rounded-[18px]"></div>
         </div>
         <div className="h-full w-full flex flex-row gap-3">
           <div className="w-1/2 h-full flex flex-col">
             {/* LISTADO DE COTIZACIONES */}
-            <div className="w-full h-full rounded-[18px] mb-3 bg-sky-50">
+            <div className="w-full h-full rounded-[18px] mb-3 bg-white shadow-sm">
               <div className="flex flex-col p-4">
-                <h2 className="text-lg font-semibold text-secondary mb-2">
+                <h2 className="text-lg font-semibold text-black mb-2">
                   Últimas cotizaciones
                 </h2>
                 <div className="space-y-3">
                   {cotizaciones.map((cotizacion) => (
                     <div
                       key={cotizacion.id}
-                      className="flex items-center bg-sky-100 rounded-lg p-3 cursor-pointer hover:bg-gray-50"
+                      className="flex items-center bg-sky-50 rounded-lg p-3 cursor-pointer hover:bg-gray-50"
                     >
                       <div className="flex-1">
                         <div className="flex gap-3">
-                          <h3 className="text-secondary font-semibold">
+                          <h3 className="text-black font-semibold">
                             {cotizacion.name}
                           </h3>
                           <div className="text-sm text-gray-500 flex items-center gap-2">
@@ -125,16 +112,16 @@ export default function Dashboard() {
             </div>
             <div className="gap-3 w-full h-1/2 flex flex-row">
               <div className="flex flex-col justify-between w-full mb-3 h-full">
-                <div className="w-full h-full bg-sky-50 rounded-[18px]"></div>
+                <div className="w-full h-full bg-white shadow-sm rounded-[18px]"></div>
               </div>
             </div>
           </div>
           <div className="w-1/2 h-full flex flex-col-reverse gap-3">
             {/* LISTADO DE COTIZACIONES */}
-            <div className="w-full h-full rounded-[18px] bg-sky-50"></div>
+            <div className="w-full h-full rounded-[18px] bg-white shadow-sm"></div>
             <div className="gap-3 w-full h-1/2 flex flex-row">
               <div className="flex flex-col justify-between w-full mb-3 h-full">
-                <div className="w-full h-full bg-sky-50 rounded-[18px]"></div>
+                <div className="w-full h-full bg-white shadow-sm rounded-[18px]"></div>
               </div>
             </div>
           </div>

@@ -44,12 +44,13 @@ const cotizaciones = [
 
 export default function History() {
   return (
-    <div className="flex justify-start w-full h-full flex-col bg-background p-[20px]">
-      <Header
-        title="Cotizaciones"
-        description="Historial de cotizaciones realizadas"
-        className="bg-gradient-to-r from-green-600 to-emerald-200"
-      />
+    <div className="flex justify-start w-full h-full flex-col bg-transparent px-[20px]">
+      <div className="w-full h-auto  rounded-[18px] mb-2 flex-shrink-0">
+        <Header
+          title="Cotizaciones"
+          description="Historial de cotizaciones realizadas"
+        />
+      </div>
       <div className="flex mb-4 items-center ">
         <div className="w-auto rounded-[18px] flex bg-sky-50 h-10 px-4 items-center justify-start">
           <Search

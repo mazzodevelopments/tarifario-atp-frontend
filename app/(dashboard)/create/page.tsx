@@ -30,7 +30,7 @@ export default function Create() {
   useEffect(() => {
     if (selectedIncoterm) {
       const selectedIncotermData = incoterms.find(
-        (inco) => inco.value === selectedIncoterm,
+        (inco) => inco.value === selectedIncoterm
       );
       if (selectedIncotermData) {
         setTotalSteps(selectedIncotermData.steps);
@@ -54,7 +54,7 @@ export default function Create() {
       case "DAP":
       case "DDP":
         return vias.filter(
-          (via) => via.value !== "COURIER" && via.value !== "MARÍTIMA",
+          (via) => via.value !== "COURIER" && via.value !== "MARÍTIMA"
         );
       default:
         return vias;
@@ -128,13 +128,12 @@ export default function Create() {
   };
 
   return (
-    <div className="flex flex-col w-full h-full bg-background p-[20px]">
+    <div className="flex flex-col w-full h-full bg-transparent px-[20]">
       <Header
         title="Nueva Cotización"
         description="Crea una nueva cotización"
-        className="bg-gradient-to-r from-primary to-sky-200"
       />
-      <div className="flex-grow flex flex-col gap-6 w-full p-[20px] bg-sky-50 rounded-[18px] relative">
+      <div className="flex-grow flex flex-col gap-6 w-full h-full p-[20px] bg-white shadow-sm rounded-[18px] relative">
         {isCreating || isSuccess ? (
           <SuccessAnimation isCreating={isCreating} isSuccess={isSuccess} />
         ) : (
@@ -155,7 +154,7 @@ export default function Create() {
             </div>
             <div className="flex justify-between mt-auto">
               <Button
-                className="px-4 py-2 bg-neutral-200 text-neutral-600 rounded-md hover:bg-neutral-300 disabled:opacity-50"
+                className="px-3 py-1 bg-neutral-200 text-neutral-800  hover:bg-neutral-300 disabled:opacity-50"
                 onClick={handlePrevious}
                 disabled={currentStep === 0}
               >
@@ -164,14 +163,14 @@ export default function Create() {
               {currentStep === totalSteps - 1 ? (
                 <Button
                   onClick={handleCreate}
-                  className="px-4 py-2 bg-primary text-white rounded-[6px]"
+                  className="px-4 py-2 bg-primary text-white"
                 >
                   Crear Cotización
                 </Button>
               ) : (
                 <Button
                   onClick={handleNext}
-                  className="px-4 py-2 bg-primary text-white rounded-[6px]"
+                  className="px-4 py-2 bg-primary text-white"
                   disabled={isNextButtonDisabled()}
                 >
                   Siguiente
