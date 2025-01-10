@@ -10,9 +10,10 @@ export const incoterms = [
 ];
 
 export const vias = [
-  { value: "Aéreo", label: "Aéreo" },
-  { value: "Terrestre", label: "Terrestre" },
-  { value: "Maritimo", label: "Maritimo" },
+  { value: "COURIER", label: "COURIER" },
+  { value: "AÉREO", label: "AÉREO" },
+  { value: "TERRESTRE", label: "TERRESTRE" },
+  { value: "MARÍTIMA", label: "MARÍTIMA" },
 ];
 
 export const paises = [
