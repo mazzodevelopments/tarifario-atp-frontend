@@ -8,6 +8,7 @@ import Header from "@/app/(dashboard)/components/Header";
 
 import IncotermSelect from "@/app/(dashboard)/create/steps/IncotermSelect";
 import LocationSelect from "@/app/(dashboard)/create/steps/LocationSelect";
+import PackageOptionsAttachment from "@/app/(dashboard)/create/steps/PackageOptionsAttachment";
 import { incoterms, vias, paises } from "@/app/(dashboard)/create/data";
 
 export interface DropdownOption {
@@ -25,6 +26,11 @@ export default function Create() {
     via: "",
     origen: "",
     destino: "",
+  });
+  const [packageOptions, setPackageOptions] = useState({
+    pickUpCost: 180,
+    needsRepackaging: false,
+    needsFumigation: false,
   });
 
   useEffect(() => {
@@ -117,6 +123,9 @@ export default function Create() {
         !selectedLocation.destino
       );
     }
+    if (currentStep === 2) {
+      return packageOptions.pickUpCost < 180 || packageOptions.pickUpCost > 650;
+    }
     return false;
   };
 
@@ -140,8 +149,23 @@ export default function Create() {
             setSelectedLocation={setSelectedLocation}
           />
         );
+      case 2:
+        return <PackageOptionsAttachment onOptionsChange={setPackageOptions} />;
       default:
         return <p>Contenido de la etapa {currentStep + 1}</p>;
+    }
+  };
+
+  const getStepTitle = () => {
+    switch (currentStep) {
+      case 0:
+        return "Seleccionar Incoterm";
+      case 1:
+        return "Seleccionar Ubicaciones";
+      case 2:
+        return "Opciones de Paquete";
+      default:
+        return `Etapa ${currentStep + 1}`;
     }
   };
 
@@ -162,9 +186,7 @@ export default function Create() {
             />
             <div className="flex-grow overflow-hidden">
               <div className="h-full relative flex flex-col">
-                <h3 className="text-xl font-semibold mb-4">
-                  Etapa {currentStep + 1}
-                </h3>
+                <h3 className="text-xl font-semibold mb-4">{getStepTitle()}</h3>
                 <div className="flex justify-center relative pt-[10%] items-center w-full mx-auto">
                   {renderStepContent()}
                 </div>
