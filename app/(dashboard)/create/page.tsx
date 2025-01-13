@@ -113,15 +113,6 @@ export default function Create() {
     }
   };
 
-  const getStepTitle = () => {
-    switch (currentStep) {
-      case 0:
-        return "Ingresar Datos";
-      default:
-        return `Etapa ${currentStep + 1}`;
-    }
-  };
-
   return (
     <div className="flex flex-col w-full h-full bg-transparent px-[20]">
       <Header
@@ -139,7 +130,7 @@ export default function Create() {
             />
             <div className="flex-grow overflow-hidden">
               <div className="h-full relative flex flex-col">
-                <h3 className="text-xl font-semibold mb-4">{getStepTitle()}</h3>
+                <h3 className="text-xl font-semibold mb-4">{`Etapa ${currentStep + 1}`}</h3>
                 <div className="flex justify-center relative pt-[10%] items-center w-full mx-auto">
                   {renderStepContent()}
                 </div>
