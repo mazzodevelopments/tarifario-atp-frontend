@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Button from "@/components/Button";
 import { Item } from "@/app/(dashboard)/create/steps/ItemList/ItemList";
+import Input from "@/components/Input";
+import Dropdown, { DropdownItem } from "@/components/Dropdown";
 
 const UNITS = ["Unidad", "Metro", "Kilogramo", "Litro", "Pieza"];
 
@@ -40,6 +42,24 @@ export default function CreateItem({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleBrandSelect = (item: DropdownItem) => {
+    setFormData((prev) => ({ ...prev, brand: item.name }));
+  };
+
+  const fetchBrands = async (): Promise<DropdownItem[]> => {
+    // Simular la obtención de marcas desde un servicio
+    return [
+      { id: "1", name: "Marca A" },
+      { id: "2", name: "Marca B" },
+      { id: "3", name: "Marca C" },
+    ];
+  };
+
+  const addBrand = async (name: string): Promise<DropdownItem> => {
+    // Simular la adición de una nueva marca
+    return { id: Math.random().toString(36).substr(2, 9), name };
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
@@ -49,14 +69,13 @@ export default function CreateItem({
         >
           Detalle
         </label>
-        <input
+        <Input
           type="text"
           id="detail"
           name="detail"
           value={formData.detail}
           onChange={handleChange}
           required
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
         />
       </div>
 
@@ -67,14 +86,10 @@ export default function CreateItem({
         >
           Marca
         </label>
-        <input
-          type="text"
-          id="brand"
-          name="brand"
-          value={formData.brand}
-          onChange={handleChange}
-          required
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+        <Dropdown
+          fetchItems={fetchBrands}
+          addItem={addBrand}
+          onSelect={handleBrandSelect}
         />
       </div>
 
@@ -86,7 +101,7 @@ export default function CreateItem({
           >
             Cantidad
           </label>
-          <input
+          <Input
             type="number"
             id="quantity"
             name="quantity"
@@ -94,7 +109,6 @@ export default function CreateItem({
             value={formData.quantity}
             onChange={handleChange}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
           />
         </div>
 
@@ -111,7 +125,7 @@ export default function CreateItem({
             value={formData.unit}
             onChange={handleChange}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+            className="w-full px-2 py-2 border rounded-md focus:outline-none text-sm"
           >
             <option value="">Seleccionar unidad</option>
             {UNITS.map((unit) => (
@@ -130,14 +144,13 @@ export default function CreateItem({
         >
           Part Number (PN)
         </label>
-        <input
+        <Input
           type="text"
           id="partNumber"
           name="partNumber"
           value={formData.partNumber}
           onChange={handleChange}
           required
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
         />
       </div>
 
@@ -145,11 +158,14 @@ export default function CreateItem({
         <Button
           type="button"
           onClick={onCancel}
-          className="px-4 py-2 bg-gray-200 text-gray-800 hover:bg-gray-300"
+          className="px-4 py-2 text-sm bg-gray-200 text-gray-800 hover:bg-gray-300"
         >
           Cancelar
         </Button>
-        <Button type="submit" className="px-4 py-2 bg-primary text-white">
+        <Button
+          type="submit"
+          className="px-4 py-2 text-sm bg-primary text-white"
+        >
           Agregar Item
         </Button>
       </div>

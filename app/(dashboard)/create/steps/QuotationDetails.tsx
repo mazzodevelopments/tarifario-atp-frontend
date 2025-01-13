@@ -69,7 +69,6 @@ export default function QuotationDetails({
         <Input
           id="name"
           name="name"
-          label="Nombre"
           value={quotationData.name}
           onChange={handleInputChange}
           placeholder="Enter name"

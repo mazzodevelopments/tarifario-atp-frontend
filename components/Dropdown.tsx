@@ -48,8 +48,8 @@ export default function Dropdown({
   useEffect(() => {
     setFilteredItems(
       items.filter((item) =>
-        item.name.toLowerCase().includes(value.toLowerCase())
-      )
+        item.name.toLowerCase().includes(value.toLowerCase()),
+      ),
     );
   }, [items, value]);
 
@@ -84,7 +84,7 @@ export default function Dropdown({
           value={value}
           onChange={handleInputChange}
           onClick={() => setIsOpen(true)}
-          className="w-full px-2 py-2 border rounded-md focus:outline-none"
+          className="w-full px-2 py-2 text-sm border rounded-md focus:outline-none"
           placeholder="Seleccionar o buscar..."
         />
         <button
@@ -117,7 +117,7 @@ export default function Dropdown({
           <div
             key={item.id}
             onClick={() => handleSelect(item)}
-            className="px-2 py-2 hover:bg-gray-100 cursor-pointer"
+            className="px-2 py-2 text-sm hover:bg-gray-100 cursor-pointer"
           >
             {item.name}
           </div>
