@@ -35,13 +35,6 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
     <div className="w-full max-w-4xl mx-auto">
       <div className="flex justify-between items-center mb-3">
         <h3 className="text-lg font-medium">Items de la Cotización</h3>
-        <Button
-          onClick={() => setShowCreateModal(true)}
-          className="text-sm px-4 py-2 bg-primary text-white flex items-center gap-2"
-        >
-          <span className="text-md">+</span>
-          Agregar Item
-        </Button>
       </div>
 
       <div className="border rounded-lg overflow-x-auto">
@@ -103,6 +96,15 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
             )}
           </tbody>
         </table>
+      </div>
+      <div className="flex justify-center items-center w-full mt-6">
+        <Button
+          onClick={() => setShowCreateModal(true)}
+          className="text-sm px-4 py-2 bg-primary text-white flex items-center gap-2"
+        >
+          <span className="text-md">+</span>
+          Agregar Item
+        </Button>
       </div>
 
       {showCreateModal && (
