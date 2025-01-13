@@ -1,5 +1,5 @@
 "use client";
-import { Briefcase, Plus, Server } from "react-feather";
+import { Briefcase, ChevronRight, Plus, Server } from "react-feather";
 import { User, Calendar, DollarSign, Search } from "react-feather";
 import Image from "next/image";
 import defaultProfilePic from "@/public/default-profile-pic.png";
@@ -42,13 +42,6 @@ export default function Dashboard() {
       date: new Date().toISOString(),
       value: 1800,
     },
-    {
-      id: "6",
-      name: "A25R-3",
-      client: "Michael Brown",
-      date: new Date().toISOString(),
-      value: 1800,
-    },
   ];
 
   const proveedores = [
@@ -71,11 +64,6 @@ export default function Dashboard() {
       id: "P004",
       name: "Proveedor D",
       quotations: 7,
-    },
-    {
-      id: "P005",
-      name: "Proveedor E",
-      quotations: 5,
     },
   ];
 
@@ -117,19 +105,24 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-          <div className="w-[calc(24vw+0.75rem)] h-full bg-white border-[0.5px] border-[#ebebebcc] shadow-sm rounded-[18px]">
-            <div className="flex flex-col p-4">
-              <h2 className="text-2xl font-semibold text-black mb-2">
-                Últimas cotizaciones
-              </h2>
+          <div className="w-[calc(24vw+0.75rem)] h-full bg-white border-[0.5px] border-[#ebebebcc] shadow-sm rounded-[18px] relative">
+            <div className="flex flex-col p-4 relative">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-2xl font-semibold text-black">
+                  Últimas Cotizaciones
+                </h2>
+                <div className="w-8 h-8 bg-primary rounded-[8px] flex justify-center items-center">
+                  <Briefcase size={18} className="text-white" />
+                </div>
+              </div>
               <div className="space-y-3">
                 {cotizaciones.map((cotizacion) => (
                   <div
                     key={cotizacion.id}
-                    className="flex items-center bg-sky-50 rounded-lg p-3 cursor-pointer hover:bg-gray-50"
+                    className="flex items-center bg-white border-[0.5px] border-[#ebebebcc] rounded-lg py-4 px-3 cursor-pointer hover:bg-gray-50"
                   >
                     <div className="flex-1">
-                      <div className="flex gap-3">
+                      <div className="flex gap-3 flex-col">
                         <h3 className="text-black font-semibold">
                           {cotizacion.name}
                         </h3>
@@ -139,7 +132,7 @@ export default function Dashboard() {
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3 text-sm">
+                    <div className="flex items-end gap-3 text-sm flex-col">
                       <div className="flex items-center gap-2 text-gray-500">
                         <Calendar size={16} className="text-gray-400" />
                         {cotizacion.date.split("T")[0]}
@@ -151,6 +144,15 @@ export default function Dashboard() {
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+            <div className="absolute bottom-4 right-4 w-auto flex justify-end gap-2 items-end h-auto">
+              <div className="flex justify-end items-center px-3 py-2 rounded-xl border-[0.5px] border-[#ebebeb] text-black">
+                <span className="text-sm">Ver más cotizaciones</span>
+              </div>
+
+              <div className="flex justify-end items-center px-3 py-2 rounded-xl bg-neutral-900 text-white">
+                <span className="text-sm">Agregar Cotización</span>
               </div>
             </div>
           </div>
@@ -165,10 +167,13 @@ export default function Dashboard() {
             {/* LISTADO DE COTIZACIONES */}
             <div className="w-full h-full rounded-[18px] mt-3 bg-white border-[0.5px] border-[#ebebebcc] shadow-sm">
               <div className="flex flex-col p-4">
-                <div className="flex">
-                  <h2 className="text-2xl font-semibold text-black mb-2">
+                <div className="flex items-center justify-between mb-3">
+                  <h2 className="text-2xl font-semibold text-black">
                     Principales Proveedores
                   </h2>
+                  {/* <div className="w-8 h-8 bg-red-500 rounded-[8px] flex justify-center items-center">
+                    <Briefcase size={18} className="text-white" />
+                  </div> */}
                 </div>
                 <div className="space-y-3">
                   {proveedores.map((proveedor) => (
@@ -198,6 +203,15 @@ export default function Dashboard() {
                       </div>
                     </div>
                   ))}
+                </div>
+                <div className="w-full flex justify-end gap-2 items-end h-14">
+                  <div className="flex justify-end items-center px-3 py-2 rounded-xl border-[0.5px] border-[#ebebeb] text-black">
+                    <span className="text-sm">Ver más proveedores</span>
+                  </div>
+
+                  <div className="flex justify-end items-center px-3 py-2 rounded-xl bg-neutral-900 text-white">
+                    <span className="text-sm">Agregar Proveedor</span>
+                  </div>
                 </div>
               </div>
             </div>
