@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
+import Button from "./Button";
+import Input from "./Input";
 
 export interface DropdownItem {
   id: string;
@@ -48,8 +50,8 @@ export default function Dropdown({
   useEffect(() => {
     setFilteredItems(
       items.filter((item) =>
-        item.name.toLowerCase().includes(value.toLowerCase()),
-      ),
+        item.name.toLowerCase().includes(value.toLowerCase())
+      )
     );
   }, [items, value]);
 
@@ -126,31 +128,34 @@ export default function Dropdown({
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
           <div className="bg-white p-6 rounded-lg">
-            <h2 className="text-xl font-bold mb-4">Agregar nuevo elemento</h2>
-            <form onSubmit={handleAddItem}>
-              <input
+            <h2 className="text-lg font-medium mb-2">Agregar nuevo elemento</h2>
+            <div>
+              <Input
                 type="text"
                 value={newItemName}
-                onChange={(e) => setNewItemName(e.target.value)}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setNewItemName(e.target.value)
+                }
                 placeholder="Nombre del nuevo elemento"
               />
-              <div className="flex justify-end">
-                <button
+              <div className="flex justify-end gap-2 mt-4">
+                <Button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 text-gray-600 hover:text-gray-800 mr-2"
+                  variant="secondary"
+                  className="px-2"
                 >
                   Cancelar
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                </Button>
+                <Button
+                  onClick={handleAddItem}
+                  variant="primary"
+                  className="px-2"
                 >
                   Agregar
-                </button>
+                </Button>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       )}

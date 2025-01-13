@@ -147,23 +147,22 @@ export default function Create() {
             </div>
             <div className="flex justify-between mt-auto">
               <Button
-                className="px-3 py-1 bg-neutral-200 text-neutral-900 hover:bg-neutral-300 disabled:opacity-50"
+                className="px-3 py-1 disabled:opacity-50"
+                variant="secondary"
                 onClick={handlePrevious}
                 disabled={currentStep === 0}
               >
                 Anterior
               </Button>
               {currentStep === totalSteps - 1 ? (
-                <Button
-                  onClick={handleCreate}
-                  className="px-4 py-2 bg-primary text-white"
-                >
+                <Button onClick={handleCreate} variant="primary">
                   Crear Cotización
                 </Button>
               ) : (
                 <Button
                   onClick={handleNext}
-                  className="px-4 py-2 bg-primary text-white"
+                  variant="primary"
+                  className="text-white"
                   disabled={isNextButtonDisabled()}
                 >
                   Siguiente

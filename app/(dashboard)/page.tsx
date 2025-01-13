@@ -4,6 +4,7 @@ import { User, Calendar, DollarSign, Search } from "react-feather";
 import Image from "next/image";
 import defaultProfilePic from "@/public/default-profile-pic.png";
 import Header from "./components/Header";
+import Button from "@/components/Button";
 
 export default function Dashboard() {
   const cotizaciones = [
@@ -147,13 +148,16 @@ export default function Dashboard() {
               </div>
             </div>
             <div className="absolute bottom-4 right-4 w-auto flex justify-end gap-2 items-end h-auto">
-              <div className="flex justify-end items-center px-3 py-2 rounded-xl border-[0.5px] border-[#ebebeb] text-black">
-                <span className="text-sm">Ver más cotizaciones</span>
-              </div>
+              <Button variant="secondary" className="px-3 py-2 text-sm">
+                Agregar cotización
+              </Button>
 
-              <div className="flex justify-end items-center px-3 py-2 rounded-xl bg-neutral-900 text-white">
-                <span className="text-sm">Agregar Cotización</span>
-              </div>
+              <Button
+                variant="primary"
+                className="px-3 py-2 bg-neutral-900 text-white text-sm"
+              >
+                Agregar cotización
+              </Button>
             </div>
           </div>
         </div>
@@ -205,13 +209,16 @@ export default function Dashboard() {
                   ))}
                 </div>
                 <div className="w-full flex justify-end gap-2 items-end h-14">
-                  <div className="flex justify-end items-center px-3 py-2 rounded-xl border-[0.5px] border-[#ebebeb] text-black">
-                    <span className="text-sm">Ver más proveedores</span>
-                  </div>
+                  <Button variant="secondary" className="px-3 py-2 text-sm">
+                    Ver más proveedores
+                  </Button>
 
-                  <div className="flex justify-end items-center px-3 py-2 rounded-xl bg-neutral-900 text-white">
-                    <span className="text-sm">Agregar Proveedor</span>
-                  </div>
+                  <Button
+                    variant="primary"
+                    className="px-3 py-2 bg-neutral-900 text-white text-sm"
+                  >
+                    Agregar proveedor
+                  </Button>
                 </div>
               </div>
             </div>
