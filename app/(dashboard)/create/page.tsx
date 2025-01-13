@@ -81,7 +81,7 @@ export default function Create() {
         title="Nueva Cotización"
         description="Crea una nueva cotización"
       />
-      <div className="flex-grow flex flex-col gap-6 w-full h-full p-[20px] bg-white rounded-[18px] relative">
+      <div className="flex-grow flex flex-col gap-6 w-full h-full p-[20px] border-[0.5px] border-[#ebebebcc] shadow-sm bg-white rounded-[18px] relative">
         {isCreating || isSuccess ? (
           <SuccessAnimation isCreating={isCreating} isSuccess={isSuccess} />
         ) : (
@@ -100,7 +100,7 @@ export default function Create() {
             </div>
             <div className="flex justify-between mt-auto">
               <Button
-                className="px-3 py-1 bg-neutral-200 text-neutral-800 hover:bg-neutral-300 disabled:opacity-50"
+                className="px-3 py-1 bg-neutral-200 text-neutral-900 hover:bg-neutral-300 disabled:opacity-50"
                 onClick={handlePrevious}
                 disabled={currentStep === 0}
               >

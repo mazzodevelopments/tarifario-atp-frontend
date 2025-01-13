@@ -48,8 +48,8 @@ export default function Dropdown({
   useEffect(() => {
     setFilteredItems(
       items.filter((item) =>
-        item.name.toLowerCase().includes(value.toLowerCase()),
-      ),
+        item.name.toLowerCase().includes(value.toLowerCase())
+      )
     );
   }, [items, value]);
 
@@ -69,7 +69,7 @@ export default function Dropdown({
     if (newItemName.trim()) {
       const newItem = await addItem(newItemName.trim());
       setItems([...items, newItem]);
-      handleSelect(newItem); // Selecciona automáticamente el nuevo elemento
+      handleSelect(newItem);
       setNewItemName("");
       setIsModalOpen(false);
     }
@@ -84,7 +84,7 @@ export default function Dropdown({
           value={value}
           onChange={handleInputChange}
           onClick={() => setIsOpen(true)}
-          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-2 py-2 border rounded-md focus:outline-none"
           placeholder="Seleccionar o buscar..."
         />
         <button
@@ -106,21 +106,25 @@ export default function Dropdown({
           </svg>
         </button>
       </div>
-      {isOpen && filteredItems.length > 0 && (
-        <div className="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg max-h-60 overflow-auto">
-          {filteredItems.map((item) => (
-            <div
-              key={item.id}
-              onClick={() => handleSelect(item)}
-              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-            >
-              {item.name}
-            </div>
-          ))}
-        </div>
-      )}
+      <div
+        className={`absolute z-10 w-full mt-1 bg-white border rounded-md max-h-60 overflow-auto transform transition-all duration-200 ease-in-out ${
+          isOpen && filteredItems.length > 0
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 -translate-y-2 pointer-events-none"
+        }`}
+      >
+        {filteredItems.map((item) => (
+          <div
+            key={item.id}
+            onClick={() => handleSelect(item)}
+            className="px-2 py-2 hover:bg-gray-100 cursor-pointer"
+          >
+            {item.name}
+          </div>
+        ))}
+      </div>
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
           <div className="bg-white p-6 rounded-lg">
             <h2 className="text-xl font-bold mb-4">Agregar nuevo elemento</h2>
             <form onSubmit={handleAddItem}>
