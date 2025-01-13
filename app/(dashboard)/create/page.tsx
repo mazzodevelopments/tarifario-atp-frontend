@@ -6,6 +6,9 @@ import SuccessAnimation from "./SuccesAnimation";
 import Button from "@/components/Button";
 import Header from "@/app/(dashboard)/components/Header";
 import QuotationDetails from "@/app/(dashboard)/create/steps/QuotationDetails";
+import ItemsList, {
+  Item,
+} from "@/app/(dashboard)/create/steps/ItemList/ItemList";
 
 export default function Create() {
   // ANIMACIÓN FINAL
@@ -19,6 +22,48 @@ export default function Create() {
     client: "",
     buyer: "",
   });
+  const [items, setItems] = useState<Item[]>([
+    {
+      id: "1",
+      detail: "Bomba centrífuga industrial",
+      brand: "Grundfos",
+      quantity: 2,
+      unit: "Unidad",
+      partNumber: "CR-32-2",
+    },
+    {
+      id: "2",
+      detail: "Válvula de control de flujo",
+      brand: "Samson",
+      quantity: 5,
+      unit: "Unidad",
+      partNumber: "3241-PN16",
+    },
+    {
+      id: "3",
+      detail: "Cable de instrumentación blindado",
+      brand: "Belden",
+      quantity: 100,
+      unit: "Metro",
+      partNumber: "8761-100",
+    },
+    {
+      id: "4",
+      detail: "Sensor de presión diferencial",
+      brand: "Endress+Hauser",
+      quantity: 3,
+      unit: "Unidad",
+      partNumber: "PMD75-1BA7B6",
+    },
+    {
+      id: "5",
+      detail: 'Tubería de acero inoxidable 2"',
+      brand: "Sandvik",
+      quantity: 50,
+      unit: "Metro",
+      partNumber: "AISI316L-2",
+    },
+  ]);
 
   useEffect(() => {
     setTotalSteps(8);
@@ -61,6 +106,8 @@ export default function Create() {
             setQuotationData={setQuotationData}
           />
         );
+      case 1:
+        return <ItemsList items={items} setItems={setItems} />;
       default:
         return <p>Contenido de la etapa {currentStep + 1}</p>;
     }
