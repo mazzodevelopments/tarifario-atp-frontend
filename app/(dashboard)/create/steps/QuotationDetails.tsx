@@ -1,5 +1,5 @@
 import React from "react";
-import Dropdown from "@/components/Dropdown";
+import Dropdown, { DropdownItem } from "@/components/Dropdown";
 
 interface QuotationDetailsProps {
   quotationData: {
@@ -14,38 +14,25 @@ interface QuotationDetailsProps {
   }) => void;
 }
 
-interface Item {
-  id: string;
-  name: string;
-}
-
 // Simulate a function to fetch clients from an API
-const fetchClients = async (): Promise<Item[]> => {
+const fetchClients = async (): Promise<DropdownItem[]> => {
   return [
     { id: "1", name: "Client 1" },
     { id: "2", name: "Client 2" },
     { id: "3", name: "Client 3" },
   ];
 };
-
-// Simulate a function to fetch buyers from an API
-const fetchBuyers = async (): Promise<Item[]> => {
+const fetchBuyers = async (): Promise<DropdownItem[]> => {
   return [
     { id: "1", name: "Buyer 1" },
     { id: "2", name: "Buyer 2" },
     { id: "3", name: "Buyer 3" },
   ];
 };
-
-// Simulate a function to add a new client through an API
-const addClient = async (name: string): Promise<Item> => {
-  // In a real application, this would be an API call
+const addClient = async (name: string): Promise<DropdownItem> => {
   return { id: Date.now().toString(), name };
 };
-
-// Simulate a function to add a new buyer through an API
-const addBuyer = async (name: string): Promise<Item> => {
-  // In a real application, this would be an API call
+const addBuyer = async (name: string): Promise<DropdownItem> => {
   return { id: Date.now().toString(), name };
 };
 
@@ -61,7 +48,7 @@ export default function QuotationDetails({
     });
   };
 
-  const handleDropdownSelect = (field: string) => (item: Item) => {
+  const handleDropdownSelect = (field: string) => (item: DropdownItem) => {
     setQuotationData({
       ...quotationData,
       [field]: item.name,

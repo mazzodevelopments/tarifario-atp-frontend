@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 
-interface Item {
+export interface DropdownItem {
   id: string;
   name: string;
 }
 
 interface DropdownProps {
-  fetchItems: () => Promise<Item[]>;
-  addItem: (name: string) => Promise<Item>;
-  onSelect: (item: Item) => void;
+  fetchItems: () => Promise<DropdownItem[]>;
+  addItem: (name: string) => Promise<DropdownItem>;
+  onSelect: (item: DropdownItem) => void;
 }
 
 export default function Dropdown({
@@ -16,8 +16,8 @@ export default function Dropdown({
   addItem,
   onSelect,
 }: DropdownProps) {
-  const [items, setItems] = useState<Item[]>([]);
-  const [filteredItems, setFilteredItems] = useState<Item[]>([]);
+  const [items, setItems] = useState<DropdownItem[]>([]);
+  const [filteredItems, setFilteredItems] = useState<DropdownItem[]>([]);
   const [value, setValue] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -58,7 +58,7 @@ export default function Dropdown({
     setIsOpen(true);
   };
 
-  const handleSelect = (item: Item) => {
+  const handleSelect = (item: DropdownItem) => {
     setValue(item.name);
     setIsOpen(false);
     onSelect(item);
