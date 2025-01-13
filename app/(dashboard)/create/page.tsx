@@ -36,7 +36,7 @@ export default function Create() {
   useEffect(() => {
     if (selectedIncoterm) {
       const selectedIncotermData = incoterms.find(
-        (inco) => inco.value === selectedIncoterm,
+        (inco) => inco.value === selectedIncoterm
       );
       if (selectedIncotermData) {
         setTotalSteps(selectedIncotermData.steps);
@@ -58,21 +58,21 @@ export default function Create() {
           (via) =>
             via.value !== "COURIER" &&
             via.value !== "TERRESTRE" &&
-            via.value !== "AÉREO",
+            via.value !== "AÉREO"
         );
       case "CFR":
         return vias.filter(
           (via) =>
             via.value !== "COURIER" &&
             via.value !== "TERRESTRE" &&
-            via.value !== "AÉREO",
+            via.value !== "AÉREO"
         );
       case "CIF":
         return vias.filter(
           (via) =>
             via.value !== "COURIER" &&
             via.value !== "TERRESTRE" &&
-            via.value !== "AÉREO",
+            via.value !== "AÉREO"
         );
       case "DAT":
         return vias;
@@ -175,7 +175,7 @@ export default function Create() {
         title="Nueva Cotización"
         description="Crea una nueva cotización"
       />
-      <div className="flex-grow flex flex-col gap-6 w-full h-full p-[20px] bg-white shadow-sm rounded-[18px] relative">
+      <div className="flex-grow flex flex-col gap-6 w-full h-full p-[20px] bg-white  rounded-[18px] relative">
         {isCreating || isSuccess ? (
           <SuccessAnimation isCreating={isCreating} isSuccess={isSuccess} />
         ) : (

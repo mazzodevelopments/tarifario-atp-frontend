@@ -46,9 +46,9 @@ export default function AuthLayout({
   }, [pathname]);
 
   return (
-    <div className="w-screen relative h-screen flex justify-center items-center flex-row bg-gray-50">
+    <div className="w-screen relative h-screen flex justify-center items-center flex-row bg-white">
       <div className="w-full h-full flex justify-center items-center flex-row overflow-hidden">
-        <div className="w-[328px] h-full flex justify-between items-center flex-col bg-white shadow-sm z-20 p-[30px] pt-12 rounded-r-[18px]">
+        <div className="w-[328px] h-full flex justify-between items-center flex-col bg-white shadow-sm z-20 px-[30px] py-10 border-r-[0.5px] border-[#ebebebcc]">
           <div className="flex justify-start w-full items-start flex-col">
             <div className="w-full flex flex-row items-end pb-6">
               <h3 className="text-xl font-bold text-primary leading-[1]">
@@ -128,7 +128,7 @@ export default function AuthLayout({
             </div>
           </div>
         </div>
-        <div className="w-full h-full relative flex justify-center items-center flex-col overflow-hidden py-4">
+        <div className="w-full h-full relative flex justify-center items-center flex-col overflow-hidden py-10">
           <AnimatePresence mode="wait">
             <PageTransition>{children}</PageTransition>
           </AnimatePresence>

@@ -17,7 +17,7 @@ export default function Header({
   className = "",
   searchInput,
 }: HeaderProps) {
-  const baseClasses = "flex justify-between items-center h-24";
+  const baseClasses = "flex justify-between items-center h-auto mb-4";
   const combinedClasses = `${baseClasses} ${className}`.trim();
 
   return (
@@ -39,7 +39,7 @@ export default function Header({
                 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black"
               />
               <input
-                className="w-full h-[2.25vw] rounded-xl pl-10 pr-4 bg-white shadow-sm text-sm focus:outline-none placeholder-secondary"
+                className="w-full h-[2.25vw] rounded-xl pl-10 pr-4 bg-sky-50  text-sm focus:outline-none placeholder-secondary"
                 placeholder="Buscar cotización"
               />
             </div>
