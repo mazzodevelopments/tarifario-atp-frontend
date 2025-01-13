@@ -80,7 +80,7 @@ export default function Dashboard() {
           <div className="gap-3 w-full h-auto flex flex-row">
             {/* CREAR COTIZACION */}
             <div className="flex flex-row justify-between w-auto mb-3 h-full">
-              <div className="rounded-[18px] flex bg-neutral-900 border-[0.5px] border-[#ebebebcc] shadow-sm w-[12vw] h-full px-6 py-4 items-center justify-center flex-row">
+              <div className="rounded-[18px] flex bg-neutral-900 shadow-sm w-[12vw] h-full px-6 py-4 items-center justify-center flex-row">
                 <Plus
                   className="text-white mr-2"
                   fontWeight="bold"
@@ -94,7 +94,7 @@ export default function Dashboard() {
 
             {/* COMPARAR COTIZACION */}
             <div className="flex flex-row justify-between w-auto mb-3 h-full">
-              <div className="rounded-[18px] flex bg-neutral-900 border-[0.5px] border-[#ebebebcc] shadow-sm w-[12vw] h-full px-6 py-4 items-center justify-center flex-row">
+              <div className="rounded-[18px] flex bg-neutral-900 shadow-sm w-[12vw] h-full px-6 py-4 items-center justify-center flex-row">
                 <Server
                   className="text-white mr-2"
                   fontWeight="bold"

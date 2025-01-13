@@ -114,7 +114,7 @@ export default function Create() {
   };
 
   return (
-    <div className="flex flex-col w-full h-full bg-transparent px-[20]">
+    <div className="flex flex-col w-[70%] h-full bg-transparent px-[20]">
       <Header
         title="Nueva Cotización"
         description="Crea una nueva cotización"
@@ -130,8 +130,10 @@ export default function Create() {
             />
             <div className="flex-grow overflow-hidden">
               <div className="h-full relative flex flex-col">
-                <h3 className="text-xl font-semibold mb-4">{`Etapa ${currentStep + 1}`}</h3>
-                <div className="flex justify-center relative pt-[10%] items-center w-full mx-auto">
+                <h3 className="text-xl font-semibold mb-4">{`Etapa ${
+                  currentStep + 1
+                }`}</h3>
+                <div className="flex justify-center relative h-full items-center w-full mx-auto">
                   {renderStepContent()}
                 </div>
               </div>

@@ -91,7 +91,7 @@ export default function AuthLayout({
           </div>
           <div className="w-full flex flex-col justify-end">
             <div className="flex w-full h-auto justify-start items-center">
-              <div className="flex flex-col gap-2 items-center py-2 px-4 rounded-[18px] w-full text-gray-800 bg-sky-50">
+              <div className="flex flex-col gap-2 items-center py-2 px-4 rounded-[18px] w-full text-gray-800 border-[0.5px] border-[#ebebebcc] shadow-sm">
                 <div className="flex w-full items-center gap-2 h-14 hover:cursor-pointer">
                   <div className="w-8 h-8 rounded-xl overflow-hidden">
                     <Image
