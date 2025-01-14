@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ProgressBar from "./ProgressBar";
 import SuccessAnimation from "./SuccesAnimation";
 import Button from "@/components/Button";
@@ -37,16 +37,26 @@ export default function Create() {
       detail: "Bomba centrífuga industrial",
       brand: "Grundfos",
       quantity: 2,
-      unit: "Unidad",
+      unit: "Pulgada",
       partNumber: "CR-32-2",
+      incoterm: "EXW",
+      pickup: false,
+      pickupPrice: 0,
+      repackaging: false,
+      palletFumigation: false,
     },
     {
       id: "2",
       detail: "Válvula de control de flujo",
       brand: "Samson",
       quantity: 5,
-      unit: "Unidad",
+      unit: "Pulgada",
       partNumber: "3241-PN16",
+      incoterm: "FOB",
+      pickup: true,
+      pickupPrice: 200,
+      repackaging: true,
+      palletFumigation: false,
     },
     {
       id: "3",
@@ -55,14 +65,24 @@ export default function Create() {
       quantity: 100,
       unit: "Metro",
       partNumber: "8761-100",
+      incoterm: "CIF",
+      pickup: false,
+      pickupPrice: 0,
+      repackaging: false,
+      palletFumigation: true,
     },
     {
       id: "4",
       detail: "Sensor de presión diferencial",
       brand: "Endress+Hauser",
       quantity: 3,
-      unit: "Unidad",
+      unit: "Pulgada",
       partNumber: "PMD75-1BA7B6",
+      incoterm: "DAP",
+      pickup: true,
+      pickupPrice: 250,
+      repackaging: true,
+      palletFumigation: true,
     },
     {
       id: "5",
@@ -71,6 +91,11 @@ export default function Create() {
       quantity: 50,
       unit: "Metro",
       partNumber: "AISI316L-2",
+      incoterm: "DDP",
+      pickup: false,
+      pickupPrice: 0,
+      repackaging: false,
+      palletFumigation: false,
     },
   ]);
 

@@ -12,6 +12,11 @@ export interface Item {
   quantity: number;
   unit: string;
   partNumber: string;
+  incoterm: string;
+  pickup: boolean;
+  pickupPrice: number;
+  repackaging: boolean;
+  palletFumigation: boolean;
 }
 
 interface ItemsListProps {
@@ -56,6 +61,12 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
               <th className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Part Number
               </th>
+              <th className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Incoterm
+              </th>
+              <th className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Opciones
+              </th>
               <th className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
             </tr>
           </thead>
@@ -63,7 +74,7 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
             {items.length === 0 ? (
               <tr>
                 <td
-                  colSpan={6}
+                  colSpan={8}
                   className="text-sm px-6 py-2 text-center text-gray-500"
                 >
                   No hay items agregados
@@ -82,6 +93,19 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
                   <td className="px-6 py-2 whitespace-nowrap">{item.unit}</td>
                   <td className="px-6 py-2 whitespace-nowrap">
                     {item.partNumber}
+                  </td>
+                  <td className="px-6 py-2 whitespace-nowrap">
+                    {item.incoterm}
+                  </td>
+                  <td className="px-6 py-2 whitespace-nowrap">
+                    {item.pickup && <span className="mr-2">Pickup</span>}
+                    {item.repackaging && (
+                      <span className="mr-2">Reembalaje</span>
+                    )}
+                    {item.palletFumigation && <span>Fumigación</span>}
+                    {!item.pickup &&
+                      !item.repackaging &&
+                      !item.palletFumigation && <span>-</span>}
                   </td>
                   <td className="px-6 py-2 whitespace-nowrap">
                     <button
