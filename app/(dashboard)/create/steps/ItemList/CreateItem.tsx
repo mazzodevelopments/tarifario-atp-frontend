@@ -34,7 +34,7 @@ export default function CreateItem({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newItem: Item = {
-      id: Math.random().toString(36).substr(2, 9),
+      id: Math.random().toString(36).slice(2, 9),
       ...formData,
       quantity: Number(formData.quantity),
     };
