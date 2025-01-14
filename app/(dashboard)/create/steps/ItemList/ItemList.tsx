@@ -37,26 +37,26 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
         <h3 className="text-lg font-medium">Items de la Cotización</h3>
       </div>
 
-      <div className="border rounded-lg overflow-x-auto">
+      <div className="border rounded-md overflow-x-auto">
         <table className="w-full">
           <thead className="border-b border-gray-200">
             <tr>
-              <th className="px-6 py-1.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Detalle
               </th>
-              <th className="px-6 py-1.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Marca
               </th>
-              <th className="px-6 py-1.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Cantidad
               </th>
-              <th className="px-6 py-1.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Unidad
               </th>
-              <th className="px-6 py-1.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Part Number
               </th>
-              <th className="px-6 py-1.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
+              <th className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
