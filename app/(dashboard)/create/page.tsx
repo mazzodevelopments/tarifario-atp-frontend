@@ -10,13 +10,22 @@ import ItemsList, {
   Item,
 } from "@/app/(dashboard)/create/steps/ItemList/ItemList";
 
+const steps = [
+  { title: "Cargar Datos Cotización" },
+  { title: "Agregar Items" },
+  { title: "Validar Precios" },
+  { title: "Configurar Márgenes" },
+  { title: "Revisar Impuestos" },
+  { title: "Agregar Condiciones" },
+  { title: "Vista Previa" },
+  { title: "Confirmar y Crear" },
+];
+
 export default function Create() {
-  // ANIMACIÓN FINAL
   const [isCreating, setIsCreating] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  // ESTADOS
   const [currentStep, setCurrentStep] = useState(0);
-  const [totalSteps, setTotalSteps] = useState(0);
+  const totalSteps = steps.length;
   const [quotationData, setQuotationData] = useState({
     name: "",
     client: "",
@@ -65,10 +74,6 @@ export default function Create() {
     },
   ]);
 
-  useEffect(() => {
-    setTotalSteps(8);
-  }, []);
-
   const handleNext = () => {
     if (currentStep < totalSteps - 1) {
       setCurrentStep(currentStep + 1);
@@ -114,67 +119,65 @@ export default function Create() {
   };
 
   const renderStepTitle = () => {
-    switch (currentStep) {
-      case 0:
-        return "Cargar Datos Cotización";
-      case 1:
-        return "Agregar Items";
-      default:
-        return `Etapa ${currentStep}`;
-    }
+    return steps[currentStep]?.title || "";
   };
 
   return (
-    <div className="flex flex-col w-[70%] h-full bg-transparent px-[20]">
+    <div className="flex flex-col w-full h-full bg-transparent px-[20]">
       <Header
         title="Nueva Cotización"
         description="Crea una nueva cotización"
       />
-      <div className="flex-grow flex flex-col gap-6 w-full h-full p-[20px] border-[0.5px] border-[#ebebebcc] shadow-sm bg-white rounded-[18px] relative">
-        {isCreating || isSuccess ? (
-          <SuccessAnimation isCreating={isCreating} isSuccess={isSuccess} />
-        ) : (
-          <>
-            <ProgressBar
-              currentStep={currentStep}
-              totalSteps={totalSteps - 1}
-            />
-            <div className="flex-grow overflow-hidden">
-              <div className="h-full relative flex flex-col">
-                <h3 className="text-xl font-semibold mb-4">{`Etapa ${
-                  currentStep + 1
-                } - ${renderStepTitle()}`}</h3>
-                <div className="flex justify-center relative h-full items-center w-full mx-auto">
-                  {renderStepContent()}
+      <div className="flex w-full h-full">
+        <div className="flex-grow flex flex-col gap-6 w-[70%] h-full p-[20px] border-[0.5px] border-[#ebebebcc] shadow-sm bg-white rounded-[18px] relative">
+          {isCreating || isSuccess ? (
+            <SuccessAnimation isCreating={isCreating} isSuccess={isSuccess} />
+          ) : (
+            <>
+              <div className="flex-grow overflow-hidden">
+                <div className="h-full relative flex flex-col">
+                  <h3 className="text-xl font-semibold mb-4">{`Etapa ${
+                    currentStep + 1
+                  } - ${renderStepTitle()}`}</h3>
+                  <div className="flex justify-center relative h-full items-center w-full mx-auto">
+                    {renderStepContent()}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="flex justify-between mt-auto">
-              <Button
-                className="px-3 py-1 disabled:opacity-50"
-                variant="secondary"
-                onClick={handlePrevious}
-                disabled={currentStep === 0}
-              >
-                Anterior
-              </Button>
-              {currentStep === totalSteps - 1 ? (
-                <Button onClick={handleCreate} variant="primary">
-                  Crear Cotización
-                </Button>
-              ) : (
+              <div className="flex justify-between mt-auto">
                 <Button
-                  onClick={handleNext}
-                  variant="primary"
-                  className="text-white"
-                  disabled={isNextButtonDisabled()}
+                  className="px-3 py-1 disabled:opacity-50"
+                  variant="secondary"
+                  onClick={handlePrevious}
+                  disabled={currentStep === 0}
                 >
-                  Siguiente
+                  Anterior
                 </Button>
-              )}
-            </div>
-          </>
-        )}
+                {currentStep === totalSteps - 1 ? (
+                  <Button onClick={handleCreate} variant="primary">
+                    Crear Cotización
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={handleNext}
+                    variant="primary"
+                    className="text-white"
+                    disabled={isNextButtonDisabled()}
+                  >
+                    Siguiente
+                  </Button>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+        <div className="w-[30%] flex justify-center items-start gap-6">
+          <ProgressBar
+            currentStep={currentStep}
+            totalSteps={totalSteps}
+            steps={steps}
+          />
+        </div>
       </div>
     </div>
   );
