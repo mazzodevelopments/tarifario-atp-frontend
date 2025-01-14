@@ -12,7 +12,7 @@ const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const baseStyles = `
-    relative overflow-hidden px-3 py-2 rounded-[12px] font-regular cursor-pointer
+    relative overflow-hidden px-3 py-2 rounded-[12px] font-medium cursor-pointer
     transition-all duration-300 ease-out
     transform hover:scale-95
   `;
