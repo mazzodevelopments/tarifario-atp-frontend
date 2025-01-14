@@ -113,6 +113,17 @@ export default function Create() {
     }
   };
 
+  const renderStepTitle = () => {
+    switch (currentStep) {
+      case 0:
+        return "Cargar Datos Cotización";
+      case 1:
+        return "Agregar Items";
+      default:
+        return `Etapa ${currentStep}`;
+    }
+  };
+
   return (
     <div className="flex flex-col w-[70%] h-full bg-transparent px-[20]">
       <Header
@@ -132,7 +143,7 @@ export default function Create() {
               <div className="h-full relative flex flex-col">
                 <h3 className="text-xl font-semibold mb-4">{`Etapa ${
                   currentStep + 1
-                }`}</h3>
+                } - ${renderStepTitle()}`}</h3>
                 <div className="flex justify-center relative h-full items-center w-full mx-auto">
                   {renderStepContent()}
                 </div>
