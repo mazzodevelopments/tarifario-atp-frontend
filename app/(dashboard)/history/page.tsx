@@ -51,20 +51,21 @@ export default function History() {
           description="Historial de cotizaciones realizadas"
         />
       </div>
-      <div className="flex mb-4 items-center ">
-        <div className="w-auto rounded-[18px] flex bg-sky-50 h-10 px-4 items-center justify-start">
-          <Search
-            className="text-primary mr-2 opacity-65 ml-1"
-            fontWeight="bold"
-            size={18}
-          />
-          <input
-            className="text-[0.8vw] font-regular text-primary bg-transparent outline-none placeholder:text-primary placeholder:opacity-65"
-            placeholder="Buscar cotización"
-          />
+      <div className="flex mb-2 items-center ">
+        <div className="flex items-center gap-2 h-14 hover:cursor-pointer">
+          <div className="relative w-[12vw]">
+            <Search
+              size={20}
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary"
+            />
+            <input
+              className="w-full h-[2.25vw] rounded-xl pl-10 pr-4 bg-sky-50  text-md focus:outline-none placeholder-primary"
+              placeholder="Buscar cotización"
+            />
+          </div>
         </div>
       </div>
-      <div className="w-full py-2 px-4 border-[2px] border-gray-100 rounded-[18px]">
+      <div className="w-full p-[20px] border-[0.5px] border-[#ebebebcc] shadow-sm bg-white rounded-[18px]">
         <table className="w-full table-auto overflow-hidden">
           <thead className="text-left text-gray-600 p-4 border-b">
             <tr>

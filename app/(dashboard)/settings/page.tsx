@@ -29,18 +29,16 @@ export default function Reports() {
     type: string;
     value: string;
   }) => (
-    <div className="w-full mt-4 flex flex-col">
+    <div className="w-full py-4 flex flex-col border-b-[0.5px] border-[#ebebebcc]">
       <label className="text-sm font-semibold text-gray-700">{label}</label>
-      <div className="relative w-full pb-1 pr-1 border-b-2 border-gray-100">
+      <div className="relative w-full pb-1 pr-1">
         <input
           type={type}
           value={value}
           className="w-full pr-1.5 pt-2.5 font-medium text-gray-600 text-sm outline-none"
           readOnly
         />
-        <Button className="absolute right-0 top-0 text-xs rounded-xl px-3.5 py-2">
-          Editar
-        </Button>
+        <Button className="mt-2 text-xs rounded-xl">Editar</Button>
       </div>
     </div>
   );
@@ -48,8 +46,8 @@ export default function Reports() {
   return (
     <div className="flex flex-col justify-start w-full h-full bg-transparent px-[20px]">
       <Header title="Ajustes" description="Lista de proveedores oficiales" />
-      <div className="flex flex-row w-full h-auto justify-start items-start gap-2 bg-white rounded-[18px] px-2 pb-2 border-2 border-gray-100">
-        <div className="flex flex-col w-[60%] p-4">
+      <div className="flex flex-row w-[70%] h-auto justify-start items-start gap-2 bg-white rounded-[18px] px-2 pb-2 border-[0.5px] border-[#ebebebcc]">
+        <div className="flex flex-col w-[90%] p-4">
           <label className="text-md font-semibold text-gray-700 mb-2">
             Mi cuenta
           </label>
@@ -71,11 +69,9 @@ export default function Reports() {
                 </label>
               </div>
             </div>
-            <div className="flex gap-2 ml-4">
-              <Button className="text-xs rounded-xl px-3.5 py-1.5">
-                Eliminar
-              </Button>
-              <Button className="flex items-center text-xs w-full rounded-xl px-3.5 py-1.5">
+            <div className="w-auto flex items-center justify-center gap-2">
+              <Button className="">Eliminar</Button>
+              <Button className="flex items-center text-xs rounded-xl">
                 <UploadCloud className="mr-2" size={20} />
                 Nueva foto de perfil
               </Button>
