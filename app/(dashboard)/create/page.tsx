@@ -9,6 +9,9 @@ import QuotationDetails from "@/app/(dashboard)/create/steps/QuotationDetails";
 import ItemsList, {
   Item,
 } from "@/app/(dashboard)/create/steps/ItemList/ItemList";
+import BudgetList, {
+  Budget,
+} from "@/app/(dashboard)/create/steps/BudgetList/BudgetList";
 
 const steps = [
   { title: "Cargar Datos Cotización" },
@@ -32,7 +35,65 @@ export default function Create() {
     client: "",
     buyer: "",
   });
-  const [items, setItems] = useState<Item[]>([]);
+  const [items, setItems] = useState<Item[]>([
+    {
+      id: "1",
+      detail: "Motor eléctrico",
+      brand: "Siemens",
+      quantity: 10,
+      unit: "unidades",
+      partNumber: "MTR-1234",
+    },
+    {
+      id: "2",
+      detail: "Bomba hidráulica",
+      brand: "Bosch",
+      quantity: 5,
+      unit: "unidades",
+      partNumber: "BMP-5678",
+    },
+    {
+      id: "3",
+      detail: "Rodamiento de bolas",
+      brand: "SKF",
+      quantity: 50,
+      unit: "unidades",
+      partNumber: "RDM-9101",
+    },
+    {
+      id: "4",
+      detail: "Placa de circuito impreso",
+      brand: "Intel",
+      quantity: 20,
+      unit: "unidades",
+      partNumber: "PCB-1112",
+    },
+    {
+      id: "5",
+      detail: "Transformador de potencia",
+      brand: "ABB",
+      quantity: 3,
+      unit: "unidades",
+      partNumber: "TRF-3141",
+    },
+    {
+      id: "6",
+      detail: "Condensador cerámico",
+      brand: "Murata",
+      quantity: 200,
+      unit: "piezas",
+      partNumber: "CND-1617",
+    },
+    {
+      id: "7",
+      detail: "Resistencia variable",
+      brand: "Panasonic",
+      quantity: 150,
+      unit: "piezas",
+      partNumber: "RVS-2023",
+    },
+  ]);
+  const [budgets, setBudgets] = useState<Budget[]>([]);
 
   const handleNext = () => {
     if (currentStep < totalSteps - 1) {
@@ -73,6 +134,10 @@ export default function Create() {
         );
       case 1:
         return <ItemsList items={items} setItems={setItems} />;
+      case 2:
+        return (
+          <BudgetList budgets={budgets} setBudgets={setBudgets} items={items} />
+        );
       default:
         return <p>Contenido de la etapa {currentStep + 1}</p>;
     }

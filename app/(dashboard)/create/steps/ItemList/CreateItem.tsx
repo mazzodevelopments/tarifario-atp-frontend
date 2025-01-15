@@ -1,12 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import Button from "@/components/Button";
 import { Item } from "@/app/(dashboard)/create/steps/ItemList/ItemList";
+import { UNITS } from "@/app/(dashboard)/create/data";
 import Input from "@/components/Input";
+import Button from "@/components/Button";
 import Dropdown, { DropdownItem } from "@/components/Dropdown";
-
-const UNITS = ["Unidad", "Metro", "Kilogramo", "Litro", "Pieza"];
 
 interface CreateItemProps {
   onItemCreated: (item: Item) => void;
@@ -17,10 +16,10 @@ export default function CreateItem({
   onItemCreated,
   onCancel,
 }: CreateItemProps) {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<Omit<Item, "id">>({
     detail: "",
     brand: "",
-    quantity: "",
+    quantity: 0,
     unit: "",
     partNumber: "",
   });
@@ -46,8 +45,8 @@ export default function CreateItem({
     }));
   };
 
-  const handleBrandSelect = (item: DropdownItem) => {
-    setFormData((prev) => ({ ...prev, brand: item.name }));
+  const handleSelect = (field: keyof Item) => (item: DropdownItem) => {
+    setFormData((prev) => ({ ...prev, [field]: item.name }));
   };
 
   const fetchBrands = async (): Promise<DropdownItem[]> => {
@@ -62,6 +61,11 @@ export default function CreateItem({
   const addBrand = async (name: string): Promise<DropdownItem> => {
     // Simular la adición de una nueva marca
     return { id: Math.random().toString(36).substr(2, 9), name };
+  };
+
+  const fetchUnits = async (): Promise<DropdownItem[]> => {
+    // Simular la obtención de marcas desde un servicio
+    return UNITS;
   };
 
   return (
@@ -93,7 +97,7 @@ export default function CreateItem({
         <Dropdown
           fetchItems={fetchBrands}
           addItem={addBrand}
-          onSelect={handleBrandSelect}
+          onSelect={handleSelect("brand")}
         />
       </div>
 
@@ -123,21 +127,7 @@ export default function CreateItem({
           >
             Unidad de Medida
           </label>
-          <select
-            id="unit"
-            name="unit"
-            value={formData.unit}
-            onChange={handleChange}
-            required
-            className="w-full px-2 py-2 border rounded-md focus:outline-none text-sm"
-          >
-            <option value="">Seleccionar unidad</option>
-            {UNITS.map((unit) => (
-              <option key={unit} value={unit}>
-                {unit}
-              </option>
-            ))}
-          </select>
+          <Dropdown fetchItems={fetchUnits} onSelect={handleSelect("unit")} />
         </div>
       </div>
 

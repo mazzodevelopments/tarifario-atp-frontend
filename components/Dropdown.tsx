@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
-import Button from "./Button";
-import Input from "./Input";
+import { useState, useEffect, useRef } from "react";
+import Button from "@/components/Button";
+import Input from "@/components/Input";
 
 export interface DropdownItem {
   id: string;
@@ -9,7 +9,7 @@ export interface DropdownItem {
 
 interface DropdownProps {
   fetchItems: () => Promise<DropdownItem[]>;
-  addItem: (name: string) => Promise<DropdownItem>;
+  addItem?: (name: string) => Promise<DropdownItem>;
   onSelect: (item: DropdownItem) => void;
 }
 
@@ -50,8 +50,8 @@ export default function Dropdown({
   useEffect(() => {
     setFilteredItems(
       items.filter((item) =>
-        item.name.toLowerCase().includes(value.toLowerCase())
-      )
+        item.name.toLowerCase().includes(value.toLowerCase()),
+      ),
     );
   }, [items, value]);
 
@@ -68,7 +68,7 @@ export default function Dropdown({
 
   const handleAddItem = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (newItemName.trim()) {
+    if (newItemName.trim() && addItem) {
       const newItem = await addItem(newItemName.trim());
       setItems([...items, newItem]);
       handleSelect(newItem);
@@ -89,24 +89,26 @@ export default function Dropdown({
           className="w-full px-2 py-2 text-sm border rounded-md focus:outline-none"
           placeholder="Seleccionar o buscar..."
         />
-        <button
-          type="button"
-          onClick={() => setIsModalOpen(true)}
-          className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 rounded-full hover:bg-gray-200 focus:outline-none"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            viewBox="0 0 20 20"
-            fill="currentColor"
+        {addItem && (
+          <button
+            type="button"
+            onClick={() => setIsModalOpen(true)}
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 rounded-full hover:bg-gray-200 focus:outline-none"
           >
-            <path
-              fillRule="evenodd"
-              d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+        )}
       </div>
       <div
         className={`absolute z-10 w-full mt-1 bg-white border rounded-md max-h-60 overflow-auto transform transition-all duration-200 ease-in-out ${
@@ -125,7 +127,7 @@ export default function Dropdown({
           </div>
         ))}
       </div>
-      {isModalOpen && (
+      {isModalOpen && addItem && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
           <div className="bg-white p-6 rounded-lg">
             <h2 className="text-lg font-medium mb-2">Agregar nuevo elemento</h2>
