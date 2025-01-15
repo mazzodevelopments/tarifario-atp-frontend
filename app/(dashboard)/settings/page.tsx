@@ -1,51 +1,72 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import { UploadCloud } from "react-feather";
 import defaultProfilePic from "@/public/default-profile-pic.png";
 import Button from "@/components/Button";
 import Header from "@/app/(dashboard)/components/Header";
 
-export default function Reports() {
-  const inputFields = [
-    { label: "Nombre", type: "text", value: "Matías Monzalvo" },
-    {
-      label: "Email",
-      type: "email",
-      value: "matiasmonzalvo@mazzodevelopments.com",
-    },
-    { label: "Teléfono", type: "tel", value: "+542944723412" },
-    {
-      label: "Dirección",
-      type: "text",
-      value: "Soldado de la Independencia 1468",
-    },
-  ];
+export default function Settings() {
+  const [editingField, setEditingField] = useState<string | null>(null);
 
-  const EditableInput = ({
+  const [userData, setUserData] = useState({
+    Nombre: "Matías Monzalvo",
+    Email: "matiasmonzalvo@mazzodevelopments.com",
+    Teléfono: "+542944723412",
+    Dirección: "Soldado de la Independencia 1468",
+  });
+
+  const handleEdit = (field: string) => {
+    setEditingField(field);
+  };
+
+  const handleSave = (field: string) => {
+    setEditingField(null);
+  };
+
+  const handleChange = (field: string, value: string) => {
+    setUserData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const EditableField = ({
     label,
-    type,
     value,
   }: {
     label: string;
-    type: string;
     value: string;
   }) => (
     <div className="w-full py-4 flex flex-col border-b-[0.5px] border-[#ebebebcc]">
       <label className="text-sm font-semibold text-gray-700">{label}</label>
       <div className="relative w-full pb-1 pr-1">
-        <input
-          type={type}
-          value={value}
-          className="w-full pr-1.5 pt-2.5 font-medium text-gray-600 text-sm outline-none"
-          readOnly
-        />
-        <Button className="mt-2 text-xs rounded-xl">Editar</Button>
+        {editingField === label ? (
+          <input
+            type="text"
+            value={value}
+            onChange={(e) => handleChange(label, e.target.value)}
+            className="w-full pr-1.5 pt-2.5 font-medium text-gray-600 text-sm outline-none border-b border-gray-300"
+            autoFocus
+          />
+        ) : (
+          <p className="w-full pr-1.5 pt-2.5 font-medium text-gray-600 text-sm">
+            {value}
+          </p>
+        )}
+        <Button
+          className="mt-2 text-xs rounded-xl"
+          onClick={() =>
+            editingField === label ? handleSave(label) : handleEdit(label)
+          }
+        >
+          {editingField === label ? "Guardar" : "Editar"}
+        </Button>
       </div>
     </div>
   );
 
   return (
     <div className="flex flex-col justify-start w-full h-full bg-transparent px-[20px]">
-      <Header title="Ajustes" description="Lista de proveedores oficiales" />
+      <Header title="Ajustes" description="Configuración de la cuenta" />
       <div className="flex flex-row w-[70%] h-auto justify-start items-start gap-2 bg-white rounded-[18px] px-2 pb-2 border-[0.5px] border-[#ebebebcc]">
         <div className="flex flex-col w-[90%] p-4">
           <label className="text-md font-semibold text-gray-700 mb-2">
@@ -55,7 +76,7 @@ export default function Reports() {
             <div className="flex gap-4 items-center">
               <Image
                 className="w-20 h-20 rounded-[28px]"
-                src={defaultProfilePic.src}
+                src={defaultProfilePic.src || "/placeholder.svg"}
                 alt="Settings"
                 width={80}
                 height={80}
@@ -85,8 +106,8 @@ export default function Reports() {
             </div>
           </div>
           <div className="w-full">
-            {inputFields.map((field, index) => (
-              <EditableInput key={index} {...field} />
+            {Object.entries(userData).map(([label, value]) => (
+              <EditableField key={label} label={label} value={value} />
             ))}
           </div>
         </div>
