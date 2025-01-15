@@ -48,7 +48,7 @@ export default function AuthLayout({
   return (
     <div className="w-screen relative h-screen flex justify-center items-center flex-row bg-white">
       <div className="w-full h-full flex justify-center items-center flex-row overflow-hidden">
-        <div className="w-[328px] h-full flex justify-between items-center flex-col bg-white shadow-sm z-20 px-[30px] py-10 border-r-[0.5px] border-[#ebebebcc]">
+        <div className="w-[328px] h-full flex justify-between items-center flex-col bg-gray-50 shadow-sm z-20 px-[30px] py-10 border-r-[0.5px] border-[#ebebebcc]">
           <div className="flex justify-start w-full items-start flex-col">
             <div className="w-full flex flex-row items-end pb-6">
               <h3 className="text-xl font-bold text-primary leading-[1]">
@@ -65,10 +65,10 @@ export default function AuthLayout({
               {menuItems.map((item) => (
                 <Link
                   key={item.id}
-                  className={`text-sm flex items-center justify-between hover:cursor-pointer transition-all duration-300 ease-in-out w-full font-medium py-1.5 rounded-lg px-2 ${
+                  className={`text-sm flex items-center justify-between hover:cursor-pointer transition-all duration-300 ease-in-out w-full font-medium py-1.5 rounded-lg px-2 border-[0.5px]  ${
                     selectedItem === item.id
-                      ? " bg-sky-50 text-primary"
-                      : "hover:bg-sky-50/75 text-gray-500"
+                      ? " bg-white text-black border-[#ebebebcc] shadow-sm"
+                      : "hover:bg-gray-100 text-gray-500 border-gray-50"
                   }`}
                   href={`/${item.id}`}
                 >
@@ -77,7 +77,7 @@ export default function AuthLayout({
                       size={18}
                       fontWeight="bold"
                       className={` ${
-                        selectedItem === item.id ? " text-primary" : ""
+                        selectedItem === item.id ? " text-black" : ""
                       }`}
                     />
                     <span className="text-md ml-2 flex">{item.label}</span>
@@ -91,7 +91,7 @@ export default function AuthLayout({
           </div>
           <div className="w-full flex flex-col justify-end">
             <div className="flex w-full h-auto justify-start items-center">
-              <div className="flex flex-col gap-2 items-center py-2 px-4 rounded-[18px] w-full text-gray-800 border-[0.5px] border-[#ebebebcc] shadow-sm">
+              <div className="flex flex-col gap-2 items-center py-2 px-4 rounded-[18px] w-full text-gray-800 border-[0.5px] border-[#ebebebcc] shadow-sm bg-white">
                 <div className="flex w-full items-center gap-2 h-14 hover:cursor-pointer">
                   <div className="w-8 h-8 rounded-xl overflow-hidden">
                     <Image
@@ -105,7 +105,7 @@ export default function AuthLayout({
                     <h3 className="text-sm font-semibold w-full text-black">
                       Tomás Matteozzi
                     </h3>
-                    <span className="text-[0.65vw] text-black">
+                    <span className="text-[0.65vw] text-gray-500 font-medium">
                       Administrador
                     </span>
                   </div>
