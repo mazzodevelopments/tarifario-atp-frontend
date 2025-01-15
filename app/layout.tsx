@@ -1,9 +1,4 @@
-import {
-  avenirLight,
-  avenirMedium,
-  avenirHeavy,
-  avenirBold,
-} from "@/fonts/fonts";
+import { Avenir } from "@/fonts/fonts";
 import "./globals.css";
 
 export const metadata = {
@@ -18,11 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${avenirLight.variable} ${avenirMedium.variable} ${avenirHeavy.variable} ${avenirBold.variable} font-sans antialiased`}
-      >
-        {children}
-      </body>
+      <body className={Avenir.className}>{children}</body>
     </html>
   );
 }

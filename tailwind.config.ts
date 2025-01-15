@@ -8,14 +8,6 @@ export default {
   ],
   theme: {
     extend: {
-      fontFamily: {
-        sans: [
-          "var(--font-avenir-light)",
-          "var(--font-avenir-medium)",
-          "var(--font-avenir-semibold)",
-          "var(--font-avenir-bold)",
-        ],
-      },
       colors: {
         primary: "#0076A8",
         secondary: "#274864",
