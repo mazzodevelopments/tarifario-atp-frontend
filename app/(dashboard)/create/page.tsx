@@ -13,6 +13,7 @@ import ItemsList, {
 const steps = [
   { title: "Cargar Datos Cotización" },
   { title: "Agregar Items" },
+  { title: "Configurar Presupuestos" },
   { title: "Agregar Transportes" },
   { title: "Configurar Márgenes" },
   { title: "Revisar Impuestos" },
