@@ -1,11 +1,10 @@
-import { Poppins } from "next/font/google";
+import {
+  avenirLight,
+  avenirMedium,
+  avenirHeavy,
+  avenirBold,
+} from "@/fonts/fonts";
 import "./globals.css";
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-poppins",
-});
 
 export const metadata = {
   title: "ATP Solutions - Tarifario",
@@ -19,7 +18,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.variable} font-sans antialiased`}>
+      <body
+        className={`${avenirLight.variable} ${avenirMedium.variable} ${avenirHeavy.variable} ${avenirBold.variable} font-sans antialiased`}
+      >
         {children}
       </body>
     </html>
