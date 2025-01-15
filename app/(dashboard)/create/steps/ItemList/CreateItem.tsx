@@ -7,7 +7,6 @@ import Input from "@/components/Input";
 import Dropdown, { DropdownItem } from "@/components/Dropdown";
 
 const UNITS = ["Unidad", "Metro", "Kilogramo", "Litro", "Pieza"];
-const INCOTERMS = ["EXW", "FOB", "FCA", "CIF", "CFR", "DAT", "DAP", "DDP"];
 
 interface CreateItemProps {
   onItemCreated: (item: Item) => void;
@@ -24,11 +23,6 @@ export default function CreateItem({
     quantity: "",
     unit: "",
     partNumber: "",
-    incoterm: "",
-    pickup: false,
-    pickupPrice: 180,
-    repackaging: false,
-    palletFumigation: false,
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -162,98 +156,6 @@ export default function CreateItem({
           onChange={handleChange}
           required
         />
-      </div>
-
-      <div>
-        <label
-          htmlFor="incoterm"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Incoterm
-        </label>
-        <select
-          id="incoterm"
-          name="incoterm"
-          value={formData.incoterm}
-          onChange={handleChange}
-          required
-          className="w-full px-2 py-2 border rounded-md focus:outline-none text-sm"
-        >
-          <option value="">Seleccionar Incoterm</option>
-          {INCOTERMS.map((incoterm) => (
-            <option key={incoterm} value={incoterm}>
-              {incoterm}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="space-y-2">
-        <div className="flex items-center">
-          <input
-            type="checkbox"
-            id="pickup"
-            name="pickup"
-            checked={formData.pickup}
-            onChange={handleChange}
-            className="mr-2"
-          />
-          <label htmlFor="pickup" className="text-sm font-medium text-gray-700">
-            Pickup
-          </label>
-        </div>
-        {formData.pickup && (
-          <div>
-            <label
-              htmlFor="pickupPrice"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Precio de Pickup (USD 180 - USD 650)
-            </label>
-            <Input
-              type="number"
-              id="pickupPrice"
-              name="pickupPrice"
-              min="180"
-              max="650"
-              value={formData.pickupPrice}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        )}
-        <div className="flex items-center">
-          <input
-            type="checkbox"
-            id="repackaging"
-            name="repackaging"
-            checked={formData.repackaging}
-            onChange={handleChange}
-            className="mr-2"
-          />
-          <label
-            htmlFor="repackaging"
-            className="text-sm font-medium text-gray-700"
-          >
-            Reembalaje (USD 190)
-          </label>
-        </div>
-        <div className="flex items-center">
-          <input
-            type="checkbox"
-            id="palletFumigation"
-            name="palletFumigation"
-            checked={formData.palletFumigation}
-            onChange={handleChange}
-            className="mr-2"
-          />
-          <label
-            htmlFor="palletFumigation"
-            className="text-sm font-medium text-gray-700"
-          >
-            Fumigación de Pallet (USD 250)
-          </label>
-        </div>
       </div>
 
       <div className="flex justify-end gap-3 mt-6">
