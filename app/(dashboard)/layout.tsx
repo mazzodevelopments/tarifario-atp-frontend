@@ -68,7 +68,7 @@ export default function AuthLayout({
                   className={`text-sm flex items-center justify-between hover:cursor-pointer transition-all duration-300 ease-in-out w-full font-medium py-1.5 rounded-lg px-2 ${
                     selectedItem === item.id
                       ? " bg-sky-50 text-primary"
-                      : "hover:bg-sky-50 text-gray-500 hover:text-gray-700"
+                      : "hover:bg-sky-50/75 text-gray-500"
                   }`}
                   href={`/${item.id}`}
                 >
