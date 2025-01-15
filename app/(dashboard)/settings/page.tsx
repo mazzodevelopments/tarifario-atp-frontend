@@ -37,18 +37,18 @@ export default function Settings() {
     value: string;
   }) => (
     <div className="w-full py-4 flex flex-col border-b-[0.5px] border-[#ebebebcc]">
-      <label className="text-sm font-semibold text-gray-700">{label}</label>
+      <label className="text-sm font-[800] text-gray-700">{label}</label>
       <div className="relative w-full pb-1 pr-1">
         {editingField === label ? (
           <input
             type="text"
             value={value}
             onChange={(e) => handleChange(label, e.target.value)}
-            className="w-full pr-1.5 pt-2.5 font-medium text-gray-600 text-sm outline-none border-b border-gray-300"
+            className="w-full pr-1.5 pt-2.5 font-[600] text-gray-600 text-sm outline-none border-b border-gray-300"
             autoFocus
           />
         ) : (
-          <p className="w-full pr-1.5 pt-2.5 font-medium text-gray-600 text-sm">
+          <p className="w-full pr-1.5 pt-2.5 font-[600] text-gray-600 text-sm">
             {value}
           </p>
         )}
@@ -69,7 +69,7 @@ export default function Settings() {
       <Header title="Ajustes" description="Configuración de la cuenta" />
       <div className="flex flex-row w-[70%] h-auto justify-start items-start gap-2 bg-white rounded-[18px] px-2 pb-2 border-[0.5px] border-[#ebebebcc]">
         <div className="flex flex-col w-[90%] p-4">
-          <label className="text-md font-semibold text-gray-700 mb-2">
+          <label className="text-md font-[800] text-gray-700 mb-2">
             Mi cuenta
           </label>
           <div className="flex w-full justify-between items-center pb-4 border-b-2 border-gray-100">
@@ -82,10 +82,10 @@ export default function Settings() {
                 height={80}
               />
               <div className="flex flex-col w-[60%]">
-                <h3 className="font-semibold text-sm text-gray-600">
+                <h3 className="font-[800] text-sm text-gray-600">
                   Sube una foto de perfil
                 </h3>
-                <label className="font-medium text-sm text-gray-500">
+                <label className="font-[600] text-sm text-gray-500">
                   Así tu equipo te reconocerá en cada etapa.
                 </label>
               </div>
@@ -93,7 +93,7 @@ export default function Settings() {
             <div className="w-auto flex items-center justify-center gap-2">
               <Button variant="secondary">Eliminar</Button>
               <button
-                className="relative flex flex-row overflow-hidden px-3 py-2 rounded-[12px] font-medium cursor-pointer
+                className="relative flex flex-row overflow-hidden px-3 py-2 rounded-[12px] font-[600] cursor-pointer
     transition-all duration-300 ease-out text-sm
     transform hover:scale-95 bg-neutral-900 text-white
       before:absolute before:top-0 before:left-0 before:w-full before:h-full

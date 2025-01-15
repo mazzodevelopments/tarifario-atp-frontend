@@ -51,21 +51,21 @@ export default function AuthLayout({
         <div className="w-[328px] h-full flex justify-between items-center flex-col bg-gray-50 shadow-sm z-20 px-[30px] py-10 border-r-[0.5px] border-[#ebebebcc]">
           <div className="flex justify-start w-full items-start flex-col">
             <div className="w-full flex flex-row items-end pb-6">
-              <h3 className="text-xl font-bold text-primary leading-[1]">
+              <h3 className="text-xl font-[900] text-primary leading-[1]">
                 atp
               </h3>
-              <h3 className="text-lg font-semibold uppercase leading-[1] text-black">
+              <h3 className="text-lg font-[800] uppercase leading-[1] text-black">
                 solutions
               </h3>
             </div>
             <div className="w-full flex justify-between mt-2 items-start gap-2 flex-col">
-              <label className="uppercase text-gray-400 text-xs font-medium">
+              <label className="uppercase text-gray-400 text-xs font-[600]">
                 General
               </label>
               {menuItems.map((item) => (
                 <Link
                   key={item.id}
-                  className={`text-sm flex items-center justify-between hover:cursor-pointer transition-all duration-300 ease-in-out w-full font-medium py-1.5 rounded-lg px-2 border-[0.5px]  ${
+                  className={`text-sm flex items-center justify-between hover:cursor-pointer transition-all duration-300 ease-in-out w-full font-[600] py-1.5 rounded-lg px-2 border-[0.5px]  ${
                     selectedItem === item.id
                       ? " bg-white text-black border-[#ebebebcc] shadow-sm"
                       : "hover:bg-gray-100 text-gray-500 border-gray-50"
@@ -102,10 +102,10 @@ export default function AuthLayout({
                     />
                   </div>
                   <div className="flex flex-col">
-                    <h3 className="text-sm font-semibold w-full text-black">
+                    <h3 className="text-sm font-[800] w-full text-black">
                       Tomás Matteozzi
                     </h3>
-                    <span className="text-[0.65vw] text-gray-500 font-medium">
+                    <span className="text-[0.65vw] text-gray-500 font-[600]">
                       Administrador
                     </span>
                   </div>

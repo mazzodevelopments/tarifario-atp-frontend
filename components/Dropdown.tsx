@@ -54,8 +54,8 @@ export default function Dropdown({
   useEffect(() => {
     setFilteredItems(
       items.filter((item) =>
-        item.name.toLowerCase().includes(value.toLowerCase()),
-      ),
+        item.name.toLowerCase().includes(value.toLowerCase())
+      )
     );
   }, [items, value]);
 
@@ -138,7 +138,7 @@ export default function Dropdown({
       {isModalOpen && addItem && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
           <div className="bg-white p-6 rounded-lg">
-            <h2 className="text-lg font-medium mb-2">Agregar nuevo elemento</h2>
+            <h2 className="text-lg font-[600] mb-2">Agregar nuevo elemento</h2>
             <div>
               <Input
                 type="text"

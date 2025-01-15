@@ -86,7 +86,7 @@ export default function Dashboard() {
                   fontWeight="bold"
                   size={"1.5vw"}
                 />
-                <h3 className="text-md font-medium text-white bg-transparent outline-none">
+                <h3 className="text-md font-[600] text-white bg-transparent outline-none">
                   Crear cotización
                 </h3>
               </div>
@@ -100,7 +100,7 @@ export default function Dashboard() {
                   fontWeight="bold"
                   size={"1.25vw"}
                 />
-                <h3 className="text-md font-medium text-white bg-transparent outline-none">
+                <h3 className="text-md font-[600] text-white bg-transparent outline-none">
                   Comparar
                 </h3>
               </div>
@@ -109,7 +109,7 @@ export default function Dashboard() {
           <div className="w-[calc(24vw+0.75rem)] h-full bg-white border-[0.5px] border-[#ebebebcc] shadow-sm rounded-[18px] relative">
             <div className="flex flex-col p-4 relative">
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-2xl font-semibold text-black">
+                <h2 className="text-2xl font-[800] text-black">
                   Últimas Cotizaciones
                 </h2>
                 <div className="w-8 h-8 bg-primary rounded-[8px] flex justify-center items-center">
@@ -124,7 +124,7 @@ export default function Dashboard() {
                   >
                     <div className="flex-1">
                       <div className="flex gap-3 flex-col">
-                        <h3 className="text-black font-semibold">
+                        <h3 className="text-black font-[800]">
                           {cotizacion.name}
                         </h3>
                         <div className="text-sm text-gray-500 flex items-center gap-2">
@@ -138,7 +138,7 @@ export default function Dashboard() {
                         <Calendar size={16} className="text-gray-400" />
                         {cotizacion.date.split("T")[0]}
                       </div>
-                      <div className="flex items-center text-primary font-semibold">
+                      <div className="flex items-center text-primary font-[800]">
                         <DollarSign size={16} />
                         {cotizacion.value}
                       </div>
@@ -172,7 +172,7 @@ export default function Dashboard() {
             <div className="w-full h-full rounded-[18px] mt-3 bg-white border-[0.5px] border-[#ebebebcc] shadow-sm">
               <div className="flex flex-col p-4">
                 <div className="flex items-center justify-between mb-3">
-                  <h2 className="text-2xl font-semibold text-black">
+                  <h2 className="text-2xl font-[800] text-black">
                     Principales Proveedores
                   </h2>
                   {/* <div className="w-8 h-8 bg-red-500 rounded-[8px] flex justify-center items-center">
@@ -187,7 +187,7 @@ export default function Dashboard() {
                     >
                       <div className="flex-1">
                         <div className="flex gap-3 flex-col">
-                          <h3 className="text-black font-semibold">
+                          <h3 className="text-black font-[800]">
                             {proveedor.name}
                           </h3>
                           <div className="text-sm text-gray-500 flex items-center gap-2">
@@ -196,7 +196,7 @@ export default function Dashboard() {
                         </div>
                       </div>
                       <div className="flex items-center gap-3 text-sm">
-                        <div className="flex items-center text-black font-semibold flex-col">
+                        <div className="flex items-center text-black font-[800] flex-col">
                           <p className="text-xl opacity-90">
                             {proveedor.quotations}
                           </p>

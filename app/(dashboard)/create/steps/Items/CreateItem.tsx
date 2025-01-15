@@ -35,7 +35,7 @@ export default function CreateItem({
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value, type } = e.target;
     setFormData((prev) => ({
@@ -73,7 +73,7 @@ export default function CreateItem({
       <div>
         <label
           htmlFor="detail"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-[600] text-gray-700"
         >
           Detalle
         </label>
@@ -90,7 +90,7 @@ export default function CreateItem({
       <div>
         <label
           htmlFor="brand"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-[600] text-gray-700"
         >
           Marca
         </label>
@@ -106,7 +106,7 @@ export default function CreateItem({
         <div>
           <label
             htmlFor="quantity"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-[600] text-gray-700"
           >
             Cantidad
           </label>
@@ -124,7 +124,7 @@ export default function CreateItem({
         <div>
           <label
             htmlFor="unit"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-[600] text-gray-700"
           >
             Unidad de Medida
           </label>
@@ -139,7 +139,7 @@ export default function CreateItem({
       <div>
         <label
           htmlFor="partNumber"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-[600] text-gray-700"
         >
           Part Number (PN)
         </label>

@@ -18,7 +18,7 @@ export default function SuccessAnimation({
           <div className="rounded-full bg-secondary text-white p-2 mb-4">
             <Check size={52} />
           </div>
-          <p className="text-2xl font-medium text-secondary">
+          <p className="text-2xl font-[600] text-secondary">
             Cotización creada con éxito
           </p>
         </div>

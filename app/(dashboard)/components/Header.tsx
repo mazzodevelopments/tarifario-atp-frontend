@@ -24,7 +24,7 @@ export default function Header({
     <div className="w-full h-auto  rounded-[18px] mb-2 flex-shrink-0">
       <div className={combinedClasses}>
         <div className="flex flex-col justify-center items-start">
-          <h2 className="flex items-center text-4xl leading-[1] mb-2 p-0 font-semibold text-black">
+          <h2 className="flex items-center text-4xl leading-[1] mb-2 p-0 font-[800] text-black">
             {title}
           </h2>
           <p className="text-md leading-[1] ml-1 text-black opacity-90">

@@ -14,17 +14,17 @@ export default function Register() {
         onSubmit={handleSubmit}
         className="w-1/2 h-1/2 flex justify-center items-start p-10 flex-col gap-2"
       >
-        <h2 className="font-bold text-4xl text-gray-800 leading-[1] mb-2">
+        <h2 className="font-[900] text-4xl text-gray-800 leading-[1] mb-2">
           Ingresar
         </h2>
         <div className="w-full">
-          <span className="text-sm font-semibold text-gray-600 leading-[1]">
+          <span className="text-sm font-[800] text-gray-600 leading-[1]">
             Correo electrónico
           </span>
           <input className={inputStyles} />
         </div>
         <div className="w-full">
-          <span className="text-sm font-semibold text-gray-600 leading-[1]">
+          <span className="text-sm font-[800] text-gray-600 leading-[1]">
             Contraseña
           </span>
           <input className={inputStyles}></input>

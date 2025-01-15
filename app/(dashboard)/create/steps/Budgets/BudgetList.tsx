@@ -46,7 +46,7 @@ export default function BudgetList({
     setSelectedBudgets((prev) =>
       prev.includes(id)
         ? prev.filter((budgetId) => budgetId !== id)
-        : [...prev, id],
+        : [...prev, id]
     );
   };
 
@@ -60,34 +60,34 @@ export default function BudgetList({
         <table className="w-full">
           <thead className="border-b border-gray-200">
             <tr>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider">
                 Item
               </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider">
                 Proveedor
               </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider">
                 Origen
               </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider">
                 Destino
               </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider">
                 Precio Unitario
               </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider">
                 Peso Unitario
               </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider">
                 Tiempo de Entrega
               </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider">
                 Incoterm
               </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider">
                 Seleccionar
               </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
+              <th className="px-4 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider"></th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">

@@ -62,7 +62,7 @@ export default function QuotationDetails({
       <div>
         <label
           htmlFor="name"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-[600] text-gray-700"
         >
           Nombre
         </label>
@@ -79,7 +79,7 @@ export default function QuotationDetails({
       <div>
         <label
           htmlFor="client"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-[600] text-gray-700"
         >
           Client
         </label>
@@ -94,7 +94,7 @@ export default function QuotationDetails({
       <div>
         <label
           htmlFor="buyer"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-[600] text-gray-700"
         >
           Buyer
         </label>

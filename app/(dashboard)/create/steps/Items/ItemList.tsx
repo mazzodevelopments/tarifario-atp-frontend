@@ -41,22 +41,22 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
         <table className="w-full">
           <thead className="border-b border-gray-200">
             <tr>
-              <th className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider">
                 Detalle
               </th>
-              <th className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider">
                 Marca
               </th>
-              <th className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider">
                 Cantidad
               </th>
-              <th className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider">
                 Unidad
               </th>
-              <th className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider">
                 Part Number
               </th>
-              <th className="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
+              <th className="px-6 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider"></th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -72,7 +72,7 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
             ) : (
               items.map((item) => (
                 <tr key={item.id} className="text-sm">
-                  <td className="px-6 py-2 whitespace-nowrap font-medium">
+                  <td className="px-6 py-2 whitespace-nowrap font-[600]">
                     {item.detail}
                   </td>
                   <td className="px-6 py-2 whitespace-nowrap">{item.brand}</td>

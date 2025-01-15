@@ -40,7 +40,7 @@ export default function CreateBudget({
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value, type } = e.target;
     setFormData((prev) => ({
@@ -87,7 +87,7 @@ export default function CreateBudget({
       <div>
         <label
           htmlFor="item"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-[600] text-gray-700"
         >
           Item
         </label>
@@ -101,7 +101,7 @@ export default function CreateBudget({
       <div>
         <label
           htmlFor="supplier"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-[600] text-gray-700"
         >
           Proveedor
         </label>
@@ -116,7 +116,7 @@ export default function CreateBudget({
       <div>
         <label
           htmlFor="origin"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-[600] text-gray-700"
         >
           Origen
         </label>
@@ -130,7 +130,7 @@ export default function CreateBudget({
       <div>
         <label
           htmlFor="destination"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-[600] text-gray-700"
         >
           Destino
         </label>
@@ -145,7 +145,7 @@ export default function CreateBudget({
         <div>
           <label
             htmlFor="unitPrice"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-[600] text-gray-700"
           >
             Precio Unitario
           </label>
@@ -162,7 +162,7 @@ export default function CreateBudget({
         <div>
           <label
             htmlFor="unitWeight"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-[600] text-gray-700"
           >
             Peso Unitario
           </label>
@@ -180,7 +180,7 @@ export default function CreateBudget({
       <div>
         <label
           htmlFor="deliveryTime"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-[600] text-gray-700"
         >
           Tiempo de Entrega
         </label>
@@ -197,7 +197,7 @@ export default function CreateBudget({
       <div>
         <label
           htmlFor="incoterm"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-[600] text-gray-700"
         >
           Incoterm
         </label>

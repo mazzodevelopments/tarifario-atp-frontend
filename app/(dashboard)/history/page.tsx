@@ -69,11 +69,11 @@ export default function History() {
         <table className="w-full table-auto overflow-hidden">
           <thead className="text-left text-gray-600 p-4 border-b">
             <tr>
-              <th className="text-sm font-semibold pb-2">Nombre</th>
-              <th className="text-sm font-semibold pb-2">Cliente</th>
-              <th className="text-sm font-semibold pb-2">Usuarios</th>
-              <th className="text-sm font-semibold pb-2">Fase</th>
-              <th className="text-sm font-semibold pb-2">Fecha</th>
+              <th className="text-sm font-[800] pb-2">Nombre</th>
+              <th className="text-sm font-[800] pb-2">Cliente</th>
+              <th className="text-sm font-[800] pb-2">Usuarios</th>
+              <th className="text-sm font-[800] pb-2">Fase</th>
+              <th className="text-sm font-[800] pb-2">Fecha</th>
             </tr>
           </thead>
           <tbody>

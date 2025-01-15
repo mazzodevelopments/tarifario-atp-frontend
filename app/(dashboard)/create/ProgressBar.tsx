@@ -41,7 +41,7 @@ export default function ProgressBar({
             key={index}
             className={`text-sm transition-colors duration-300 ${
               index === currentStep
-                ? "text-primary font-medium"
+                ? "text-primary font-[600]"
                 : index < currentStep
                 ? "text-gray-700"
                 : "text-gray-400"

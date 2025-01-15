@@ -159,7 +159,7 @@ export default function Create() {
             <>
               <div className="flex-grow overflow-hidden">
                 <div className="h-full relative flex flex-col">
-                  <h3 className="text-xl font-semibold mb-4">{`Etapa ${
+                  <h3 className="text-xl font-[800] mb-4">{`Etapa ${
                     currentStep + 1
                   } - ${renderStepTitle()}`}</h3>
                   <div className="flex justify-center relative h-full items-center w-full mx-auto">
