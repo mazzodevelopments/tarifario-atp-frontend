@@ -67,6 +67,12 @@ export default function CreateBudget({
     return { id: Math.random().toString(36).substr(2, 9), name };
   };
 
+  const fetchItems = async (): Promise<DropdownItem[]> => {
+    return items.map((item) => {
+      return { id: item.id, name: item.detail };
+    });
+  };
+
   const fetchLocations = async (): Promise<DropdownItem[]> => {
     // Simular la obtención de ubicaciones desde un servicio
     return COUNTRIES;
@@ -85,21 +91,7 @@ export default function CreateBudget({
         >
           Item
         </label>
-        <select
-          id="item"
-          name="item"
-          value={formData.item}
-          onChange={handleChange}
-          required
-          className="w-full px-2 py-2 border rounded-md focus:outline-none text-sm"
-        >
-          <option value="">Seleccionar item</option>
-          {items.map((item) => (
-            <option key={item.id} value={item.detail}>
-              {item.detail}
-            </option>
-          ))}
-        </select>
+        <Dropdown fetchItems={fetchItems} onSelect={handleSelect("item")} />
       </div>
 
       <div>
