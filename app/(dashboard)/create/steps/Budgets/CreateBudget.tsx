@@ -91,7 +91,11 @@ export default function CreateBudget({
         >
           Item
         </label>
-        <Dropdown fetchItems={fetchItems} onSelect={handleSelect("item")} />
+        <Dropdown
+          fetchItems={fetchItems}
+          onSelect={handleSelect("item")}
+          required
+        />
       </div>
 
       <div>
@@ -105,6 +109,7 @@ export default function CreateBudget({
           addItem={addSupplier}
           fetchItems={fetchSuppliers}
           onSelect={handleSelect("supplier")}
+          required
         />
       </div>
 
@@ -118,6 +123,7 @@ export default function CreateBudget({
         <Dropdown
           fetchItems={fetchLocations}
           onSelect={handleSelect("origin")}
+          required
         />
       </div>
 
@@ -131,6 +137,7 @@ export default function CreateBudget({
         <Dropdown
           fetchItems={fetchLocations}
           onSelect={handleSelect("destination")}
+          required
         />
       </div>
 
@@ -197,6 +204,7 @@ export default function CreateBudget({
         <Dropdown
           fetchItems={fetchIncoterms}
           onSelect={handleSelect("incoterm")}
+          required
         />
       </div>
 

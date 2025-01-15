@@ -98,6 +98,7 @@ export default function CreateItem({
           fetchItems={fetchBrands}
           addItem={addBrand}
           onSelect={handleSelect("brand")}
+          required
         />
       </div>
 
@@ -127,7 +128,11 @@ export default function CreateItem({
           >
             Unidad de Medida
           </label>
-          <Dropdown fetchItems={fetchUnits} onSelect={handleSelect("unit")} />
+          <Dropdown
+            fetchItems={fetchUnits}
+            onSelect={handleSelect("unit")}
+            required
+          />
         </div>
       </div>
 

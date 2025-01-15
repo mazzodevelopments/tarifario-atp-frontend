@@ -11,12 +11,16 @@ interface DropdownProps {
   fetchItems: () => Promise<DropdownItem[]>;
   addItem?: (name: string) => Promise<DropdownItem>;
   onSelect: (item: DropdownItem) => void;
+  required?: boolean;
+  error?: string;
 }
 
 export default function Dropdown({
   fetchItems,
   addItem,
   onSelect,
+  required = false,
+  error,
 }: DropdownProps) {
   const [items, setItems] = useState<DropdownItem[]>([]);
   const [filteredItems, setFilteredItems] = useState<DropdownItem[]>([]);
@@ -86,8 +90,11 @@ export default function Dropdown({
           value={value}
           onChange={handleInputChange}
           onClick={() => setIsOpen(true)}
-          className="w-full px-2 py-2 text-sm border rounded-md focus:outline-none"
+          className={`w-full px-2 py-2 text-sm border rounded-md focus:outline-none ${
+            error ? "border-red-500" : ""
+          }`}
           placeholder="Seleccionar o buscar..."
+          required={required}
         />
         {addItem && (
           <button
@@ -110,6 +117,7 @@ export default function Dropdown({
           </button>
         )}
       </div>
+      {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
       <div
         className={`absolute z-10 w-full mt-1 bg-white border rounded-md max-h-60 overflow-auto transform transition-all duration-200 ease-in-out ${
           isOpen && filteredItems.length > 0
