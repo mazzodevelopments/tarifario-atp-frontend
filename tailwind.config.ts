@@ -12,10 +12,8 @@ export default {
         sans: ["var(--font-poppins)"],
       },
       colors: {
-        primary: "#2795d5",
+        primary: "#0076A8",
         secondary: "#274864",
-        secondaryLight: "#2e5374",
-        secondaryDark: "#1D3A53",
         background: "#ffffff",
       },
     },
