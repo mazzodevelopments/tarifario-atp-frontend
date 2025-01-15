@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Item } from "@/app/(dashboard)/create/steps/ItemList/ItemList";
-import { Budget } from "@/app/(dashboard)/create/steps/BudgetList/BudgetList";
+import { Item } from "@/app/(dashboard)/create/steps/Items/ItemList";
+import { Budget } from "@/app/(dashboard)/create/steps/Budgets/BudgetList";
 import { COUNTRIES, INCOTERMS } from "@/app/(dashboard)/create/data";
 import Button from "@/components/Button";
 import Input from "@/components/Input";

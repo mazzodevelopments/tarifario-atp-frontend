@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Trash } from "react-feather";
-import { Item } from "@/app/(dashboard)/create/steps/ItemList/ItemList";
+import { Item } from "@/app/(dashboard)/create/steps/Items/ItemList";
 import Button from "@/components/Button";
 import CreateBudget from "./CreateBudget";
 

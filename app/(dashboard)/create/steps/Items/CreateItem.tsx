@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Item } from "@/app/(dashboard)/create/steps/ItemList/ItemList";
+import { Item } from "@/app/(dashboard)/create/steps/Items/ItemList";
 import { UNITS } from "@/app/(dashboard)/create/data";
 import Input from "@/components/Input";
 import Button from "@/components/Button";

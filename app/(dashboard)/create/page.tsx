@@ -6,12 +6,10 @@ import SuccessAnimation from "./SuccesAnimation";
 import Button from "@/components/Button";
 import Header from "@/app/(dashboard)/components/Header";
 import QuotationDetails from "@/app/(dashboard)/create/steps/QuotationDetails";
-import ItemsList, {
-  Item,
-} from "@/app/(dashboard)/create/steps/ItemList/ItemList";
+import ItemsList, { Item } from "@/app/(dashboard)/create/steps/Items/ItemList";
 import BudgetList, {
   Budget,
-} from "@/app/(dashboard)/create/steps/BudgetList/BudgetList";
+} from "@/app/(dashboard)/create/steps/Budgets/BudgetList";
 
 const steps = [
   { title: "Cargar Datos Cotización" },
