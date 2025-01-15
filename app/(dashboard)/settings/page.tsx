@@ -71,10 +71,17 @@ export default function Reports() {
             </div>
             <div className="w-auto flex items-center justify-center gap-2">
               <Button className="">Eliminar</Button>
-              <Button className="flex items-center text-xs rounded-xl">
+              <button
+                className="relative flex flex-row overflow-hidden px-3 py-2 rounded-[12px] font-medium cursor-pointer
+    transition-all duration-300 ease-out text-sm
+    transform hover:scale-95 bg-neutral-900 text-white
+      before:absolute before:top-0 before:left-0 before:w-full before:h-full
+      before:bg-white before:opacity-0 before:transition-opacity before:duration-300
+      hover:before:opacity-20"
+              >
                 <UploadCloud className="mr-2" size={20} />
                 Nueva foto de perfil
-              </Button>
+              </button>
             </div>
           </div>
           <div className="w-full">
