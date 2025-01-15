@@ -31,48 +31,7 @@ export default function Create() {
     client: "",
     buyer: "",
   });
-  const [items, setItems] = useState<Item[]>([
-    {
-      id: "1",
-      detail: "Bomba centrífuga industrial",
-      brand: "Grundfos",
-      quantity: 2,
-      unit: "Pulgada",
-      partNumber: "CR-32-2",
-    },
-    {
-      id: "2",
-      detail: "Válvula de control de flujo",
-      brand: "Samson",
-      quantity: 5,
-      unit: "Pulgada",
-      partNumber: "3241-PN16",
-    },
-    {
-      id: "3",
-      detail: "Cable de instrumentación blindado",
-      brand: "Belden",
-      quantity: 100,
-      unit: "Metro",
-      partNumber: "8761-100",
-    },
-    {
-      id: "4",
-      detail: "Sensor de presión diferencial",
-      brand: "Endress+Hauser",
-      quantity: 3,
-      unit: "Pulgada",
-      partNumber: "PMD75-1BA7B6",
-    },
-    {
-      id: "5",
-      detail: 'Tubería de acero inoxidable 2"',
-      brand: "Sandvik",
-      quantity: 50,
-      unit: "Metro",
-      partNumber: "AISI316L-2",
-    },
-  ]);
+  const [items, setItems] = useState<Item[]>([]);
 
   const handleNext = () => {
     if (currentStep < totalSteps - 1) {

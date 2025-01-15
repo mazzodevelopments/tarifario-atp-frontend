@@ -91,7 +91,7 @@ export default function Settings() {
               </div>
             </div>
             <div className="w-auto flex items-center justify-center gap-2">
-              <Button className="">Eliminar</Button>
+              <Button variant="secondary">Eliminar</Button>
               <button
                 className="relative flex flex-row overflow-hidden px-3 py-2 rounded-[12px] font-medium cursor-pointer
     transition-all duration-300 ease-out text-sm

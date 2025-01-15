@@ -34,10 +34,10 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
   return (
     <div className="w-full max-w-4xl mx-auto">
       <div className="flex justify-between items-center mb-3">
-        <h3 className="text-lg font-medium">Items de la Cotización</h3>
+        <h3 className="text-lg font-regular">Items de la Cotización</h3>
       </div>
 
-      <div className="border rounded-md overflow-x-auto">
+      <div className="border rounded-md overflow-x-hidden max-h-[18vw]">
         <table className="w-full">
           <thead className="border-b border-gray-200">
             <tr>
@@ -61,10 +61,10 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {items.length === 0 ? (
-              <tr>
+              <tr className="h-36">
                 <td
                   colSpan={8}
-                  className="text-sm px-6 py-2 text-center text-gray-500"
+                  className="text-sm m-auto h-full  text-center text-gray-500"
                 >
                   No hay items agregados
                 </td>
