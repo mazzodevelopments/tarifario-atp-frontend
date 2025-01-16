@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Button from "@/components/Button";
 import CreateItem from "./CreateItem";
-import { Trash } from "react-feather";
+import { Trash, X } from "react-feather";
 
 export interface Item {
   id: string;
@@ -56,7 +56,7 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
               <th className="px-6 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider">
                 Part Number
               </th>
-              <th className="px-6 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider"></th>
+              <th className="px-1 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider"></th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -83,12 +83,12 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
                   <td className="px-6 py-2 whitespace-nowrap">
                     {item.partNumber}
                   </td>
-                  <td className="px-6 py-2 whitespace-nowrap">
+                  <td className="px-4 py-2 whitespace-nowrap">
                     <button
                       onClick={() => handleDeleteItem(item.id)}
-                      className="text-red-600 hover:text-red-900"
+                      className="text-black hover:text-red-600"
                     >
-                      <Trash className="w-4" />
+                      <X className="w-4" />
                     </button>
                   </td>
                 </tr>
