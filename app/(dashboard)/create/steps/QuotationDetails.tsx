@@ -7,11 +7,13 @@ interface QuotationDetailsProps {
     name: string;
     client: string;
     buyer: string;
+    requestedDate: string;
   };
   setQuotationData: (quotationData: {
     name: string;
     client: string;
     buyer: string;
+    requestedDate: string;
   }) => void;
 }
 

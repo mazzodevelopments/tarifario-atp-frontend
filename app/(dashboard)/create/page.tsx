@@ -28,10 +28,12 @@ export default function Create() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const totalSteps = steps.length;
+  // ESTADOS COTIZACIÓN
   const [quotationData, setQuotationData] = useState({
     name: "",
     client: "",
     buyer: "",
+    requestedDate: new Date().toISOString().split("T")[0],
   });
   const [items, setItems] = useState<Item[]>([
     {
@@ -77,14 +79,17 @@ export default function Create() {
     setIsCreating(true);
     // Simular la creación de la cotización
     await new Promise((resolve) => setTimeout(resolve, 2000));
+    console.log("Creando cotización con fecha:", quotationData.requestedDate);
     setIsCreating(false);
     setIsSuccess(true);
   };
 
   const isNextButtonDisabled = () => {
     if (currentStep === 0) {
-      // Check if all properties in quotationData have non-empty values
-      return Object.values(quotationData).some((value) => value.trim() === "");
+      // Check if name, client, and buyer have non-empty values
+      return ["name", "client", "buyer"].some(
+        (key) => quotationData[key as keyof typeof quotationData].trim() === "",
+      );
     }
     return false;
   };
