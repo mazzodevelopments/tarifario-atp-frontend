@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Trash } from "react-feather";
+import { X } from "react-feather";
 import { Item } from "@/app/(dashboard)/create/steps/Items/ItemList";
 import Button from "@/components/Button";
 import CreateBudget from "./CreateBudget";
@@ -51,7 +51,7 @@ export default function BudgetList({
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto">
+    <div className="w-full mx-auto">
       <div className="flex justify-between items-center mb-3">
         <h3 className="text-lg font-regular">Presupuestos</h3>
       </div>
@@ -84,9 +84,6 @@ export default function BudgetList({
               <th className="px-4 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider">
                 Incoterm
               </th>
-              <th className="px-4 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider">
-                Seleccionar
-              </th>
               <th className="px-4 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider"></th>
             </tr>
           </thead>
@@ -102,7 +99,17 @@ export default function BudgetList({
               </tr>
             ) : (
               budgets.map((budget) => (
-                <tr key={budget.id} className="text-sm">
+                <tr
+                  key={budget.id}
+                  onClick={() => handleSelectBudget(budget.id)}
+                  className={`text-sm cursor-pointer transition-colors duration-200 ease-in-out ${
+                    selectedBudgets.includes(budget.id)
+                      ? "bg-sky-100 hover:bg-sky-200"
+                      : "hover:bg-sky-50"
+                  }`}
+                  role="row"
+                  aria-selected={selectedBudgets.includes(budget.id)}
+                >
                   <td className="px-4 py-2 whitespace-nowrap">{budget.item}</td>
                   <td className="px-4 py-2 whitespace-nowrap">
                     {budget.supplier}
@@ -126,19 +133,15 @@ export default function BudgetList({
                     {budget.incoterm}
                   </td>
                   <td className="px-4 py-2 whitespace-nowrap">
-                    <input
-                      type="checkbox"
-                      checked={selectedBudgets.includes(budget.id)}
-                      onChange={() => handleSelectBudget(budget.id)}
-                      className="form-checkbox h-4 w-4 text-blue-600"
-                    />
-                  </td>
-                  <td className="px-4 py-2 whitespace-nowrap">
                     <button
-                      onClick={() => handleDeleteBudget(budget.id)}
-                      className="text-red-600 hover:text-red-900"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteBudget(budget.id);
+                      }}
+                      className="text-black hover:text-red-600"
+                      aria-label={`Delete budget for ${budget.item}`}
                     >
-                      <Trash className="w-4" />
+                      <X className="w-4" />
                     </button>
                   </td>
                 </tr>
