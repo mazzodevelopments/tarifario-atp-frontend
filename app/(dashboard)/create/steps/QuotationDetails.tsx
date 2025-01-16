@@ -81,7 +81,7 @@ export default function QuotationDetails({
           htmlFor="client"
           className="block text-sm font-[600] text-gray-700"
         >
-          Client
+          Cliente
         </label>
         <Dropdown
           fetchItems={fetchClients}
@@ -96,7 +96,7 @@ export default function QuotationDetails({
           htmlFor="buyer"
           className="block text-sm font-[600] text-gray-700"
         >
-          Buyer
+          Comprador
         </label>
         <Dropdown
           fetchItems={fetchBuyers}
