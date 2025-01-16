@@ -58,38 +58,6 @@ export default function Create() {
       unit: "unidades",
       partNumber: "RDM-9101",
     },
-    {
-      id: "4",
-      detail: "Placa de circuito impreso",
-      brand: "Intel",
-      quantity: 20,
-      unit: "unidades",
-      partNumber: "PCB-1112",
-    },
-    {
-      id: "5",
-      detail: "Transformador de potencia",
-      brand: "ABB",
-      quantity: 3,
-      unit: "unidades",
-      partNumber: "TRF-3141",
-    },
-    {
-      id: "6",
-      detail: "Condensador cerámico",
-      brand: "Murata",
-      quantity: 200,
-      unit: "piezas",
-      partNumber: "CND-1617",
-    },
-    {
-      id: "7",
-      detail: "Resistencia variable",
-      brand: "Panasonic",
-      quantity: 150,
-      unit: "piezas",
-      partNumber: "RVS-2023",
-    },
   ]);
   const [budgets, setBudgets] = useState<Budget[]>([]);
 

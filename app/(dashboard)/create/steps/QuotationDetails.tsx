@@ -104,8 +104,6 @@ export default function QuotationDetails({
           onSelect={handleDropdownSelect("buyer")}
         />
       </div>
-
-      {quotationData.name + quotationData.buyer + quotationData.client}
     </div>
   );
 }
