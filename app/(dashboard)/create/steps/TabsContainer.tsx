@@ -1,6 +1,6 @@
 import { useState } from "react";
 import BudgetList from "./Budgets/BudgetList";
-import CustomList from "./Customs/CustomList";
+import CustomList, { Custom } from "./Customs/CustomList";
 import TransportList from "./Transports/TransportList";
 import DeliveryList from "./Deliveries/DeliveryList";
 import { Item } from "./Items/ItemList";
@@ -10,6 +10,8 @@ interface TabsContainerProps {
   items: Item[];
   budgets: Budget[];
   setBudgets: (budgets: Budget[]) => void;
+  customs: Custom[];
+  setCustoms: (custom: Custom[]) => void;
 }
 
 const tabs = [
@@ -23,6 +25,8 @@ export default function TabsContainer({
   items,
   budgets,
   setBudgets,
+  customs,
+  setCustoms,
 }: TabsContainerProps) {
   const [activeTab, setActiveTab] = useState("budgets");
 
@@ -33,7 +37,7 @@ export default function TabsContainer({
           <BudgetList items={items} budgets={budgets} setBudgets={setBudgets} />
         );
       case "custom":
-        return <CustomList />;
+        return <CustomList customs={customs} setCustoms={setCustoms} />;
       case "transport":
         return <TransportList />;
       case "delivery":

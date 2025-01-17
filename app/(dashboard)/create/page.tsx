@@ -9,6 +9,7 @@ import QuotationDetails from "@/app/(dashboard)/create/steps/QuotationDetails";
 import ItemsList, { Item } from "@/app/(dashboard)/create/steps/Items/ItemList";
 import TabsContainer from "@/app/(dashboard)/create/steps/TabsContainer";
 import { Budget } from "@/app/(dashboard)/create/steps/Budgets/BudgetList";
+import { Custom } from "@/app/(dashboard)/create/steps/Customs/CustomList";
 
 const steps = [
   { title: "Cargar Datos Cotización" },
@@ -61,6 +62,7 @@ export default function Create() {
     },
   ]);
   const [budgets, setBudgets] = useState<Budget[]>([]);
+  const [customs, setCustoms] = useState<Custom[]>([]);
 
   const handleNext = () => {
     if (currentStep < totalSteps - 1) {
@@ -109,6 +111,8 @@ export default function Create() {
             items={items}
             budgets={budgets}
             setBudgets={setBudgets}
+            customs={customs}
+            setCustoms={setCustoms}
           />
         );
       default:
