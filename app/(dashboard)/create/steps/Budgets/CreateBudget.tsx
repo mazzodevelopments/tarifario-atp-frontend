@@ -38,10 +38,14 @@ export default function CreateBudget({
     unit: "",
     incoterm: "",
   });
-
   const [selectedItemQuantity, setSelectedItemQuantity] = useState<number>(0);
+  const [buttonsState, setButtonsState] = useState({
+    transport: false,
+    customs: false,
+    delivery: false,
+  });
 
-  // Effect to update total weight when unit weight or selected item changes
+  // CALCULO DE PESO TOTAL
   useEffect(() => {
     setFormData((prev) => ({
       ...prev,
@@ -49,7 +53,7 @@ export default function CreateBudget({
     }));
   }, [formData.unitWeight, selectedItemQuantity]);
 
-  // Effect to calculate total price based on unit price, quantity, and margin
+  // CALCULO DEL PRECIO TOTAL CON MARGEN
   useEffect(() => {
     const basePrice = formData.unitPrice * selectedItemQuantity;
     const marginMultiplier = 1 + formData.margin / 100;
@@ -59,6 +63,41 @@ export default function CreateBudget({
       totalPrice: calculatedTotalPrice,
     }));
   }, [formData.unitPrice, selectedItemQuantity, formData.margin]);
+
+  // HABILITACIÓN DE BOTONES
+  useEffect(() => {
+    const updateButtonStates = (incoterm: string) => {
+      switch (incoterm) {
+        case "EXW":
+          setButtonsState({ transport: true, customs: true, delivery: true });
+          break;
+        case "FOB":
+          setButtonsState({ transport: true, customs: true, delivery: false });
+          break;
+        case "CIP":
+          setButtonsState({ transport: false, customs: true, delivery: false });
+          break;
+        case "DPU":
+          setButtonsState({ transport: false, customs: true, delivery: true });
+          break;
+        case "DDP":
+          setButtonsState({
+            transport: false,
+            customs: false,
+            delivery: false,
+          });
+          break;
+        default:
+          setButtonsState({
+            transport: false,
+            customs: false,
+            delivery: false,
+          });
+      }
+    };
+
+    updateButtonStates(formData.incoterm);
+  }, [formData.incoterm]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -346,13 +385,28 @@ export default function CreateBudget({
 
       <div className="flex justify-center items-center">
         <div className="flex gap-3">
-          <Button type="button" variant="secondary" className="text-sm">
+          <Button
+            type="button"
+            variant="secondary"
+            className="text-sm"
+            disabled={!buttonsState.transport}
+          >
             Agregar Transporte
           </Button>
-          <Button type="button" variant="secondary" className="text-sm">
+          <Button
+            type="button"
+            variant="secondary"
+            className="text-sm"
+            disabled={!buttonsState.customs}
+          >
             Agregar Aduana
           </Button>
-          <Button type="button" variant="secondary" className="text-sm">
+          <Button
+            type="button"
+            variant="secondary"
+            className="text-sm"
+            disabled={!buttonsState.delivery}
+          >
             Agregar Entrega
           </Button>
         </div>
