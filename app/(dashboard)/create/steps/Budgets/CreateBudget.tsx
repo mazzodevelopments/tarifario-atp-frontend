@@ -264,7 +264,7 @@ export default function CreateBudget({
             name="totalWeight"
             value={formData.totalWeight}
             onChange={handleChange}
-            required
+            disabled
           />
         </div>
 
