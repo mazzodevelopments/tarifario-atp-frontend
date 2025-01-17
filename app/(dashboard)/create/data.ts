@@ -1,15 +1,12 @@
 export const INCOTERMS = [
   { id: "1", name: "EXW" },
-  { id: "2", name: "FCA" },
-  { id: "3", name: "CPT" },
-  { id: "4", name: "CIP" },
-  { id: "5", name: "DAP" },
-  { id: "6", name: "DPU" },
-  { id: "7", name: "DPP" },
-  { id: "8", name: "FAS" },
-  { id: "9", name: "FOB" },
-  { id: "10", name: "CFR" },
-  { id: "11", name: "CIF" },
+  { id: "2", name: "FOB" },
+  { id: "3", name: "FCA" },
+  { id: "4", name: "CIF" },
+  { id: "5", name: "CFR" },
+  { id: "6", name: "DAT" },
+  { id: "7", name: "DAP" },
+  { id: "8", name: "DDP" },
 ];
 
 export const CURRENCIES = [

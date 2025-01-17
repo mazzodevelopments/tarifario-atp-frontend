@@ -72,13 +72,22 @@ export default function CreateBudget({
           setButtonsState({ transport: true, customs: true, delivery: true });
           break;
         case "FOB":
-          setButtonsState({ transport: true, customs: true, delivery: false });
+          setButtonsState({ transport: true, customs: true, delivery: true });
           break;
-        case "CIP":
+        case "FCA":
           setButtonsState({ transport: false, customs: true, delivery: false });
           break;
-        case "DPU":
+        case "CIF":
           setButtonsState({ transport: false, customs: true, delivery: true });
+          break;
+        case "CFR":
+          setButtonsState({ transport: false, customs: true, delivery: true });
+          break;
+        case "DAT":
+          setButtonsState({ transport: false, customs: false, delivery: true });
+          break;
+        case "DAP":
+          setButtonsState({ transport: false, customs: false, delivery: true });
           break;
         case "DDP":
           setButtonsState({
