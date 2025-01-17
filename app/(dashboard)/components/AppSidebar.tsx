@@ -14,6 +14,7 @@ import {
   LogOut,
   ChevronDown,
   ChevronsUpDown,
+  Plus,
 } from "lucide-react";
 
 import {
@@ -59,12 +60,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="pt-6">
         <SidebarMenu>
-          <SidebarMenuItem className="flex flex-row items-center">
+          <SidebarMenuItem className="flex flex-row items-center ">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton
                   size="lg"
-                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground pl-1"
                 >
                   <div className="flex aspect-square size-8 p-1 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                     <Image
@@ -96,10 +97,23 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>General</SidebarGroupLabel>
+        <SidebarGroup className="pt-0">
           <SidebarGroupContent>
             <SidebarMenu>
+              <SidebarMenuItem key={"create"} className="flex mb-4">
+                <Link
+                  className="justify-center items-center w-full flex px-1 py-2 rounded-lg border-[0.5px] border-[#ebebebcc] bg-white overflow-hidden"
+                  href="/create"
+                >
+                  {state === "collapsed" ? (
+                    <Plus className="h-4 w-4" />
+                  ) : (
+                    <span className="font-[600] whitespace-nowrap">
+                      Nueva cotización
+                    </span>
+                  )}
+                </Link>
+              </SidebarMenuItem>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.id}>
                   <SidebarMenuButton
@@ -126,10 +140,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   size="lg"
                   className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                 >
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src="/placeholder-avatar.jpg" alt="Usuario" />
-                    <AvatarFallback>U</AvatarFallback>
-                  </Avatar>
+                  <Image
+                    src="/default-profile-pic.png"
+                    width={700}
+                    height={700}
+                    alt="Picture of the author"
+                    className="w-8 h-8 rounded-full"
+                  />
                   <div className="flex flex-col gap-0.5 leading-none">
                     <span className="font-semibold">Usuario</span>
                     <span className="text-xs text-muted-foreground">
@@ -143,12 +160,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 className="w-[--radix-dropdown-menu-trigger-width]"
                 align="start"
               >
-                <DropdownMenuItem>
-                  <Settings className="mr-2 h-4 w-4" />
-                  <span>Configuración</span>
+                <DropdownMenuItem className="cursor-pointer" asChild>
+                  <Link href="/settings" className="flex items-center">
+                    <Settings className="mr-2 h-4 w-4" />
+                    <span>Configuración</span>
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Cerrar sesión</span>
                 </DropdownMenuItem>
