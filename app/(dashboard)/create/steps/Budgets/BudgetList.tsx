@@ -14,13 +14,18 @@ interface BudgetListProps {
 
 export interface Budget {
   id: string;
+  date: string;
   item: string;
-  supplier: string;
   origin: string;
   destination: string;
+  supplier: string;
+  deliveryTime: number;
   unitPrice: number;
+  currency: number;
+  margin: number;
   unitWeight: number;
-  deliveryTime: string;
+  totalWeight: number;
+  unit: string;
   incoterm: string;
 }
 
@@ -46,7 +51,7 @@ export default function BudgetList({
     setSelectedBudgets((prev) =>
       prev.includes(id)
         ? prev.filter((budgetId) => budgetId !== id)
-        : [...prev, id]
+        : [...prev, id],
     );
   };
 
@@ -162,7 +167,7 @@ export default function BudgetList({
 
       {showCreateModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
-          <div className="bg-white p-6 rounded-lg w-full max-w-md">
+          <div className="bg-white p-6 rounded-lg w-full max-w-xl">
             <CreateBudget
               onBudgetCreated={handleBudgetCreated}
               onCancel={() => setShowCreateModal(false)}

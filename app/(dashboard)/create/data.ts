@@ -12,6 +12,19 @@ export const INCOTERMS = [
   { id: "11", name: "CIF" },
 ];
 
+export const CURRENCIES = [
+  { id: "USD", name: "Dólar Estadounidense (USD)" },
+  { id: "EUR", name: "Euro (EUR)" },
+  { id: "MXN", name: "Peso Mexicano (MXN)" },
+  { id: "GBP", name: "Libra Esterlina (GBP)" },
+  { id: "JPY", name: "Yen Japonés (JPY)" },
+  { id: "CAD", name: "Dólar Canadiense (CAD)" },
+  { id: "AUD", name: "Dólar Australiano (AUD)" },
+  { id: "CHF", name: "Franco Suizo (CHF)" },
+  { id: "CNY", name: "Yuan Chino (CNY)" },
+  { id: "BRL", name: "Real Brasileño (BRL)" },
+];
+
 export const UNITS = [
   { id: "1", name: "Unidad" },
   { id: "2", name: "Metro" },
@@ -20,7 +33,7 @@ export const UNITS = [
   { id: "5", name: "Pieza" },
 ];
 
-export const vias = [
+export const VÍAS = [
   { id: "COURIER", name: "COURIER" },
   { id: "AÉREO", name: "AÉREO" },
   { id: "TERRESTRE", name: "TERRESTRE" },

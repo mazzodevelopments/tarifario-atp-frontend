@@ -3,7 +3,12 @@
 import { useState } from "react";
 import { Item } from "@/app/(dashboard)/create/steps/Items/ItemList";
 import { Budget } from "@/app/(dashboard)/create/steps/Budgets/BudgetList";
-import { COUNTRIES, INCOTERMS } from "@/app/(dashboard)/create/data";
+import {
+  COUNTRIES,
+  INCOTERMS,
+  UNITS,
+  CURRENCIES,
+} from "@/app/(dashboard)/create/data";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Dropdown, { DropdownItem } from "@/components/Dropdown";
@@ -20,13 +25,18 @@ export default function CreateBudget({
   items,
 }: CreateBudgetProps) {
   const [formData, setFormData] = useState<Omit<Budget, "id">>({
+    date: new Date().toISOString().split("T")[0],
     item: "",
-    supplier: "",
     origin: "",
     destination: "",
+    supplier: "",
+    deliveryTime: 0,
     unitPrice: 0,
+    currency: 0,
+    margin: 0,
     unitWeight: 0,
-    deliveryTime: "",
+    totalWeight: 0,
+    unit: "",
     incoterm: "",
   });
 
@@ -40,7 +50,7 @@ export default function CreateBudget({
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value, type } = e.target;
     setFormData((prev) => ({
@@ -54,7 +64,6 @@ export default function CreateBudget({
   };
 
   const fetchSuppliers = async (): Promise<DropdownItem[]> => {
-    // Simular la obtención de proveedores desde un servicio
     return [
       { id: "1", name: "Proveedor A" },
       { id: "2", name: "Proveedor B" },
@@ -63,7 +72,6 @@ export default function CreateBudget({
   };
 
   const addSupplier = async (name: string): Promise<DropdownItem> => {
-    // Simular la adición de una nueva marca
     return { id: Math.random().toString(36).substr(2, 9), name };
   };
 
@@ -74,7 +82,6 @@ export default function CreateBudget({
   };
 
   const fetchLocations = async (): Promise<DropdownItem[]> => {
-    // Simular la obtención de ubicaciones desde un servicio
     return COUNTRIES;
   };
 
@@ -82,12 +89,36 @@ export default function CreateBudget({
     return INCOTERMS;
   };
 
+  const fetchUnits = async (): Promise<DropdownItem[]> => {
+    return UNITS;
+  };
+
+  const fetchCurrencies = async (): Promise<DropdownItem[]> => {
+    return CURRENCIES;
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label
+          htmlFor="margin"
+          className="block text-sm font-semibold text-gray-700"
+        >
+          Fecha
+        </label>
+        <Input
+          type="date"
+          name="date"
+          value={formData.date}
+          onChange={handleChange}
+          required
+        />
+      </div>
+
+      <div>
+        <label
           htmlFor="item"
-          className="block text-sm font-[600] text-gray-700"
+          className="block text-sm font-semibold text-gray-700"
         >
           Item
         </label>
@@ -97,11 +128,56 @@ export default function CreateBudget({
           required
         />
       </div>
+      <div className="grid grid-cols-3 gap-4">
+        <div>
+          <label
+            htmlFor="origin"
+            className="block text-sm font-semibold text-gray-700"
+          >
+            Origen
+          </label>
+          <Dropdown
+            fetchItems={fetchLocations}
+            onSelect={handleSelect("origin")}
+            required
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="destination"
+            className="block text-sm font-semibold text-gray-700"
+          >
+            Destino
+          </label>
+          <Dropdown
+            fetchItems={fetchLocations}
+            onSelect={handleSelect("destination")}
+            required
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="deliveryTime"
+            className="block text-sm font-semibold text-gray-700"
+          >
+            Tiempo de Entrega (Días)
+          </label>
+          <Input
+            type="number"
+            name="deliveryTime"
+            value={formData.deliveryTime}
+            onChange={handleChange}
+            required
+          />
+        </div>
+      </div>
 
       <div>
         <label
           htmlFor="supplier"
-          className="block text-sm font-[600] text-gray-700"
+          className="block text-sm font-semibold text-gray-700"
         >
           Proveedor
         </label>
@@ -113,45 +189,16 @@ export default function CreateBudget({
         />
       </div>
 
-      <div>
-        <label
-          htmlFor="origin"
-          className="block text-sm font-[600] text-gray-700"
-        >
-          Origen
-        </label>
-        <Dropdown
-          fetchItems={fetchLocations}
-          onSelect={handleSelect("origin")}
-          required
-        />
-      </div>
-
-      <div>
-        <label
-          htmlFor="destination"
-          className="block text-sm font-[600] text-gray-700"
-        >
-          Destino
-        </label>
-        <Dropdown
-          fetchItems={fetchLocations}
-          onSelect={handleSelect("destination")}
-          required
-        />
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-3 gap-4">
         <div>
           <label
             htmlFor="unitPrice"
-            className="block text-sm font-[600] text-gray-700"
+            className="block text-sm font-semibold text-gray-700"
           >
             Precio Unitario
           </label>
           <Input
             type="number"
-            id="unitPrice"
             name="unitPrice"
             value={formData.unitPrice}
             onChange={handleChange}
@@ -161,17 +208,76 @@ export default function CreateBudget({
 
         <div>
           <label
+            htmlFor="currency"
+            className="block text-sm font-semibold text-gray-700"
+          >
+            Moneda
+          </label>
+          <Dropdown
+            fetchItems={fetchCurrencies}
+            onSelect={handleSelect("currency")}
+            required
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="margin"
+            className="block text-sm font-semibold text-gray-700"
+          >
+            Margen (%)
+          </label>
+          <Input
+            type="number"
+            name="margin"
+            value={formData.margin}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div>
+          <label
             htmlFor="unitWeight"
-            className="block text-sm font-[600] text-gray-700"
+            className="block text-sm font-semibold text-gray-700"
           >
             Peso Unitario
           </label>
           <Input
             type="number"
-            id="unitWeight"
             name="unitWeight"
             value={formData.unitWeight}
             onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="totalWeight"
+            className="block text-sm font-semibold text-gray-700"
+          >
+            Peso Total
+          </label>
+          <Input
+            type="number"
+            name="totalWeight"
+            value={formData.totalWeight}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="unit"
+            className="block text-sm font-semibold text-gray-700"
+          >
+            Unidad
+          </label>
+          <Dropdown
+            fetchItems={fetchUnits}
+            onSelect={handleSelect("unit")}
             required
           />
         </div>
@@ -179,25 +285,8 @@ export default function CreateBudget({
 
       <div>
         <label
-          htmlFor="deliveryTime"
-          className="block text-sm font-[600] text-gray-700"
-        >
-          Tiempo de Entrega
-        </label>
-        <Input
-          type="text"
-          id="deliveryTime"
-          name="deliveryTime"
-          value={formData.deliveryTime}
-          onChange={handleChange}
-          required
-        />
-      </div>
-
-      <div>
-        <label
           htmlFor="incoterm"
-          className="block text-sm font-[600] text-gray-700"
+          className="block text-sm font-semibold text-gray-700"
         >
           Incoterm
         </label>
@@ -208,12 +297,26 @@ export default function CreateBudget({
         />
       </div>
 
-      <div className="flex justify-end gap-3 mt-6">
-        <Button type="button" onClick={onCancel} variant="secondary">
+      <div className="flex justify-center items-center">
+        <div className="flex gap-3">
+          <Button type="button" className="text-sm">
+            Agregar Transporte
+          </Button>
+          <Button type="button" className="text-sm">
+            Agregar Aduana
+          </Button>
+          <Button type="button" className="text-sm">
+            Agregar Entrega
+          </Button>
+        </div>
+      </div>
+
+      <div className="flex justify-end gap-2">
+        <Button type="button" onClick={onCancel} className="text-sm">
           Cancelar
         </Button>
-        <Button type="submit" variant="primary">
-          Agregar Presupuesto
+        <Button type="submit" className="text-sm bg-primary text-white">
+          Crear Presupuesto
         </Button>
       </div>
     </form>
