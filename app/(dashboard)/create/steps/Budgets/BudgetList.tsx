@@ -57,10 +57,6 @@ export default function BudgetList({
 
   return (
     <div className="w-full mx-auto">
-      <div className="flex justify-between items-center mb-3">
-        <h3 className="text-lg font-regular">Presupuestos</h3>
-      </div>
-
       <div className="border rounded-md overflow-x-auto max-h-[18vw]">
         <table className="w-full">
           <thead className="border-b border-gray-200">

@@ -7,9 +7,8 @@ import Button from "@/components/Button";
 import Header from "@/app/(dashboard)/components/Header";
 import QuotationDetails from "@/app/(dashboard)/create/steps/QuotationDetails";
 import ItemsList, { Item } from "@/app/(dashboard)/create/steps/Items/ItemList";
-import BudgetList, {
-  Budget,
-} from "@/app/(dashboard)/create/steps/Budgets/BudgetList";
+import TabsContainer from "@/app/(dashboard)/create/steps/TabsContainer";
+import { Budget } from "@/app/(dashboard)/create/steps/Budgets/BudgetList";
 
 const steps = [
   { title: "Cargar Datos Cotización" },
@@ -86,7 +85,6 @@ export default function Create() {
 
   const isNextButtonDisabled = () => {
     if (currentStep === 0) {
-      // Check if name, client, and buyer have non-empty values
       return ["name", "client", "buyer"].some(
         (key) => quotationData[key as keyof typeof quotationData].trim() === "",
       );
@@ -107,7 +105,11 @@ export default function Create() {
         return <ItemsList items={items} setItems={setItems} />;
       case 2:
         return (
-          <BudgetList budgets={budgets} setBudgets={setBudgets} items={items} />
+          <TabsContainer
+            items={items}
+            budgets={budgets}
+            setBudgets={setBudgets}
+          />
         );
       default:
         return <p>Contenido de la etapa {currentStep + 1}</p>;
