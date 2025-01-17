@@ -1,103 +1,151 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
-  Settings2,
-  SquareTerminal,
-} from "lucide-react";
-
-import {
-  Clock,
   Home,
   PlusSquare,
-  Users,
-  ChevronRight,
-  Settings,
-  Truck,
+  Clock,
   BarChart2,
+  Users,
+  Truck,
+  Settings,
   LogOut,
-} from "react-feather";
+  ChevronDown,
+  ChevronsUpDown,
+} from "lucide-react";
+
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
   SidebarRail,
   SidebarTrigger,
+  useSidebar,
 } from "@/components/ui/sidebar";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+const menuItems = [
+  { icon: Home, label: "Home", id: "" },
+  { icon: PlusSquare, label: "Crear", id: "create" },
+  { icon: Clock, label: "Cotizaciones", id: "history" },
+  { icon: BarChart2, label: "Comparar", id: "compare" },
+  { icon: Users, label: "Clientes", id: "clients" },
+  { icon: Truck, label: "Proveedores", id: "suppliers" },
+];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const [selectedItem, setSelectedItem] = React.useState<string | null>(null);
   const pathname = usePathname();
-  const menuItems = [
-    { icon: Home, label: "Home", id: "" },
-    { icon: PlusSquare, label: "Crear", id: "create" },
-    { icon: Clock, label: "Cotizaciones", id: "history" },
-    { icon: BarChart2, label: "Comparar", id: "compare" },
-    { icon: Users, label: "Clientes", id: "clients" },
-    { icon: Truck, label: "Proveedores", id: "suppliers" },
-  ];
-
-  React.useEffect(() => {
-    const pathSegment = pathname.split("/")[1];
-    if (pathSegment === "settings") {
-      setSelectedItem("settings");
-    } else {
-      const matchedItem = menuItems.find((item) => item.id === pathSegment);
-      setSelectedItem(matchedItem ? matchedItem.id : null);
-    }
-  }, [pathname]);
 
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader className="px-4 flex flex-row justify-between items-center">
-        <h1>ATP</h1>
-        <SidebarTrigger />
+      <SidebarHeader className="pt-6">
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton
+                  size="lg"
+                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                >
+                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                    ATP
+                  </div>
+                  <div className="flex flex-col gap-0.5 leading-none">
+                    <span className="font-semibold">ATP</span>
+                    <span className="">Dashboard</span>
+                  </div>
+                  <ChevronsUpDown className="ml-auto" />
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                className="w-[--radix-dropdown-menu-trigger-width]"
+                align="start"
+              >
+                <DropdownMenuItem>Opción 1</DropdownMenuItem>
+                <DropdownMenuItem>Opción 2</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <div className="w-full flex justify-between mt-2 px-4 items-start gap-2 flex-col">
-          {/* <label className="uppercase text-gray-400 text-xs font-[600]">
-            General
-          </label> */}
-          {menuItems.map((item) => (
-            <Link
-              key={item.id}
-              className={`text-sm flex items-center justify-between hover:cursor-pointer transition-all duration-300 ease-in-out w-full font-[600] py-1.5 rounded-lg px-2 border-[0.5px]  ${
-                selectedItem === item.id
-                  ? " bg-white text-black border-[#ebebebcc] shadow-sm"
-                  : "hover:bg-gray-100 text-gray-500 border-gray-50"
-              }`}
-              href={`/${item.id}`}
-            >
-              <div className="flex items-center">
-                <item.icon
-                  size={18}
-                  fontWeight="bold"
-                  className={` ${
-                    selectedItem === item.id ? " text-black" : ""
-                  }`}
-                />
-                <span className="text-md ml-2 flex">{item.label}</span>
-              </div>
-              {selectedItem === item.id && (
-                <ChevronRight className="h-4 w-4 opacity-55 transition duration-300" />
-              )}
-            </Link>
-          ))}
-        </div>
+        <SidebarGroup>
+          <SidebarGroupLabel>General</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {menuItems.map((item) => (
+                <SidebarMenuItem key={item.id}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={pathname === `/${item.id}`}
+                  >
+                    <Link href={`/${item.id}`}>
+                      <item.icon className="mr-2" />
+                      <span>{item.label}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
-        <h3>Usuario</h3>
+      <SidebarFooter className="pb-5">
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton
+                  size="lg"
+                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                >
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src="/placeholder-avatar.jpg" alt="Usuario" />
+                    <AvatarFallback>U</AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col gap-0.5 leading-none">
+                    <span className="font-semibold">Usuario</span>
+                    <span className="text-xs text-muted-foreground">
+                      usuario@ejemplo.com
+                    </span>
+                  </div>
+                  <ChevronDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                className="w-[--radix-dropdown-menu-trigger-width]"
+                align="start"
+              >
+                <DropdownMenuItem>
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>Configuración</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Cerrar sesión</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
