@@ -31,6 +31,7 @@ export interface Budget {
   unitPrice: number;
   currency: number;
   margin: number;
+  totalPrice: number;
   unitWeight: number;
   totalWeight: number;
   unit: string;
@@ -141,7 +142,7 @@ export default function BudgetList({
 
       {showCreateModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
-          <div className="bg-white p-6 rounded-lg w-full max-w-xl">
+          <div className="bg-white p-6 rounded-lg w-full max-w-3xl">
             <CreateBudget
               onBudgetCreated={handleBudgetCreated}
               onCancel={() => setShowCreateModal(false)}

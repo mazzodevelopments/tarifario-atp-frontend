@@ -1,6 +1,4 @@
-"use client";
-
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Item } from "@/app/(dashboard)/create/steps/Items/ItemList";
 import { Budget } from "@/app/(dashboard)/create/steps/Budgets/BudgetList";
 import {
@@ -36,9 +34,31 @@ export default function CreateBudget({
     margin: 0,
     unitWeight: 0,
     totalWeight: 0,
+    totalPrice: 0,
     unit: "",
     incoterm: "",
   });
+
+  const [selectedItemQuantity, setSelectedItemQuantity] = useState<number>(0);
+
+  // Effect to update total weight when unit weight or selected item changes
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      totalWeight: prev.unitWeight * selectedItemQuantity,
+    }));
+  }, [formData.unitWeight, selectedItemQuantity]);
+
+  // Effect to calculate total price based on unit price, quantity, and margin
+  useEffect(() => {
+    const basePrice = formData.unitPrice * selectedItemQuantity;
+    const marginMultiplier = 1 + formData.margin / 100;
+    const calculatedTotalPrice = basePrice * marginMultiplier;
+    setFormData((prev) => ({
+      ...prev,
+      totalPrice: calculatedTotalPrice,
+    }));
+  }, [formData.unitPrice, selectedItemQuantity, formData.margin]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,14 +73,24 @@ export default function CreateBudget({
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value, type } = e.target;
+    const numericValue = type === "number" ? parseFloat(value) : value;
+
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "number" ? parseFloat(value) : value,
+      [name]: numericValue,
     }));
   };
 
   const handleSelect = (field: keyof Budget) => (item: DropdownItem) => {
     setFormData((prev) => ({ ...prev, [field]: item.name }));
+
+    // If selecting an item, update the selected item quantity
+    if (field === "item") {
+      const selectedItem = items.find((i) => i.detail === item.name);
+      if (selectedItem) {
+        setSelectedItemQuantity(selectedItem.quantity);
+      }
+    }
   };
 
   const fetchSuppliers = async (): Promise<DropdownItem[]> => {
@@ -189,7 +219,7 @@ export default function CreateBudget({
         />
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-4 gap-4">
         <div>
           <label
             htmlFor="unitPrice"
@@ -238,6 +268,23 @@ export default function CreateBudget({
 
         <div>
           <label
+            htmlFor="totalPrice"
+            className="block text-sm font-semibold text-gray-700"
+          >
+            Precio Total
+          </label>
+          <Input
+            type="number"
+            name="totalPrice"
+            value={formData.totalPrice.toFixed(2)}
+            disabled
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-3 gap-4">
+        <div>
+          <label
             htmlFor="unitWeight"
             className="block text-sm font-semibold text-gray-700"
           >
@@ -248,6 +295,20 @@ export default function CreateBudget({
             name="unitWeight"
             value={formData.unitWeight}
             onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="unit"
+            className="block text-sm font-semibold text-gray-700"
+          >
+            Unidad
+          </label>
+          <Dropdown
+            fetchItems={fetchUnits}
+            onSelect={handleSelect("unit")}
             required
           />
         </div>
@@ -265,20 +326,6 @@ export default function CreateBudget({
             value={formData.totalWeight}
             onChange={handleChange}
             disabled
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="unit"
-            className="block text-sm font-semibold text-gray-700"
-          >
-            Unidad
-          </label>
-          <Dropdown
-            fetchItems={fetchUnits}
-            onSelect={handleSelect("unit")}
-            required
           />
         </div>
       </div>
@@ -299,13 +346,13 @@ export default function CreateBudget({
 
       <div className="flex justify-center items-center">
         <div className="flex gap-3">
-          <Button type="button" className="text-sm">
+          <Button type="button" variant="secondary" className="text-sm">
             Agregar Transporte
           </Button>
-          <Button type="button" className="text-sm">
+          <Button type="button" variant="secondary" className="text-sm">
             Agregar Aduana
           </Button>
-          <Button type="button" className="text-sm">
+          <Button type="button" variant="secondary" className="text-sm">
             Agregar Entrega
           </Button>
         </div>
