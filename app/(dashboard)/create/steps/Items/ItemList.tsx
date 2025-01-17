@@ -3,7 +3,15 @@
 import { useState } from "react";
 import Button from "@/components/Button";
 import CreateItem from "./CreateItem";
-import { Trash, X } from "react-feather";
+import { X } from "react-feather";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 export interface Item {
   id: string;
@@ -38,64 +46,48 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
       </div>
 
       <div className="border rounded-md overflow-x-hidden max-h-[18vw]">
-        <table className="w-full">
-          <thead className="border-b border-gray-200">
-            <tr>
-              <th className="px-6 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider">
-                Detalle
-              </th>
-              <th className="px-6 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider">
-                Marca
-              </th>
-              <th className="px-6 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider">
-                Cantidad
-              </th>
-              <th className="px-6 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider">
-                Unidad
-              </th>
-              <th className="px-6 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider">
-                Part Number
-              </th>
-              <th className="px-1 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider"></th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+        <Table className="w-full">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Detalle</TableHead>
+              <TableHead>Marca</TableHead>
+              <TableHead>Cantidad</TableHead>
+              <TableHead>Unidad</TableHead>
+              <TableHead>Part Number</TableHead>
+              <TableHead></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {items.length === 0 ? (
-              <tr className="h-36">
-                <td
+              <TableRow className="h-36">
+                <TableCell
                   colSpan={8}
                   className="text-sm m-auto h-full  text-center text-gray-500"
                 >
                   No hay items agregados
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ) : (
               items.map((item) => (
-                <tr key={item.id} className="text-sm">
-                  <td className="px-6 py-2 whitespace-nowrap font-[600]">
-                    {item.detail}
-                  </td>
-                  <td className="px-6 py-2 whitespace-nowrap">{item.brand}</td>
-                  <td className="px-6 py-2 whitespace-nowrap">
-                    {item.quantity}
-                  </td>
-                  <td className="px-6 py-2 whitespace-nowrap">{item.unit}</td>
-                  <td className="px-6 py-2 whitespace-nowrap">
-                    {item.partNumber}
-                  </td>
-                  <td className="px-4 py-2 whitespace-nowrap">
+                <TableRow key={item.id} className="text-sm">
+                  <TableCell>{item.detail}</TableCell>
+                  <TableCell>{item.brand}</TableCell>
+                  <TableCell>{item.quantity}</TableCell>
+                  <TableCell>{item.unit}</TableCell>
+                  <TableCell>{item.partNumber}</TableCell>
+                  <TableCell>
                     <button
                       onClick={() => handleDeleteItem(item.id)}
                       className="text-black hover:text-red-600"
                     >
                       <X className="w-4" />
                     </button>
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               ))
             )}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
       <div className="flex justify-center items-center w-full mt-6">
         <Button

@@ -5,6 +5,14 @@ import { X } from "react-feather";
 import { Item } from "@/app/(dashboard)/create/steps/Items/ItemList";
 import Button from "@/components/Button";
 import CreateBudget from "./CreateBudget";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 interface BudgetListProps {
   budgets: Budget[];
@@ -58,49 +66,33 @@ export default function BudgetList({
   return (
     <div className="w-full mx-auto">
       <div className="border rounded-md overflow-x-auto max-h-[18vw]">
-        <table className="w-full">
-          <thead className="border-b border-gray-200">
-            <tr>
-              <th className="px-4 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider">
-                Item
-              </th>
-              <th className="px-4 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider">
-                Proveedor
-              </th>
-              <th className="px-4 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider">
-                Origen
-              </th>
-              <th className="px-4 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider">
-                Destino
-              </th>
-              <th className="px-4 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider">
-                Precio Unitario
-              </th>
-              <th className="px-4 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider">
-                Peso Unitario
-              </th>
-              <th className="px-4 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider">
-                Tiempo de Entrega
-              </th>
-              <th className="px-4 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider">
-                Incoterm
-              </th>
-              <th className="px-4 py-2 text-left text-xs font-[600] text-gray-500 uppercase tracking-wider"></th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+        <Table className="w-full">
+          <TableHeader className="border-b border-gray-200">
+            <TableRow>
+              <TableHead>Item</TableHead>
+              <TableHead>Proveedor</TableHead>
+              <TableHead>Origen</TableHead>
+              <TableHead>Destino</TableHead>
+              <TableHead>Precio Unitario</TableHead>
+              <TableHead>Peso Unitario</TableHead>
+              <TableHead>Tiempo de Entrega</TableHead>
+              <TableHead>Incoterm</TableHead>
+              <TableHead></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody className="bg-white divide-y divide-gray-200">
             {budgets.length === 0 ? (
-              <tr className="h-36">
-                <td
+              <TableRow className="h-24">
+                <TableCell
                   colSpan={10}
                   className="text-sm m-auto h-full text-center text-gray-500"
                 >
                   No hay presupuestos agregados
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ) : (
               budgets.map((budget) => (
-                <tr
+                <TableRow
                   key={budget.id}
                   onClick={() => handleSelectBudget(budget.id)}
                   className={`text-sm cursor-pointer transition-colors duration-200 ease-in-out ${
@@ -111,29 +103,15 @@ export default function BudgetList({
                   role="row"
                   aria-selected={selectedBudgets.includes(budget.id)}
                 >
-                  <td className="px-4 py-2 whitespace-nowrap">{budget.item}</td>
-                  <td className="px-4 py-2 whitespace-nowrap">
-                    {budget.supplier}
-                  </td>
-                  <td className="px-4 py-2 whitespace-nowrap">
-                    {budget.origin}
-                  </td>
-                  <td className="px-4 py-2 whitespace-nowrap">
-                    {budget.destination}
-                  </td>
-                  <td className="px-4 py-2 whitespace-nowrap">
-                    {budget.unitPrice}
-                  </td>
-                  <td className="px-4 py-2 whitespace-nowrap">
-                    {budget.unitWeight}
-                  </td>
-                  <td className="px-4 py-2 whitespace-nowrap">
-                    {budget.deliveryTime}
-                  </td>
-                  <td className="px-4 py-2 whitespace-nowrap">
-                    {budget.incoterm}
-                  </td>
-                  <td className="px-4 py-2 whitespace-nowrap">
+                  <TableCell>{budget.item}</TableCell>
+                  <TableCell>{budget.supplier}</TableCell>
+                  <TableCell>{budget.origin}</TableCell>
+                  <TableCell>{budget.destination}</TableCell>
+                  <TableCell>{budget.unitPrice}</TableCell>
+                  <TableCell>{budget.unitWeight}</TableCell>
+                  <TableCell>{budget.deliveryTime}</TableCell>
+                  <TableCell>{budget.incoterm}</TableCell>
+                  <TableCell>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -144,12 +122,12 @@ export default function BudgetList({
                     >
                       <X className="w-4" />
                     </button>
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               ))
             )}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
       <div className="flex justify-center items-center w-full mt-6">
         <Button
