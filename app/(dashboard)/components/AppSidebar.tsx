@@ -40,6 +40,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Image from "next/image";
 
 const menuItems = [
   { icon: Home, label: "Home", id: "" },
@@ -52,24 +53,32 @@ const menuItems = [
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
+  const { state } = useSidebar();
 
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="pt-6">
         <SidebarMenu>
-          <SidebarMenuItem>
+          <SidebarMenuItem className="flex flex-row items-center">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton
                   size="lg"
                   className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                 >
-                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                    ATP
+                  <div className="flex aspect-square size-8 p-1 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                    <Image
+                      src="/logo.png"
+                      width={700}
+                      height={700}
+                      alt="Picture of the author"
+                      className="saturate-0"
+                    />
                   </div>
                   <div className="flex flex-col gap-0.5 leading-none">
-                    <span className="font-semibold">ATP</span>
-                    <span className="">Dashboard</span>
+                    <span className="font-semibold whitespace-nowrap">
+                      ATP Solutions
+                    </span>
                   </div>
                   <ChevronsUpDown className="ml-auto" />
                 </SidebarMenuButton>
@@ -82,6 +91,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <DropdownMenuItem>Opción 2</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            {state === "expanded" && <SidebarTrigger />}
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
