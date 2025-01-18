@@ -6,16 +6,13 @@ import Input from "@/components/Input";
 import Button from "@/components/Button";
 import Dropdown, { DropdownItem } from "@/components/Dropdown";
 import { Item } from "@/app/(dashboard)/create/types";
+import { DialogClose } from "@/components/ui/dialog";
 
 interface CreateItemProps {
   onItemCreated: (item: Item) => void;
-  onCancel: () => void;
 }
 
-export default function CreateItem({
-  onItemCreated,
-  onCancel,
-}: CreateItemProps) {
+export default function CreateItem({ onItemCreated }: CreateItemProps) {
   const [formData, setFormData] = useState<Omit<Item, "id">>({
     detail: "",
     brand: "",
@@ -35,7 +32,7 @@ export default function CreateItem({
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value, type } = e.target;
     setFormData((prev) => ({
@@ -154,12 +151,16 @@ export default function CreateItem({
       </div>
 
       <div className="flex justify-end gap-3 mt-6">
-        <Button type="button" onClick={onCancel} variant="secondary">
-          Cancelar
-        </Button>
-        <Button type="submit" variant="primary">
-          Agregar Item
-        </Button>
+        <DialogClose asChild>
+          <Button type="button" variant="secondary">
+            Cancelar
+          </Button>
+        </DialogClose>
+        <DialogClose asChild>
+          <Button type="submit" variant="primary">
+            Agregar Item
+          </Button>
+        </DialogClose>
       </div>
     </form>
   );

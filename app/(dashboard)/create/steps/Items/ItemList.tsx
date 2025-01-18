@@ -13,6 +13,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Item } from "@/app/(dashboard)/create/types";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 interface ItemsListProps {
   items: Item[];
@@ -81,26 +88,28 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
           </TableBody>
         </Table>
       </div>
-      <div className="flex justify-center items-center w-full mt-6">
-        <Button
-          onClick={() => setShowCreateModal(true)}
-          className="text-sm px-4 py-2 bg-primary text-white flex items-center gap-2"
-        >
-          <span className="text-md">+</span>
-          Agregar Item
-        </Button>
-      </div>
-
-      {showCreateModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
-          <div className="bg-white p-6 rounded-lg w-full max-w-md">
-            <CreateItem
-              onItemCreated={handleItemCreated}
-              onCancel={() => setShowCreateModal(false)}
-            />
-          </div>
+      <Dialog>
+        <div className="flex justify-center items-center w-full mt-6">
+          <DialogTrigger asChild>
+            <Button
+              onClick={() => setShowCreateModal(true)}
+              className="text-sm px-4 py-2 bg-primary text-white flex items-center gap-2"
+            >
+              <span className="text-md mr-2">+</span>
+              Agregar Item
+            </Button>
+          </DialogTrigger>
         </div>
-      )}
+
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="text-2xl">Agregar nuevo item</DialogTitle>
+          </DialogHeader>
+          <div className="bg-white rounded-lg w-full">
+            <CreateItem onItemCreated={handleItemCreated} />
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

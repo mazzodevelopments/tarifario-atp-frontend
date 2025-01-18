@@ -14,6 +14,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Budget } from "@/app/(dashboard)/create/types";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 interface BudgetListProps {
   budgets: Budget[];
@@ -43,7 +50,7 @@ export default function BudgetList({
     setSelectedBudgets((prev) =>
       prev.includes(id)
         ? prev.filter((budgetId) => budgetId !== id)
-        : [...prev, id],
+        : [...prev, id]
     );
   };
 
@@ -113,27 +120,26 @@ export default function BudgetList({
           </TableBody>
         </Table>
       </div>
-      <div className="flex justify-center items-center w-full mt-6">
-        <Button
-          onClick={() => setShowCreateModal(true)}
-          className="text-sm px-4 py-2 bg-primary text-white flex items-center gap-2"
-        >
-          <span className="text-md">+</span>
-          Agregar Presupuesto
-        </Button>
-      </div>
 
-      {showCreateModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
-          <div className="bg-white p-6 rounded-lg w-full max-w-3xl">
-            <CreateBudget
-              onBudgetCreated={handleBudgetCreated}
-              onCancel={() => setShowCreateModal(false)}
-              items={items}
-            />
-          </div>
+      <Dialog>
+        <div className="flex justify-center items-center w-full mt-6">
+          <DialogTrigger asChild>
+            <Button className="text-sm px-4 py-2 bg-primary text-white flex items-center gap-2">
+              <span className="text-md mr-2">+</span>
+              Agregar Presupuesto
+            </Button>
+          </DialogTrigger>
         </div>
-      )}
+
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">Agregar presupuesto</DialogTitle>
+          </DialogHeader>{" "}
+          <div className="bg-white rounded-lg w-full">
+            <CreateBudget onBudgetCreated={handleBudgetCreated} items={items} />
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -10,16 +10,15 @@ import {
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Dropdown, { DropdownItem } from "@/components/Dropdown";
+import { DialogClose } from "@/components/ui/dialog";
 
 interface CreateBudgetProps {
   onBudgetCreated: (budget: Budget) => void;
-  onCancel: () => void;
   items: Item[];
 }
 
 export default function CreateBudget({
   onBudgetCreated,
-  onCancel,
   items,
 }: CreateBudgetProps) {
   const [formData, setFormData] = useState<Omit<Budget, "id">>({
@@ -118,7 +117,7 @@ export default function CreateBudget({
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value, type } = e.target;
     const numericValue = type === "number" ? parseFloat(value) : value;
@@ -396,38 +395,39 @@ export default function CreateBudget({
         <div className="flex gap-3">
           <Button
             type="button"
-            variant="secondary"
-            className="text-sm"
+            className="text-sm bg-primary/10 text-primary"
             disabled={!buttonsState.transport}
           >
-            Agregar Transporte
+            + Agregar Transporte
           </Button>
           <Button
             type="button"
-            variant="secondary"
-            className="text-sm"
+            className="text-sm bg-primary/10 text-primary"
             disabled={!buttonsState.customs}
           >
-            Agregar Aduana
+            + Agregar Aduana
           </Button>
           <Button
             type="button"
-            variant="secondary"
-            className="text-sm"
+            className="text-sm bg-primary/10 text-primary"
             disabled={!buttonsState.delivery}
           >
-            Agregar Entrega
+            + Agregar Entrega
           </Button>
         </div>
       </div>
 
       <div className="flex justify-end gap-2">
-        <Button type="button" onClick={onCancel} className="text-sm">
-          Cancelar
-        </Button>
-        <Button type="submit" className="text-sm bg-primary text-white">
-          Crear Presupuesto
-        </Button>
+        <DialogClose asChild>
+          <Button type="button" variant="secondary" className="text-sm">
+            Cancelar
+          </Button>
+        </DialogClose>
+        <DialogClose asChild>
+          <Button type="submit" className="text-sm bg-primary text-white">
+            Crear Presupuesto
+          </Button>
+        </DialogClose>
       </div>
     </form>
   );
