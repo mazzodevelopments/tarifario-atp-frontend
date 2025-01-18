@@ -4,16 +4,13 @@ import { useState } from "react";
 import { Custom } from "@/app/(dashboard)/create/types";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
+import { DialogClose } from "@/components/ui/dialog";
 
 interface CreateCustomProps {
   onCustomCreated: (custom: Custom) => void;
-  onCancel: () => void;
 }
 
-export default function CreateCustom({
-  onCustomCreated,
-  onCancel,
-}: CreateCustomProps) {
+export default function CreateCustom({ onCustomCreated }: CreateCustomProps) {
   const [formData, setFormData] = useState<Omit<Custom, "id">>({
     oficializacionSedi: 0,
     gastosDespachosAduanero: 0,
@@ -32,7 +29,7 @@ export default function CreateCustom({
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value, type } = e.target;
     setFormData((prev) => ({
@@ -136,12 +133,16 @@ export default function CreateCustom({
       </div>
 
       <div className="flex justify-end gap-2">
-        <Button type="button" onClick={onCancel} className="text-sm">
-          Cancelar
-        </Button>
-        <Button type="submit" className="text-sm bg-primary text-white">
-          Crear Gasto de Aduana
-        </Button>
+        <DialogClose asChild>
+          <Button type="button" variant="secondary" className="text-sm">
+            Cancelar
+          </Button>
+        </DialogClose>
+        <DialogClose asChild>
+          <Button type="submit" className="text-sm bg-primary text-white">
+            Crear Gasto de Aduana
+          </Button>
+        </DialogClose>
       </div>
     </form>
   );

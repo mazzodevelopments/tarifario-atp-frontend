@@ -13,6 +13,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Custom } from "@/app/(dashboard)/create/types";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 interface CustomListProps {
   customs: Custom[];
@@ -37,7 +44,7 @@ export default function CustomList({ customs, setCustoms }: CustomListProps) {
     setSelectedCustoms((prev) =>
       prev.includes(id)
         ? prev.filter((customId) => customId !== id)
-        : [...prev, id],
+        : [...prev, id]
     );
   };
 
@@ -103,26 +110,29 @@ export default function CustomList({ customs, setCustoms }: CustomListProps) {
           </TableBody>
         </Table>
       </div>
-      <div className="flex justify-center items-center w-full mt-6">
-        <Button
-          onClick={() => setShowCreateModal(true)}
-          className="text-sm px-4 py-2 bg-primary text-white flex items-center gap-2"
-        >
-          <span className="text-md">+</span>
-          Agregar Gastos de Aduana
-        </Button>
-      </div>
-
-      {showCreateModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
-          <div className="bg-white p-6 rounded-lg w-full max-w-xl">
-            <CreateCustom
-              onCustomCreated={handleCustomCreated}
-              onCancel={() => setShowCreateModal(false)}
-            />
-          </div>
+      <Dialog>
+        <div className="flex justify-center items-center w-full mt-6">
+          <DialogTrigger asChild>
+            <Button
+              onClick={() => setShowCreateModal(true)}
+              className="text-sm px-4 py-2 bg-primary text-white flex items-center gap-2"
+            >
+              <span className="text-md mr-2">+</span>
+              Agregar Gastos de Aduana
+            </Button>
+          </DialogTrigger>
         </div>
-      )}
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="text-2xl">
+              Agregar gastos de aduana
+            </DialogTitle>
+          </DialogHeader>
+          <div className="bg-white rounded-lg w-full max-w-xl">
+            <CreateCustom onCustomCreated={handleCustomCreated} />
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
