@@ -13,29 +13,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Budget } from "@/app/(dashboard)/create/types";
 
 interface BudgetListProps {
   budgets: Budget[];
   setBudgets: (budgets: Budget[]) => void;
   items: Item[];
-}
-
-export interface Budget {
-  id: string;
-  date: string;
-  item: string;
-  origin: string;
-  destination: string;
-  supplier: string;
-  deliveryTime: number;
-  unitPrice: number;
-  currency: number;
-  margin: number;
-  totalPrice: number;
-  unitWeight: number;
-  totalWeight: number;
-  unit: string;
-  incoterm: string;
 }
 
 export default function BudgetList({

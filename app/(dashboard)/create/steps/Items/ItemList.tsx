@@ -12,15 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-export interface Item {
-  id: string;
-  detail: string;
-  brand: string;
-  quantity: number;
-  unit: string;
-  partNumber: string;
-}
+import { Item } from "@/app/(dashboard)/create/types";
 
 interface ItemsListProps {
   items: Item[];

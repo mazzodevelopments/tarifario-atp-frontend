@@ -8,7 +8,7 @@ import Header from "@/app/(dashboard)/components/Header";
 import QuotationDetails from "@/app/(dashboard)/create/steps/QuotationDetails";
 import ItemsList, { Item } from "@/app/(dashboard)/create/steps/Items/ItemList";
 import TabsContainer from "@/app/(dashboard)/create/steps/TabsContainer";
-import { Budget } from "@/app/(dashboard)/create/steps/Budgets/BudgetList";
+import { Budget } from "@/app/(dashboard)/create/types";
 import { Custom } from "@/app/(dashboard)/create/steps/Customs/CustomList";
 
 const steps = [

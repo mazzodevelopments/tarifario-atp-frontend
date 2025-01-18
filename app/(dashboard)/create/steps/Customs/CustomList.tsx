@@ -12,15 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-export interface Custom {
-  id: string;
-  oficializacionSedi: number;
-  gastosDespachosAduanero: number;
-  gastosOperativos: number;
-  seguridadElectrica: number;
-  senasa: number;
-}
+import { Custom } from "@/app/(dashboard)/create/types";
 
 interface CustomListProps {
   customs: Custom[];

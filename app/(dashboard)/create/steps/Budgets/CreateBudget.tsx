@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Item } from "@/app/(dashboard)/create/steps/Items/ItemList";
-import { Budget } from "@/app/(dashboard)/create/steps/Budgets/BudgetList";
+import { Budget } from "@/app/(dashboard)/create/types";
 import {
   COUNTRIES,
   INCOTERMS,

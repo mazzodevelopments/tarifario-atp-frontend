@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Item } from "@/app/(dashboard)/create/steps/Items/ItemList";
 import { UNITS } from "@/app/(dashboard)/create/data";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import Dropdown, { DropdownItem } from "@/components/Dropdown";
+import { Item } from "@/app/(dashboard)/create/types";
 
 interface CreateItemProps {
   onItemCreated: (item: Item) => void;
@@ -35,7 +35,7 @@ export default function CreateItem({
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value, type } = e.target;
     setFormData((prev) => ({
