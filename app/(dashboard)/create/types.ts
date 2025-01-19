@@ -25,15 +25,6 @@ export interface Budget {
   incoterm: string;
 }
 
-export interface Custom {
-  id: string;
-  oficializacionSedi: number;
-  gastosDespachosAduanero: number;
-  gastosOperativos: number;
-  seguridadElectrica: number;
-  senasa: number;
-}
-
 export interface Transport {
   id: string;
   via: string;
@@ -43,16 +34,18 @@ export interface Transport {
   fumigation: boolean;
 }
 
-export interface AirOrCourier extends Transport {
-  edcadassa: number; // ESTADÍA EN EDCADASSA SON USD 70 X DÍA
-  internationalFreight: number;
+/*** DESTINO – MARÍTIMO -TERRESTRE ***/
+export interface AirportFreightCourier {
+  edcadassaStayCost: number; // ESTADÍA EN EDCADASSA SON USD 70 X DÍA
+  internationalFreightCost: number;
   internationalInsurance: number; // PORCENTAJE DESDE 0,4% a 1%
   administrativeCharges: number;
-  airWayBillCut: number;
+  airwayBillCuttingFee: number;
 }
 
-export interface SeaOrLand extends Transport {
-  // PUERTO
+/*** DESTINO – MARÍTIMO -TERRESTRE ***/
+// PUERTO
+export interface PortBondedWarehouse {
   transferToCustomsWarehouse: number;
   deconsolidation: number;
   movement: number;
@@ -64,11 +57,42 @@ export interface SeaOrLand extends Transport {
   containerCleaning: number;
   optionalCustody: number;
   senasaVerification: number;
-  //FORDWARDER
-  originExpenses: number;
-  internationalFreight: number;
-  generalPortAdministration: number;
-  localExpenses: number; //
-  deconsolidation: number; //
-  blPaymentForOriginalDocumentRetrieval: number;
+}
+
+// FORWARDER
+export interface ForwarderInternationalFreight {
+  originCharges: number;
+  internationalFreightCost: number;
+  agpFee: number; // AGP (General Port Administration) fee
+  localCharges: number;
+  deconsolidationFee: number;
+  billOfLadingPayment: number;
+  providerPriceList: Record<string, number>;
+}
+
+/*** ADUANA ***/
+export interface Custom {
+  sediLegalizationFee: number; // USD 50
+  invoiceValueFOB: number; //
+  internationalFreightValue: number; // VALOR DEL PASO ANTERIOR
+  insuranceValue: number; // 1%
+  taxableBase: number; // BASE IMPONIBLE
+  importDutyRate: number; // DERECHOS DE IMPORTACIÓN
+  statisticsRate: number; // 3%
+  ivaBase: number; // DERECHOS + ESTADISITCAS
+  ivaRate: number; // VAT rate (21%)
+  additionalIvaRate: number; // Additional VAT rate (10.5%)
+  incomeTaxRate: number; // 6%
+  grossIncomeRate: number; // 2.5%
+  simFee: number; // USD 10
+  minimumCustomsDispatchCost: number; // Minimum customs dispatch cost (USD 250 or 0.8% of CIF value)
+  cifValue: number; // CIF value (INVOICE + INTERNATIONAL FREIGHT + INSURANCE)
+  customsOperationalCharges: number; // Operational charges (USD 210)
+  optionalElectricalSecurity: number; //  USD 150
+  optionalSenasaFee: number; // USD 50
+}
+
+/*** ENTREGA ***/
+export interface InternalFreightLogistics {
+  internalFreightCost: number;
 }
