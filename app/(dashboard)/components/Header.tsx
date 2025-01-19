@@ -21,7 +21,7 @@ export default function Header({
   const combinedClasses = `${baseClasses} ${className}`.trim();
 
   return (
-    <div className="w-full h-auto  rounded-[18px] mb-2 flex-shrink-0">
+    <div className="w-full h-auto rounded-[18px] mb-2 flex-shrink-0">
       <div className={combinedClasses}>
         <div className="flex flex-col justify-center items-start">
           <h2 className="flex items-center text-4xl leading-[1] mb-2 p-0 font-[800] text-black">

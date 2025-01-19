@@ -157,7 +157,7 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
           </Button>
         </DialogClose>
         <DialogClose asChild>
-          <Button type="submit" variant="primary">
+          <Button type="submit" variant="primary" className="text-white">
             Agregar Item
           </Button>
         </DialogClose>
