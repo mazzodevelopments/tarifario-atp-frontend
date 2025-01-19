@@ -44,7 +44,7 @@ export default function CustomList({ customs, setCustoms }: CustomListProps) {
     setSelectedCustoms((prev) =>
       prev.includes(id)
         ? prev.filter((customId) => customId !== id)
-        : [...prev, id]
+        : [...prev, id],
     );
   };
 
@@ -85,13 +85,13 @@ export default function CustomList({ customs, setCustoms }: CustomListProps) {
                   role="row"
                   aria-selected={selectedCustoms.includes(custom.id)}
                 >
-                  <TableCell>${custom.oficializacionSedi.toFixed(2)}</TableCell>
-                  <TableCell>
-                    ${custom.gastosDespachosAduanero.toFixed(2)}
-                  </TableCell>
-                  <TableCell>${custom.gastosOperativos.toFixed(2)}</TableCell>
-                  <TableCell>${custom.seguridadElectrica.toFixed(2)}</TableCell>
-                  <TableCell>${custom.senasa.toFixed(2)}</TableCell>
+                  {/*<TableCell>${custom.oficializacionSedi.toFixed(2)}</TableCell>*/}
+                  {/*<TableCell>*/}
+                  {/*  ${custom.gastosDespachosAduanero.toFixed(2)}*/}
+                  {/*</TableCell>*/}
+                  {/*<TableCell>${custom.gastosOperativos.toFixed(2)}</TableCell>*/}
+                  {/*<TableCell>${custom.seguridadElectrica.toFixed(2)}</TableCell>*/}
+                  {/*<TableCell>${custom.senasa.toFixed(2)}</TableCell>*/}
                   <TableCell>
                     <button
                       onClick={(e) => {
