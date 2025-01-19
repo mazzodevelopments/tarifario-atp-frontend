@@ -57,8 +57,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { state } = useSidebar();
 
   return (
-    <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader className="pt-6">
+    <Sidebar collapsible="icon" {...props} className="border-sky-50 bg-sky-50">
+      <SidebarHeader className="pt-6 ">
         <SidebarMenu>
           <SidebarMenuItem className="flex flex-row items-center ">
             <DropdownMenu>
