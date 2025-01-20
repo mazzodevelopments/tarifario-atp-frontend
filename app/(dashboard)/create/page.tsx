@@ -7,8 +7,8 @@ import Button from "@/components/Button";
 import Header from "@/app/(dashboard)/components/Header";
 import QuotationDetails from "@/app/(dashboard)/create/steps/QuotationDetails";
 import ItemsList from "@/app/(dashboard)/create/steps/Items/ItemList";
-import TabsContainer from "@/app/(dashboard)/create/steps/TabsContainer";
-import { Budget, Item, Custom } from "@/app/(dashboard)/create/types";
+import { Budget, Item } from "@/app/(dashboard)/create/types";
+import BudgetList from "@/app/(dashboard)/create/steps/Budgets/BudgetList";
 
 const steps = [
   { title: "Cargar Datos Cotización" },
@@ -61,7 +61,6 @@ export default function Create() {
     },
   ]);
   const [budgets, setBudgets] = useState<Budget[]>([]);
-  const [customs, setCustoms] = useState<Custom[]>([]);
 
   const handleNext = () => {
     if (currentStep < totalSteps - 1) {
@@ -106,13 +105,7 @@ export default function Create() {
         return <ItemsList items={items} setItems={setItems} />;
       case 2:
         return (
-          <TabsContainer
-            items={items}
-            budgets={budgets}
-            setBudgets={setBudgets}
-            customs={customs}
-            setCustoms={setCustoms}
-          />
+          <BudgetList budgets={budgets} setBudgets={setBudgets} items={items} />
         );
       default:
         return <p>Contenido de la etapa {currentStep + 1}</p>;

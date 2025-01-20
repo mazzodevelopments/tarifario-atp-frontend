@@ -58,6 +58,7 @@ export interface PortBondedWarehouse {
   containerCleaning: number;
   optionalCustody: number;
   senasaVerification: number;
+  forwarder: ForwarderInternationalFreight;
 }
 
 // FORWARDER

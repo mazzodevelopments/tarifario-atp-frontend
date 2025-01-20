@@ -2,14 +2,12 @@ import { useState } from "react";
 import BudgetList from "./Budgets/BudgetList";
 import TransportList from "./Transports/TransportList";
 import DeliveryList from "./Deliveries/DeliveryList";
-import { Item, Custom, Budget } from "@/app/(dashboard)/create/types";
+import { Item, Budget } from "@/app/(dashboard)/create/types";
 
 interface TabsContainerProps {
   items: Item[];
   budgets: Budget[];
   setBudgets: (budgets: Budget[]) => void;
-  customs: Custom[];
-  setCustoms: (custom: Custom[]) => void;
 }
 
 const tabs = [
