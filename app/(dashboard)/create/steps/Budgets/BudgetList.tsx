@@ -102,8 +102,14 @@ export default function BudgetList({
                   <TableCell>{budget.unitWeight}</TableCell>
                   <TableCell>{budget.deliveryTime}</TableCell>
                   <TableCell>{budget.incoterm}</TableCell>
-                  <TableCell>${budget.transport?.total}</TableCell>
-                  <TableCell>${budget.custom?.total}</TableCell>
+                  <TableCell>
+                    {budget.transport?.total
+                      ? `$${budget.transport?.total}`
+                      : "-"}
+                  </TableCell>
+                  <TableCell>
+                    {budget.custom?.total ? `$${budget.custom?.total}` : "-"}
+                  </TableCell>
                   <TableCell>
                     <button
                       onClick={(e) => {
