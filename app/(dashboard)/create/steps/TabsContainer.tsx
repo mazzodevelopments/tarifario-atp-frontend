@@ -1,10 +1,8 @@
 import { useState } from "react";
 import BudgetList from "./Budgets/BudgetList";
-import CustomList, { Custom } from "./Customs/CustomList";
 import TransportList from "./Transports/TransportList";
 import DeliveryList from "./Deliveries/DeliveryList";
-import { Item } from "./Items/ItemList";
-import { Budget } from "./Budgets/BudgetList";
+import { Item, Custom, Budget } from "@/app/(dashboard)/create/types";
 
 interface TabsContainerProps {
   items: Item[];
@@ -16,7 +14,6 @@ interface TabsContainerProps {
 
 const tabs = [
   { id: "budgets", label: "Presupuestos" },
-  { id: "custom", label: "Aduanas" },
   { id: "transport", label: "Transportes" },
   { id: "delivery", label: "Entregas" },
 ];
@@ -25,8 +22,6 @@ export default function TabsContainer({
   items,
   budgets,
   setBudgets,
-  customs,
-  setCustoms,
 }: TabsContainerProps) {
   const [activeTab, setActiveTab] = useState("budgets");
 
@@ -36,8 +31,6 @@ export default function TabsContainer({
         return (
           <BudgetList items={items} budgets={budgets} setBudgets={setBudgets} />
         );
-      case "custom":
-        return <CustomList customs={customs} setCustoms={setCustoms} />;
       case "transport":
         return <TransportList />;
       case "delivery":
