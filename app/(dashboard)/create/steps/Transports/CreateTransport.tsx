@@ -165,7 +165,7 @@ export default function CreateTransport({
   const renderMaritimeForm = () => (
     <div className="space-y-4">
       <h3 className="text-lg font-semibold mb-4">
-        Maritime-Terrestrial Transport
+        Transporte Maritimo - Terrestre
       </h3>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {Object.entries(maritimeData).map(([key, value]) => {
@@ -189,7 +189,7 @@ export default function CreateTransport({
 
   const renderAirForm = () => (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold mb-4">Air-Courier Transport</h3>
+      <h3 className="text-lg font-semibold mb-4">Transporte Aereo - Courier</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {Object.entries(airData).map(([key, value]) =>
           renderInputField(key, value, handleAirChange),
