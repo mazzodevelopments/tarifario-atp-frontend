@@ -2,43 +2,69 @@ import Cotizacion from "@/app/(dashboard)/components/Cotizacion";
 import DEFAULT_PROFILE_PIC from "@/public/default-profile-pic.png";
 import { Search } from "react-feather";
 import Header from "@/app/(dashboard)/components/Header";
+import QuotationCard from "./QuotationCard";
 
-const cotizaciones = [
+export interface Cotizacion {
+  id: number;
+  nombreCotizacion: string;
+  empresa: string;
+  representante: string;
+  cantidadItems: number;
+  transporte: string;
+  tipoProveedor: "Nacional" | "Internacional";
+  incoterm: string;
+}
+
+export const cotizaciones: Cotizacion[] = [
   {
-    id: "1",
-    name: "A25R-1",
-    client: "John Doe",
-    users: [
-      { id: "1", profilePic: DEFAULT_PROFILE_PIC.src },
-      { id: "2", profilePic: DEFAULT_PROFILE_PIC.src },
-      { id: "3", profilePic: DEFAULT_PROFILE_PIC.src },
-    ],
-    date: new Date().toISOString(),
-    phase: "Request",
+    id: 1,
+    nombreCotizacion: "Cotización Q3-2023",
+    empresa: "TechSolutions Inc.",
+    representante: "María González",
+    cantidadItems: 15,
+    transporte: "Marítimo",
+    tipoProveedor: "Internacional",
+    incoterm: "FOB",
   },
   {
-    id: "2",
-    name: "A25R-2",
-    client: "Emily Johnson",
-    users: [
-      { id: "1", profilePic: DEFAULT_PROFILE_PIC.src },
-      { id: "2", profilePic: DEFAULT_PROFILE_PIC.src },
-    ],
-    date: new Date().toISOString(),
-    phase: "In Progress",
+    id: 2,
+    nombreCotizacion: "Proyecto Alpha",
+    empresa: "Innovate Systems",
+    representante: "Carlos Rodríguez",
+    cantidadItems: 8,
+    transporte: "Aéreo",
+    tipoProveedor: "Internacional",
+    incoterm: "CIF",
   },
   {
-    id: "3",
-    name: "A25R-3",
-    client: "Michael Brown",
-    users: [
-      { id: "1", profilePic: DEFAULT_PROFILE_PIC.src },
-      { id: "2", profilePic: DEFAULT_PROFILE_PIC.src },
-      { id: "3", profilePic: DEFAULT_PROFILE_PIC.src },
-      { id: "4", profilePic: DEFAULT_PROFILE_PIC.src },
-    ],
-    date: new Date().toISOString(),
-    phase: "Completed",
+    id: 3,
+    nombreCotizacion: "Expansión Local 2023",
+    empresa: "Distribuidora Nacional S.A.",
+    representante: "Ana Martínez",
+    cantidadItems: 22,
+    transporte: "Terrestre",
+    tipoProveedor: "Nacional",
+    incoterm: "N/A",
+  },
+  {
+    id: 4,
+    nombreCotizacion: "Actualización Equipos",
+    empresa: "Global Tech Corp",
+    representante: "John Smith",
+    cantidadItems: 12,
+    transporte: "Marítimo",
+    tipoProveedor: "Internacional",
+    incoterm: "DDP",
+  },
+  {
+    id: 5,
+    nombreCotizacion: "Suministros Q4",
+    empresa: "Industrias Locales Ltda.",
+    representante: "Laura Pérez",
+    cantidadItems: 30,
+    transporte: "Terrestre",
+    tipoProveedor: "Nacional",
+    incoterm: "N/A",
   },
 ];
 
@@ -65,30 +91,12 @@ export default function History() {
           </div>
         </div>
       </div>
-      <div className="w-full p-[20px] border-[0.5px] border-[#ebebebcc] shadow-sm bg-white rounded-[18px]">
-        <table className="w-full table-auto overflow-hidden">
-          <thead className="text-left text-gray-600 p-4 border-b">
-            <tr>
-              <th className="text-sm font-[800] pb-2">Nombre</th>
-              <th className="text-sm font-[800] pb-2">Cliente</th>
-              <th className="text-sm font-[800] pb-2">Usuarios</th>
-              <th className="text-sm font-[800] pb-2">Fase</th>
-              <th className="text-sm font-[800] pb-2">Fecha</th>
-            </tr>
-          </thead>
-          <tbody>
-            {cotizaciones.map((cotizacion) => (
-              <Cotizacion
-                key={cotizacion.id}
-                name={cotizacion.name}
-                client={cotizacion.client}
-                users={cotizacion.users}
-                date={cotizacion.date}
-                phase={cotizacion.phase}
-              />
-            ))}
-          </tbody>
-        </table>
+      <div className="w-full  bg-white">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-start mt-2">
+          {cotizaciones.map((cotizacion) => (
+            <QuotationCard key={cotizacion.id} {...cotizacion} />
+          ))}
+        </div>
       </div>
     </div>
   );

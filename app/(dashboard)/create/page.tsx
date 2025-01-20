@@ -86,7 +86,7 @@ export default function Create() {
   const isNextButtonDisabled = () => {
     if (currentStep === 0) {
       return ["name", "client", "buyer"].some(
-        (key) => quotationData[key as keyof typeof quotationData].trim() === "",
+        (key) => quotationData[key as keyof typeof quotationData].trim() === ""
       );
     }
     return false;
@@ -148,7 +148,11 @@ export default function Create() {
                   Anterior
                 </Button>
                 {currentStep === totalSteps - 1 ? (
-                  <Button onClick={handleCreate} variant="primary">
+                  <Button
+                    onClick={handleCreate}
+                    className="text-white"
+                    variant="primary"
+                  >
                     Crear Cotización
                   </Button>
                 ) : (
