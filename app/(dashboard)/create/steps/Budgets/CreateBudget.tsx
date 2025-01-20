@@ -15,8 +15,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import type { Item, Budget } from "@/app/(dashboard)/create/types";
+import type {
+  Item,
+  Budget,
+  PortBondedWarehouse,
+  AirportFreightCourier,
+} from "@/app/(dashboard)/create/types";
 import CreateCustom from "@/app/(dashboard)/create/steps/Customs/CreateCustom";
+import CreateTransport from "@/app/(dashboard)/create/steps/Transports/CreateTransport";
 
 interface CreateBudgetProps {
   onBudgetCreated: (budget: Budget) => void;
@@ -44,26 +50,8 @@ export default function CreateBudget({
     totalPrice: 0,
     unit: "",
     incoterm: "",
-    custom: {
-      id: "",
-      sediLegalizationFee: 0,
-      invoiceValueFOB: 0,
-      internationalFreightValue: 0,
-      taxableBase: 0,
-      importDutyRate: 0,
-      statisticsRate: 0,
-      ivaRate: 0,
-      additionalIvaRate: 0,
-      incomeTaxRate: 0,
-      grossIncomeRate: 0,
-      simFee: 0,
-      cifValue: 0,
-      minimumCustomsDispatchCost: 0,
-      customsOperationalCharges: 0,
-      optionalElectricalSecurity: 0,
-      optionalSenasaFee: 0,
-      total: 0,
-    },
+    custom: null,
+    transport: null,
   });
   const [selectedItemQuantity, setSelectedItemQuantity] = useState<number>(0);
   const [buttonsState, setButtonsState] = useState({
@@ -72,6 +60,11 @@ export default function CreateBudget({
     delivery: false,
   });
   const [isCustomModalOpen, setIsCustomModalOpen] = useState(false);
+  const [isTransportModalOpen, setIsTransportModalOpen] = useState(false);
+
+  useEffect(() => {
+    console.log("isTransportModalOpen:", isTransportModalOpen);
+  }, [isTransportModalOpen]);
 
   useEffect(() => {
     setFormData((prev) => ({
@@ -197,6 +190,16 @@ export default function CreateBudget({
 
   const fetchCurrencies = async (): Promise<DropdownItem[]> => {
     return CURRENCIES;
+  };
+
+  const handleTransportCreated = (
+    transportData: PortBondedWarehouse | AirportFreightCourier,
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      transport: transportData,
+    }));
+    setIsTransportModalOpen(false);
   };
 
   return (
@@ -422,6 +425,11 @@ export default function CreateBudget({
             type="button"
             className="text-sm bg-primary/10 text-primary"
             disabled={!buttonsState.transport}
+            onClick={() => {
+              console.log("Transport button clicked");
+              console.log("buttonsState.transport:", buttonsState.transport);
+              setIsTransportModalOpen(true);
+            }}
           >
             + Agregar Transporte
           </Button>
@@ -473,6 +481,18 @@ export default function CreateBudget({
               setIsCustomModalOpen(false);
             }}
           />
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={isTransportModalOpen}
+        onOpenChange={setIsTransportModalOpen}
+      >
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">Agregar Transporte</DialogTitle>
+          </DialogHeader>
+          <CreateTransport onTransportCreated={handleTransportCreated} />
         </DialogContent>
       </Dialog>
     </form>

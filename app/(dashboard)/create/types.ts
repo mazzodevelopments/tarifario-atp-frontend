@@ -23,7 +23,8 @@ export interface Budget {
   totalWeight: number;
   unit: string;
   incoterm: string;
-  custom: Custom;
+  transport: AirportFreightCourier | PortBondedWarehouse | null;
+  custom: Custom | null;
 }
 
 export interface Transport {
@@ -37,11 +38,13 @@ export interface Transport {
 
 /*** DESTINO – MARÍTIMO -TERRESTRE ***/
 export interface AirportFreightCourier {
-  edcadassaStayCost: number; // ESTADÍA EN EDCADASSA SON USD 70 X DÍA
+  edcadassaStayCostPerDay: number; // ESTADÍA EN EDCADASSA SON USD 70 X DÍA
+  edcadassaStayDuration: number;
   internationalFreightCost: number;
   internationalInsurance: number; // PORCENTAJE DESDE 0,4% a 1%
   administrativeCharges: number;
   airwayBillCuttingFee: number;
+  total: number;
 }
 
 /*** DESTINO – MARÍTIMO -TERRESTRE ***/
@@ -59,6 +62,7 @@ export interface PortBondedWarehouse {
   optionalCustody: number;
   senasaVerification: number;
   forwarder: ForwarderInternationalFreight;
+  total: number;
 }
 
 // FORWARDER
