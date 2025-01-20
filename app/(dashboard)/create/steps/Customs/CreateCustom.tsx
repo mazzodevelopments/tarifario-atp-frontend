@@ -1,10 +1,7 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import type { Custom } from "@/app/(dashboard)/create/types";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
-import { DialogClose } from "@/components/ui/dialog";
 
 interface CreateCustomProps {
   onCustomCreated: (custom: Custom) => void;
@@ -120,6 +117,7 @@ export default function CreateCustom({ onCustomCreated }: CreateCustomProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    e.stopPropagation(); // Prevent event from bubbling up
     const newCustom: Custom = {
       id: Math.random().toString(36).slice(2, 9),
       ...formData,
@@ -196,16 +194,16 @@ export default function CreateCustom({ onCustomCreated }: CreateCustomProps) {
       </div>
 
       <div className="flex justify-end gap-2">
-        <DialogClose asChild>
-          <Button type="button" variant="secondary">
-            Cancelar
-          </Button>
-        </DialogClose>
-        <DialogClose asChild>
-          <Button type="submit" className="bg-primary text-white">
-            Crear Gasto de Aduana
-          </Button>
-        </DialogClose>
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={() => onCustomCreated({ id: "", ...formData })}
+        >
+          Cancelar
+        </Button>
+        <Button type="submit" className="bg-primary text-white">
+          Crear Gasto de Aduana
+        </Button>
       </div>
     </form>
   );

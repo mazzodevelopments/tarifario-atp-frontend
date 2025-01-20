@@ -10,7 +10,6 @@ import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Dropdown, { type DropdownItem } from "@/components/Dropdown";
 import {
-  DialogClose,
   Dialog,
   DialogContent,
   DialogHeader,
@@ -22,11 +21,13 @@ import CreateCustom from "@/app/(dashboard)/create/steps/Customs/CreateCustom";
 interface CreateBudgetProps {
   onBudgetCreated: (budget: Budget) => void;
   items: Item[];
+  onCancel?: () => void;
 }
 
 export default function CreateBudget({
   onBudgetCreated,
   items,
+  onCancel,
 }: CreateBudgetProps) {
   const [formData, setFormData] = useState<Omit<Budget, "id">>({
     date: new Date().toISOString().split("T")[0],
@@ -72,7 +73,6 @@ export default function CreateBudget({
   });
   const [isCustomModalOpen, setIsCustomModalOpen] = useState(false);
 
-  // CALCULO DE PESO TOTAL
   useEffect(() => {
     setFormData((prev) => ({
       ...prev,
@@ -80,7 +80,6 @@ export default function CreateBudget({
     }));
   }, [formData.unitWeight, selectedItemQuantity]);
 
-  // CALCULO DEL PRECIO TOTAL CON MARGEN
   useEffect(() => {
     const basePrice = formData.unitPrice * selectedItemQuantity;
     const marginMultiplier = 1 + formData.margin / 100;
@@ -91,7 +90,6 @@ export default function CreateBudget({
     }));
   }, [formData.unitPrice, selectedItemQuantity, formData.margin]);
 
-  // HABILITACIÓN DE BOTONES
   useEffect(() => {
     const updateButtonStates = (incoterm: string) => {
       switch (incoterm) {
@@ -140,7 +138,6 @@ export default function CreateBudget({
     const newBudget: Budget = {
       id: Math.random().toString(36).slice(2, 9),
       ...formData,
-      custom: formData.custom,
     };
     onBudgetCreated(newBudget);
   };
@@ -160,7 +157,6 @@ export default function CreateBudget({
   const handleSelect = (field: keyof Budget) => (item: DropdownItem) => {
     setFormData((prev) => ({ ...prev, [field]: item.name }));
 
-    // If selecting an item, update the selected item quantity
     if (field === "item") {
       const selectedItem = items.find((i) => i.detail === item.name);
       if (selectedItem) {
@@ -448,17 +444,19 @@ export default function CreateBudget({
       </div>
 
       <div className="flex justify-end gap-2">
-        <DialogClose asChild>
-          <Button type="button" variant="secondary" className="text-sm">
-            Cancelar
-          </Button>
-        </DialogClose>
-        <DialogClose asChild>
-          <Button type="submit" className="text-sm bg-primary text-white">
-            Crear Presupuesto
-          </Button>
-        </DialogClose>
+        <Button
+          type="button"
+          variant="secondary"
+          className="text-sm"
+          onClick={onCancel}
+        >
+          Cancelar
+        </Button>
+        <Button type="submit" className="text-sm bg-primary text-white">
+          Crear Presupuesto
+        </Button>
       </div>
+
       <Dialog open={isCustomModalOpen} onOpenChange={setIsCustomModalOpen}>
         <DialogContent className="max-w-3xl">
           <DialogHeader>

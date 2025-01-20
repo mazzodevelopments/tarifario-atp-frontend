@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { X } from "react-feather";
 import Button from "@/components/Button";
@@ -123,7 +121,7 @@ export default function BudgetList({
         </Table>
       </div>
 
-      <Dialog>
+      <Dialog open={showCreateModal} onOpenChange={setShowCreateModal}>
         <div className="flex justify-center items-center w-full mt-6">
           <DialogTrigger asChild>
             <Button className="text-sm px-4 py-2 bg-primary text-white flex items-center gap-2">
@@ -136,9 +134,13 @@ export default function BudgetList({
         <DialogContent className="max-w-3xl">
           <DialogHeader>
             <DialogTitle className="text-2xl">Agregar presupuesto</DialogTitle>
-          </DialogHeader>{" "}
+          </DialogHeader>
           <div className="bg-white rounded-lg w-full">
-            <CreateBudget onBudgetCreated={handleBudgetCreated} items={items} />
+            <CreateBudget
+              onBudgetCreated={handleBudgetCreated}
+              items={items}
+              onCancel={() => setShowCreateModal(false)}
+            />
           </div>
         </DialogContent>
       </Dialog>
