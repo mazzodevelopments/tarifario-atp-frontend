@@ -62,10 +62,7 @@ export default function CreateBudget({
   const [isCustomModalOpen, setIsCustomModalOpen] = useState(false);
   const [isTransportModalOpen, setIsTransportModalOpen] = useState(false);
 
-  useEffect(() => {
-    console.log("isTransportModalOpen:", isTransportModalOpen);
-  }, [isTransportModalOpen]);
-
+  // CALCULO TOTAL DEL PESO
   useEffect(() => {
     setFormData((prev) => ({
       ...prev,
@@ -73,6 +70,7 @@ export default function CreateBudget({
     }));
   }, [formData.unitWeight, selectedItemQuantity]);
 
+  // CALCULO DE TOTAL
   useEffect(() => {
     const basePrice = formData.unitPrice * selectedItemQuantity;
     const marginMultiplier = 1 + formData.margin / 100;
@@ -129,7 +127,7 @@ export default function CreateBudget({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Check if any required numeric fields are empty or zero
+    // CHECKEO DE QUE LOS INPUTS NUMERICOS TENGAN VALORES
     const requiredNumericFields = [
       "deliveryTime",
       "unitPrice",
@@ -439,11 +437,53 @@ export default function CreateBudget({
         />
       </div>
 
+      <div className="grid grid-cols-3 gap-4">
+        {formData.transport?.total && (
+          <div>
+            <label
+              htmlFor="transportTotal"
+              className="block text-sm font-semibold text-gray-700"
+            >
+              Precio Total Transporte
+            </label>
+            <Input
+              type="number"
+              name="transportTotal"
+              value={formData.transport.total}
+              onChange={handleChange}
+              disabled
+            />
+          </div>
+        )}
+
+        {formData.custom?.total && (
+          <div>
+            <label
+              htmlFor="customTotal"
+              className="block text-sm font-semibold text-gray-700"
+            >
+              Precio Total Gastos de Aduana
+            </label>
+            <Input
+              type="number"
+              name="customTotal"
+              value={formData.custom.total}
+              onChange={handleChange}
+              disabled
+            />
+          </div>
+        )}
+      </div>
+
       <div className="flex justify-center items-center">
         <div className="flex gap-3">
           <Button
             type="button"
-            className="text-sm bg-primary/10 text-primary"
+            className={`text-sm ${
+              formData.transport === null
+                ? "bg-primary/10 text-primary"
+                : "bg-orange-100 text-orange-500"
+            }`}
             disabled={!buttonsState.transport}
             onClick={() => {
               console.log("Transport button clicked");
@@ -451,15 +491,21 @@ export default function CreateBudget({
               setIsTransportModalOpen(true);
             }}
           >
-            + Agregar Transporte
+            {formData.transport === null
+              ? "+Agregar Transporte"
+              : "Editar Transporte"}
           </Button>
           <Button
             type="button"
-            className="text-sm bg-primary/10 text-primary"
+            className={`text-sm ${
+              formData.custom === null
+                ? "bg-primary/10 text-primary"
+                : "bg-orange-100 text-orange-500"
+            }`}
             disabled={!buttonsState.customs}
             onClick={() => setIsCustomModalOpen(true)}
           >
-            + Agregar Aduana
+            {formData.custom === null ? "+Agregar Aduana" : "Editar Aduana"}
           </Button>
           <Button
             type="button"
