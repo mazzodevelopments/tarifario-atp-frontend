@@ -107,7 +107,7 @@ export default function BudgetList({
                   <TableCell>{budget.destination}</TableCell>
                   <TableCell>{budget.deliveryTime} días</TableCell>
                   <TableCell>{budget.incoterm}</TableCell>
-                  <TableCell>${budget.totalPrice}</TableCell>
+                  <TableCell>${budget.totalPrice.toFixed(2)}</TableCell>
                   <TableCell>
                     {budget.transport?.total
                       ? `$${budget.transport.total.toFixed(2)}`
