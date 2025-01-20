@@ -128,6 +128,23 @@ export default function CreateBudget({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Check if any required numeric fields are empty or zero
+    const requiredNumericFields = [
+      "deliveryTime",
+      "unitPrice",
+      "margin",
+      "unitWeight",
+    ];
+    const hasEmptyFields = requiredNumericFields.some(
+      (field) => !formData[field as keyof typeof formData],
+    );
+
+    if (hasEmptyFields) {
+      alert("Please fill in all required fields with non-zero values.");
+      return;
+    }
+
     const newBudget: Budget = {
       id: Math.random().toString(36).slice(2, 9),
       ...formData,
@@ -139,7 +156,12 @@ export default function CreateBudget({
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value, type } = e.target;
-    const numericValue = type === "number" ? Number.parseFloat(value) : value;
+    let numericValue: string | number = value;
+
+    if (type === "number") {
+      const parsedValue = Number.parseFloat(value);
+      numericValue = isNaN(parsedValue) ? "" : Math.max(0, parsedValue);
+    }
 
     setFormData((prev) => ({
       ...prev,
@@ -265,6 +287,8 @@ export default function CreateBudget({
             value={formData.deliveryTime}
             onChange={handleChange}
             required
+            min="0"
+            step="1"
           />
         </div>
       </div>
@@ -298,6 +322,8 @@ export default function CreateBudget({
             value={formData.unitPrice}
             onChange={handleChange}
             required
+            min="0"
+            step="10"
           />
         </div>
 
@@ -328,6 +354,8 @@ export default function CreateBudget({
             value={formData.margin}
             onChange={handleChange}
             required
+            min="0"
+            step="10"
           />
         </div>
 
@@ -361,6 +389,8 @@ export default function CreateBudget({
             value={formData.unitWeight}
             onChange={handleChange}
             required
+            min="0"
+            step="10"
           />
         </div>
 
