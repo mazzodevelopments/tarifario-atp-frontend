@@ -143,43 +143,232 @@ export default function CreateTransport({
     }
   };
 
-  const renderInputField = (
-    key: string,
-    value: number,
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
-  ) => (
-    <div key={key} className="mb-4">
-      <label className="block text-sm font-medium text-gray-700 mb-1">
-        {key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, " $1")}
-      </label>
-      <Input
-        type="number"
-        name={key}
-        value={value}
-        onChange={onChange}
-        className="w-full"
-      />
-    </div>
-  );
-
   const renderMaritimeForm = () => (
     <div className="space-y-4">
       <h3 className="text-lg font-semibold mb-4">
         Transporte Maritimo - Terrestre
       </h3>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {Object.entries(maritimeData).map(([key, value]) => {
-          if (key === "forwarder") {
-            return Object.entries(value).map(([forwarderKey, forwarderValue]) =>
-              renderInputField(
-                `forwarder.${forwarderKey}`,
-                forwarderValue as number,
-                handleMaritimeChange,
-              ),
-            );
-          }
-          return renderInputField(key, value as number, handleMaritimeChange);
-        })}
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Transfer To Customs Warehouse
+          </label>
+          <Input
+            type="number"
+            name="transferToCustomsWarehouse"
+            value={maritimeData.transferToCustomsWarehouse}
+            onChange={handleMaritimeChange}
+            className="w-full"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Deconsolidation
+          </label>
+          <Input
+            type="number"
+            name="deconsolidation"
+            value={maritimeData.deconsolidation}
+            onChange={handleMaritimeChange}
+            className="w-full"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Movement
+          </label>
+          <Input
+            type="number"
+            name="movement"
+            value={maritimeData.movement}
+            onChange={handleMaritimeChange}
+            className="w-full"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Administrative Charges
+          </label>
+          <Input
+            type="number"
+            name="administrativeCharges"
+            value={maritimeData.administrativeCharges}
+            onChange={handleMaritimeChange}
+            className="w-full"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Electronic Seal
+          </label>
+          <Input
+            type="number"
+            name="electronicSeal"
+            value={maritimeData.electronicSeal}
+            onChange={handleMaritimeChange}
+            className="w-full"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Empty Container Return Before Deadline
+          </label>
+          <Input
+            type="number"
+            name="emptyContainerReturnBeforeDeadline"
+            value={maritimeData.emptyContainerReturnBeforeDeadline}
+            onChange={handleMaritimeChange}
+            className="w-full"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Late Return Fee
+          </label>
+          <Input
+            type="number"
+            name="lateReturnFee"
+            value={maritimeData.lateReturnFee}
+            onChange={handleMaritimeChange}
+            className="w-full"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Storage Days
+          </label>
+          <Input
+            type="number"
+            name="storageDays"
+            value={maritimeData.storageDays}
+            onChange={handleMaritimeChange}
+            className="w-full"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Container Cleaning
+          </label>
+          <Input
+            type="number"
+            name="containerCleaning"
+            value={maritimeData.containerCleaning}
+            onChange={handleMaritimeChange}
+            className="w-full"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Optional Custody
+          </label>
+          <Input
+            type="number"
+            name="optionalCustody"
+            value={maritimeData.optionalCustody}
+            onChange={handleMaritimeChange}
+            className="w-full"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Senasa Verification
+          </label>
+          <Input
+            type="number"
+            name="senasaVerification"
+            value={maritimeData.senasaVerification}
+            onChange={handleMaritimeChange}
+            className="w-full"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Origin Charges
+          </label>
+          <Input
+            type="number"
+            name="forwarder.originCharges"
+            value={maritimeData.forwarder.originCharges}
+            onChange={handleMaritimeChange}
+            className="w-full"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            International Freight Cost
+          </label>
+          <Input
+            type="number"
+            name="forwarder.internationalFreightCost"
+            value={maritimeData.forwarder.internationalFreightCost}
+            onChange={handleMaritimeChange}
+            className="w-full"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            AGP Fee
+          </label>
+          <Input
+            type="number"
+            name="forwarder.agpFee"
+            value={maritimeData.forwarder.agpFee}
+            onChange={handleMaritimeChange}
+            className="w-full"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Local Charges
+          </label>
+          <Input
+            type="number"
+            name="forwarder.localCharges"
+            value={maritimeData.forwarder.localCharges}
+            onChange={handleMaritimeChange}
+            className="w-full"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Deconsolidation Fee
+          </label>
+          <Input
+            type="number"
+            name="forwarder.deconsolidationFee"
+            value={maritimeData.forwarder.deconsolidationFee}
+            onChange={handleMaritimeChange}
+            className="w-full"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Bill of Lading Payment
+          </label>
+          <Input
+            type="number"
+            name="forwarder.billOfLadingPayment"
+            value={maritimeData.forwarder.billOfLadingPayment}
+            onChange={handleMaritimeChange}
+            className="w-full"
+          />
+        </div>
       </div>
       <div className="text-xl font-bold">
         Total: ${calculateMaritimeTotal(maritimeData).toFixed(2)}
@@ -191,9 +380,89 @@ export default function CreateTransport({
     <div className="space-y-4">
       <h3 className="text-lg font-semibold mb-4">Transporte Aereo - Courier</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {Object.entries(airData).map(([key, value]) =>
-          renderInputField(key, value, handleAirChange),
-        )}
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Costo Por Día EDCADASSA
+          </label>
+          <Input
+            type="number"
+            name="edcadassaStayCostPerDay"
+            value={airData.edcadassaStayCostPerDay}
+            className="w-full"
+            disabled
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Cantidad De Días EDCADASSA
+          </label>
+          <Input
+            type="number"
+            name="edcadassaStayDuration"
+            value={airData.edcadassaStayDuration}
+            onChange={handleAirChange}
+            className="w-full"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Flete Internacional
+          </label>
+          <Input
+            type="number"
+            name="internationalFreightCost"
+            value={airData.internationalFreightCost}
+            onChange={handleAirChange}
+            className="w-full"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Seguro Internacional (%)
+          </label>
+          <Input
+            type="number"
+            name="internationalInsurance"
+            value={airData.internationalInsurance}
+            onChange={handleAirChange}
+            min={0.4}
+            step={0.1}
+            max={1}
+            className="w-full"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Cargos Administrativos
+          </label>
+          <Input
+            type="number"
+            name="administrativeCharges"
+            value={airData.administrativeCharges}
+            onChange={handleAirChange}
+            className="w-full"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Corte De Guía Aerea
+          </label>
+          <Input
+            type="number"
+            name="airwayBillCuttingFee"
+            value={airData.airwayBillCuttingFee}
+            onChange={handleAirChange}
+            min={150}
+            step={10}
+            max={300}
+            className="w-full"
+          />
+        </div>
       </div>
       <div className="text-xl font-bold">
         Total: ${calculateAirTotal(airData).toFixed(2)}
