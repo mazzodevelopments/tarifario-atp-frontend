@@ -10,7 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Budget } from "@/app/(dashboard)/create/types";
+import type { Budget } from "@/app/(dashboard)/create/types";
 import {
   Dialog,
   DialogContent,
@@ -18,7 +18,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Item } from "@/app/(dashboard)/create/types";
+import type { Item } from "@/app/(dashboard)/create/types";
 
 interface BudgetListProps {
   budgets: Budget[];
@@ -52,6 +52,13 @@ export default function BudgetList({
     );
   };
 
+  const calculateTotal = (budget: Budget) => {
+    const budgetTotal = budget.totalPrice;
+    const transportTotal = budget.transport?.total || 0;
+    const customTotal = budget.custom?.total || 0;
+    return Number((budgetTotal + transportTotal + customTotal).toFixed(2));
+  };
+
   return (
     <div className="w-full mx-auto">
       <div className="border rounded-md overflow-x-auto max-h-[18vw]">
@@ -62,12 +69,13 @@ export default function BudgetList({
               <TableHead>Proveedor</TableHead>
               <TableHead>Origen</TableHead>
               <TableHead>Destino</TableHead>
-              <TableHead>Precio Unitario</TableHead>
-              <TableHead>Peso Unitario</TableHead>
               <TableHead>Tiempo de Entrega</TableHead>
+              <TableHead>Precio Unitario</TableHead>
+              <TableHead>Precio Total</TableHead>
               <TableHead>Incoterm</TableHead>
               <TableHead>Transporte</TableHead>
               <TableHead>Aduana</TableHead>
+              <TableHead>Total</TableHead>
               <TableHead></TableHead>
             </TableRow>
           </TableHeader>
@@ -75,7 +83,7 @@ export default function BudgetList({
             {budgets.length === 0 ? (
               <TableRow className="h-24">
                 <TableCell
-                  colSpan={10}
+                  colSpan={12}
                   className="text-sm m-auto h-full text-center text-gray-500"
                 >
                   No hay presupuestos agregados
@@ -98,17 +106,22 @@ export default function BudgetList({
                   <TableCell>{budget.supplier}</TableCell>
                   <TableCell>{budget.origin}</TableCell>
                   <TableCell>{budget.destination}</TableCell>
-                  <TableCell>{budget.unitPrice}</TableCell>
-                  <TableCell>{budget.unitWeight}</TableCell>
                   <TableCell>{budget.deliveryTime}</TableCell>
+                  <TableCell>${budget.unitPrice}</TableCell>
+                  <TableCell>${budget.totalPrice}</TableCell>
                   <TableCell>{budget.incoterm}</TableCell>
                   <TableCell>
                     {budget.transport?.total
-                      ? `$${budget.transport?.total}`
+                      ? `$${budget.transport.total.toFixed(2)}`
                       : "-"}
                   </TableCell>
                   <TableCell>
-                    {budget.custom?.total ? `$${budget.custom?.total}` : "-"}
+                    {budget.custom?.total
+                      ? `$${budget.custom.total.toFixed(2)}`
+                      : "-"}
+                  </TableCell>
+                  <TableCell className="font-semibold">
+                    ${calculateTotal(budget).toFixed(2)}
                   </TableCell>
                   <TableCell>
                     <button
@@ -117,7 +130,7 @@ export default function BudgetList({
                         handleDeleteBudget(budget.id);
                       }}
                       className="text-black hover:text-red-600"
-                      aria-label={`Delete budget for ${budget.item}`}
+                      aria-label={`Delete budget for ${budget.item} with total $${calculateTotal(budget).toFixed(2)}`}
                     >
                       <X className="w-4" />
                     </button>
