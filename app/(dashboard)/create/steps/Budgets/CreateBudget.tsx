@@ -1,4 +1,4 @@
-import type React from "react";
+import React from "react";
 import { useState, useEffect } from "react";
 import {
   COUNTRIES,
@@ -62,6 +62,9 @@ export default function CreateBudget({
   const [isCustomModalOpen, setIsCustomModalOpen] = useState(false);
   const [isTransportModalOpen, setIsTransportModalOpen] = useState(false);
 
+  const isWithinArgentina =
+    formData.origin === "Argentina" && formData.destination === "Argentina";
+
   // CALCULO TOTAL DEL PESO
   useEffect(() => {
     setFormData((prev) => ({
@@ -82,6 +85,21 @@ export default function CreateBudget({
   }, [formData.unitPrice, selectedItemQuantity, formData.margin]);
 
   useEffect(() => {
+    if (isWithinArgentina) {
+      setButtonsState({
+        transport: false,
+        customs: false,
+        delivery: true,
+      });
+      setFormData((prev) => ({
+        ...prev,
+        incoterm: "",
+        transport: null,
+        custom: null,
+      }));
+      return;
+    }
+
     const updateButtonStates = (incoterm: string) => {
       switch (incoterm) {
         case "EXW":
@@ -122,7 +140,12 @@ export default function CreateBudget({
     };
 
     updateButtonStates(formData.incoterm);
-  }, [formData.incoterm]);
+  }, [
+    formData.incoterm,
+    formData.origin,
+    formData.destination,
+    isWithinArgentina,
+  ]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -434,6 +457,7 @@ export default function CreateBudget({
           fetchItems={fetchIncoterms}
           onSelect={handleSelect("incoterm")}
           required
+          disabled={isWithinArgentina}
         />
       </div>
 
@@ -478,8 +502,6 @@ export default function CreateBudget({
             }`}
             disabled={!buttonsState.transport}
             onClick={() => {
-              console.log("Transport button clicked");
-              console.log("buttonsState.transport:", buttonsState.transport);
               setIsTransportModalOpen(true);
             }}
           >
@@ -508,6 +530,12 @@ export default function CreateBudget({
           </Button>
         </div>
       </div>
+
+      {isWithinArgentina && (
+        <div className="flex items-center justify-center">
+          <span className="text-sm font-[600] text-orange-500">Nacional</span>
+        </div>
+      )}
 
       <div className="flex justify-end gap-2">
         <Button

@@ -13,6 +13,7 @@ interface DropdownProps {
   onSelect: (item: DropdownItem) => void;
   required?: boolean;
   error?: string;
+  disabled?: boolean;
 }
 
 export default function Dropdown({
@@ -21,6 +22,7 @@ export default function Dropdown({
   onSelect,
   required = false,
   error,
+  disabled,
 }: DropdownProps) {
   const [items, setItems] = useState<DropdownItem[]>([]);
   const [filteredItems, setFilteredItems] = useState<DropdownItem[]>([]);
@@ -54,8 +56,8 @@ export default function Dropdown({
   useEffect(() => {
     setFilteredItems(
       items.filter((item) =>
-        item.name.toLowerCase().includes(value.toLowerCase())
-      )
+        item.name.toLowerCase().includes(value.toLowerCase()),
+      ),
     );
   }, [items, value]);
 
@@ -95,6 +97,7 @@ export default function Dropdown({
           }`}
           placeholder="Seleccionar o buscar..."
           required={required}
+          disabled={disabled}
         />
         {addItem && (
           <button
