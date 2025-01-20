@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { X } from "react-feather";
-import { Item } from "@/app/(dashboard)/create/steps/Items/ItemList";
 import Button from "@/components/Button";
 import CreateBudget from "./CreateBudget";
 import {
@@ -21,6 +20,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Item } from "@/app/(dashboard)/create/types";
 
 interface BudgetListProps {
   budgets: Budget[];
@@ -50,7 +50,7 @@ export default function BudgetList({
     setSelectedBudgets((prev) =>
       prev.includes(id)
         ? prev.filter((budgetId) => budgetId !== id)
-        : [...prev, id]
+        : [...prev, id],
     );
   };
 
@@ -68,6 +68,7 @@ export default function BudgetList({
               <TableHead>Peso Unitario</TableHead>
               <TableHead>Tiempo de Entrega</TableHead>
               <TableHead>Incoterm</TableHead>
+              <TableHead>Aduana</TableHead>
               <TableHead></TableHead>
             </TableRow>
           </TableHeader>
@@ -102,6 +103,7 @@ export default function BudgetList({
                   <TableCell>{budget.unitWeight}</TableCell>
                   <TableCell>{budget.deliveryTime}</TableCell>
                   <TableCell>{budget.incoterm}</TableCell>
+                  <TableCell>{budget.custom.total}</TableCell>
                   <TableCell>
                     <button
                       onClick={(e) => {

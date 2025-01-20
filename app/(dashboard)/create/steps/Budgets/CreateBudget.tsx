@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Item } from "@/app/(dashboard)/create/steps/Items/ItemList";
-import { Budget } from "@/app/(dashboard)/create/types";
+import type React from "react";
+import { useState, useEffect } from "react";
 import {
   COUNTRIES,
   INCOTERMS,
@@ -9,8 +8,16 @@ import {
 } from "@/app/(dashboard)/create/data";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
-import Dropdown, { DropdownItem } from "@/components/Dropdown";
-import { DialogClose } from "@/components/ui/dialog";
+import Dropdown, { type DropdownItem } from "@/components/Dropdown";
+import {
+  DialogClose,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import type { Item, Budget } from "@/app/(dashboard)/create/types";
+import CreateCustom from "@/app/(dashboard)/create/steps/Customs/CreateCustom";
 
 interface CreateBudgetProps {
   onBudgetCreated: (budget: Budget) => void;
@@ -36,6 +43,26 @@ export default function CreateBudget({
     totalPrice: 0,
     unit: "",
     incoterm: "",
+    custom: {
+      id: "",
+      sediLegalizationFee: 0,
+      invoiceValueFOB: 0,
+      internationalFreightValue: 0,
+      taxableBase: 0,
+      importDutyRate: 0,
+      statisticsRate: 0,
+      ivaRate: 0,
+      additionalIvaRate: 0,
+      incomeTaxRate: 0,
+      grossIncomeRate: 0,
+      simFee: 0,
+      cifValue: 0,
+      minimumCustomsDispatchCost: 0,
+      customsOperationalCharges: 0,
+      optionalElectricalSecurity: 0,
+      optionalSenasaFee: 0,
+      total: 0,
+    },
   });
   const [selectedItemQuantity, setSelectedItemQuantity] = useState<number>(0);
   const [buttonsState, setButtonsState] = useState({
@@ -43,6 +70,7 @@ export default function CreateBudget({
     customs: false,
     delivery: false,
   });
+  const [isCustomModalOpen, setIsCustomModalOpen] = useState(false);
 
   // CALCULO DE PESO TOTAL
   useEffect(() => {
@@ -112,15 +140,16 @@ export default function CreateBudget({
     const newBudget: Budget = {
       id: Math.random().toString(36).slice(2, 9),
       ...formData,
+      custom: formData.custom,
     };
     onBudgetCreated(newBudget);
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value, type } = e.target;
-    const numericValue = type === "number" ? parseFloat(value) : value;
+    const numericValue = type === "number" ? Number.parseFloat(value) : value;
 
     setFormData((prev) => ({
       ...prev,
@@ -404,6 +433,7 @@ export default function CreateBudget({
             type="button"
             className="text-sm bg-primary/10 text-primary"
             disabled={!buttonsState.customs}
+            onClick={() => setIsCustomModalOpen(true)}
           >
             + Agregar Aduana
           </Button>
@@ -429,6 +459,24 @@ export default function CreateBudget({
           </Button>
         </DialogClose>
       </div>
+      <Dialog open={isCustomModalOpen} onOpenChange={setIsCustomModalOpen}>
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">
+              Agregar Gasto de Aduana
+            </DialogTitle>
+          </DialogHeader>
+          <CreateCustom
+            onCustomCreated={(newCustom) => {
+              setFormData((prev) => ({
+                ...prev,
+                custom: newCustom,
+              }));
+              setIsCustomModalOpen(false);
+            }}
+          />
+        </DialogContent>
+      </Dialog>
     </form>
   );
 }

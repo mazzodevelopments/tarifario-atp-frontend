@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Custom } from "@/app/(dashboard)/create/types";
+import type { Custom } from "@/app/(dashboard)/create/types";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import { DialogClose } from "@/components/ui/dialog";
@@ -28,34 +28,26 @@ export default function CreateCustom({ onCustomCreated }: CreateCustomProps) {
     customsOperationalCharges: 210,
     optionalElectricalSecurity: 150,
     optionalSenasaFee: 50,
+    total: 0,
   });
 
   const [includeElectricalSecurity, setIncludeElectricalSecurity] =
     useState(false);
   const [includeSenasaFee, setIncludeSenasaFee] = useState(false);
-  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     const calculateCustoms = () => {
-      // BASE IMPONIBLE === CIF
       const taxableBase =
         formData.invoiceValueFOB +
         formData.internationalFreightValue +
         (formData.invoiceValueFOB + formData.internationalFreightValue) * 0.01;
 
-      // ESTADISTICA
       const statisticsRate = taxableBase * 0.03;
-
-      // IVA
       const ivaBase = formData.importDutyRate + statisticsRate;
       const ivaRate = ivaBase * 0.21;
       const additionalIvaRate = ivaBase * 0.105;
-
-      // GANANCIAS E INGRESOS BRUTOS
       const incomeTaxRate = taxableBase * 0.06;
       const grossIncomeRate = taxableBase * 0.025;
-
-      // Calculate minimum customs dispatch cost
       const minimumCustomsDispatchCost = Math.max(250, taxableBase * 0.008);
 
       setFormData((prevData) => ({
@@ -83,7 +75,8 @@ export default function CreateCustom({ onCustomCreated }: CreateCustomProps) {
         if (
           typeof value === "number" &&
           key !== "optionalElectricalSecurity" &&
-          key !== "optionalSenasaFee"
+          key !== "optionalSenasaFee" &&
+          key !== "total"
         ) {
           return sum + value;
         }
@@ -96,8 +89,34 @@ export default function CreateCustom({ onCustomCreated }: CreateCustomProps) {
       (includeElectricalSecurity ? formData.optionalElectricalSecurity : 0) +
       (includeSenasaFee ? formData.optionalSenasaFee : 0);
 
-    setTotal(calculatedTotal + optionalTotal);
-  }, [formData, includeElectricalSecurity, includeSenasaFee]);
+    const newTotal = calculatedTotal + optionalTotal;
+
+    if (newTotal !== formData.total) {
+      setFormData((prevData) => ({
+        ...prevData,
+        total: newTotal,
+      }));
+    }
+  }, [
+    includeElectricalSecurity,
+    includeSenasaFee,
+    formData.optionalElectricalSecurity,
+    formData.optionalSenasaFee,
+    formData.sediLegalizationFee,
+    formData.invoiceValueFOB,
+    formData.internationalFreightValue,
+    formData.taxableBase,
+    formData.importDutyRate,
+    formData.statisticsRate,
+    formData.ivaRate,
+    formData.additionalIvaRate,
+    formData.incomeTaxRate,
+    formData.grossIncomeRate,
+    formData.simFee,
+    formData.cifValue,
+    formData.minimumCustomsDispatchCost,
+    formData.customsOperationalCharges,
+  ]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -120,7 +139,28 @@ export default function CreateCustom({ onCustomCreated }: CreateCustomProps) {
               {key.charAt(0).toUpperCase() +
                 key.slice(1).replace(/([A-Z])/g, " $1")}
             </label>
-            <Input type="number" name={key} value={value} disabled />
+            <Input
+              type="number"
+              name={key}
+              value={value}
+              disabled={
+                key !== "invoiceValueFOB" &&
+                key !== "internationalFreightValue" &&
+                key !== "importDutyRate"
+              }
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                if (
+                  key === "invoiceValueFOB" ||
+                  key === "internationalFreightValue" ||
+                  key === "importDutyRate"
+                ) {
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    [key]: Number.parseFloat(e.target.value) || 0,
+                  }));
+                }
+              }}
+            />
           </div>
         ))}
       </div>
@@ -130,7 +170,9 @@ export default function CreateCustom({ onCustomCreated }: CreateCustomProps) {
           type="checkbox"
           id="electricalSecurity"
           checked={includeElectricalSecurity}
-          onChange={(e) => setIncludeElectricalSecurity(e.target.checked)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setIncludeElectricalSecurity(e.target.checked)
+          }
         />
         <label htmlFor="electricalSecurity">
           Include Electrical Security (150)
@@ -142,21 +184,25 @@ export default function CreateCustom({ onCustomCreated }: CreateCustomProps) {
           type="checkbox"
           id="senasaFee"
           checked={includeSenasaFee}
-          onChange={(e) => setIncludeSenasaFee(e.target.checked)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setIncludeSenasaFee(e.target.checked)
+          }
         />
         <label htmlFor="senasaFee">Include Senasa Fee (50)</label>
       </div>
 
-      <div className="text-xl font-bold mt-4">Total: {total.toFixed(2)}</div>
+      <div className="text-xl font-bold mt-4">
+        Total: ${formData.total.toFixed(2)}
+      </div>
 
       <div className="flex justify-end gap-2">
         <DialogClose asChild>
-          <Button type="button" variant="secondary" className="text-sm">
+          <Button type="button" variant="secondary">
             Cancelar
           </Button>
         </DialogClose>
         <DialogClose asChild>
-          <Button type="submit" className="text-sm bg-primary text-white">
+          <Button type="submit" className="bg-primary text-white">
             Crear Gasto de Aduana
           </Button>
         </DialogClose>

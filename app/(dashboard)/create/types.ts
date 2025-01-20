@@ -23,6 +23,7 @@ export interface Budget {
   totalWeight: number;
   unit: string;
   incoterm: string;
+  custom: Custom;
 }
 
 export interface Transport {
@@ -92,6 +93,7 @@ export interface Custom {
   customsOperationalCharges: number; // USD 210
   optionalElectricalSecurity: number; //  USD 150
   optionalSenasaFee: number; // USD 50
+  total: number;
 }
 
 /*** ENTREGA ***/
