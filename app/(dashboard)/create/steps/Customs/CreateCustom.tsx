@@ -20,7 +20,6 @@ export default function CreateCustom({ onCustomCreated }: CreateCustomProps) {
     incomeTaxRate: 0,
     grossIncomeRate: 0,
     simFee: 10,
-    cifValue: 0,
     minimumCustomsDispatchCost: 250,
     customsOperationalCharges: 210,
     optionalElectricalSecurity: 150,
@@ -39,8 +38,9 @@ export default function CreateCustom({ onCustomCreated }: CreateCustomProps) {
         formData.internationalFreightValue +
         (formData.invoiceValueFOB + formData.internationalFreightValue) * 0.01;
 
+      const importDuty = taxableBase * formData.importDutyRate;
       const statisticsRate = taxableBase * 0.03;
-      const ivaBase = formData.importDutyRate + statisticsRate;
+      const ivaBase = importDuty + statisticsRate;
       const ivaRate = ivaBase * 0.21;
       const additionalIvaRate = ivaBase * 0.105;
       const incomeTaxRate = taxableBase * 0.06;
@@ -94,26 +94,15 @@ export default function CreateCustom({ onCustomCreated }: CreateCustomProps) {
         total: newTotal,
       }));
     }
-  }, [
-    includeElectricalSecurity,
-    includeSenasaFee,
-    formData.optionalElectricalSecurity,
-    formData.optionalSenasaFee,
-    formData.sediLegalizationFee,
-    formData.invoiceValueFOB,
-    formData.internationalFreightValue,
-    formData.taxableBase,
-    formData.importDutyRate,
-    formData.statisticsRate,
-    formData.ivaRate,
-    formData.additionalIvaRate,
-    formData.incomeTaxRate,
-    formData.grossIncomeRate,
-    formData.simFee,
-    formData.cifValue,
-    formData.minimumCustomsDispatchCost,
-    formData.customsOperationalCharges,
-  ]);
+  }, [includeElectricalSecurity, includeSenasaFee, formData]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: Number(value),
+    }));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -127,68 +116,216 @@ export default function CreateCustom({ onCustomCreated }: CreateCustomProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="grid grid-cols-3 gap-4">
+        <div>
+          <label
+            htmlFor="invoiceValueFOB"
+            className="block text-sm font-semibold text-gray-700"
+          >
+            FOB (Valor de la INVOICE)
+          </label>
+          <Input
+            type="number"
+            name="invoiceValueFOB"
+            value={formData.invoiceValueFOB}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="internationalFreightValue"
+            className="block text-sm font-semibold text-gray-700"
+          >
+            Flete internacional
+          </label>
+          <Input
+            type="number"
+            name="internationalFreightValue"
+            value={formData.internationalFreightValue}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="importDutyRate"
+            className="block text-sm font-semibold text-gray-700"
+          >
+            Tasa de Derechos de Importación (%)
+          </label>
+          <Input
+            type="number"
+            name="importDutyRate"
+            value={formData.importDutyRate}
+            onChange={handleInputChange}
+          />
+        </div>
+      </div>
       <div className="grid grid-cols-2 gap-4">
-        {Object.entries(formData).map(([key, value]) => (
-          <div key={key}>
-            <label
-              htmlFor={key}
-              className="block text-sm font-semibold text-gray-700"
-            >
-              {key.charAt(0).toUpperCase() +
-                key.slice(1).replace(/([A-Z])/g, " $1")}
-            </label>
-            <Input
-              type="number"
-              name={key}
-              value={value}
-              disabled={
-                key !== "invoiceValueFOB" &&
-                key !== "internationalFreightValue" &&
-                key !== "importDutyRate"
-              }
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                if (
-                  key === "invoiceValueFOB" ||
-                  key === "internationalFreightValue" ||
-                  key === "importDutyRate"
-                ) {
-                  setFormData((prevData) => ({
-                    ...prevData,
-                    [key]: Number.parseFloat(e.target.value) || 0,
-                  }));
-                }
-              }}
-            />
-          </div>
-        ))}
+        <div>
+          <label
+            htmlFor="sediLegalizationFee"
+            className="block text-sm font-semibold text-gray-700"
+          >
+            Oficialización SEDI
+          </label>
+          <Input
+            type="number"
+            name="sediLegalizationFee"
+            value={formData.sediLegalizationFee}
+            disabled
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="taxableBase"
+            className="block text-sm font-semibold text-gray-700"
+          >
+            Base Imponible
+          </label>
+          <Input
+            type="number"
+            name="taxableBase"
+            value={formData.taxableBase}
+            disabled
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="statisticsRate"
+            className="block text-sm font-semibold text-gray-700"
+          >
+            Estadística
+          </label>
+          <Input
+            type="number"
+            name="statisticsRate"
+            value={formData.statisticsRate}
+            disabled
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="ivaRate"
+            className="block text-sm font-semibold text-gray-700"
+          >
+            IVA
+          </label>
+          <Input
+            type="number"
+            name="ivaRate"
+            value={formData.ivaRate}
+            disabled
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="additionalIvaRate"
+            className="block text-sm font-semibold text-gray-700"
+          >
+            IVA Adicional
+          </label>
+          <Input
+            type="number"
+            name="additionalIvaRate"
+            value={formData.additionalIvaRate}
+            disabled
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="incomeTaxRate"
+            className="block text-sm font-semibold text-gray-700"
+          >
+            Ganancias
+          </label>
+          <Input
+            type="number"
+            name="incomeTaxRate"
+            value={formData.incomeTaxRate}
+            disabled
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="grossIncomeRate"
+            className="block text-sm font-semibold text-gray-700"
+          >
+            Ingresos Brutos
+          </label>
+          <Input
+            type="number"
+            name="grossIncomeRate"
+            value={formData.grossIncomeRate}
+            disabled
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="simFee"
+            className="block text-sm font-semibold text-gray-700"
+          >
+            Arancel SIM
+          </label>
+          <Input type="number" name="simFee" value={formData.simFee} disabled />
+        </div>
+        <div>
+          <label
+            htmlFor="minimumCustomsDispatchCost"
+            className="block text-sm font-semibold text-gray-700"
+          >
+            Gastos despacho aduanero mínimo
+          </label>
+          <Input
+            type="number"
+            name="minimumCustomsDispatchCost"
+            value={formData.minimumCustomsDispatchCost}
+            disabled
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="customsOperationalCharges"
+            className="block text-sm font-semibold text-gray-700"
+          >
+            Gastos operativos
+          </label>
+          <Input
+            type="number"
+            name="customsOperationalCharges"
+            value={formData.customsOperationalCharges}
+            disabled
+          />
+        </div>
       </div>
+      <div className="grid grid-cols-2">
+        <div className="flex items-center space-x-2">
+          <input
+            type="checkbox"
+            id="electricalSecurity"
+            checked={includeElectricalSecurity}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setIncludeElectricalSecurity(e.target.checked)
+            }
+          />
+          <label htmlFor="electricalSecurity" className="text-sm font-[600]">
+            Incluir Seguridad Eléctrica (${formData.optionalElectricalSecurity})
+          </label>
+        </div>
 
-      <div className="flex items-center space-x-2">
-        <input
-          type="checkbox"
-          id="electricalSecurity"
-          checked={includeElectricalSecurity}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setIncludeElectricalSecurity(e.target.checked)
-          }
-        />
-        <label htmlFor="electricalSecurity">
-          Include Electrical Security (150)
-        </label>
+        <div className="flex items-center space-x-2">
+          <input
+            type="checkbox"
+            id="senasaFee"
+            checked={includeSenasaFee}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setIncludeSenasaFee(e.target.checked)
+            }
+          />
+          <label htmlFor="senasaFee" className="text-sm font-[600]">
+            Incluir SENASA (${formData.optionalSenasaFee})
+          </label>
+        </div>
       </div>
-
-      <div className="flex items-center space-x-2">
-        <input
-          type="checkbox"
-          id="senasaFee"
-          checked={includeSenasaFee}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setIncludeSenasaFee(e.target.checked)
-          }
-        />
-        <label htmlFor="senasaFee">Include Senasa Fee (50)</label>
-      </div>
-
       <div className="text-xl font-bold mt-4">
         Total: ${formData.total.toFixed(2)}
       </div>

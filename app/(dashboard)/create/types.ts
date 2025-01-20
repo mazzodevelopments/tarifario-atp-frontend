@@ -85,7 +85,7 @@ export interface Custom {
   // CALCULO DE BASE IMPONIBLE
   invoiceValueFOB: number; //
   internationalFreightValue: number; // VALOR DEL PASO ANTERIOR
-  taxableBase: number; // BASE IMPONIBLE --> FOB + Flete Internacional + (FOB x 0.01)
+  taxableBase: number; // BASE IMPONIBLE --> FOB + Flete Internacional + (FOB x 0.01) === CIF
   // IMPUESTOS
   importDutyRate: number; // DERECHOS DE IMPORTACIÓN (Varía según la mercaderia y el arancel)
   statisticsRate: number; // ESTADISTICAS = BASE IMPONIBLE x 0.03
@@ -95,7 +95,6 @@ export interface Custom {
   grossIncomeRate: number; // INGRESOS BRUTOS = BASE IMPONIBLE x 0.025
   simFee: number; // USD 10
   // OTROS GASTOS
-  cifValue: number; // CIF value (INVOICE + INTERNATIONAL FREIGHT + INSURANCE)
   minimumCustomsDispatchCost: number; // PARA GASTOS DESPACHOS ADUANEROS SE USA EL MAX DE HONORARIOS MINIMOS (250 USD) O EL 0.8% DEL VALOR DEL CIF
   customsOperationalCharges: number; // USD 210
   optionalElectricalSecurity: number; //  USD 150

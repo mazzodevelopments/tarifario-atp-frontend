@@ -446,13 +446,9 @@ export default function CreateBudget({
             >
               Precio Total Transporte
             </label>
-            <Input
-              type="number"
-              name="transportTotal"
-              value={formData.transport.total}
-              onChange={handleChange}
-              disabled
-            />
+            <span className="font-[600] text-xl">
+              ${formData.transport.total}
+            </span>
           </div>
         )}
 
@@ -464,13 +460,7 @@ export default function CreateBudget({
             >
               Precio Total Gastos de Aduana
             </label>
-            <Input
-              type="number"
-              name="customTotal"
-              value={formData.custom.total}
-              onChange={handleChange}
-              disabled
-            />
+            <span className="font-[600] text-xl">${formData.custom.total}</span>
           </div>
         )}
       </div>
@@ -532,7 +522,7 @@ export default function CreateBudget({
       </div>
 
       <Dialog open={isCustomModalOpen} onOpenChange={setIsCustomModalOpen}>
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="max-w-4xl">
           <DialogHeader>
             <DialogTitle className="text-2xl">
               Agregar Gasto de Aduana
@@ -554,7 +544,7 @@ export default function CreateBudget({
         open={isTransportModalOpen}
         onOpenChange={setIsTransportModalOpen}
       >
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="max-w-4xl">
           <DialogHeader>
             <DialogTitle className="text-2xl">Agregar Transporte</DialogTitle>
           </DialogHeader>
