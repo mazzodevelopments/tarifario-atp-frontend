@@ -69,10 +69,9 @@ export default function BudgetList({
               <TableHead>Proveedor</TableHead>
               <TableHead>Origen</TableHead>
               <TableHead>Destino</TableHead>
-              <TableHead>Tiempo de Entrega</TableHead>
-              <TableHead>Precio Unitario</TableHead>
-              <TableHead>Precio Total</TableHead>
+              <TableHead>T. Entrega</TableHead>
               <TableHead>Incoterm</TableHead>
+              <TableHead>Precio Total</TableHead>
               <TableHead>Transporte</TableHead>
               <TableHead>Aduana</TableHead>
               <TableHead>Total</TableHead>
@@ -106,10 +105,9 @@ export default function BudgetList({
                   <TableCell>{budget.supplier}</TableCell>
                   <TableCell>{budget.origin}</TableCell>
                   <TableCell>{budget.destination}</TableCell>
-                  <TableCell>{budget.deliveryTime}</TableCell>
-                  <TableCell>${budget.unitPrice}</TableCell>
-                  <TableCell>${budget.totalPrice}</TableCell>
+                  <TableCell>{budget.deliveryTime} días</TableCell>
                   <TableCell>{budget.incoterm}</TableCell>
+                  <TableCell>${budget.totalPrice}</TableCell>
                   <TableCell>
                     {budget.transport?.total
                       ? `$${budget.transport.total.toFixed(2)}`
