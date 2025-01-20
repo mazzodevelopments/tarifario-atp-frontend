@@ -117,7 +117,7 @@ export default function CreateCustom({ onCustomCreated }: CreateCustomProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    e.stopPropagation(); // Prevent event from bubbling up
+    e.stopPropagation();
     const newCustom: Custom = {
       id: Math.random().toString(36).slice(2, 9),
       ...formData,

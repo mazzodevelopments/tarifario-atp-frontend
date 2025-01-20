@@ -192,16 +192,6 @@ export default function CreateBudget({
     return CURRENCIES;
   };
 
-  const handleTransportCreated = (
-    transportData: PortBondedWarehouse | AirportFreightCourier,
-  ) => {
-    setFormData((prev) => ({
-      ...prev,
-      transport: transportData,
-    }));
-    setIsTransportModalOpen(false);
-  };
-
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
@@ -492,7 +482,17 @@ export default function CreateBudget({
           <DialogHeader>
             <DialogTitle className="text-2xl">Agregar Transporte</DialogTitle>
           </DialogHeader>
-          <CreateTransport onTransportCreated={handleTransportCreated} />
+          <CreateTransport
+            onTransportCreated={(
+              transportData: PortBondedWarehouse | AirportFreightCourier,
+            ) => {
+              setFormData((prev) => ({
+                ...prev,
+                transport: transportData,
+              }));
+              setIsTransportModalOpen(false);
+            }}
+          />
         </DialogContent>
       </Dialog>
     </form>

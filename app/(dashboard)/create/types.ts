@@ -38,6 +38,7 @@ export interface Transport {
 
 /*** DESTINO – MARÍTIMO -TERRESTRE ***/
 export interface AirportFreightCourier {
+  id: string;
   edcadassaStayCostPerDay: number; // ESTADÍA EN EDCADASSA SON USD 70 X DÍA
   edcadassaStayDuration: number;
   internationalFreightCost: number;
@@ -50,6 +51,7 @@ export interface AirportFreightCourier {
 /*** DESTINO – MARÍTIMO -TERRESTRE ***/
 // PUERTO
 export interface PortBondedWarehouse {
+  id: string;
   transferToCustomsWarehouse: number;
   deconsolidation: number;
   movement: number;

@@ -66,6 +66,7 @@ export default function BudgetList({
               <TableHead>Peso Unitario</TableHead>
               <TableHead>Tiempo de Entrega</TableHead>
               <TableHead>Incoterm</TableHead>
+              <TableHead>Transporte</TableHead>
               <TableHead>Aduana</TableHead>
               <TableHead></TableHead>
             </TableRow>
@@ -101,7 +102,8 @@ export default function BudgetList({
                   <TableCell>{budget.unitWeight}</TableCell>
                   <TableCell>{budget.deliveryTime}</TableCell>
                   <TableCell>{budget.incoterm}</TableCell>
-                  <TableCell>{budget.custom.total}</TableCell>
+                  <TableCell>${budget.transport?.total}</TableCell>
+                  <TableCell>${budget.custom?.total}</TableCell>
                   <TableCell>
                     <button
                       onClick={(e) => {
