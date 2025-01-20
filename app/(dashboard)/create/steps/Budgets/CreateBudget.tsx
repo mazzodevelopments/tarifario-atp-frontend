@@ -447,7 +447,7 @@ export default function CreateBudget({
               Precio Total Transporte
             </label>
             <span className="font-[600] text-xl">
-              ${formData.transport.total}
+              ${formData.transport.total.toFixed(2)}
             </span>
           </div>
         )}
@@ -460,7 +460,9 @@ export default function CreateBudget({
             >
               Precio Total Gastos de Aduana
             </label>
-            <span className="font-[600] text-xl">${formData.custom.total}</span>
+            <span className="font-[600] text-xl">
+              ${formData.custom.total.toFixed(2)}
+            </span>
           </div>
         )}
       </div>
