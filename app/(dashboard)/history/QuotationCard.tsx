@@ -13,13 +13,13 @@ const QuotationCard: React.FC<Cotizacion> = ({
   incoterm,
 }) => {
   return (
-    <div className="bg-white shadow-md rounded-[12px] overflow-hidden w-full">
-      <div className="bg-gradient-to-br from-primary/80 to-primary px-6 py-4">
-        <h2 className="text-2xl font-bold text-white truncate">
+    <div className="bg-white shadow-sm border border-neutral-200 rounded-[18px] overflow-hidden w-full">
+      <div className="bg-gradient-to-br p-6">
+        <h2 className="text-2xl font-[900] text-black truncate">
           {nombreCotizacion}
         </h2>
       </div>
-      <div className="p-[20px] space-y-4">
+      <div className="px-6 space-y-4">
         <div className="flex items-center space-x-3">
           <Briefcase className="text-gray-400 flex-shrink-0" size={20} />
           <div className="min-w-0 flex-1">
