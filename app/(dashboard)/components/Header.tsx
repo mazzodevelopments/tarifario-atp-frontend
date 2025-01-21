@@ -17,19 +17,16 @@ export default function Header({
   className = "",
   searchInput,
 }: HeaderProps) {
-  const baseClasses = "flex justify-between items-center h-auto mb-4";
+  const baseClasses = "flex justify-between items-center h-full px-3 mb-4";
   const combinedClasses = `${baseClasses} ${className}`.trim();
 
   return (
-    <div className="w-full h-auto rounded-[18px] mb-2 flex-shrink-0">
+    <div className="w-full h-20 flex-shrink-0 border-b border-neutral-200">
       <div className={combinedClasses}>
-        <div className="flex flex-col justify-center items-start">
-          <h2 className="flex items-center text-4xl leading-[1] mb-2 p-0 font-[800] text-black">
+        <div className="flex flex-col justify-center items-center">
+          <h2 className="flex items-center text-xl leading-[1] p-0 font-[800] text-black">
             {title}
           </h2>
-          <p className="text-md leading-[1] ml-1 text-black opacity-90">
-            {description}
-          </p>
         </div>
         {searchInput && (
           <div className="flex items-center gap-2 h-14 hover:cursor-pointer">

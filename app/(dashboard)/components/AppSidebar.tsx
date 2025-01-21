@@ -57,9 +57,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { state } = useSidebar();
 
   return (
-    <Sidebar collapsible="icon" {...props} className="border-sky-50 bg-sky-50">
-      <SidebarHeader className="pt-6 ">
-        <SidebarMenu>
+    <Sidebar collapsible="icon" {...props} className="border-neutral-200">
+      <SidebarHeader className="h-20 mb-6 justify-center items-center">
+        <SidebarMenu className="">
           <SidebarMenuItem className="flex flex-row items-center ">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -67,18 +67,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   size="lg"
                   className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground pl-1"
                 >
-                  <div className="flex aspect-square size-8 p-1 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
                     <Image
                       src="/logo.png"
                       width={700}
                       height={700}
                       alt="Picture of the author"
-                      className="saturate-0"
                     />
                   </div>
-                  <div className="flex flex-col gap-0.5 leading-none">
-                    <span className="font-semibold whitespace-nowrap">
-                      ATP Solutions
+                  <div className="flex flex-col gap-0.5 mt-1 leading-none text-gray-800">
+                    <span className="font-[600] whitespace-nowrap text-[1.1em]">
+                      <span className="font-[800]">ATP</span> Solutions
                     </span>
                   </div>
                   <ChevronsUpDown className="ml-auto" />
@@ -100,28 +99,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarGroup className="pt-0">
           <SidebarGroupContent>
             <SidebarMenu>
-              <SidebarMenuItem key={"create"} className="flex mb-4">
-                <Link
-                  className="justify-center items-center w-full flex px-1 py-2 rounded-lg border-[0.5px] border-[#ebebebcc] bg-white overflow-hidden"
-                  href="/create"
-                >
-                  {state === "collapsed" ? (
-                    <Plus className="h-4 w-4" />
-                  ) : (
-                    <span className="font-[600] whitespace-nowrap">
-                      Nueva cotización
-                    </span>
-                  )}
-                </Link>
-              </SidebarMenuItem>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.id}>
                   <SidebarMenuButton
                     asChild
                     isActive={pathname === `/${item.id}`}
+                    className="text-gray-500 text-[1.05em] font-[500]"
                   >
                     <Link href={`/${item.id}`}>
-                      <item.icon className="mr-2" />
+                      <item.icon strokeWidth={2.5} className="mr-1" />
                       <span>{item.label}</span>
                     </Link>
                   </SidebarMenuButton>

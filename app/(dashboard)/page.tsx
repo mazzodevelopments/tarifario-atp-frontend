@@ -5,6 +5,20 @@ import Image from "next/image";
 import defaultProfilePic from "@/public/default-profile-pic.png";
 import Header from "./components/Header";
 import Button from "@/components/Button";
+import {
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ChevronDown, LogOut, Settings } from "lucide-react";
+import Link from "next/link";
 
 export default function Dashboard() {
   const cotizaciones = [
@@ -69,13 +83,76 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="flex justify-start w-full h-full flex-col bg-white px-[20px]">
-      <Header
-        title="General"
-        description="Vista general del Tarifario"
-        searchInput={true}
-      />
-      <div className="flex flex-row gap-3 items-start w-full h-full">
+    <div className="flex justify-start w-full h-full flex-col bg-white">
+      <div className="w-full h-20 flex-shrink-0 border-b border-neutral-200">
+        <div className="flex justify-between items-center h-full px-3 mb-4">
+          <div className="flex flex-col justify-center items-start w-[12vw]">
+            <h2 className="flex items-center text-xl leading-[1] p-0 font-[800] text-black">
+              General
+            </h2>
+          </div>
+          <div className="flex items-center gap-2 h-14 hover:cursor-pointer">
+            <div className="relative w-[22vw]">
+              <Search
+                size={20}
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black"
+              />
+              <input
+                className="w-full h-[2.25vw] rounded-full pl-10 pr-4 bg-slate-50  text-sm focus:outline-none placeholder-secondary"
+                placeholder="Buscar cotización"
+              />
+            </div>
+          </div>
+          <div className="flex items-center gap-2 h-14 hover:cursor-pointer">
+            <div className="relative w-[12vw]">
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <SidebarMenuButton
+                        size="lg"
+                        className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                      >
+                        <Image
+                          src="/default-profile-pic.png"
+                          width={700}
+                          height={700}
+                          alt="Picture of the author"
+                          className="w-8 h-8 rounded-full"
+                        />
+                        <div className="flex flex-col gap-0.5 leading-none">
+                          <span className="font-semibold">Usuario</span>
+                          <span className="text-xs text-muted-foreground">
+                            usuario@ejemplo.com
+                          </span>
+                        </div>
+                        <ChevronDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
+                      </SidebarMenuButton>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent
+                      className="w-[--radix-dropdown-menu-trigger-width]"
+                      align="start"
+                    >
+                      <DropdownMenuItem className="cursor-pointer" asChild>
+                        <Link href="/settings" className="flex items-center">
+                          <Settings className="mr-2 h-4 w-4" />
+                          <span>Configuración</span>
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem className="cursor-pointer">
+                        <LogOut className="mr-2 h-4 w-4" />
+                        <span>Cerrar sesión</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-row gap-3 items-start w-full h-full p-3">
         <div className="w-1/2 h-full bg-white border-[0.5px] border-[#ebebebcc] shadow-sm rounded-[18px] relative">
           <div className="flex flex-col p-4 relative">
             <div className="flex items-center justify-start mb-3">

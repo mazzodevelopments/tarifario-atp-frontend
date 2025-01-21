@@ -19,12 +19,10 @@ export default function AuthLayout({
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <div className="flex flex-1 flex-col gap-4 py-6 pr-5 pl-3 overflow-hidden bg-sky-50">
-          <div className="w-full h-full bg-white rounded-2xl overflow-hidden py-4 border border-neutral-100 shadow-sm">
-            <AnimatePresence mode="wait">
-              <PageTransition>{children}</PageTransition>
-            </AnimatePresence>
-          </div>
+        <div className="flex flex-1 flex-col gap-4 overflow-hidden bg-white">
+          <AnimatePresence mode="wait">
+            <PageTransition>{children}</PageTransition>
+          </AnimatePresence>
         </div>
       </SidebarInset>
     </SidebarProvider>
