@@ -89,12 +89,14 @@ export default function QuotationDetails({
           fetchItems={fetchClients}
           addItem={addClient}
           onSelect={handleDropdownSelect("client")}
+          value={formData.client}
           label="Cliente"
         />
         <Dropdown
           fetchItems={fetchBuyers}
           addItem={addBuyer}
           onSelect={handleDropdownSelect("buyer")}
+          value={formData.buyer}
           label="Comprador"
         />
         <Input

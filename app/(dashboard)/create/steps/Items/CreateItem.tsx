@@ -78,6 +78,7 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
         required
       />
       <Dropdown
+        value={formData.brand}
         fetchItems={fetchBrands}
         addItem={addBrand}
         onSelect={handleSelect("brand")}
@@ -96,6 +97,7 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
           required
         />
         <Dropdown
+          value={formData.unit}
           fetchItems={fetchUnits}
           onSelect={handleSelect("unit")}
           label="Unidad de Medida"

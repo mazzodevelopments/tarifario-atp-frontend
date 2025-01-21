@@ -43,7 +43,7 @@ export default function CreateBudget({
     supplier: "",
     deliveryTime: 0,
     unitPrice: 0,
-    currency: 0,
+    currency: "",
     margin: 0,
     unitWeight: 0,
     totalWeight: 0,
@@ -246,6 +246,7 @@ export default function CreateBudget({
         required
       />
       <Dropdown
+        value={formData.item}
         fetchItems={fetchItems}
         onSelect={handleSelect("item")}
         label="Item"
@@ -253,12 +254,14 @@ export default function CreateBudget({
       />
       <div className="grid grid-cols-3 gap-4">
         <Dropdown
+          value={formData.origin}
           fetchItems={fetchLocations}
           onSelect={handleSelect("origin")}
           label="Origen"
           required
         />
         <Dropdown
+          value={formData.destination}
           fetchItems={fetchLocations}
           onSelect={handleSelect("destination")}
           label="Destino"
@@ -276,6 +279,7 @@ export default function CreateBudget({
         />
       </div>
       <Dropdown
+        value={formData.supplier}
         addItem={addSupplier}
         fetchItems={fetchSuppliers}
         onSelect={handleSelect("supplier")}
@@ -295,6 +299,7 @@ export default function CreateBudget({
           step="10"
         />
         <Dropdown
+          value={formData.currency}
           fetchItems={fetchCurrencies}
           onSelect={handleSelect("currency")}
           label="Moneda"
@@ -331,6 +336,7 @@ export default function CreateBudget({
           step="10"
         />
         <Dropdown
+          value={formData.unit}
           fetchItems={fetchUnits}
           onSelect={handleSelect("unit")}
           label="Unidad"
@@ -346,6 +352,7 @@ export default function CreateBudget({
         />
       </div>
       <Dropdown
+        value={formData.incoterm}
         fetchItems={fetchIncoterms}
         onSelect={handleSelect("incoterm")}
         label="Incoterm"

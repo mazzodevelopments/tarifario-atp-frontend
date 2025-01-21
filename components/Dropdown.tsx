@@ -11,6 +11,7 @@ interface DropdownProps {
   fetchItems: () => Promise<DropdownItem[]>;
   addItem?: (name: string) => Promise<DropdownItem>;
   onSelect: (item: DropdownItem) => void;
+  value?: string;
   label?: string;
   required?: boolean;
   error?: string;
@@ -22,13 +23,14 @@ export default function Dropdown({
   addItem,
   onSelect,
   label,
+  value,
   required = false,
   error,
   disabled,
 }: DropdownProps) {
   const [items, setItems] = useState<DropdownItem[]>([]);
   const [filteredItems, setFilteredItems] = useState<DropdownItem[]>([]);
-  const [value, setValue] = useState("");
+  const [inputValue, setInputValue] = useState(value || "");
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newItemName, setNewItemName] = useState("");
@@ -58,18 +60,18 @@ export default function Dropdown({
   useEffect(() => {
     setFilteredItems(
       items.filter((item) =>
-        item.name.toLowerCase().includes(value.toLowerCase()),
+        item.name.toLowerCase().includes(inputValue.toLowerCase()),
       ),
     );
   }, [items, value]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
+    setInputValue(e.target.value);
     setIsOpen(true);
   };
 
   const handleSelect = (item: DropdownItem) => {
-    setValue(item.name);
+    setInputValue(item.name);
     setIsOpen(false);
     onSelect(item);
   };

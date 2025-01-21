@@ -28,7 +28,7 @@ export interface Budget {
   supplier: string;
   deliveryTime: number;
   unitPrice: number;
-  currency: number;
+  currency: string;
   margin: number;
   totalPrice: number;
   unitWeight: number;
