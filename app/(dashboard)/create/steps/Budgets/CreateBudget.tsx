@@ -237,229 +237,121 @@ export default function CreateBudget({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label
-          htmlFor="margin"
-          className="block text-sm font-semibold text-gray-700"
-        >
-          Fecha
-        </label>
-        <Input
-          type="date"
-          name="date"
-          value={formData.date}
-          onChange={handleChange}
-          required
-        />
-      </div>
-
-      <div>
-        <label
-          htmlFor="item"
-          className="block text-sm font-semibold text-gray-700"
-        >
-          Item
-        </label>
-        <Dropdown
-          fetchItems={fetchItems}
-          onSelect={handleSelect("item")}
-          required
-        />
-      </div>
+      <Input
+        type="date"
+        name="date"
+        value={formData.date}
+        onChange={handleChange}
+        label="Fecha"
+        required
+      />
+      <Dropdown
+        fetchItems={fetchItems}
+        onSelect={handleSelect("item")}
+        label="Item"
+        required
+      />
       <div className="grid grid-cols-3 gap-4">
-        <div>
-          <label
-            htmlFor="origin"
-            className="block text-sm font-semibold text-gray-700"
-          >
-            Origen
-          </label>
-          <Dropdown
-            fetchItems={fetchLocations}
-            onSelect={handleSelect("origin")}
-            required
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="destination"
-            className="block text-sm font-semibold text-gray-700"
-          >
-            Destino
-          </label>
-          <Dropdown
-            fetchItems={fetchLocations}
-            onSelect={handleSelect("destination")}
-            required
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="deliveryTime"
-            className="block text-sm font-semibold text-gray-700"
-          >
-            Tiempo de Entrega (Días)
-          </label>
-          <Input
-            type="number"
-            name="deliveryTime"
-            value={formData.deliveryTime}
-            onChange={handleChange}
-            required
-            min="0"
-            step="1"
-          />
-        </div>
-      </div>
-
-      <div>
-        <label
-          htmlFor="supplier"
-          className="block text-sm font-semibold text-gray-700"
-        >
-          Proveedor
-        </label>
         <Dropdown
-          addItem={addSupplier}
-          fetchItems={fetchSuppliers}
-          onSelect={handleSelect("supplier")}
+          fetchItems={fetchLocations}
+          onSelect={handleSelect("origin")}
+          label="Origen"
           required
         />
+        <Dropdown
+          fetchItems={fetchLocations}
+          onSelect={handleSelect("destination")}
+          label="Destino"
+          required
+        />
+        <Input
+          type="number"
+          name="deliveryTime"
+          value={formData.deliveryTime}
+          onChange={handleChange}
+          label="Tiempo de Entrega (Días)"
+          required
+          min="0"
+          step="1"
+        />
       </div>
+      <Dropdown
+        addItem={addSupplier}
+        fetchItems={fetchSuppliers}
+        onSelect={handleSelect("supplier")}
+        label="Proovedor"
+        required
+      />
 
       <div className="grid grid-cols-4 gap-4">
-        <div>
-          <label
-            htmlFor="unitPrice"
-            className="block text-sm font-semibold text-gray-700"
-          >
-            Precio Unitario
-          </label>
-          <Input
-            type="number"
-            name="unitPrice"
-            value={formData.unitPrice}
-            onChange={handleChange}
-            required
-            min="0"
-            step="10"
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="currency"
-            className="block text-sm font-semibold text-gray-700"
-          >
-            Moneda
-          </label>
-          <Dropdown
-            fetchItems={fetchCurrencies}
-            onSelect={handleSelect("currency")}
-            required
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="margin"
-            className="block text-sm font-semibold text-gray-700"
-          >
-            Margen (%)
-          </label>
-          <Input
-            type="number"
-            name="margin"
-            value={formData.margin}
-            onChange={handleChange}
-            required
-            min="0"
-            step="10"
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="totalPrice"
-            className="block text-sm font-semibold text-gray-700"
-          >
-            Precio Total
-          </label>
-          <Input
-            type="number"
-            name="totalPrice"
-            value={formData.totalPrice.toFixed(2)}
-            disabled
-          />
-        </div>
+        <Input
+          type="number"
+          name="unitPrice"
+          value={formData.unitPrice}
+          onChange={handleChange}
+          label="Precio Unitario"
+          required
+          min="0"
+          step="10"
+        />
+        <Dropdown
+          fetchItems={fetchCurrencies}
+          onSelect={handleSelect("currency")}
+          label="Moneda"
+          required
+        />
+        <Input
+          type="number"
+          name="margin"
+          value={formData.margin}
+          onChange={handleChange}
+          label="Margen (%)"
+          required
+          min="0"
+          step="10"
+        />
+        <Input
+          type="number"
+          name="totalPrice"
+          value={formData.totalPrice.toFixed(2)}
+          label="Precio Total"
+          disabled
+        />
       </div>
 
       <div className="grid grid-cols-3 gap-4">
-        <div>
-          <label
-            htmlFor="unitWeight"
-            className="block text-sm font-semibold text-gray-700"
-          >
-            Peso Unitario
-          </label>
-          <Input
-            type="number"
-            name="unitWeight"
-            value={formData.unitWeight}
-            onChange={handleChange}
-            required
-            min="0"
-            step="10"
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="unit"
-            className="block text-sm font-semibold text-gray-700"
-          >
-            Unidad
-          </label>
-          <Dropdown
-            fetchItems={fetchUnits}
-            onSelect={handleSelect("unit")}
-            required
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="totalWeight"
-            className="block text-sm font-semibold text-gray-700"
-          >
-            Peso Total
-          </label>
-          <Input
-            type="number"
-            name="totalWeight"
-            value={formData.totalWeight}
-            onChange={handleChange}
-            disabled
-          />
-        </div>
-      </div>
-
-      <div>
-        <label
-          htmlFor="incoterm"
-          className="block text-sm font-semibold text-gray-700"
-        >
-          Incoterm
-        </label>
-        <Dropdown
-          fetchItems={fetchIncoterms}
-          onSelect={handleSelect("incoterm")}
+        <Input
+          type="number"
+          name="unitWeight"
+          value={formData.unitWeight}
+          onChange={handleChange}
+          label="Peso Unitario"
           required
-          disabled={isWithinArgentina}
+          min="0"
+          step="10"
+        />
+        <Dropdown
+          fetchItems={fetchUnits}
+          onSelect={handleSelect("unit")}
+          label="Unidad"
+          required
+        />
+        <Input
+          type="number"
+          name="totalWeight"
+          value={formData.totalWeight}
+          onChange={handleChange}
+          label="Peso Total"
+          disabled
         />
       </div>
+      <Dropdown
+        fetchItems={fetchIncoterms}
+        onSelect={handleSelect("incoterm")}
+        label="Incoterm"
+        required
+        disabled={isWithinArgentina}
+      />
 
       <div className="grid grid-cols-3 gap-4">
         {formData.transport?.total && (

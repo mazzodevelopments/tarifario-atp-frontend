@@ -117,185 +117,99 @@ export default function CreateCustom({ onCustomCreated }: CreateCustomProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-3 gap-4">
-        <div>
-          <label
-            htmlFor="invoiceValueFOB"
-            className="block text-sm font-semibold text-gray-700"
-          >
-            FOB (Valor de la INVOICE)
-          </label>
-          <Input
-            type="number"
-            name="invoiceValueFOB"
-            value={formData.invoiceValueFOB}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="internationalFreightValue"
-            className="block text-sm font-semibold text-gray-700"
-          >
-            Flete internacional
-          </label>
-          <Input
-            type="number"
-            name="internationalFreightValue"
-            value={formData.internationalFreightValue}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="importDutyRate"
-            className="block text-sm font-semibold text-gray-700"
-          >
-            Tasa de Derechos de Importación (%)
-          </label>
-          <Input
-            type="number"
-            name="importDutyRate"
-            value={formData.importDutyRate}
-            onChange={handleInputChange}
-          />
-        </div>
+        <Input
+          type="number"
+          name="invoiceValueFOB"
+          value={formData.invoiceValueFOB}
+          label=" FOB (Valor de la INVOICE)"
+          onChange={handleInputChange}
+        />
+        <Input
+          type="number"
+          name="internationalFreightValue"
+          value={formData.internationalFreightValue}
+          label="Flete internacional"
+          onChange={handleInputChange}
+        />
+        <Input
+          type="number"
+          name="importDutyRate"
+          value={formData.importDutyRate}
+          label="Tasa de Derechos de Importación (%)"
+          onChange={handleInputChange}
+        />
       </div>
       <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label
-            htmlFor="sediLegalizationFee"
-            className="block text-sm font-semibold text-gray-700"
-          >
-            Oficialización SEDI
-          </label>
-          <Input
-            type="number"
-            name="sediLegalizationFee"
-            value={formData.sediLegalizationFee}
-            disabled
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="taxableBase"
-            className="block text-sm font-semibold text-gray-700"
-          >
-            Base Imponible
-          </label>
-          <Input
-            type="number"
-            name="taxableBase"
-            value={formData.taxableBase}
-            disabled
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="statisticsRate"
-            className="block text-sm font-semibold text-gray-700"
-          >
-            Estadística
-          </label>
-          <Input
-            type="number"
-            name="statisticsRate"
-            value={formData.statisticsRate}
-            disabled
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="ivaRate"
-            className="block text-sm font-semibold text-gray-700"
-          >
-            IVA
-          </label>
-          <Input
-            type="number"
-            name="ivaRate"
-            value={formData.ivaRate}
-            disabled
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="additionalIvaRate"
-            className="block text-sm font-semibold text-gray-700"
-          >
-            IVA Adicional
-          </label>
-          <Input
-            type="number"
-            name="additionalIvaRate"
-            value={formData.additionalIvaRate}
-            disabled
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="incomeTaxRate"
-            className="block text-sm font-semibold text-gray-700"
-          >
-            Ganancias
-          </label>
-          <Input
-            type="number"
-            name="incomeTaxRate"
-            value={formData.incomeTaxRate}
-            disabled
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="grossIncomeRate"
-            className="block text-sm font-semibold text-gray-700"
-          >
-            Ingresos Brutos
-          </label>
-          <Input
-            type="number"
-            name="grossIncomeRate"
-            value={formData.grossIncomeRate}
-            disabled
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="simFee"
-            className="block text-sm font-semibold text-gray-700"
-          >
-            Arancel SIM
-          </label>
-          <Input type="number" name="simFee" value={formData.simFee} disabled />
-        </div>
-        <div>
-          <label
-            htmlFor="minimumCustomsDispatchCost"
-            className="block text-sm font-semibold text-gray-700"
-          >
-            Gastos despacho aduanero mínimo
-          </label>
-          <Input
-            type="number"
-            name="minimumCustomsDispatchCost"
-            value={formData.minimumCustomsDispatchCost}
-            disabled
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="customsOperationalCharges"
-            className="block text-sm font-semibold text-gray-700"
-          >
-            Gastos operativos
-          </label>
-          <Input
-            type="number"
-            name="customsOperationalCharges"
-            value={formData.customsOperationalCharges}
-            disabled
-          />
-        </div>
+        <Input
+          type="number"
+          name="sediLegalizationFee"
+          value={formData.sediLegalizationFee}
+          label="Oficialización SEDI"
+          disabled
+        />
+        <Input
+          type="number"
+          name="taxableBase"
+          value={formData.taxableBase}
+          label="Base Imponible"
+          disabled
+        />
+        <Input
+          type="number"
+          name="statisticsRate"
+          value={formData.statisticsRate}
+          label="Estadística"
+          disabled
+        />
+        <Input
+          type="number"
+          name="ivaRate"
+          value={formData.ivaRate}
+          label="IVA"
+          disabled
+        />
+        <Input
+          type="number"
+          name="additionalIvaRate"
+          value={formData.additionalIvaRate}
+          label="IVA Adicional"
+          disabled
+        />
+        <Input
+          type="number"
+          name="incomeTaxRate"
+          value={formData.incomeTaxRate}
+          label="Ganancias"
+          disabled
+        />
+        <Input
+          type="number"
+          name="grossIncomeRate"
+          value={formData.grossIncomeRate}
+          label="Ingresos Brutos"
+          disabled
+        />
+        <Input
+          type="number"
+          name="simFee"
+          value={formData.simFee}
+          disabled
+          label="Arancel SIM"
+        />
+        <Input
+          type="number"
+          name="minimumCustomsDispatchCost"
+          value={formData.minimumCustomsDispatchCost}
+          label="Gastos despacho aduanero mínimo"
+          disabled
+        />
+        <Input
+          type="number"
+          name="customsOperationalCharges"
+          value={formData.customsOperationalCharges}
+          label="Gastos operativos"
+          disabled
+        />
       </div>
       <div className="grid grid-cols-2">
         <div className="flex items-center space-x-2">

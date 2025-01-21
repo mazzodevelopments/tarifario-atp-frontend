@@ -32,7 +32,7 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value, type } = e.target;
     setFormData((prev) => ({
@@ -67,88 +67,51 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label
-          htmlFor="detail"
-          className="block text-sm font-[600] text-gray-700"
-        >
-          Detalle
-        </label>
-        <Input
-          type="text"
-          id="detail"
-          name="detail"
-          value={formData.detail}
-          onChange={handleChange}
-          required
-        />
-      </div>
-
-      <div>
-        <label
-          htmlFor="brand"
-          className="block text-sm font-[600] text-gray-700"
-        >
-          Marca
-        </label>
-        <Dropdown
-          fetchItems={fetchBrands}
-          addItem={addBrand}
-          onSelect={handleSelect("brand")}
-          required
-        />
-      </div>
-
+      <Input
+        type="text"
+        id="detail"
+        name="detail"
+        value={formData.detail}
+        onChange={handleChange}
+        placeholder="Detail"
+        label="Detalle"
+        required
+      />
+      <Dropdown
+        fetchItems={fetchBrands}
+        addItem={addBrand}
+        onSelect={handleSelect("brand")}
+        label="Marca"
+        required
+      />
       <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label
-            htmlFor="quantity"
-            className="block text-sm font-[600] text-gray-700"
-          >
-            Cantidad
-          </label>
-          <Input
-            type="number"
-            id="quantity"
-            name="quantity"
-            min="1"
-            value={formData.quantity}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="unit"
-            className="block text-sm font-[600] text-gray-700"
-          >
-            Unidad de Medida
-          </label>
-          <Dropdown
-            fetchItems={fetchUnits}
-            onSelect={handleSelect("unit")}
-            required
-          />
-        </div>
-      </div>
-
-      <div>
-        <label
-          htmlFor="partNumber"
-          className="block text-sm font-[600] text-gray-700"
-        >
-          Part Number (PN)
-        </label>
         <Input
-          type="text"
-          id="partNumber"
-          name="partNumber"
-          value={formData.partNumber}
+          type="number"
+          id="quantity"
+          name="quantity"
+          min="1"
+          value={formData.quantity}
           onChange={handleChange}
+          label="Cantidad"
+          required
+        />
+        <Dropdown
+          fetchItems={fetchUnits}
+          onSelect={handleSelect("unit")}
+          label="Unidad de Medida"
           required
         />
       </div>
+      <Input
+        type="text"
+        id="partNumber"
+        name="partNumber"
+        value={formData.partNumber}
+        onChange={handleChange}
+        placeholder="Part Number"
+        label="Part Number (PN)"
+        required
+      />
 
       <div className="flex justify-end gap-3 mt-6">
         <DialogClose asChild>
@@ -157,7 +120,7 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
           </Button>
         </DialogClose>
         <DialogClose asChild>
-          <Button type="submit" variant="primary" className="text-white">
+          <Button type="submit" className="bg-primary text-white">
             Agregar Item
           </Button>
         </DialogClose>
