@@ -12,7 +12,7 @@ const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const baseStyles = `
-    relative flex flex-row overflow-hidden px-3 py-2 rounded-[12px] font-[600] cursor-pointer
+    relative flex flex-row overflow-hidden px-3 text-sm py-2 rounded-[12px] font-[600] cursor-pointer
     transition-all duration-300 ease-out
     transform hover:enabled:scale-95 disabled:cursor-not-allowed disabled:opacity-50
   `;
@@ -39,7 +39,7 @@ const Button: React.FC<ButtonProps> = ({
       `}
       {...props}
     >
-      <span className="relative z-10 text-sm">{children}</span>
+      {children}
     </button>
   );
 };

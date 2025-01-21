@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown, LogOut, Settings } from "lucide-react";
 import Link from "next/link";
+import { QuotationSlider } from "./QuotationCarousel";
 
 export default function Dashboard() {
   const cotizaciones = [
@@ -160,57 +161,33 @@ export default function Dashboard() {
               Vista general de mis cotizaciones
             </p>
           </div>
-          <div
-            className="w-full h-full bg-white border border-neutral-200 shadow-sm
+          <div className="h-full gap-3 flex flex-col">
+            <div
+              className="w-full h-[65%] bg-white border border-neutral-200 shadow-sm
  rounded-[18px] relative"
-          >
-            <div className="flex flex-col p-4 relative">
-              <div className="flex items-center justify-start mb-3">
-                <h2 className="text-2xl font-[800] text-black">Overview</h2>
+            >
+              <div className="flex flex-col p-4 relative">
+                <div className="flex items-center justify-start mb-3">
+                  <h2 className="text-md font-[600] text-black">
+                    Cotización reciente
+                  </h2>
+                </div>
+                <div className="space-y-3"></div>
               </div>
-              <div className="space-y-3">
-                {cotizaciones.map((cotizacion) => (
-                  <div
-                    key={cotizacion.id}
-                    className="flex items-center bg-white border-[0.5px] border-[#ebebebcc] rounded-lg py-4 px-3 cursor-pointer hover:bg-gray-50"
-                  >
-                    <div className="flex-1">
-                      <div className="flex gap-3 flex-col">
-                        <h3 className="text-black font-[800]">
-                          {cotizacion.name}
-                        </h3>
-                        <div className="text-sm text-gray-500 flex items-center gap-2">
-                          <User size={16} className="text-gray-400" />
-                          {cotizacion.client}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-end gap-3 text-sm flex-col">
-                      <div className="flex items-center gap-2 text-gray-500">
-                        <Calendar size={16} className="text-gray-400" />
-                        {cotizacion.date.split("T")[0]}
-                      </div>
-                      <div className="flex items-center text-primary font-[800]">
-                        <DollarSign size={16} />
-                        {cotizacion.value}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="absolute bottom-4 right-4 w-auto flex justify-end gap-2 items-end h-auto">
-              <Button variant="secondary" className="px-3 py-2 text-sm">
-                Agregar cotización
-              </Button>
+              <div className="absolute bottom-4 right-4 w-auto flex justify-end gap-2 items-end h-auto">
+                <Button variant="secondary" className="px-3 py-2 text-sm">
+                  Ver más cotizaciones
+                </Button>
 
-              <Button
-                variant="primary"
-                className="px-3 py-2 bg-neutral-900 text-white text-sm"
-              >
-                Agregar cotización
-              </Button>
+                <Button
+                  variant="primary"
+                  className="px-3 py-2 bg-neutral-900 text-white text-sm"
+                >
+                  Abrir cotización
+                </Button>
+              </div>
             </div>
+            <QuotationSlider cotizaciones={cotizaciones} />
           </div>
         </div>
 
