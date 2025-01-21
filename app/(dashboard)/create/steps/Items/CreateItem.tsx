@@ -14,11 +14,15 @@ interface CreateItemProps {
 
 export default function CreateItem({ onItemCreated }: CreateItemProps) {
   const [formData, setFormData] = useState<Omit<Item, "id">>({
+    family: "",
+    subfamily: "",
     detail: "",
     brand: "",
     quantity: 0,
     unit: "",
     partNumber: "",
+    numbering: "",
+    stage: "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -55,7 +59,33 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
     ];
   };
 
+  const fetchFamilies = async (): Promise<DropdownItem[]> => {
+    // Simular la obtención de marcas desde un servicio
+    return [
+      { id: "1", name: "Familia A" },
+      { id: "2", name: "Familia B" },
+      { id: "3", name: "Familia C" },
+    ];
+  };
+
+  const fetchSubfamilies = async (): Promise<DropdownItem[]> => {
+    // Simular la obtención de marcas desde un servicio
+    return [
+      { id: "1", name: "Subfamilia A" },
+      { id: "2", name: "Subfamilia B" },
+      { id: "3", name: "Subfamilia C" },
+    ];
+  };
+
   const addBrand = async (name: string): Promise<DropdownItem> => {
+    // Simular la adición de una nueva marca
+    return { id: Math.random().toString(36).substr(2, 9), name };
+  };
+  const addFamily = async (name: string): Promise<DropdownItem> => {
+    // Simular la adición de una nueva marca
+    return { id: Math.random().toString(36).substr(2, 9), name };
+  };
+  const addSubfamily = async (name: string): Promise<DropdownItem> => {
     // Simular la adición de una nueva marca
     return { id: Math.random().toString(36).substr(2, 9), name };
   };
@@ -67,6 +97,24 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="grid grid-cols-2 gap-4">
+        <Dropdown
+          value={formData.family}
+          fetchItems={fetchFamilies}
+          addItem={addFamily}
+          onSelect={handleSelect("family")}
+          label="Familia"
+          required
+        />
+        <Dropdown
+          value={formData.subfamily}
+          fetchItems={fetchSubfamilies}
+          addItem={addSubfamily}
+          onSelect={handleSelect("subfamily")}
+          label="Subfamilia"
+          required
+        />
+      </div>
       <Input
         type="text"
         id="detail"
@@ -112,6 +160,26 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
         onChange={handleChange}
         placeholder="Part Number"
         label="Part Number (PN)"
+        required
+      />
+      <Input
+        type="text"
+        id="numbering"
+        name="numbering"
+        value={formData.numbering}
+        onChange={handleChange}
+        placeholder="Numeración"
+        label="Numeración"
+        required
+      />
+      <Input
+        type="text"
+        id="stage"
+        name="stage"
+        value={formData.stage}
+        onChange={handleChange}
+        placeholder="Estadio"
+        label="Estadio"
         required
       />
 
