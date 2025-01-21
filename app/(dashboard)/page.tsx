@@ -20,6 +20,7 @@ import {
 import { ChevronDown, LogOut, Settings } from "lucide-react";
 import Link from "next/link";
 import { QuotationSlider } from "./QuotationCarousel";
+import CurrentQuotationCard from "./CurrentQuotation";
 
 export default function Dashboard() {
   const cotizaciones = [
@@ -153,7 +154,7 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-      <div className="flex flex-row gap-3 items-start w-full h-full">
+      <div className="flex flex-row items-start w-full h-full">
         <div className="w-1/3 h-full flex flex-col border-r border-neutral-200 relative p-6">
           <div className="w-full flex flex-col pb-4">
             <h2 className="text-3xl font-[800]">Mis cotizaciones</h2>
@@ -162,40 +163,19 @@ export default function Dashboard() {
             </p>
           </div>
           <div className="h-full gap-3 flex flex-col">
-            <div
-              className="w-full h-[65%] bg-white border border-neutral-200 shadow-sm
- rounded-[18px] relative"
-            >
-              <div className="flex flex-col p-4 relative">
-                <div className="flex items-center justify-start mb-3">
-                  <h2 className="text-md font-[600] text-black">
-                    Cotización reciente
-                  </h2>
-                </div>
-                <div className="space-y-3"></div>
-              </div>
-              <div className="absolute bottom-4 right-4 w-auto flex justify-end gap-2 items-end h-auto">
-                <Button variant="secondary" className="px-3 py-2 text-sm">
-                  Ver más cotizaciones
-                </Button>
-
-                <Button
-                  variant="primary"
-                  className="px-3 py-2 bg-neutral-900 text-white text-sm"
-                >
-                  Abrir cotización
-                </Button>
-              </div>
-            </div>
+            <CurrentQuotationCard />
             <QuotationSlider cotizaciones={cotizaciones} />
           </div>
         </div>
 
-        <div
-          className="w-1/2 h-full bg-white bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-90 border border-gray-100
- rounded-[18px] relative"
-        >
-          <div className="flex flex-col p-4 relative">
+        <div className="w-2/3 h-full flex flex-col relative p-6">
+          <div className="w-full flex flex-col pb-4">
+            <h2 className="text-3xl font-[800]">Panel Admin / User</h2>
+            <p className="text-gray-500 ml-1">
+              Vista general de mis cotizaciones
+            </p>
+          </div>
+          <div className="flex flex-col p-4 relative bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full">
             <div className="flex items-center justify-start mb-3">
               <div className="w-7 h-7 mr-2 bg-red-700 rounded-[8px] flex justify-center items-center">
                 <Briefcase size={18} className="text-white" />
