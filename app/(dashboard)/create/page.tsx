@@ -7,8 +7,12 @@ import Button from "@/components/Button";
 import Header from "@/app/(dashboard)/components/Header";
 import QuotationDetails from "@/app/(dashboard)/create/steps/QuotationDetails";
 import ItemsList from "@/app/(dashboard)/create/steps/Items/ItemList";
-import { Budget, Item } from "@/app/(dashboard)/create/types";
 import BudgetList from "@/app/(dashboard)/create/steps/Budgets/BudgetList";
+import type {
+  Budget,
+  Item,
+  QuotationData,
+} from "@/app/(dashboard)/create/types";
 
 const steps = [
   { title: "Cargar Datos Cotización" },
@@ -28,12 +32,9 @@ export default function Create() {
   const [currentStep, setCurrentStep] = useState(0);
   const totalSteps = steps.length;
   // ESTADOS COTIZACIÓN
-  const [quotationData, setQuotationData] = useState({
-    name: "",
-    client: "",
-    buyer: "",
-    requestedDate: new Date().toISOString().split("T")[0],
-  });
+  const [quotationData, setQuotationData] = useState<QuotationData | null>(
+    null,
+  );
   const [items, setItems] = useState<Item[]>([
     {
       id: "1",
@@ -78,28 +79,35 @@ export default function Create() {
     setIsCreating(true);
     // Simular la creación de la cotización
     await new Promise((resolve) => setTimeout(resolve, 2000));
-    console.log("Creando cotización con fecha:", quotationData.requestedDate);
+    if (quotationData) {
+      console.log("Creando cotización con fecha:", quotationData?.uploadDate);
+    }
     setIsCreating(false);
     setIsSuccess(true);
   };
 
   const isNextButtonDisabled = () => {
     if (currentStep === 0) {
-      return ["name", "client", "buyer"].some(
-        (key) => quotationData[key as keyof typeof quotationData].trim() === ""
+      return (
+        !quotationData ||
+        ["name", "client", "buyer"].some(
+          (key) =>
+            quotationData[key as keyof typeof quotationData].trim() === "",
+        )
       );
     }
     return false;
+  };
+
+  const handleQuotationDataChange = (newData: typeof quotationData) => {
+    setQuotationData(newData);
   };
 
   const renderStepContent = () => {
     switch (currentStep) {
       case 0:
         return (
-          <QuotationDetails
-            quotationData={quotationData}
-            setQuotationData={setQuotationData}
-          />
+          <QuotationDetails onFormDataChange={handleQuotationDataChange} />
         );
       case 1:
         return <ItemsList items={items} setItems={setItems} />;
@@ -130,9 +138,7 @@ export default function Create() {
             <>
               <div className="flex-grow overflow-hidden">
                 <div className="h-full relative flex flex-col">
-                  <h3 className="text-xl font-[800] mb-4">{`Etapa ${
-                    currentStep + 1
-                  } - ${renderStepTitle()}`}</h3>
+                  <h3 className="text-xl font-[800] mb-4">{`Etapa ${currentStep + 1} - ${renderStepTitle()}`}</h3>
                   <div className="flex justify-center relative h-full items-center w-full mx-auto">
                     {renderStepContent()}
                   </div>
