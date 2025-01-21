@@ -117,12 +117,12 @@ export default function Create() {
   };
 
   return (
-    <div className="flex flex-col w-full h-full bg-transparent">
+    <div className="flex flex-col w-full h-full bg-neutral-50">
       <Header
         title="Nueva Cotización"
         description="Crea una nueva cotización"
       />
-      <div className="flex w-full h-full p-3">
+      <div className="flex w-full h-full p-6">
         <div className="flex-grow flex flex-col gap-6 w-[70%] h-full p-[20px] border-[0.5px] border-[#ebebebcc] shadow-sm bg-white rounded-[18px] relative">
           {isCreating || isSuccess ? (
             <SuccessAnimation isCreating={isCreating} isSuccess={isSuccess} />
