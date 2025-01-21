@@ -107,7 +107,10 @@ export default function Create() {
     switch (currentStep) {
       case 0:
         return (
-          <QuotationDetails onFormDataChange={handleQuotationDataChange} />
+          <QuotationDetails
+            onFormDataChange={handleQuotationDataChange}
+            initialData={quotationData}
+          />
         );
       case 1:
         return <ItemsList items={items} setItems={setItems} />;
