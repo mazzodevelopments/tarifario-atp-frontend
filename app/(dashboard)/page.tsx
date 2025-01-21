@@ -172,7 +172,7 @@ export default function Dashboard() {
           <div className="w-full flex flex-col pb-4">
             <h2 className="text-3xl font-[800]">Panel Admin / User</h2>
             <p className="text-gray-500 ml-1">
-              Vista general de mis cotizaciones
+              Panel de acciones de usuario o administrador (en proceso)
             </p>
           </div>
           <div className="flex flex-col p-4 relative bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full">
@@ -212,18 +212,18 @@ export default function Dashboard() {
                 </div>
               ))}
             </div>
-          </div>
-          <div className="absolute bottom-4 right-4 w-auto flex justify-end gap-2 items-end h-auto">
-            <Button variant="secondary" className="px-3 py-2 text-sm">
-              Agregar cotización
-            </Button>
+            <div className="absolute bottom-4 right-4 w-auto flex justify-end gap-2 items-end h-auto">
+              <Button variant="secondary" className="px-3 py-2 text-sm">
+                Agregar cotización
+              </Button>
 
-            <Button
-              variant="primary"
-              className="px-3 py-2 bg-neutral-900 text-white text-sm"
-            >
-              Agregar cotización
-            </Button>
+              <Button
+                variant="primary"
+                className="px-3 py-2 bg-neutral-900 text-white text-sm"
+              >
+                Agregar cotización
+              </Button>
+            </div>
           </div>
         </div>
       </div>
