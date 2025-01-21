@@ -45,20 +45,6 @@ export default function Dashboard() {
       date: new Date().toISOString(),
       value: 1800,
     },
-    {
-      id: "4",
-      name: "A25R-1",
-      client: "John Doe",
-      date: new Date().toISOString(),
-      value: 1800,
-    },
-    {
-      id: "5",
-      name: "A25R-2",
-      client: "Emily Johnson",
-      date: new Date().toISOString(),
-      value: 1800,
-    },
   ];
 
   const proveedores = [
@@ -168,63 +154,42 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="w-2/3 h-full flex flex-col relative p-6">
-          <div className="w-full flex flex-col pb-4">
-            <h2 className="text-3xl font-[800]">Panel Admin / User</h2>
-            <p className="text-gray-500 ml-1">
-              Panel de acciones de usuario o administrador (en proceso)
-            </p>
-          </div>
-          <div className="flex flex-col p-4 relative bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full">
-            <div className="flex items-center justify-start mb-3">
-              <div className="w-7 h-7 mr-2 bg-red-700 rounded-[8px] flex justify-center items-center">
-                <Briefcase size={18} className="text-white" />
+        <div className="w-2/3 h-full flex flex-col relative p-6 gap-3">
+          <div className="flex flex-row gap-3 h-[60%]">
+            <div className="flex flex-col w-[65%]">
+              <div className="w-full flex flex-col pb-4">
+                <h2 className="text-3xl font-[800]">Panel Admin / User</h2>
+                <p className="text-gray-500 ml-1">
+                  Panel de acciones de usuario o administrador
+                </p>
               </div>
-              <h2 className="text-2xl font-[800] text-black">Ventas</h2>
-            </div>
-            <div className="space-y-3">
-              {cotizaciones.map((cotizacion) => (
-                <div
-                  key={cotizacion.id}
-                  className="flex items-center bg-white border-[0.5px] border-[#ebebebcc] rounded-lg py-4 px-3 cursor-pointer hover:bg-gray-50"
-                >
-                  <div className="flex-1">
-                    <div className="flex gap-3 flex-col">
-                      <h3 className="text-black font-[800]">
-                        {cotizacion.name}
-                      </h3>
-                      <div className="text-sm text-gray-500 flex items-center gap-2">
-                        <User size={16} className="text-gray-400" />
-                        {cotizacion.client}
-                      </div>
-                    </div>
+              <div className="flex flex-col p-4 relative bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full">
+                <div className="flex items-center justify-start mb-3">
+                  <div className="w-7 h-7 mr-2 bg-red-700 rounded-[8px] flex justify-center items-center">
+                    <Briefcase size={18} className="text-white" />
                   </div>
-                  <div className="flex items-end gap-3 text-sm flex-col">
-                    <div className="flex items-center gap-2 text-gray-500">
-                      <Calendar size={16} className="text-gray-400" />
-                      {cotizacion.date.split("T")[0]}
-                    </div>
-                    <div className="flex items-center text-primary font-[800]">
-                      <DollarSign size={16} />
-                      {cotizacion.value}
-                    </div>
-                  </div>
+                  <h2 className="text-2xl font-[800] text-black">Ventas</h2>
                 </div>
-              ))}
-            </div>
-            <div className="absolute bottom-4 right-4 w-auto flex justify-end gap-2 items-end h-auto">
-              <Button variant="secondary" className="px-3 py-2 text-sm">
-                Agregar cotización
-              </Button>
 
-              <Button
-                variant="primary"
-                className="px-3 py-2 bg-neutral-900 text-white text-sm"
-              >
-                Agregar cotización
-              </Button>
+                <div className="absolute bottom-4 right-4 w-auto flex justify-end gap-2 items-end h-auto">
+                  <Button variant="secondary" className="px-3 py-2 text-sm">
+                    Agregar cotización
+                  </Button>
+
+                  <Button
+                    variant="primary"
+                    className="px-3 py-2 bg-neutral-900 text-white text-sm"
+                  >
+                    Agregar cotización
+                  </Button>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col w-[35%]">
+              <div className="flex flex-col p-4 relative bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full"></div>
             </div>
           </div>
+          <div className="h-[40%] bg-white shadow-sm border border-neutral-200 w-full rounded-[16px]"></div>
         </div>
       </div>
     </div>

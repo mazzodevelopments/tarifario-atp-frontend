@@ -39,12 +39,12 @@ export default function Proveedores() {
   };
 
   return (
-    <div className="flex justify-start w-full h-full flex-col bg-transparent px-[20px]">
+    <div className="flex justify-start w-full h-full flex-col bg-transparent">
       <Header
         title="Proveedores"
         description="Lista de proveedores oficiales"
       />
-      <div className="mt-6">
+      <div className="mt-6 px-6">
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
             <Button className="text-white">Agregar Proveedor</Button>
@@ -100,11 +100,11 @@ export default function Proveedores() {
           </DialogContent>
         </Dialog>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6 px-6">
         {proveedores.map((proveedor) => (
           <div
             key={proveedor.id}
-            className="bg-white p-4 rounded-lg border border-neutral-100"
+            className="bg-white p-4 rounded-[16px] border border-neutral-200 shadow-sm"
           >
             <h3 className="font-semibold">{proveedor.nombre}</h3>
             <p className="text-sm text-gray-600">{proveedor.tipo}</p>
