@@ -40,7 +40,9 @@ export interface Budget {
   incoterm: string;
   transport: AirportFreightCourier | PortBondedWarehouse | null;
   custom: Custom | null;
+  delivery: Delivery | null;
   numbering: string;
+  stage: string;
 }
 
 /*** DESTINO – MARÍTIMO -TERRESTRE ***/
@@ -110,6 +112,6 @@ export interface Custom {
 }
 
 /*** ENTREGA ***/
-export interface InternalFreightLogistics {
-  internalFreightCost: number;
+export interface Delivery {
+  total: number;
 }

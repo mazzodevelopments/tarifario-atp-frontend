@@ -52,7 +52,9 @@ export default function CreateBudget({
     incoterm: "",
     custom: null,
     transport: null,
+    delivery: null,
     numbering: "",
+    stage: "COTI",
   });
   const [selectedItemQuantity, setSelectedItemQuantity] = useState<number>(0);
   const [buttonsState, setButtonsState] = useState({
@@ -366,7 +368,7 @@ export default function CreateBudget({
         value={formData.numbering}
         onChange={handleChange}
         label="Numeración"
-        placeholder="Ej: COTI 0000000001"
+        placeholder="Ej: 0000000001"
       />
 
       <div className="grid grid-cols-3 gap-4">

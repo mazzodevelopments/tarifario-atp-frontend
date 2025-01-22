@@ -75,6 +75,7 @@ export default function BudgetList({
               <TableHead>Precio Total</TableHead>
               <TableHead>Transporte</TableHead>
               <TableHead>Aduana</TableHead>
+              <TableHead>Entrega</TableHead>
               <TableHead>Total</TableHead>
               <TableHead></TableHead>
             </TableRow>
@@ -103,7 +104,7 @@ export default function BudgetList({
                   aria-selected={selectedBudgets.includes(budget.id)}
                 >
                   <TableCell>{budget.item}</TableCell>
-                  <TableCell>{budget.numbering}</TableCell>
+                  <TableCell>{budget.stage + " " + budget.numbering}</TableCell>
                   <TableCell>{budget.supplier}</TableCell>
                   <TableCell>{budget.origin}</TableCell>
                   <TableCell>{budget.destination}</TableCell>
@@ -118,6 +119,11 @@ export default function BudgetList({
                   <TableCell>
                     {budget.custom?.total
                       ? `$${budget.custom.total.toFixed(2)}`
+                      : "-"}
+                  </TableCell>
+                  <TableCell>
+                    {budget.delivery?.total
+                      ? `$${budget.delivery.total.toFixed(2)}`
                       : "-"}
                   </TableCell>
                   <TableCell className="font-semibold">
