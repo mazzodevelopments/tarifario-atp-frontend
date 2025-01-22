@@ -1,22 +1,10 @@
-import Image from "next/image";
-import logo from "@/public/logo.png";
-
 export default function AuthLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <div className="w-screen h-screen bg-background flex justify-center items-center">
-      <div className="w-[50%] flex justify-end px-[2%] items-center h-full">
-        <div className="w-[18vw] mt-[0.75vw] h-auto pr-20 border-r-2 border-r-gray-100 flex flex-col justify-center items-center">
-          <Image src={logo.src} width={1000} height={1000} alt="LOGO" />
-          <h1 className="flex items-center justify-center mt-6 text-3xl ">
-            <span className="font-[900] text-primary">atp</span>
-            <span className="font-[800] text-gray-800">SOLUTIONS</span>
-          </h1>
-        </div>
-      </div>
+    <div className="w-screen h-screen bg-background flex justify-center items-center bg-neutral-50">
       {children}
     </div>
   );
