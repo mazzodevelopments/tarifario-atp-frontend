@@ -65,8 +65,8 @@ export default function BudgetList({
         <Table className="w-full">
           <TableHeader className="border-b border-gray-200">
             <TableRow>
-              <TableHead>Item</TableHead>
               <TableHead>Numeración</TableHead>
+              <TableHead>Item</TableHead>
               <TableHead>Proveedor</TableHead>
               <TableHead>Origen</TableHead>
               <TableHead>Destino</TableHead>
@@ -103,8 +103,8 @@ export default function BudgetList({
                   role="row"
                   aria-selected={selectedBudgets.includes(budget.id)}
                 >
-                  <TableCell>{budget.item}</TableCell>
                   <TableCell>{budget.stage + " " + budget.numbering}</TableCell>
+                  <TableCell>{budget.item}</TableCell>
                   <TableCell>{budget.supplier}</TableCell>
                   <TableCell>{budget.origin}</TableCell>
                   <TableCell>{budget.destination}</TableCell>

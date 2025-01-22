@@ -248,6 +248,14 @@ export default function CreateBudget({
         label="Fecha"
         required
       />
+      <Input
+        type="text"
+        name="numbering"
+        value={formData.numbering}
+        onChange={handleChange}
+        label="Numeración"
+        placeholder="Ej: 0000000001"
+      />
       <Dropdown
         value={formData.item}
         fetchItems={fetchItems}
@@ -361,14 +369,6 @@ export default function CreateBudget({
         label="Incoterm"
         required
         disabled={isWithinArgentina}
-      />
-      <Input
-        type="text"
-        name="numbering"
-        value={formData.numbering}
-        onChange={handleChange}
-        label="Numeración"
-        placeholder="Ej: 0000000001"
       />
 
       <div className="grid grid-cols-3 gap-4">

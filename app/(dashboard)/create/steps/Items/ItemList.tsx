@@ -48,10 +48,12 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
         <Table className="w-full">
           <TableHeader>
             <TableRow>
+              <TableHead>Numeración</TableHead>
               <TableHead>Detalle</TableHead>
+              <TableHead>Familia</TableHead>
+              <TableHead>Subfamilia</TableHead>
               <TableHead>Marca</TableHead>
               <TableHead>Cantidad</TableHead>
-              <TableHead>Unidad</TableHead>
               <TableHead>Part Number</TableHead>
               <TableHead></TableHead>
             </TableRow>
@@ -69,10 +71,12 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
             ) : (
               items.map((item) => (
                 <TableRow key={item.id} className="text-sm">
+                  <TableCell>{item.numbering}</TableCell>
                   <TableCell>{item.detail}</TableCell>
+                  <TableCell>{item.family}</TableCell>
+                  <TableCell>{item.subfamily}</TableCell>
                   <TableCell>{item.brand}</TableCell>
-                  <TableCell>{item.quantity}</TableCell>
-                  <TableCell>{item.unit}</TableCell>
+                  <TableCell>{item.quantity + " " + item.unit}</TableCell>
                   <TableCell>{item.partNumber}</TableCell>
                   <TableCell>
                     <button
