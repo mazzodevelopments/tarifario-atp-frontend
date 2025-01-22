@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Button from "@/components/Button";
 import CreateItem from "./CreateItem";
 import { X } from "react-feather";
