@@ -126,7 +126,7 @@ export default function CreateCustom({ onCustomCreated }: CreateCustomProps) {
         />
         <Input
           type="number"
-          name="internationalFreightValue"
+          name="internationalFreightCost"
           value={formData.internationalFreightCost}
           label="Flete internacional"
           onChange={handleInputChange}
