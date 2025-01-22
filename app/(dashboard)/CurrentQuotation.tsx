@@ -2,10 +2,16 @@
 
 import Button from "@/components/Button";
 import { Avatar } from "@/components/ui/avatar";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { CalendarIcon, DollarSignIcon, UserIcon } from "lucide-react";
 
 export default function CurrentQuotationCard() {
-  const usersWorking = 3;
+  const usersWorking = 12;
   const quotationData = {
     id: "COT-2023-001",
     client: "Acme Corporation",
@@ -14,26 +20,41 @@ export default function CurrentQuotationCard() {
     status: "En progreso",
   };
 
+  const formatNumber = (num: number) => {
+    return num.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,");
+  };
+
   return (
     <div className="w-full h-[65%] bg-white border border-neutral-200 shadow-sm rounded-[18px] relative">
       <div className="flex flex-col p-4 relative">
         <div className="flex items-start justify-between mb-3">
           <h2 className="text-md font-[600] text-black">Cotización reciente</h2>
-          <div className="flex flex-col items-center w-[25%]">
-            <div className="flex -space-x-2 overflow-hidden">
-              <Avatar className="inline-block border-2 size-7 border-white">
-                <img src="/default-profile-pic.png" alt="User 1" />
-              </Avatar>
-              <Avatar className="inline-block border-2 size-7 border-white">
-                <img src="/default-profile-pic.png" alt="User 2" />
-              </Avatar>
-              <Avatar className="inline-block border-2 size-7 border-white">
-                <img src="/default-profile-pic.png" alt="User 3" />
-              </Avatar>
-            </div>
-            <span className="text-xs text-neutral-600 w-[90%] text-center">
-              {usersWorking} usuarios trabajando en esta cotización
-            </span>
+          <div className="flex flex-col items-end w-[25%]">
+            <TooltipProvider>
+              <Tooltip delayDuration={250}>
+                <TooltipTrigger>
+                  <div className="flex -space-x-2 overflow-hidden items-center hover:bg-neutral-100 p-1 rounded-md">
+                    <Avatar className="inline-block border-2 size-7 border-white">
+                      <img src="/default-profile-pic.png" alt="User 1" />
+                    </Avatar>
+                    <Avatar className="inline-block border-2 size-7 border-white">
+                      <img src="/default-profile-pic.png" alt="User 2" />
+                    </Avatar>
+                    <Avatar className="inline-block border-2 size-7 border-white">
+                      <img src="/default-profile-pic.png" alt="User 3" />
+                    </Avatar>
+                    <div className="pl-3">
+                      <span className="font-[600]">+9</span>
+                    </div>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent className="bg-sky-100">
+                  <p className="text-primary text-[1.2em] font-[600]">
+                    {usersWorking} usuarios trabajando
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
         </div>
         <div className="space-y-3">
@@ -54,7 +75,7 @@ export default function CurrentQuotationCard() {
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium text-neutral-700">Total:</span>
             <span className="text-sm text-neutral-900">
-              ${quotationData.total.toLocaleString()}
+              ${formatNumber(quotationData.total)}{" "}
             </span>
           </div>
           <div className="flex items-center justify-between">
