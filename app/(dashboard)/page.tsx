@@ -22,6 +22,7 @@ import Link from "next/link";
 import { QuotationSlider } from "./QuotationCarousel";
 import CurrentQuotationCard from "./CurrentQuotation";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { NewUserDialog } from "./NewUserDialog";
 
 export default function Dashboard() {
   const cotizaciones = [
@@ -258,7 +259,7 @@ export default function Dashboard() {
                         className="flex items-center space-x-4"
                       >
                         <Image
-                          src={defaultProfilePic}
+                          src={defaultProfilePic || "/placeholder.svg"}
                           width={700}
                           height={700}
                           alt="Picture of the author"
@@ -273,12 +274,7 @@ export default function Dashboard() {
                   </div>
                 </ScrollArea>
                 <div className="w-auto flex mr-4 justify-end gap-2 items-end h-auto pt-4 border-t border-neutral-100">
-                  <Button
-                    variant="primary"
-                    className="px-3 py-2 bg-neutral-900 text-white text-sm"
-                  >
-                    Crear nuevo usuario
-                  </Button>
+                  <NewUserDialog />
                 </div>
               </div>
             </div>
