@@ -62,14 +62,17 @@ export interface AirportFreightCourier {
 export interface PortBondedWarehouse {
   id: string;
   transferToCustomsWarehouse: number;
-  deconsolidation: number;
-  movement: number;
-  administrativeCharges: number;
-  electronicSeal: number;
-  emptyContainerReturnBeforeDeadline: number;
+  deconsolidation: number; // DESCONSOLIDACIÓN
+  movementCharges: number; // COSTOS DE MOVIMIENTO
+  administrativeCharges: number; // COSTOS ADMINISTRATIVOS
+  electronicSeal: number; // PRECINTO ELECTRONICO
+  emptyContainerReturnDaysBeforeDeadline: number; // CANTIDAD DE DÍAS LIBRES SEGÚN FORDWARDER - PUERTO
   lateReturnFee: number; // 12 USD X DÍA DESDE EL PRIMER DÍA
+  // DIAS DE ALMACENAJE
   storageDays: number;
-  containerCleaning: number;
+  storageDayPrice: number;
+  storageDaysTotal: number;
+  containerCleaning: number; // LIMPIEZA CONTENEDOR
   optionalCustody: number;
   senasaVerification: number;
   forwarder: ForwarderInternationalFreight;
@@ -78,13 +81,12 @@ export interface PortBondedWarehouse {
 
 // FORWARDER
 export interface ForwarderInternationalFreight {
-  originCharges: number;
-  internationalFreightCost: number;
-  agpFee: number; // AGP (General Port Administration) fee
-  localCharges: number;
-  deconsolidationFee: number;
-  billOfLadingPayment: number;
-  providerPriceList: Record<string, number>;
+  originCharges: number; // GASTOS EN ORIGEN
+  internationalFreightCost: number; // FLETE INTERNACIONAL
+  agpFee: number; // AGP (General Port Administration) CUOTA
+  localCharges: number; // CARGOS LOCALES
+  deconsolidationFee: number; // DESCONSOLIDACIÓN
+  billOfLadingPayment: number; // PAGO DE BL
 }
 
 /*** ADUANA ***/
@@ -93,7 +95,7 @@ export interface Custom {
   sediLegalizationFee: number; // USD 50
   // CALCULO DE BASE IMPONIBLE
   invoiceValueFOB: number; //
-  internationalFreightValue: number; // VALOR DEL PASO ANTERIOR
+  internationalFreightCost: number; // VALOR DEL PASO ANTERIOR
   taxableBase: number; // BASE IMPONIBLE --> FOB + Flete Internacional + (FOB x 0.01) === CIF
   // IMPUESTOS
   importDutyRate: number; // DERECHOS DE IMPORTACIÓN (Varía según la mercaderia y el arancel)

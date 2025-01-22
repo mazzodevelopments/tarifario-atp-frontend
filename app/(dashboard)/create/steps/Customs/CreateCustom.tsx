@@ -11,7 +11,7 @@ export default function CreateCustom({ onCustomCreated }: CreateCustomProps) {
   const [formData, setFormData] = useState<Omit<Custom, "id">>({
     sediLegalizationFee: 50,
     invoiceValueFOB: 0,
-    internationalFreightValue: 0,
+    internationalFreightCost: 0,
     taxableBase: 0,
     importDutyRate: 0,
     statisticsRate: 0,
@@ -35,8 +35,8 @@ export default function CreateCustom({ onCustomCreated }: CreateCustomProps) {
     const calculateCustoms = () => {
       const taxableBase =
         formData.invoiceValueFOB +
-        formData.internationalFreightValue +
-        (formData.invoiceValueFOB + formData.internationalFreightValue) * 0.01;
+        formData.internationalFreightCost +
+        (formData.invoiceValueFOB + formData.internationalFreightCost) * 0.01;
 
       const importDuty = taxableBase * formData.importDutyRate;
       const statisticsRate = taxableBase * 0.03;
@@ -62,7 +62,7 @@ export default function CreateCustom({ onCustomCreated }: CreateCustomProps) {
     calculateCustoms();
   }, [
     formData.invoiceValueFOB,
-    formData.internationalFreightValue,
+    formData.internationalFreightCost,
     formData.importDutyRate,
   ]);
 
@@ -127,7 +127,7 @@ export default function CreateCustom({ onCustomCreated }: CreateCustomProps) {
         <Input
           type="number"
           name="internationalFreightValue"
-          value={formData.internationalFreightValue}
+          value={formData.internationalFreightCost}
           label="Flete internacional"
           onChange={handleInputChange}
         />
