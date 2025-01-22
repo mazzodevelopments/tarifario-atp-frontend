@@ -23,11 +23,10 @@ export const CURRENCIES = [
 ];
 
 export const UNITS = [
-  { id: "1", name: "Unidad" },
-  { id: "2", name: "Metro" },
-  { id: "3", name: "Kilogramo" },
-  { id: "4", name: "Litro" },
-  { id: "5", name: "Pieza" },
+  { id: "1", name: "Metro" },
+  { id: "2", name: "Kilogramo" },
+  { id: "3", name: "Litro" },
+  { id: "4", name: "Pieza" },
 ];
 
 export const VÍAS = [

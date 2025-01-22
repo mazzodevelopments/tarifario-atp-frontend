@@ -121,7 +121,7 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
         name="detail"
         value={formData.detail}
         onChange={handleChange}
-        placeholder="Detail"
+        placeholder="Detalle"
         label="Detalle"
         required
       />

@@ -80,7 +80,7 @@ export default function QuotationDetails({
         name="name"
         value={formData.name}
         onChange={handleInputChange}
-        placeholder="Enter name"
+        placeholder="Nombre"
         label="Nombre"
       />
 
@@ -137,7 +137,7 @@ export default function QuotationDetails({
         name="customerRequestNumber"
         value={formData.customerRequestNumber}
         onChange={handleInputChange}
-        placeholder="Enter customer request number"
+        placeholder="Número de Solicitud del Cliente"
         label="Número de Solicitud del Cliente"
       />
       <Input
@@ -145,7 +145,7 @@ export default function QuotationDetails({
         name="atpInternRequestNumber"
         value={formData.atpInternRequestNumber}
         onChange={handleInputChange}
-        placeholder="Enter ATP intern request number"
+        placeholder="Número de Solicitud Interna ATP"
         label="Número de Solicitud Interna ATP"
       />
     </div>
