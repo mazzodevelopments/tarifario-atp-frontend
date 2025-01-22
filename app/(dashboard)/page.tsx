@@ -21,6 +21,7 @@ import { ChevronDown, LogOut, Settings } from "lucide-react";
 import Link from "next/link";
 import { QuotationSlider } from "./QuotationCarousel";
 import CurrentQuotationCard from "./CurrentQuotation";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function Dashboard() {
   const cotizaciones = [
@@ -47,26 +48,85 @@ export default function Dashboard() {
     },
   ];
 
-  const proveedores = [
+  type User = {
+    id: number;
+    name: string;
+    email: string;
+    avatar: string;
+  };
+
+  const users: User[] = [
     {
-      id: "P001",
-      name: "Proveedor A",
-      quotations: 15,
+      id: 1,
+      name: "Alice Johnson",
+      email: "alice@example.com",
+      avatar: "defaultProfilePic",
     },
     {
-      id: "P002",
-      name: "Proveedor B",
-      quotations: 12,
+      id: 2,
+      name: "Bob Smith",
+      email: "bob@example.com",
+      avatar: "defaultProfilePic",
     },
     {
-      id: "P003",
-      name: "Proveedor C",
-      quotations: 9,
+      id: 3,
+      name: "Charlie Brown",
+      email: "charlie@example.com",
+      avatar: "defaultProfilePic",
     },
     {
-      id: "P004",
-      name: "Proveedor D",
-      quotations: 7,
+      id: 4,
+      name: "Diana Ross",
+      email: "diana@example.com",
+      avatar: "defaultProfilePic",
+    },
+    {
+      id: 5,
+      name: "Edward Norton",
+      email: "edward@example.com",
+      avatar: "defaultProfilePic",
+    },
+    {
+      id: 6,
+      name: "Fiona Apple",
+      email: "fiona@example.com",
+      avatar: "defaultProfilePic",
+    },
+    {
+      id: 7,
+      name: "George Clooney",
+      email: "george@example.com",
+      avatar: "defaultProfilePic",
+    },
+    {
+      id: 8,
+      name: "Helen Mirren",
+      email: "helen@example.com",
+      avatar: "defaultProfilePic",
+    },
+    {
+      id: 9,
+      name: "Edward Norton",
+      email: "edward@example.com",
+      avatar: "defaultProfilePic",
+    },
+    {
+      id: 10,
+      name: "Fiona Apple",
+      email: "fiona@example.com",
+      avatar: "defaultProfilePic",
+    },
+    {
+      id: 11,
+      name: "George Clooney",
+      email: "george@example.com",
+      avatar: "defaultProfilePic",
+    },
+    {
+      id: 12,
+      name: "Helen Mirren",
+      email: "helen@example.com",
+      avatar: "defaultProfilePic",
     },
   ];
 
@@ -102,7 +162,7 @@ export default function Dashboard() {
                         className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                       >
                         <Image
-                          src="/default-profile-pic.png"
+                          src={defaultProfilePic}
                           width={700}
                           height={700}
                           alt="Picture of the author"
@@ -158,9 +218,9 @@ export default function Dashboard() {
           <div className="flex flex-row gap-3 h-[60%]">
             <div className="flex flex-col w-[65%]">
               <div className="w-full flex flex-col pb-4">
-                <h2 className="text-3xl font-[800]">Panel Admin / User</h2>
+                <h2 className="text-3xl font-[800]">Panel Administrador</h2>
                 <p className="text-gray-500 ml-1">
-                  Panel de acciones de usuario o administrador
+                  Panel de acciones de administrador
                 </p>
               </div>
               <div className="flex flex-col p-4 relative bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full">
@@ -186,7 +246,41 @@ export default function Dashboard() {
               </div>
             </div>
             <div className="flex flex-col w-[35%]">
-              <div className="flex flex-col p-4 relative bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full"></div>
+              <div className="flex flex-col relative py-4 bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full">
+                <h2 className="text-lg font-semibold mb-4 mx-4">
+                  Lista de Usuarios
+                </h2>
+                <ScrollArea className="flex-grow border-neutral-100 border-t px-4">
+                  <div className="space-y-4 mt-2">
+                    {users.map((user) => (
+                      <div
+                        key={user.id}
+                        className="flex items-center space-x-4"
+                      >
+                        <Image
+                          src={defaultProfilePic}
+                          width={700}
+                          height={700}
+                          alt="Picture of the author"
+                          className="w-8 h-8 rounded-full"
+                        />
+                        <div>
+                          <p className="text-sm font-medium">{user.name}</p>
+                          <p className="text-xs text-gray-500">{user.email}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </ScrollArea>
+                <div className="w-auto flex mr-4 justify-end gap-2 items-end h-auto pt-4 border-t border-neutral-100">
+                  <Button
+                    variant="primary"
+                    className="px-3 py-2 bg-neutral-900 text-white text-sm"
+                  >
+                    Crear nuevo usuario
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
           <div className="h-[40%] bg-white shadow-sm border border-neutral-200 w-full rounded-[16px]"></div>
