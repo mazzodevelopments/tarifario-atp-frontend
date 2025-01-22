@@ -11,10 +11,10 @@ export default function Settings() {
   const [editingField, setEditingField] = useState<string | null>(null);
 
   const [userData, setUserData] = useState({
-    Nombre: "Matías Monzalvo",
+    Nombre: "Matias Monzalvo",
     Email: "matiasmonzalvo@mazzodevelopments.com",
-    Teléfono: "+542944723412",
-    Dirección: "Soldado de la Independencia 1468",
+    Telefono: "+542944723412",
+    Direccion: "Soldado de la Independencia 1468",
   });
 
   const handleEdit = (field: string) => {

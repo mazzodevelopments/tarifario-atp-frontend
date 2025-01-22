@@ -15,14 +15,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import type {
-  Item,
-  Budget,
-  PortBondedWarehouse,
-  AirportFreightCourier,
-} from "@/app/(dashboard)/create/types";
 import CreateCustom from "@/app/(dashboard)/create/steps/Customs/CreateCustom";
 import CreateTransport from "@/app/(dashboard)/create/steps/Transports/CreateTransport";
+import { Budget } from "@/types/Budget";
+import { Item } from "@/types/Item";
+import { PortBondedWarehouse } from "@/types/PortBondedWarehouse";
+import { AirportFreightCourier } from "@/types/AirportFreightCourier";
 
 interface CreateBudgetProps {
   onBudgetCreated: (budget: Budget) => void;

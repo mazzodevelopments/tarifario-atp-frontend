@@ -1,69 +1,63 @@
-import Cotizacion from "@/app/(dashboard)/components/Cotizacion";
 import { Search } from "react-feather";
 import Header from "@/app/(dashboard)/components/Header";
 import QuotationCard from "./QuotationCard";
+import { QuotationData } from "@/types/QuotationData";
 
-export interface Cotizacion {
-  id: number;
-  nombreCotizacion: string;
-  empresa: string;
-  representante: string;
-  cantidadItems: number;
-  transporte: string;
-  tipoProveedor: "Nacional" | "Internacional";
-  incoterm: string;
-}
-
-export const cotizaciones: Cotizacion[] = [
+const quotations: QuotationData[] = [
   {
-    id: 1,
-    nombreCotizacion: "Cotización Q3-2023",
-    empresa: "TechSolutions Inc.",
-    representante: "María González",
-    cantidadItems: 15,
-    transporte: "Marítimo",
-    tipoProveedor: "Internacional",
-    incoterm: "FOB",
+    name: "Construcción de Vivienda Familiar",
+    client: "Inmobiliaria Soluciones SA",
+    buyer: "Juan Pérez",
+    receptionDate: "2025-01-15",
+    uploadDate: "2025-01-16",
+    expirationDateTime: "2025-02-15T23:59:59",
+    materialsNeededDate: "2025-01-30",
+    customerRequestNumber: "REQ-2025-001",
+    atpInternRequestNumber: "ATP-INT-9001",
   },
   {
-    id: 2,
-    nombreCotizacion: "Proyecto Alpha",
-    empresa: "Innovate Systems",
-    representante: "Carlos Rodríguez",
-    cantidadItems: 8,
-    transporte: "Aéreo",
-    tipoProveedor: "Internacional",
-    incoterm: "CIF",
+    name: "Mantenimiento de Maquinaria Industrial",
+    client: "Tecnoindustria LTDA",
+    buyer: "María López",
+    receptionDate: "2025-01-10",
+    uploadDate: "2025-01-11",
+    expirationDateTime: "2025-01-25T17:00:00",
+    materialsNeededDate: "2025-01-20",
+    customerRequestNumber: "REQ-2025-002",
+    atpInternRequestNumber: "ATP-INT-9012",
   },
   {
-    id: 3,
-    nombreCotizacion: "Expansión Local 2023",
-    empresa: "Distribuidora Nacional S.A.",
-    representante: "Ana Martínez",
-    cantidadItems: 22,
-    transporte: "Terrestre",
-    tipoProveedor: "Nacional",
-    incoterm: "N/A",
+    name: "Reparación de Redes Eléctricas",
+    client: "ElectroRedes Global",
+    buyer: "Carlos Ramírez",
+    receptionDate: "2025-01-12",
+    uploadDate: "2025-01-13",
+    expirationDateTime: "2025-02-01T18:00:00",
+    materialsNeededDate: "2025-01-25",
+    customerRequestNumber: "REQ-2025-003",
+    atpInternRequestNumber: "ATP-INT-9025",
   },
   {
-    id: 4,
-    nombreCotizacion: "Actualización Equipos",
-    empresa: "Global Tech Corp",
-    representante: "John Smith",
-    cantidadItems: 12,
-    transporte: "Marítimo",
-    tipoProveedor: "Internacional",
-    incoterm: "DDP",
+    name: "Instalación de Sistema de Riego",
+    client: "AgroSolutions SAC",
+    buyer: "Laura Rodríguez",
+    receptionDate: "2025-01-09",
+    uploadDate: "2025-01-10",
+    expirationDateTime: "2025-02-09T15:30:00",
+    materialsNeededDate: "2025-01-28",
+    customerRequestNumber: "REQ-2025-004",
+    atpInternRequestNumber: "ATP-INT-9034",
   },
   {
-    id: 5,
-    nombreCotizacion: "Suministros Q4",
-    empresa: "Industrias Locales Ltda.",
-    representante: "Laura Pérez",
-    cantidadItems: 30,
-    transporte: "Terrestre",
-    tipoProveedor: "Nacional",
-    incoterm: "N/A",
+    name: "Suministro de Componentes Electrónicos",
+    client: "MicroTech Solutions",
+    buyer: "Andrea Gómez",
+    receptionDate: "2025-01-18",
+    uploadDate: "2025-01-19",
+    expirationDateTime: "2025-02-05T20:00:00",
+    materialsNeededDate: "2025-02-01",
+    customerRequestNumber: "REQ-2025-005",
+    atpInternRequestNumber: "ATP-INT-9042",
   },
 ];
 
@@ -93,8 +87,11 @@ export default function History() {
         </div>
         <div className="w-full">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-start mt-2">
-            {cotizaciones.map((cotizacion) => (
-              <QuotationCard key={cotizacion.id} {...cotizacion} />
+            {quotations.map((cotizacion) => (
+              <QuotationCard
+                key={cotizacion.customerRequestNumber}
+                {...cotizacion}
+              />
             ))}
           </div>
         </div>

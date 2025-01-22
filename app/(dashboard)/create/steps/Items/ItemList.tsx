@@ -1,5 +1,4 @@
 "use client";
-
 import Button from "@/components/Button";
 import CreateItem from "./CreateItem";
 import { X } from "react-feather";
@@ -11,7 +10,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Item } from "@/app/(dashboard)/create/types";
 import {
   Dialog,
   DialogContent,
@@ -19,6 +17,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Item } from "@/types/Item";
 
 interface ItemsListProps {
   items: Item[];

@@ -10,7 +10,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Budget } from "@/app/(dashboard)/create/types";
 import {
   Dialog,
   DialogContent,
@@ -18,7 +17,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import type { Item } from "@/app/(dashboard)/create/types";
+import type { Budget } from "@/types/Budget";
+import type { Item } from "@/types/Item";
 
 interface BudgetListProps {
   budgets: Budget[];
