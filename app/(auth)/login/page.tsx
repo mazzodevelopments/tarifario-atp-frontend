@@ -1,44 +1,52 @@
 "use client";
 import Button from "@/components/Button";
-
-const inputStyles =
-  "w-full rounded-lg h-12 bg-gray-100 p-4 mt-1 focus:outline-none";
+import Input from "@/components/Input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Image from "next/image";
+import logo from "@/public/logo.png";
 
 export default function Register() {
-  const handleSubmit = () => {
-    console.log("Submitted");
-  };
   return (
-    <div className="w-[52.5%] h-[22.5vw] justify-start items-center flex">
-      <form
-        onSubmit={handleSubmit}
-        className="w-1/2 h-1/2 flex justify-center items-start p-10 flex-col gap-2"
-      >
-        <h2 className="font-[900] text-4xl text-gray-800 leading-[1] mb-2">
-          Ingresar
-        </h2>
-        <div className="w-full">
-          <span className="text-sm font-[800] text-gray-600 leading-[1]">
-            Correo electrónico
-          </span>
-          <input className={inputStyles} />
-        </div>
-        <div className="w-full">
-          <span className="text-sm font-[800] text-gray-600 leading-[1]">
-            Contraseña
-          </span>
-          <input className={inputStyles}></input>
-        </div>
-        <div className="w-full">
-          <Button
-            className="h-12 w-full mt-4 rounded-lg"
-            variant="primary"
-            type="submit"
-          >
-            Log In
-          </Button>
-        </div>
-      </form>
+    <div className="w-[20%] h-[22.5vw] justify-center items-center flex">
+      <Card className="w-full">
+        <CardHeader className="justify-center flex items-center">
+          <div className="w-32 h-32 p-4">
+            <Image src={logo.src} width={1000} height={1000} alt="LOGO" />
+          </div>
+
+          <CardTitle className="text-3xl font-[800] text-neutral-700">
+            Iniciar sesión
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form>
+            <div className="flex flex-col gap-6">
+              <div className="grid gap-2">
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="Correo electrónico"
+                  required
+                />
+              </div>
+              <div className="grid gap-2">
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Contraseña"
+                  required
+                />
+              </div>
+              <Button
+                type="submit"
+                className="w-full text-white justify-center rounded-md text-lg"
+              >
+                Login
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }
