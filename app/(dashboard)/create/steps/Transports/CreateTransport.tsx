@@ -183,6 +183,7 @@ export default function CreateTransport({
           onChange={handleMaritimeChange}
           label="Traslado Depósito Fiscal"
           className="w-full"
+          min={0}
         />
         <Input
           type="number"
@@ -191,6 +192,7 @@ export default function CreateTransport({
           onChange={handleMaritimeChange}
           label="Desconsolidación"
           className="w-full"
+          min={0}
         />
         <Input
           type="number"
@@ -199,6 +201,7 @@ export default function CreateTransport({
           onChange={handleMaritimeChange}
           label="Movimiento"
           className="w-full"
+          min={0}
         />
       </div>
       <div className="grid grid-cols-2 gap-4">
@@ -209,6 +212,7 @@ export default function CreateTransport({
           onChange={handleMaritimeChange}
           label="Cargos Administrativos"
           className="w-full"
+          min={0}
         />
         <Input
           type="number"
@@ -217,6 +221,7 @@ export default function CreateTransport({
           onChange={handleMaritimeChange}
           label="Precinto Electrónico"
           className="w-full"
+          min={0}
         />
         <Input
           type="number"
@@ -225,6 +230,7 @@ export default function CreateTransport({
           onChange={handleMaritimeChange}
           label="Días Libres Entrega Vacío"
           className="w-full"
+          min={0}
         />
         <Input
           type="number"
@@ -233,6 +239,7 @@ export default function CreateTransport({
           onChange={handleMaritimeChange}
           label="Costo Por Días Adicionales"
           className="w-full"
+          min={0}
         />
       </div>
       <div className="grid grid-cols-3 gap-4">
@@ -243,6 +250,7 @@ export default function CreateTransport({
           onChange={handleMaritimeChange}
           label="Cantidad Días Almacenamiento"
           className="w-full"
+          min={0}
         />
         <Input
           type="number"
@@ -251,6 +259,7 @@ export default function CreateTransport({
           onChange={handleMaritimeChange}
           label="Precio Por Día"
           className="w-full"
+          min={0}
         />
         <Input
           type="number"
@@ -268,6 +277,7 @@ export default function CreateTransport({
           onChange={handleMaritimeChange}
           label="Limpieza Contenedor"
           className="w-full"
+          min={0}
           required
         />
         <Input
@@ -277,6 +287,7 @@ export default function CreateTransport({
           onChange={handleMaritimeChange}
           label="Custodia (Opcional)"
           className="w-full"
+          min={0}
         />
         <Input
           type="number"
@@ -285,6 +296,7 @@ export default function CreateTransport({
           onChange={handleMaritimeChange}
           label="Verificación SENASA"
           className="w-full"
+          min={0}
         />
       </div>
       <h3 className="text-lg font-semibold mb-2">Fordwarder</h3>
@@ -296,6 +308,7 @@ export default function CreateTransport({
           onChange={handleMaritimeChange}
           label="Gastos en Origen"
           className="w-full"
+          min={0}
         />
         <Input
           type="number"
@@ -304,6 +317,7 @@ export default function CreateTransport({
           onChange={handleMaritimeChange}
           label="Flete internacional"
           className="w-full"
+          min={0}
         />
         <Input
           type="number"
@@ -312,6 +326,7 @@ export default function CreateTransport({
           onChange={handleMaritimeChange}
           label="AGP"
           className="w-full"
+          min={0}
         />
         <Input
           type="number"
@@ -320,6 +335,7 @@ export default function CreateTransport({
           onChange={handleMaritimeChange}
           label="Gastos Locales"
           className="w-full"
+          min={0}
         />
         <Input
           type="number"
@@ -328,6 +344,7 @@ export default function CreateTransport({
           onChange={handleMaritimeChange}
           label="Desconsolidación"
           className="w-full"
+          min={0}
         />
         <Input
           type="number"
@@ -336,6 +353,7 @@ export default function CreateTransport({
           onChange={handleMaritimeChange}
           label="Pago BL"
           className="w-full"
+          min={0}
         />
       </div>
       <div className="text-xl font-bold">
@@ -363,6 +381,7 @@ export default function CreateTransport({
           onChange={handleAirChange}
           label="Cantidad De Días EDCADASSA"
           className="w-full"
+          min={0}
         />
         <Input
           type="number"
@@ -382,6 +401,7 @@ export default function CreateTransport({
           onChange={handleAirChange}
           label="Flete Internacional"
           className="w-full"
+          min={0}
         />
         <Input
           type="number"
@@ -401,6 +421,7 @@ export default function CreateTransport({
           onChange={handleAirChange}
           label="Cargos Administrativos"
           className="w-full"
+          min={0}
         />
         <Input
           type="number"
