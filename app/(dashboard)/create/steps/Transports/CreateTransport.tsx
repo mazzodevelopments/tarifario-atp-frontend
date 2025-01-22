@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import Dropdown from "@/components/Dropdown";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
-import { PortBondedWarehouse } from "@/types/PortBondedWarehouse";
-import { AirportFreightCourier } from "@/types/AirportFreightCourier";
+import type { PortBondedWarehouse } from "@/types/PortBondedWarehouse";
+import type { AirportFreightCourier } from "@/types/AirportFreightCourier";
 
 type TransportType = "MARITIME_TERRESTRIAL" | "AIR_COURIER";
 
@@ -151,18 +151,33 @@ export default function CreateTransport({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    let total = 0;
     if (transportType === "MARITIME_TERRESTRIAL") {
+      total = calculateMaritimeTotal(maritimeData);
+      if (total === 0) {
+        alert(
+          "El valor total no puede ser 0. Por favor, complete los campos necesarios.",
+        );
+        return;
+      }
       const newMaritimeData: PortBondedWarehouse = {
         id: Math.random().toString(36).slice(2, 9),
         ...maritimeData,
-        total: calculateMaritimeTotal(maritimeData),
+        total: total,
       };
       onTransportCreated(newMaritimeData);
     } else if (transportType === "AIR_COURIER") {
+      total = calculateAirTotal(airData);
+      if (total === 0) {
+        alert(
+          "El valor total no puede ser 0. Por favor, complete los campos necesarios.",
+        );
+        return;
+      }
       const newAirData: AirportFreightCourier = {
         id: Math.random().toString(36).slice(2, 9),
         ...airData,
-        total: calculateAirTotal(airData),
+        total: total,
       };
       onTransportCreated(newAirData);
     }
@@ -455,7 +470,16 @@ export default function CreateTransport({
       {transportType === "AIR_COURIER" && renderAirForm()}
 
       <div className="flex justify-end">
-        <Button type="submit" className="bg-primary text-white">
+        <Button
+          type="submit"
+          className="bg-primary text-white"
+          disabled={
+            (transportType === "MARITIME_TERRESTRIAL" &&
+              calculateMaritimeTotal(maritimeData) === 0) ||
+            (transportType === "AIR_COURIER" &&
+              calculateAirTotal(airData) === 0)
+          }
+        >
           Add Transport
         </Button>
       </div>
