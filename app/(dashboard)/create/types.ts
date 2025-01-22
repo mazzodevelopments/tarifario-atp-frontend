@@ -20,7 +20,6 @@ export interface Item {
   unit: string;
   partNumber: string;
   numbering: string;
-  stage: string;
 }
 
 export interface Budget {
@@ -41,15 +40,7 @@ export interface Budget {
   incoterm: string;
   transport: AirportFreightCourier | PortBondedWarehouse | null;
   custom: Custom | null;
-}
-
-export interface Transport {
-  id: string;
-  via: string;
-  pickUp: boolean;
-  pickUpPrice: number;
-  repackaging: boolean;
-  fumigation: boolean;
+  numbering: string;
 }
 
 /*** DESTINO – MARÍTIMO -TERRESTRE ***/

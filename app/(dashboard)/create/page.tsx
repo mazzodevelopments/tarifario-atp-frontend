@@ -17,12 +17,8 @@ import type {
 const steps = [
   { title: "Cargar Datos Cotización" },
   { title: "Agregar Items" },
-  { title: "Configurar Presupuestos" },
-  { title: "Agregar Transportes" },
-  { title: "Configurar Márgenes" },
-  { title: "Revisar Impuestos" },
-  { title: "Agregar Condiciones" },
-  { title: "Vista Previa" },
+  { title: "Configurar y Seleccionar Presupuestos" },
+  { title: "Exportar" },
   { title: "Confirmar y Crear" },
 ];
 
@@ -38,27 +34,36 @@ export default function Create() {
   const [items, setItems] = useState<Item[]>([
     {
       id: "1",
+      family: "Motores",
+      subfamily: "Eléctricos",
       detail: "Motor eléctrico",
       brand: "Siemens",
       quantity: 10,
-      unit: "unidades",
+      unit: "Unidades",
       partNumber: "MTR-1234",
+      numbering: "P000000001",
     },
     {
       id: "2",
+      family: "Hidráulicos",
+      subfamily: "Bombas",
       detail: "Bomba hidráulica",
       brand: "Bosch",
       quantity: 5,
-      unit: "unidades",
+      unit: "Unidades",
       partNumber: "BMP-5678",
+      numbering: "P000000002",
     },
     {
       id: "3",
+      family: "Rodamientos",
+      subfamily: "Bolas",
       detail: "Rodamiento de bolas",
       brand: "SKF",
       quantity: 50,
-      unit: "unidades",
+      unit: "Unidades",
       partNumber: "RDM-9101",
+      numbering: "P000000003",
     },
   ]);
   const [budgets, setBudgets] = useState<Budget[]>([]);
@@ -134,7 +139,7 @@ export default function Create() {
         description="Crea una nueva cotización"
       />
       <div className="flex w-full h-full p-6">
-        <div className="flex-grow flex flex-col gap-6 w-[70%] h-full p-[20px] border border-neutral-200 shadow-sm bg-white rounded-[18px] relative">
+        <div className="flex-grow flex flex-col gap-6 w-full h-full p-[20px] border border-neutral-200 shadow-sm bg-white rounded-[18px] relative">
           {isCreating || isSuccess ? (
             <SuccessAnimation isCreating={isCreating} isSuccess={isSuccess} />
           ) : (
@@ -178,7 +183,7 @@ export default function Create() {
             </>
           )}
         </div>
-        <div className="w-[30%] flex justify-center items-start gap-6">
+        <div className="w-[25%] flex justify-center items-start gap-6">
           <ProgressBar
             currentStep={currentStep}
             totalSteps={totalSteps}

@@ -52,6 +52,7 @@ export default function CreateBudget({
     incoterm: "",
     custom: null,
     transport: null,
+    numbering: "",
   });
   const [selectedItemQuantity, setSelectedItemQuantity] = useState<number>(0);
   const [buttonsState, setButtonsState] = useState({
@@ -358,6 +359,14 @@ export default function CreateBudget({
         label="Incoterm"
         required
         disabled={isWithinArgentina}
+      />
+      <Input
+        type="text"
+        name="numbering"
+        value={formData.numbering}
+        onChange={handleChange}
+        label="Numeración"
+        placeholder="Ej: COTI 0000000001"
       />
 
       <div className="grid grid-cols-3 gap-4">

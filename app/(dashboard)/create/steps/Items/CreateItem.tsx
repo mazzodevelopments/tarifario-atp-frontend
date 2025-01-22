@@ -22,7 +22,6 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
     unit: "",
     partNumber: "",
     numbering: "",
-    stage: "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -170,16 +169,6 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
         onChange={handleChange}
         placeholder="Numeración"
         label="Numeración"
-        required
-      />
-      <Input
-        type="text"
-        id="stage"
-        name="stage"
-        value={formData.stage}
-        onChange={handleChange}
-        placeholder="Estadio"
-        label="Estadio"
         required
       />
 

@@ -66,6 +66,7 @@ export default function BudgetList({
           <TableHeader className="border-b border-gray-200">
             <TableRow>
               <TableHead>Item</TableHead>
+              <TableHead>Numeración</TableHead>
               <TableHead>Proveedor</TableHead>
               <TableHead>Origen</TableHead>
               <TableHead>Destino</TableHead>
@@ -102,6 +103,7 @@ export default function BudgetList({
                   aria-selected={selectedBudgets.includes(budget.id)}
                 >
                   <TableCell>{budget.item}</TableCell>
+                  <TableCell>{budget.numbering}</TableCell>
                   <TableCell>{budget.supplier}</TableCell>
                   <TableCell>{budget.origin}</TableCell>
                   <TableCell>{budget.destination}</TableCell>
