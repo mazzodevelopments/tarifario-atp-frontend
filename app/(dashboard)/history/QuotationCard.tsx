@@ -1,65 +1,59 @@
 import type React from "react";
-import { Briefcase, User, Package, Truck, Globe, FileText } from "lucide-react";
-import { Cotizacion } from "./page";
+import { Briefcase, User, Calendar, Hash } from "lucide-react";
 import Button from "@/components/Button";
+import { QuotationData } from "@/types/QuotationData";
 
-const QuotationCard: React.FC<Cotizacion> = ({
-  nombreCotizacion,
-  empresa,
-  representante,
-  cantidadItems,
-  transporte,
-  tipoProveedor,
-  incoterm,
+const QuotationCard: React.FC<QuotationData> = ({
+  name,
+  client,
+  buyer,
+  expirationDateTime,
+  customerRequestNumber,
+  atpInternRequestNumber,
 }) => {
   return (
     <div className="bg-white shadow-sm border border-neutral-200 rounded-[18px] overflow-hidden w-full">
       <div className="bg-gradient-to-br p-6">
-        <h2 className="text-2xl font-[900] text-black truncate">
-          {nombreCotizacion}
-        </h2>
+        <h2 className="text-2xl font-[900] text-black truncate">{name}</h2>
       </div>
       <div className="px-6 space-y-4">
         <div className="flex items-center space-x-3">
           <Briefcase className="text-gray-400 flex-shrink-0" size={20} />
           <div className="min-w-0 flex-1">
-            <p className="text-sm text-gray-500">Empresa</p>
-            <p className="font-semibold truncate">{empresa}</p>
+            <p className="text-sm text-gray-500">Cliente</p>
+            <p className="font-semibold truncate">{client}</p>
           </div>
         </div>
         <div className="flex items-center space-x-3">
           <User className="text-gray-400 flex-shrink-0" size={20} />
           <div className="min-w-0 flex-1">
-            <p className="text-sm text-gray-500">Representante</p>
-            <p className="font-semibold truncate">{representante}</p>
+            <p className="text-sm text-gray-500">Comprador</p>
+            <p className="font-semibold truncate">{buyer}</p>
           </div>
         </div>
         <div className="flex items-center space-x-3">
-          <Package className="text-gray-400 flex-shrink-0" size={20} />
+          <Calendar className="text-gray-400 flex-shrink-0" size={20} />
           <div className="min-w-0 flex-1">
-            <p className="text-sm text-gray-500">Cantidad de Items</p>
-            <p className="font-semibold">{cantidadItems}</p>
+            <p className="text-sm text-gray-500">Fecha de Expiración</p>
+            <p className="font-semibold">
+              {new Date(expirationDateTime).toLocaleDateString("es-ES")}
+            </p>
           </div>
         </div>
         <div className="flex items-center space-x-3">
-          <Truck className="text-gray-400 flex-shrink-0" size={20} />
+          <Hash className="text-gray-400 flex-shrink-0" size={20} />
           <div className="min-w-0 flex-1">
-            <p className="text-sm text-gray-500">Transporte</p>
-            <p className="font-semibold">{transporte}</p>
+            <p className="text-sm text-gray-500">
+              Número de Solicitud del Cliente
+            </p>
+            <p className="font-semibold">{customerRequestNumber}</p>
           </div>
         </div>
         <div className="flex items-center space-x-3">
-          <Globe className="text-gray-400 flex-shrink-0" size={20} />
+          <Hash className="text-gray-400 flex-shrink-0" size={20} />
           <div className="min-w-0 flex-1">
-            <p className="text-sm text-gray-500">Tipo de Proveedor</p>
-            <p className="font-semibold">{tipoProveedor}</p>
-          </div>
-        </div>
-        <div className="flex items-center space-x-3">
-          <FileText className="text-gray-400 flex-shrink-0" size={20} />
-          <div className="min-w-0 flex-1">
-            <p className="text-sm text-gray-500">Incoterm</p>
-            <p className="font-semibold">{incoterm}</p>
+            <p className="text-sm text-gray-500">Número Interno ATP</p>
+            <p className="font-semibold">{atpInternRequestNumber}</p>
           </div>
         </div>
       </div>

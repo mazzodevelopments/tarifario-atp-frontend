@@ -4,7 +4,7 @@ import type React from "react";
 import { useState, useEffect } from "react";
 import Dropdown, { type DropdownItem } from "@/components/Dropdown";
 import Input from "@/components/Input";
-import type { QuotationData } from "@/app/(dashboard)/create/types";
+import { QuotationData } from "@/types/QuotationData";
 
 interface QuotationDetailsProps {
   onFormDataChange: (formData: QuotationData) => void;
@@ -40,7 +40,7 @@ export default function QuotationDetails({
   onFormDataChange,
   initialData,
 }: QuotationDetailsProps) {
-  const [formData, setFormData] = useState<QuotationData>(
+  const [formData, setFormData] = useState<Omit<QuotationData, "id">>(
     initialData || {
       name: "",
       client: "",

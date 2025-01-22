@@ -3,10 +3,8 @@ import { useState, useEffect } from "react";
 import Dropdown from "@/components/Dropdown";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
-import type {
-  PortBondedWarehouse,
-  AirportFreightCourier,
-} from "@/app/(dashboard)/create/types";
+import { PortBondedWarehouse } from "@/types/PortBondedWarehouse";
+import { AirportFreightCourier } from "@/types/AirportFreightCourier";
 
 type TransportType = "MARITIME_TERRESTRIAL" | "AIR_COURIER";
 

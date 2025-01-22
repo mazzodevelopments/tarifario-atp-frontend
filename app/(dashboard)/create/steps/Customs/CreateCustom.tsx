@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import type { Custom } from "@/app/(dashboard)/create/types";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
+import type { Custom } from "@/types/Custom";
 
 interface CreateCustomProps {
   onCustomCreated: (custom: Custom) => void;

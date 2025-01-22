@@ -5,8 +5,8 @@ import { UNITS } from "@/app/(dashboard)/create/data";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import Dropdown, { DropdownItem } from "@/components/Dropdown";
-import { Item } from "@/app/(dashboard)/create/types";
 import { DialogClose } from "@/components/ui/dialog";
+import { Item } from "@/types/Item";
 
 interface CreateItemProps {
   onItemCreated: (item: Item) => void;

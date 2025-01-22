@@ -8,11 +8,9 @@ import Header from "@/app/(dashboard)/components/Header";
 import QuotationDetails from "@/app/(dashboard)/create/steps/QuotationDetails";
 import ItemsList from "@/app/(dashboard)/create/steps/Items/ItemList";
 import BudgetList from "@/app/(dashboard)/create/steps/Budgets/BudgetList";
-import type {
-  Budget,
-  Item,
-  QuotationData,
-} from "@/app/(dashboard)/create/types";
+import type { QuotationData } from "@/types/QuotationData";
+import type { Item } from "@/types/Item";
+import type { Budget } from "@/types/Budget";
 
 const steps = [
   { title: "Cargar Datos Cotización" },
