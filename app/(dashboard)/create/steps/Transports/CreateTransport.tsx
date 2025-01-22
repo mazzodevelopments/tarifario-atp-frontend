@@ -52,6 +52,7 @@ export default function CreateTransport({
   >({
     edcadassaStayCostPerDay: 70,
     edcadassaStayDuration: 0,
+    edcadassaTotal: 0,
     internationalFreightCost: 0,
     internationalInsurance: 0,
     administrativeCharges: 0,
@@ -65,6 +66,14 @@ export default function CreateTransport({
     }));
   }, [maritimeData.storageDays, maritimeData.storageDayPrice]);
 
+  useEffect(() => {
+    setAirData((prevData) => ({
+      ...prevData,
+      edcadassaTotal:
+        prevData.edcadassaStayCostPerDay * prevData.edcadassaStayDuration,
+    }));
+  }, [airData.edcadassaStayCostPerDay, airData.edcadassaStayDuration]);
+
   const handleTransportTypeSelect = (item: { id: string; name: string }) => {
     setTransportType(item.id === "1" ? "MARITIME_TERRESTRIAL" : "AIR_COURIER");
   };
@@ -73,7 +82,12 @@ export default function CreateTransport({
     data: Omit<PortBondedWarehouse, "id" | "total">,
   ): number => {
     const mainTotal = Object.entries(data).reduce((sum, [key, value]) => {
-      if (key !== "forwarder" && typeof value === "number") {
+      if (
+        key !== "forwarder" &&
+        key !== "storageDays" &&
+        key !== "storageDayPrice" &&
+        typeof value === "number"
+      ) {
         return sum + value;
       }
       return sum;
@@ -115,12 +129,17 @@ export default function CreateTransport({
   const calculateAirTotal = (
     data: Omit<AirportFreightCourier, "id" | "total">,
   ): number => {
-    return Object.values(data).reduce((sum, value) => {
-      if (typeof value === "number") {
-        return sum + value;
-      }
-      return sum;
-    }, 0);
+    const baseTotal =
+      data.edcadassaTotal +
+      data.administrativeCharges +
+      data.airwayBillCuttingFee +
+      data.internationalFreightCost;
+
+    // Calculate insurance as percentage of freight cost
+    const insuranceAmount =
+      (data.internationalFreightCost * data.internationalInsurance) / 100;
+
+    return baseTotal + insuranceAmount;
   };
 
   const handleAirChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -328,7 +347,7 @@ export default function CreateTransport({
   const renderAirForm = () => (
     <div className="space-y-4">
       <h3 className="text-lg font-semibold mb-4">Transporte Aereo - Courier</h3>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-3 gap-4">
         <Input
           type="number"
           name="edcadassaStayCostPerDay"
@@ -347,6 +366,17 @@ export default function CreateTransport({
         />
         <Input
           type="number"
+          name="edcadassaTotal"
+          value={airData.edcadassaTotal}
+          onChange={handleAirChange}
+          label="Total EDCADASSA"
+          className="w-full"
+          disabled
+        />
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        <Input
+          type="number"
           name="internationalFreightCost"
           value={airData.internationalFreightCost}
           onChange={handleAirChange}
@@ -361,7 +391,7 @@ export default function CreateTransport({
           label="Seguro Internacional (%)"
           min={0.4}
           step={0.1}
-          max={1}
+          max={100}
           className="w-full"
         />
         <Input
@@ -402,7 +432,6 @@ export default function CreateTransport({
           label="Elegir Vía"
         />
       </div>
-
       {transportType === "MARITIME_TERRESTRIAL" && renderMaritimeForm()}
       {transportType === "AIR_COURIER" && renderAirForm()}
 
