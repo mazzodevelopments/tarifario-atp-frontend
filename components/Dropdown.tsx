@@ -1,6 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
+import type React from "react";
+import { useState, useEffect, useRef } from "react";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export interface DropdownItem {
   id: string;
@@ -32,8 +40,8 @@ export default function Dropdown({
   const [filteredItems, setFilteredItems] = useState<DropdownItem[]>([]);
   const [inputValue, setInputValue] = useState(value || "");
   const [isOpen, setIsOpen] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [newItemName, setNewItemName] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -60,10 +68,10 @@ export default function Dropdown({
   useEffect(() => {
     setFilteredItems(
       items.filter((item) =>
-        item.name.toLowerCase().includes(inputValue.toLowerCase()),
-      ),
+        item.name.toLowerCase().includes(inputValue.toLowerCase())
+      )
     );
-  }, [items, value]);
+  }, [items, inputValue]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -83,7 +91,7 @@ export default function Dropdown({
       setItems([...items, newItem]);
       handleSelect(newItem);
       setNewItemName("");
-      setIsModalOpen(false);
+      setIsDialogOpen(false);
     }
   };
 
@@ -95,7 +103,7 @@ export default function Dropdown({
           <input
             ref={inputRef}
             type="text"
-            value={value}
+            value={inputValue}
             onChange={handleInputChange}
             onClick={() => setIsOpen(true)}
             className={`w-full px-2 py-2 text-sm border rounded-md focus:outline-none ${
@@ -106,24 +114,59 @@ export default function Dropdown({
             disabled={disabled}
           />
           {addItem && (
-            <button
-              type="button"
-              onClick={() => setIsModalOpen(true)}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 rounded-full hover:bg-gray-200 focus:outline-none"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </button>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <button
+                  type="button"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 rounded-full hover:bg-gray-200 focus:outline-none"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Agregar nuevo elemento</DialogTitle>
+                </DialogHeader>
+                <div className="mt-4">
+                  <Input
+                    type="text"
+                    value={newItemName}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setNewItemName(e.target.value)
+                    }
+                    placeholder="Nombre del nuevo elemento"
+                  />
+                  <div className="flex justify-end gap-2 mt-4">
+                    <Button
+                      type="button"
+                      onClick={() => setIsDialogOpen(false)}
+                      variant="secondary"
+                      className="px-2"
+                    >
+                      Cancelar
+                    </Button>
+                    <Button
+                      onClick={handleAddItem}
+                      variant="primary"
+                      className="px-2 text-white"
+                    >
+                      Agregar
+                    </Button>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
           )}
         </div>
         {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
@@ -144,42 +187,6 @@ export default function Dropdown({
             </div>
           ))}
         </div>
-        {isModalOpen && addItem && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
-            <div className="bg-white p-6 rounded-lg">
-              <h2 className="text-lg font-[600] mb-2">
-                Agregar nuevo elemento
-              </h2>
-              <div>
-                <Input
-                  type="text"
-                  value={newItemName}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setNewItemName(e.target.value)
-                  }
-                  placeholder="Nombre del nuevo elemento"
-                />
-                <div className="flex justify-end gap-2 mt-4">
-                  <Button
-                    type="button"
-                    onClick={() => setIsModalOpen(false)}
-                    variant="secondary"
-                    className="px-2"
-                  >
-                    Cancelar
-                  </Button>
-                  <Button
-                    onClick={handleAddItem}
-                    variant="primary"
-                    className="px-2"
-                  >
-                    Agregar
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

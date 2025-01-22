@@ -273,7 +273,7 @@ export default function Dashboard() {
                     ))}
                   </div>
                 </ScrollArea>
-                <div className="w-auto flex mr-4 justify-end gap-2 items-end h-auto pt-4 border-t border-neutral-100">
+                <div className="w-auto flex pr-4 justify-end gap-2 items-end h-auto pt-4 border-t border-neutral-100">
                   <NewUserDialog />
                 </div>
               </div>
