@@ -1,5 +1,4 @@
 import Cotizacion from "@/app/(dashboard)/components/Cotizacion";
-import DEFAULT_PROFILE_PIC from "@/public/default-profile-pic.png";
 import { Search } from "react-feather";
 import Header from "@/app/(dashboard)/components/Header";
 import QuotationCard from "./QuotationCard";

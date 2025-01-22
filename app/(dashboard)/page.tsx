@@ -1,9 +1,8 @@
 "use client";
-import { Briefcase, ChevronRight, Plus, Server } from "react-feather";
-import { User, Calendar, DollarSign, Search } from "react-feather";
+import { Briefcase } from "react-feather";
+import { Search } from "react-feather";
 import Image from "next/image";
 import defaultProfilePic from "@/public/default-profile-pic.png";
-import Header from "./components/Header";
 import Button from "@/components/Button";
 import {
   SidebarMenu,

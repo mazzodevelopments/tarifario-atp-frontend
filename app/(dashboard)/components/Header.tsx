@@ -13,7 +13,6 @@ interface HeaderProps {
 
 export default function Header({
   title,
-  description,
   className = "",
   searchInput,
 }: HeaderProps) {

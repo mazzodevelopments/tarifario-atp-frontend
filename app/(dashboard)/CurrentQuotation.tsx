@@ -8,7 +8,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { CalendarIcon, DollarSignIcon, UserIcon } from "lucide-react";
 
 export default function CurrentQuotationCard() {
   const usersWorking = 12;

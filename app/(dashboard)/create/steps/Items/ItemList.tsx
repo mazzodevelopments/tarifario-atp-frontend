@@ -27,11 +27,8 @@ interface ItemsListProps {
 }
 
 export default function ItemsList({ items, setItems }: ItemsListProps) {
-  const [showCreateModal, setShowCreateModal] = useState(false);
-
   const handleItemCreated = async (newItem: Item) => {
     setItems([...items, newItem]);
-    setShowCreateModal(false);
   };
 
   const handleDeleteItem = async (id: string) => {
@@ -95,10 +92,7 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
       <Dialog>
         <div className="flex justify-center items-center w-full mt-6">
           <DialogTrigger asChild>
-            <Button
-              onClick={() => setShowCreateModal(true)}
-              className="text-sm px-4 py-2 bg-primary text-white flex items-center gap-2"
-            >
+            <Button className="text-sm px-4 py-2 bg-primary text-white flex items-center gap-2">
               <span className="text-md mr-2">+</span>
               Agregar Item
             </Button>

@@ -1,14 +1,8 @@
 import PageTransition from "@/components/PageTransition";
 import { AppSidebar } from "./components/AppSidebar";
 
-import { Separator } from "@/components/ui/separator";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AnimatePresence } from "framer-motion";
-import { Children } from "react";
 
 export default function AuthLayout({
   children,

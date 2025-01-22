@@ -21,9 +21,9 @@ export default function Settings() {
     setEditingField(field);
   };
 
-  const handleSave = (field: string) => {
-    setEditingField(null);
-  };
+  // const handleSave = (field: string) => {
+  //   setEditingField(null);
+  // };
 
   const handleChange = (field: string, value: string) => {
     setUserData((prev) => ({ ...prev, [field]: value }));
@@ -55,7 +55,9 @@ export default function Settings() {
         <Button
           className="mt-2 text-xs rounded-xl text-white"
           onClick={() =>
-            editingField === label ? handleSave(label) : handleEdit(label)
+            editingField === label
+              ? () => console.log("Guardar")
+              : handleEdit(label)
           }
         >
           {editingField === label ? "Guardar" : "Editar"}
