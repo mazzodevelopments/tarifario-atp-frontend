@@ -1,5 +1,5 @@
 import type React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Dropdown from "@/components/Dropdown";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
@@ -57,6 +57,13 @@ export default function CreateTransport({
     administrativeCharges: 0,
     airwayBillCuttingFee: 0,
   });
+
+  useEffect(() => {
+    setMaritimeData((prevData) => ({
+      ...prevData,
+      storageDaysTotal: prevData.storageDays * prevData.storageDayPrice,
+    }));
+  }, [maritimeData.storageDays, maritimeData.storageDayPrice]);
 
   const handleTransportTypeSelect = (item: { id: string; name: string }) => {
     setTransportType(item.id === "1" ? "MARITIME_TERRESTRIAL" : "AIR_COURIER");
@@ -228,7 +235,7 @@ export default function CreateTransport({
         />
         <Input
           type="number"
-          name="storageDayTotal"
+          name="storageDaysTotal"
           value={maritimeData.storageDaysTotal}
           onChange={handleMaritimeChange}
           className="w-full"
@@ -321,90 +328,61 @@ export default function CreateTransport({
   const renderAirForm = () => (
     <div className="space-y-4">
       <h3 className="text-lg font-semibold mb-4">Transporte Aereo - Courier</h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Costo Por Día EDCADASSA
-          </label>
-          <Input
-            type="number"
-            name="edcadassaStayCostPerDay"
-            value={airData.edcadassaStayCostPerDay}
-            className="w-full"
-            disabled
-          />
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Cantidad De Días EDCADASSA
-          </label>
-          <Input
-            type="number"
-            name="edcadassaStayDuration"
-            value={airData.edcadassaStayDuration}
-            onChange={handleAirChange}
-            className="w-full"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Flete Internacional
-          </label>
-          <Input
-            type="number"
-            name="internationalFreightCost"
-            value={airData.internationalFreightCost}
-            onChange={handleAirChange}
-            className="w-full"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Seguro Internacional (%)
-          </label>
-          <Input
-            type="number"
-            name="internationalInsurance"
-            value={airData.internationalInsurance}
-            onChange={handleAirChange}
-            min={0.4}
-            step={0.1}
-            max={1}
-            className="w-full"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Cargos Administrativos
-          </label>
-          <Input
-            type="number"
-            name="administrativeCharges"
-            value={airData.administrativeCharges}
-            onChange={handleAirChange}
-            className="w-full"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Corte De Guía Aerea
-          </label>
-          <Input
-            type="number"
-            name="airwayBillCuttingFee"
-            value={airData.airwayBillCuttingFee}
-            onChange={handleAirChange}
-            min={150}
-            step={10}
-            max={300}
-            className="w-full"
-          />
-        </div>
+      <div className="grid grid-cols-2 gap-4">
+        <Input
+          type="number"
+          name="edcadassaStayCostPerDay"
+          value={airData.edcadassaStayCostPerDay}
+          className="w-full"
+          label="Costo Por Día EDCADASSA"
+          disabled
+        />
+        <Input
+          type="number"
+          name="edcadassaStayDuration"
+          value={airData.edcadassaStayDuration}
+          onChange={handleAirChange}
+          label="Cantidad De Días EDCADASSA"
+          className="w-full"
+        />
+        <Input
+          type="number"
+          name="internationalFreightCost"
+          value={airData.internationalFreightCost}
+          onChange={handleAirChange}
+          label="Flete Internacional"
+          className="w-full"
+        />
+        <Input
+          type="number"
+          name="internationalInsurance"
+          value={airData.internationalInsurance}
+          onChange={handleAirChange}
+          label="Seguro Internacional (%)"
+          min={0.4}
+          step={0.1}
+          max={1}
+          className="w-full"
+        />
+        <Input
+          type="number"
+          name="administrativeCharges"
+          value={airData.administrativeCharges}
+          onChange={handleAirChange}
+          label="Cargos Administrativos"
+          className="w-full"
+        />
+        <Input
+          type="number"
+          name="airwayBillCuttingFee"
+          value={airData.airwayBillCuttingFee}
+          onChange={handleAirChange}
+          label="Corte De Guía Aerea"
+          min={150}
+          step={10}
+          max={300}
+          className="w-full"
+        />
       </div>
       <div className="text-xl font-bold">
         Total: ${calculateAirTotal(airData).toFixed(2)}
@@ -415,15 +393,13 @@ export default function CreateTransport({
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Elegir Vía
-        </label>
         <Dropdown
           fetchItems={async () => [
             { id: "1", name: "Maritimo - Terrestre" },
             { id: "2", name: "Air - Courier" },
           ]}
           onSelect={handleTransportTypeSelect}
+          label="Elegir Vía"
         />
       </div>
 
