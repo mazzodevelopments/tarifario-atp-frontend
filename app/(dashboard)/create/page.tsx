@@ -217,7 +217,7 @@ export default function Create() {
       return items.length === 0;
     }
     if (currentStep === 2) {
-      return budgets.length === 0;
+      return budgets.length === 0 || selectedBudgets.length === 0;
     }
     return false;
   };
