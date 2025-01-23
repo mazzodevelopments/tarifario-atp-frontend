@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X } from "react-feather";
 import Button from "@/components/Button";
 import CreateBudget from "./CreateBudget";
@@ -24,15 +24,17 @@ interface BudgetListProps {
   budgets: Budget[];
   setBudgets: (budgets: Budget[]) => void;
   items: Item[];
+  setSelectedBudgets: (selectedBudgets: Budget[]) => void;
 }
 
 export default function BudgetList({
   budgets,
   setBudgets,
   items,
+  setSelectedBudgets,
 }: BudgetListProps) {
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [selectedBudgets, setSelectedBudgets] = useState<string[]>([]);
+  const [budgetsForNextStep, setBudgetsForNextStep] = useState<string[]>([]);
 
   const handleBudgetCreated = (newBudget: Budget) => {
     setBudgets([...budgets, newBudget]);
@@ -41,11 +43,13 @@ export default function BudgetList({
 
   const handleDeleteBudget = (id: string) => {
     setBudgets(budgets.filter((budget) => budget.id !== id));
-    setSelectedBudgets(selectedBudgets.filter((budgetId) => budgetId !== id));
+    setBudgetsForNextStep(
+      budgetsForNextStep.filter((budgetId) => budgetId !== id),
+    );
   };
 
   const handleSelectBudget = (id: string) => {
-    setSelectedBudgets((prev) =>
+    setBudgetsForNextStep((prev) =>
       prev.includes(id)
         ? prev.filter((budgetId) => budgetId !== id)
         : [...prev, id],
@@ -58,6 +62,14 @@ export default function BudgetList({
     const customTotal = budget.custom?.total || 0;
     return Number((budgetTotal + transportTotal + customTotal).toFixed(2));
   };
+
+  // Sync budgetsForNextStep with setSelectedBudgets
+  useEffect(() => {
+    const selectedBudgets = budgets.filter((budget) =>
+      budgetsForNextStep.includes(budget.id),
+    );
+    setSelectedBudgets(selectedBudgets);
+  }, [budgetsForNextStep, budgets, setSelectedBudgets]);
 
   return (
     <div className="w-full mx-auto">
@@ -96,12 +108,12 @@ export default function BudgetList({
                   key={budget.id}
                   onClick={() => handleSelectBudget(budget.id)}
                   className={`text-sm cursor-pointer transition-colors duration-200 ease-in-out ${
-                    selectedBudgets.includes(budget.id)
+                    budgetsForNextStep.includes(budget.id)
                       ? "bg-sky-100 hover:bg-sky-200"
                       : "hover:bg-sky-50"
                   }`}
                   role="row"
-                  aria-selected={selectedBudgets.includes(budget.id)}
+                  aria-selected={budgetsForNextStep.includes(budget.id)}
                 >
                   <TableCell>{budget.stage + " " + budget.numbering}</TableCell>
                   <TableCell>{budget.item}</TableCell>

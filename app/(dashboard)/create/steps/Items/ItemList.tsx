@@ -35,10 +35,6 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
 
   return (
     <div className="w-full max-w-4xl mx-auto">
-      <div className="flex justify-between items-center mb-3">
-        <h3 className="text-lg font-regular">Items de la Cotización</h3>
-      </div>
-
       <div className="border rounded-md overflow-x-hidden max-h-[18vw]">
         <Table className="w-full">
           <TableHeader>

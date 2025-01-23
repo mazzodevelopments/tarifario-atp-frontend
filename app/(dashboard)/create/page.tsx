@@ -8,6 +8,7 @@ import Header from "@/app/(dashboard)/components/Header";
 import QuotationDetails from "@/app/(dashboard)/create/steps/QuotationDetails";
 import ItemsList from "@/app/(dashboard)/create/steps/Items/ItemList";
 import BudgetList from "@/app/(dashboard)/create/steps/Budgets/BudgetList";
+import SelectedBudgetsList from "@/app/(dashboard)/create/steps/Budgets/SelectedBudgetsList";
 import type { QuotationData } from "@/types/QuotationData";
 import type { Item } from "@/types/Item";
 import type { Budget } from "@/types/Budget";
@@ -16,7 +17,7 @@ const steps = [
   { title: "Cargar Datos Cotización" },
   { title: "Agregar Items" },
   { title: "Configurar y Seleccionar Presupuestos" },
-  { title: "Exportar" },
+  { title: "Revisar Presupuestos Seleccionados" },
   { title: "Confirmar y Crear" },
 ];
 
@@ -64,7 +65,119 @@ export default function Create() {
       numbering: "P000000003",
     },
   ]);
-  const [budgets, setBudgets] = useState<Budget[]>([]);
+  const [budgets, setBudgets] = useState<Budget[]>([
+    {
+      id: "1",
+      date: "2025-01-23",
+      item: "Electronics",
+      origin: "Shenzhen, China",
+      destination: "Los Angeles, USA",
+      supplier: "Tech Supplier Inc.",
+      deliveryTime: 15,
+      unitPrice: 100,
+      currency: "USD",
+      margin: 10,
+      totalPrice: 1100,
+      unitWeight: 1,
+      totalWeight: 10,
+      unit: "kg",
+      incoterm: "FOB",
+      transport: null,
+      custom: null,
+      delivery: null,
+      numbering: "0000000001",
+      stage: "COTI",
+    },
+    {
+      id: "2",
+      date: "2025-01-22",
+      item: "Automotive Parts",
+      origin: "Hamburg, Germany",
+      destination: "Detroit, USA",
+      supplier: "Auto Parts GmbH",
+      deliveryTime: 20,
+      unitPrice: 150,
+      currency: "EUR",
+      margin: 15,
+      totalPrice: 1725,
+      unitWeight: 2,
+      totalWeight: 20,
+      unit: "kg",
+      incoterm: "CIF",
+      transport: null,
+      custom: null,
+      delivery: null,
+      numbering: "0000000002",
+      stage: "COTI",
+    },
+    {
+      id: "3",
+      date: "2025-01-20",
+      item: "Furniture",
+      origin: "Ho Chi Minh City, Vietnam",
+      destination: "Sydney, Australia",
+      supplier: "VietFurnish Co.",
+      deliveryTime: 25,
+      unitPrice: 50,
+      currency: "AUD",
+      margin: 20,
+      totalPrice: 1500,
+      unitWeight: 5,
+      totalWeight: 75,
+      unit: "kg",
+      incoterm: "EXW",
+      transport: null,
+      custom: null,
+      delivery: null,
+      numbering: "0000000003",
+      stage: "COTI",
+    },
+    {
+      id: "B004",
+      date: "2025-01-18",
+      item: "Textiles",
+      origin: "Mumbai, India",
+      destination: "London, UK",
+      supplier: "Textile World",
+      deliveryTime: 12,
+      unitPrice: 25,
+      currency: "GBP",
+      margin: 10,
+      totalPrice: 550,
+      unitWeight: 0.5,
+      totalWeight: 11,
+      unit: "kg",
+      incoterm: "DAP",
+      transport: null,
+      custom: null,
+      delivery: null,
+      numbering: "0000000004",
+      stage: "COTI",
+    },
+    {
+      id: "B005",
+      date: "2025-01-17",
+      item: "Pharmaceuticals",
+      origin: "Zurich, Switzerland",
+      destination: "Toronto, Canada",
+      supplier: "SwissPharma AG",
+      deliveryTime: 10,
+      unitPrice: 200,
+      currency: "CAD",
+      margin: 5,
+      totalPrice: 2100,
+      unitWeight: 0.2,
+      totalWeight: 2,
+      unit: "kg",
+      incoterm: "FCA",
+      transport: null,
+      custom: null,
+      delivery: null,
+      numbering: "0000000005",
+      stage: "COTI",
+    },
+  ]);
+  const [selectedBudgets, setSelectedBudgets] = useState<Budget[]>([]);
 
   const handleNext = () => {
     if (currentStep < totalSteps - 1) {
@@ -80,6 +193,7 @@ export default function Create() {
 
   const handleCreate = async () => {
     setIsCreating(true);
+    setCurrentStep(currentStep + 1);
     // Simular la creación de la cotización
     await new Promise((resolve) => setTimeout(resolve, 2000));
     if (quotationData) {
@@ -119,8 +233,15 @@ export default function Create() {
         return <ItemsList items={items} setItems={setItems} />;
       case 2:
         return (
-          <BudgetList budgets={budgets} setBudgets={setBudgets} items={items} />
+          <BudgetList
+            budgets={budgets}
+            setBudgets={setBudgets}
+            items={items}
+            setSelectedBudgets={setSelectedBudgets}
+          />
         );
+      case 3:
+        return <SelectedBudgetsList selectedBudgets={selectedBudgets} />;
       default:
         return <p>Contenido de la etapa {currentStep + 1}</p>;
     }
@@ -159,7 +280,7 @@ export default function Create() {
                 >
                   Anterior
                 </Button>
-                {currentStep === totalSteps - 1 ? (
+                {currentStep === totalSteps - 2 ? (
                   <Button
                     onClick={handleCreate}
                     className="text-white"
