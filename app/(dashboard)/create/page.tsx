@@ -207,11 +207,17 @@ export default function Create() {
     if (currentStep === 0) {
       return (
         !quotationData ||
-        ["name", "client", "buyer"].some(
+        Object.keys(quotationData).some(
           (key) =>
             quotationData[key as keyof typeof quotationData].trim() === "",
         )
       );
+    }
+    if (currentStep === 1) {
+      return items.length === 0;
+    }
+    if (currentStep === 2) {
+      return budgets.length === 0;
     }
     return false;
   };
@@ -285,6 +291,7 @@ export default function Create() {
                     onClick={handleCreate}
                     className="text-white"
                     variant="primary"
+                    disabled={selectedBudgets.length === 0}
                   >
                     Crear Cotización
                   </Button>
