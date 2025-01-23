@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { X } from "react-feather";
+import { Pencil } from "lucide-react";
 import Button from "@/components/Button";
 import CreateBudget from "./CreateBudget";
+import EditBudget from "./EditBudget";
 import {
   Table,
   TableBody,
@@ -34,6 +35,8 @@ export default function BudgetList({
   setSelectedBudgets,
 }: BudgetListProps) {
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedBudget, setSelectedBudget] = useState<Budget | null>(null);
   const [budgetsForNextStep, setBudgetsForNextStep] = useState<string[]>([]);
 
   const handleBudgetCreated = (newBudget: Budget) => {
@@ -41,11 +44,27 @@ export default function BudgetList({
     setShowCreateModal(false);
   };
 
-  const handleDeleteBudget = (id: string) => {
-    setBudgets(budgets.filter((budget) => budget.id !== id));
-    setBudgetsForNextStep(
-      budgetsForNextStep.filter((budgetId) => budgetId !== id),
+  const handleBudgetEdited = (editedBudget: Budget) => {
+    setBudgets(
+      budgets.map((budget) =>
+        budget.id === editedBudget.id ? editedBudget : budget,
+      ),
     );
+    setShowEditModal(false);
+    setSelectedBudget(null);
+  };
+
+  const handleBudgetDeleted = (budgetId: string) => {
+    setBudgets(budgets.filter((budget) => budget.id !== budgetId));
+    setBudgetsForNextStep(budgetsForNextStep.filter((id) => id !== budgetId));
+    setShowEditModal(false);
+    setSelectedBudget(null);
+  };
+
+  const handleEditClick = (e: React.MouseEvent, budget: Budget) => {
+    e.stopPropagation();
+    setSelectedBudget(budget);
+    setShowEditModal(true);
   };
 
   const handleSelectBudget = (id: string) => {
@@ -63,7 +82,6 @@ export default function BudgetList({
     return Number((budgetTotal + transportTotal + customTotal).toFixed(2));
   };
 
-  // Sync budgetsForNextStep with setSelectedBudgets
   useEffect(() => {
     const selectedBudgets = budgets.filter((budget) =>
       budgetsForNextStep.includes(budget.id),
@@ -143,14 +161,11 @@ export default function BudgetList({
                   </TableCell>
                   <TableCell>
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteBudget(budget.id);
-                      }}
-                      className="text-black hover:text-red-600"
-                      aria-label={`Delete budget for ${budget.item} with total $${calculateTotal(budget).toFixed(2)}`}
+                      onClick={(e) => handleEditClick(e, budget)}
+                      className="text-black hover:text-blue-600"
+                      aria-label={`Edit budget for ${budget.item}`}
                     >
-                      <X className="w-4" />
+                      <Pencil className="w-4" />
                     </button>
                   </TableCell>
                 </TableRow>
@@ -180,6 +195,28 @@ export default function BudgetList({
               items={items}
               onCancel={() => setShowCreateModal(false)}
             />
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showEditModal} onOpenChange={setShowEditModal}>
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">Editar presupuesto</DialogTitle>
+          </DialogHeader>
+          <div className="bg-white rounded-lg w-full">
+            {selectedBudget && (
+              <EditBudget
+                budget={selectedBudget}
+                onBudgetEdited={handleBudgetEdited}
+                onBudgetDeleted={handleBudgetDeleted}
+                items={items}
+                onCancel={() => {
+                  setShowEditModal(false);
+                  setSelectedBudget(null);
+                }}
+              />
+            )}
           </div>
         </DialogContent>
       </Dialog>
