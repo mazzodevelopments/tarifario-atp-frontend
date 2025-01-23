@@ -21,6 +21,7 @@ import { Budget } from "@/types/Budget";
 import { Item } from "@/types/Item";
 import { PortBondedWarehouse } from "@/types/PortBondedWarehouse";
 import { AirportFreightCourier } from "@/types/AirportFreightCourier";
+import { Trash } from "lucide-react";
 
 interface EditBudgetProps {
   budget: Budget;
@@ -445,10 +446,10 @@ export default function EditBudget({
         <Button
           type="button"
           variant="secondary"
-          className="text-sm bg-red-100 text-red-600 hover:bg-red-200"
+          className="text-sm bg-red-100 text-red-600"
           onClick={handleDelete}
         >
-          Eliminar Presupuesto
+          <Trash size={18} />
         </Button>
         <div className="flex gap-2">
           <Button
@@ -511,11 +512,11 @@ export default function EditBudget({
       <Dialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-2xl">
+            <DialogTitle className="text-2xl font-[600]">
               Confirmar eliminación
             </DialogTitle>
           </DialogHeader>
-          <p className="py-4">
+          <p className="text-md font-medium mb-2">
             ¿Está seguro que desea eliminar este presupuesto?
           </p>
           <div className="flex justify-end gap-2">
@@ -529,7 +530,7 @@ export default function EditBudget({
             </Button>
             <Button
               type="button"
-              className="text-sm bg-red-600 text-white hover:bg-red-700"
+              className="text-sm bg-red-100 text-red-600"
               onClick={confirmDelete}
             >
               Eliminar
