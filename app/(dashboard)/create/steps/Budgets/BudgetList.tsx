@@ -165,7 +165,7 @@ export default function BudgetList({
                       className="text-black hover:text-blue-600"
                       aria-label={`Edit budget for ${budget.item}`}
                     >
-                      <Pencil className="w-4" />
+                      <Pencil className="mx-2 w-4" />
                     </button>
                   </TableCell>
                 </TableRow>
