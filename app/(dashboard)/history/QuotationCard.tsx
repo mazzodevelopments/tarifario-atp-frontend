@@ -4,7 +4,7 @@ import Button from "@/components/Button";
 import { QuotationData } from "@/types/QuotationData";
 
 const QuotationCard: React.FC<QuotationData> = ({
-  name,
+  taskNumber,
   client,
   buyer,
   expirationDateTime,
@@ -14,7 +14,9 @@ const QuotationCard: React.FC<QuotationData> = ({
   return (
     <div className="bg-white shadow-sm border border-neutral-200 rounded-[18px] overflow-hidden w-full">
       <div className="bg-gradient-to-br p-6">
-        <h2 className="text-2xl font-[900] text-black truncate">{name}</h2>
+        <h2 className="text-2xl font-[900] text-black truncate">
+          {taskNumber}
+        </h2>
       </div>
       <div className="px-6 space-y-4">
         <div className="flex items-center space-x-3">

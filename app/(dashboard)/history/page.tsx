@@ -5,7 +5,7 @@ import { QuotationData } from "@/types/QuotationData";
 
 const quotations: QuotationData[] = [
   {
-    name: "Construcción de Vivienda Familiar",
+    taskNumber: "A25R-0001",
     client: "Inmobiliaria Soluciones SA",
     buyer: "Juan Pérez",
     receptionDate: "2025-01-15",
@@ -16,7 +16,7 @@ const quotations: QuotationData[] = [
     atpInternRequestNumber: "ATP-INT-9001",
   },
   {
-    name: "Mantenimiento de Maquinaria Industrial",
+    taskNumber: "A25R-0002",
     client: "Tecnoindustria LTDA",
     buyer: "María López",
     receptionDate: "2025-01-10",
@@ -27,7 +27,7 @@ const quotations: QuotationData[] = [
     atpInternRequestNumber: "ATP-INT-9012",
   },
   {
-    name: "Reparación de Redes Eléctricas",
+    taskNumber: "A25R-0003",
     client: "ElectroRedes Global",
     buyer: "Carlos Ramírez",
     receptionDate: "2025-01-12",
@@ -38,7 +38,7 @@ const quotations: QuotationData[] = [
     atpInternRequestNumber: "ATP-INT-9025",
   },
   {
-    name: "Instalación de Sistema de Riego",
+    taskNumber: "A25R-0004",
     client: "AgroSolutions SAC",
     buyer: "Laura Rodríguez",
     receptionDate: "2025-01-09",
@@ -49,7 +49,7 @@ const quotations: QuotationData[] = [
     atpInternRequestNumber: "ATP-INT-9034",
   },
   {
-    name: "Suministro de Componentes Electrónicos",
+    taskNumber: "A25R-0005",
     client: "MicroTech Solutions",
     buyer: "Andrea Gómez",
     receptionDate: "2025-01-18",

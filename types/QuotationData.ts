@@ -1,5 +1,5 @@
 export interface QuotationData {
-  // name: string;
+  taskNumber: string;
   client: string;
   buyer: string;
   receptionDate: string;

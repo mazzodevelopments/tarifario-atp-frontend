@@ -42,6 +42,7 @@ export default function QuotationDetails({
 }: QuotationDetailsProps) {
   const [formData, setFormData] = useState<Omit<QuotationData, "id">>(
     initialData || {
+      taskNumber: "",
       client: "",
       buyer: "",
       receptionDate: new Date().toISOString().split("T")[0],
@@ -74,14 +75,14 @@ export default function QuotationDetails({
 
   return (
     <div className="w-full max-w-2xl space-y-4">
-      {/*<Input*/}
-      {/*  id="name"*/}
-      {/*  name="name"*/}
-      {/*  value={formData.name}*/}
-      {/*  onChange={handleInputChange}*/}
-      {/*  placeholder="Nombre"*/}
-      {/*  label="Nombre"*/}
-      {/*/>*/}
+      <Input
+        id="taskNumber"
+        name="taskNumber"
+        value={formData.taskNumber}
+        onChange={handleInputChange}
+        placeholder="N# Tarea"
+        label="N# Tarea"
+      />
 
       <div className="grid grid-cols-2 gap-4">
         <Dropdown
