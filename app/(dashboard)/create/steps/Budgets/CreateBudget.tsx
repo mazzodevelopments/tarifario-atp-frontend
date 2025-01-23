@@ -151,22 +151,6 @@ export default function CreateBudget({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // CHECKEO DE QUE LOS INPUTS NUMERICOS TENGAN VALORES
-    const requiredNumericFields = [
-      "deliveryTime",
-      "unitPrice",
-      "margin",
-      "unitWeight",
-    ];
-    const hasEmptyFields = requiredNumericFields.some(
-      (field) => !formData[field as keyof typeof formData],
-    );
-
-    if (hasEmptyFields) {
-      alert("Please fill in all required fields with non-zero values.");
-      return;
-    }
-
     const newBudget: Budget = {
       id: Math.random().toString(36).slice(2, 9),
       ...formData,
@@ -178,16 +162,11 @@ export default function CreateBudget({
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value, type } = e.target;
-    let numericValue: string | number = value;
-
-    if (type === "number") {
-      const parsedValue = Number.parseFloat(value);
-      numericValue = isNaN(parsedValue) ? "" : Math.max(0, parsedValue);
-    }
 
     setFormData((prev) => ({
       ...prev,
-      [name]: numericValue,
+      [name]:
+        type === "number" && value !== "" ? Math.max(0, Number(value)) : value,
     }));
   };
 
