@@ -13,8 +13,8 @@ const QuotationCard: React.FC<QuotationData> = ({
 }) => {
   return (
     <div className="bg-white shadow-sm border border-neutral-200 rounded-[18px] overflow-hidden w-full">
-      <div className="bg-gradient-to-br p-6">
-        <h2 className="text-2xl font-[900] text-black truncate">
+      <div className="bg-gradient-to-br p-6 pb-4">
+        <h2 className="text-2xl font-[800] text-black truncate">
           {taskNumber}
         </h2>
       </div>
