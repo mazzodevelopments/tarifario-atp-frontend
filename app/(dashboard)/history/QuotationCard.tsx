@@ -73,11 +73,13 @@ const QuotationCard: React.FC<QuotationData> = (quotation) => {
         </div>
       </div>
 
-      <QuotationDetails
-        quotation={quotation}
-        isOpen={showDetails}
-        onClose={() => setShowDetails(false)}
-      />
+      {quotation && (
+        <QuotationDetails
+          quotation={quotation}
+          isOpen={showDetails}
+          onClose={() => setShowDetails(false)}
+        />
+      )}
     </>
   );
 };

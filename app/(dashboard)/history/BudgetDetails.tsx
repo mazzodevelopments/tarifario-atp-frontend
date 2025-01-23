@@ -7,10 +7,12 @@ import {
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Package2, Truck, Building2, DollarSign } from "lucide-react";
-import { QuotationData } from "@/types/QuotationData";
+import type { Budget } from "@/types/Budget";
+import type { AirportFreightCourier } from "@/types/AirportFreightCourier";
+import type { PortBondedWarehouse } from "@/types/PortBondedWarehouse";
 
 interface BudgetDetailsProps {
-  budget: QuotationData["budgets"][0];
+  budget: Budget;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -19,7 +21,8 @@ export function BudgetDetails({ budget, isOpen, onClose }: BudgetDetailsProps) {
   if (!budget) return null;
 
   // Determine transport type based on the presence of airwayBillCuttingFee
-  const isAirTransport = budget.transport?.airwayBillCuttingFee !== undefined;
+  const isAirTransport =
+    budget.transport && "airwayBillCuttingFee" in budget.transport;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -132,7 +135,10 @@ export function BudgetDetails({ budget, isOpen, onClose }: BudgetDetailsProps) {
                   <div>
                     <p className="text-sm text-gray-500">Flete Internacional</p>
                     <p className="font-medium">
-                      {budget.transport.internationalFreightCost}{" "}
+                      {
+                        (budget.transport as AirportFreightCourier)
+                          .internationalFreightCost
+                      }{" "}
                       {budget.currency}
                     </p>
                   </div>
@@ -141,7 +147,10 @@ export function BudgetDetails({ budget, isOpen, onClose }: BudgetDetailsProps) {
                       Seguro Internacional
                     </p>
                     <p className="font-medium">
-                      {budget.transport.internationalInsurance}{" "}
+                      {
+                        (budget.transport as AirportFreightCourier)
+                          .internationalInsurance
+                      }{" "}
                       {budget.currency}
                     </p>
                   </div>
@@ -162,15 +171,26 @@ export function BudgetDetails({ budget, isOpen, onClose }: BudgetDetailsProps) {
                           Estadía EDCADASSA
                         </p>
                         <p className="font-medium">
-                          {budget.transport.edcadassaStayDuration} días a{" "}
-                          {budget.transport.edcadassaStayCostPerDay}{" "}
+                          {
+                            (budget.transport as AirportFreightCourier)
+                              .edcadassaStayDuration
+                          }{" "}
+                          días a{" "}
+                          {
+                            (budget.transport as AirportFreightCourier)
+                              .edcadassaStayCostPerDay
+                          }{" "}
                           {budget.currency}/día
                         </p>
                       </div>
                       <div>
                         <p className="text-sm text-gray-500">Total EDCADASSA</p>
                         <p className="font-medium">
-                          {budget.transport.edcadassaTotal} {budget.currency}
+                          {
+                            (budget.transport as AirportFreightCourier)
+                              .edcadassaTotal
+                          }{" "}
+                          {budget.currency}
                         </p>
                       </div>
                       <div>
@@ -178,14 +198,117 @@ export function BudgetDetails({ budget, isOpen, onClose }: BudgetDetailsProps) {
                           Corte de Guía Aérea
                         </p>
                         <p className="font-medium">
-                          {budget.transport.airwayBillCuttingFee}{" "}
+                          {
+                            (budget.transport as AirportFreightCourier)
+                              .airwayBillCuttingFee
+                          }{" "}
                           {budget.currency}
                         </p>
                       </div>
                     </>
                   )}
 
-                  {/* Maritime transport specific fields would go here */}
+                  {/* Maritime transport specific fields */}
+                  {!isAirTransport && (
+                    <>
+                      <div>
+                        <p className="text-sm text-gray-500">
+                          Transferencia a Depósito Fiscal
+                        </p>
+                        <p className="font-medium">
+                          {
+                            (budget.transport as PortBondedWarehouse)
+                              .transferToCustomsWarehouse
+                          }{" "}
+                          {budget.currency}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-500">
+                          Desconsolidación
+                        </p>
+                        <p className="font-medium">
+                          {
+                            (budget.transport as PortBondedWarehouse)
+                              .deconsolidation
+                          }{" "}
+                          {budget.currency}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-500">
+                          Costos de Movimiento
+                        </p>
+                        <p className="font-medium">
+                          {
+                            (budget.transport as PortBondedWarehouse)
+                              .movementCharges
+                          }{" "}
+                          {budget.currency}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-500">
+                          Precinto Electrónico
+                        </p>
+                        <p className="font-medium">
+                          {
+                            (budget.transport as PortBondedWarehouse)
+                              .electronicSeal
+                          }{" "}
+                          {budget.currency}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-500">
+                          Días de Almacenaje
+                        </p>
+                        <p className="font-medium">
+                          {
+                            (budget.transport as PortBondedWarehouse)
+                              .storageDays
+                          }{" "}
+                          días
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-500">
+                          Costo por Día de Almacenaje
+                        </p>
+                        <p className="font-medium">
+                          {
+                            (budget.transport as PortBondedWarehouse)
+                              .storageDayPrice
+                          }{" "}
+                          {budget.currency}/día
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-500">
+                          Total de Almacenaje
+                        </p>
+                        <p className="font-medium">
+                          {
+                            (budget.transport as PortBondedWarehouse)
+                              .storageDaysTotal
+                          }{" "}
+                          {budget.currency}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-500">
+                          Limpieza de Contenedor
+                        </p>
+                        <p className="font-medium">
+                          {
+                            (budget.transport as PortBondedWarehouse)
+                              .containerCleaning
+                          }{" "}
+                          {budget.currency}
+                        </p>
+                      </div>
+                    </>
+                  )}
 
                   <div>
                     <p className="text-sm text-gray-500">Total</p>

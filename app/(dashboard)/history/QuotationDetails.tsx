@@ -11,6 +11,7 @@ import { useState } from "react";
 import { QuotationData } from "@/types/QuotationData";
 import { BudgetDetails } from "./BudgetDetails";
 import { Calendar, FileText, User } from "lucide-react";
+import { Budget } from "@/types/Budget";
 
 interface QuotationDetailsProps {
   quotation: QuotationData;
@@ -23,9 +24,7 @@ export function QuotationDetails({
   isOpen,
   onClose,
 }: QuotationDetailsProps) {
-  const [selectedBudget, setSelectedBudget] = useState<
-    QuotationData["budgets"][0] | null
-  >(null);
+  const [selectedBudget, setSelectedBudget] = useState<Budget | null>(null);
 
   return (
     <>
