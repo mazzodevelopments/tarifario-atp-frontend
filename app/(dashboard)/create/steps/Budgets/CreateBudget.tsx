@@ -284,7 +284,6 @@ export default function CreateBudget({
           label="Tiempo de Entrega (Días)"
           required
           min="0"
-          step="1"
         />
       </div>
       <Dropdown
@@ -305,7 +304,6 @@ export default function CreateBudget({
           label="Precio Unitario"
           required
           min="0"
-          step="10"
         />
         <Dropdown
           value={formData.currency}
@@ -322,7 +320,6 @@ export default function CreateBudget({
           label="Margen (%)"
           required
           min="0"
-          step="10"
         />
         <Input
           type="number"
@@ -342,7 +339,6 @@ export default function CreateBudget({
           label="Peso Unitario"
           required
           min="0"
-          step="10"
         />
         <Dropdown
           value={formData.unit}

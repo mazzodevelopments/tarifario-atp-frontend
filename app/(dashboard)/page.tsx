@@ -36,6 +36,7 @@ export default function Dashboard() {
       materialsNeededDate: "2025-01-25",
       customerRequestNumber: "REQ-2025-003",
       atpInternRequestNumber: "ATP-INT-9025",
+      budgets: null,
     },
     {
       taskNumber: "A25R-0004",
@@ -47,6 +48,7 @@ export default function Dashboard() {
       materialsNeededDate: "2025-01-28",
       customerRequestNumber: "REQ-2025-004",
       atpInternRequestNumber: "ATP-INT-9034",
+      budgets: null,
     },
     {
       taskNumber: "A25R-0005",
@@ -58,6 +60,7 @@ export default function Dashboard() {
       materialsNeededDate: "2025-02-01",
       customerRequestNumber: "REQ-2025-005",
       atpInternRequestNumber: "ATP-INT-9042",
+      budgets: null,
     },
   ];
 

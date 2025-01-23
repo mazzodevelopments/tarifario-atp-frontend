@@ -51,6 +51,7 @@ export default function QuotationDetails({
       materialsNeededDate: new Date().toISOString().split("T")[0],
       customerRequestNumber: "",
       atpInternRequestNumber: "",
+      budgets: null,
     },
   );
 

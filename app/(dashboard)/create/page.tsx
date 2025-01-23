@@ -209,6 +209,9 @@ export default function Create() {
         !quotationData ||
         Object.keys(quotationData).some(
           (key) =>
+            key !== "budgets" && // Ignorar la key 'budgets'
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
             quotationData[key as keyof typeof quotationData].trim() === "",
         )
       );

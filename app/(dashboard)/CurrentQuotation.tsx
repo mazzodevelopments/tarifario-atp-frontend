@@ -22,6 +22,7 @@ export default function CurrentQuotationCard() {
     materialsNeededDate: "2025-02-01",
     customerRequestNumber: "REQ-2025-005",
     atpInternRequestNumber: "ATP-INT-9042",
+    budgets: null,
   };
 
   // const formatNumber = (num: number) => {

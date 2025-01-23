@@ -1,3 +1,5 @@
+import { Budget } from "@/types/Budget";
+
 export interface QuotationData {
   taskNumber: string;
   client: string;
@@ -8,4 +10,5 @@ export interface QuotationData {
   materialsNeededDate: string;
   customerRequestNumber: string;
   atpInternRequestNumber: string;
+  budgets: Budget[] | null;
 }
