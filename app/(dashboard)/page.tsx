@@ -22,29 +22,42 @@ import { QuotationSlider } from "./QuotationCarousel";
 import CurrentQuotationCard from "./CurrentQuotation";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { NewUserDialog } from "./NewUserDialog";
+import { QuotationData } from "@/types/QuotationData";
 
 export default function Dashboard() {
-  const cotizaciones = [
+  const quotations: QuotationData[] = [
     {
-      id: "1",
-      name: "A25R-1",
-      client: "John Doe",
-      date: new Date().toISOString(),
-      value: 1800,
+      taskNumber: "A25R-0003",
+      client: "ElectroRedes Global",
+      buyer: "Carlos Ramírez",
+      receptionDate: "2025-01-12",
+      uploadDate: "2025-01-13",
+      expirationDateTime: "2025-02-01T18:00:00",
+      materialsNeededDate: "2025-01-25",
+      customerRequestNumber: "REQ-2025-003",
+      atpInternRequestNumber: "ATP-INT-9025",
     },
     {
-      id: "2",
-      name: "A25R-2",
-      client: "Emily Johnson",
-      date: new Date().toISOString(),
-      value: 1800,
+      taskNumber: "A25R-0004",
+      client: "AgroSolutions SAC",
+      buyer: "Laura Rodríguez",
+      receptionDate: "2025-01-09",
+      uploadDate: "2025-01-10",
+      expirationDateTime: "2025-02-09T15:30:00",
+      materialsNeededDate: "2025-01-28",
+      customerRequestNumber: "REQ-2025-004",
+      atpInternRequestNumber: "ATP-INT-9034",
     },
     {
-      id: "3",
-      name: "A25R-3",
-      client: "Michael Brown",
-      date: new Date().toISOString(),
-      value: 1800,
+      taskNumber: "A25R-0005",
+      client: "MicroTech Solutions",
+      buyer: "Andrea Gómez",
+      receptionDate: "2025-01-18",
+      uploadDate: "2025-01-19",
+      expirationDateTime: "2025-02-05T20:00:00",
+      materialsNeededDate: "2025-02-01",
+      customerRequestNumber: "REQ-2025-005",
+      atpInternRequestNumber: "ATP-INT-9042",
     },
   ];
 
@@ -210,7 +223,7 @@ export default function Dashboard() {
           </div>
           <div className="h-full gap-3 flex flex-col">
             <CurrentQuotationCard />
-            <QuotationSlider cotizaciones={cotizaciones} />
+            <QuotationSlider quotations={quotations} />
           </div>
         </div>
 
@@ -225,10 +238,10 @@ export default function Dashboard() {
               </div>
               <div className="flex flex-col p-4 relative bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full">
                 <div className="flex items-center justify-start mb-3">
-                  <div className="w-7 h-7 mr-2 bg-red-700 rounded-[8px] flex justify-center items-center">
-                    <Briefcase size={18} className="text-white" />
+                  <div className="w-7 h-7 mr-2 bg-red-700 rounded-full flex justify-center items-center">
+                    <Briefcase size={16} className="text-white" />
                   </div>
-                  <h2 className="text-2xl font-[800] text-black">Ventas</h2>
+                  <h2 className="text-lg font-[800] text-black">Ventas</h2>
                 </div>
 
                 <div className="absolute bottom-4 right-4 w-auto flex justify-end gap-2 items-end h-auto">
@@ -247,7 +260,7 @@ export default function Dashboard() {
             </div>
             <div className="flex flex-col w-[35%]">
               <div className="flex flex-col relative py-4 bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full">
-                <h2 className="text-lg font-semibold mb-4 mx-4">
+                <h2 className="text-lg font-[800] mb-2 mx-4">
                   Lista de Usuarios
                 </h2>
                 <ScrollArea className="flex-grow border-neutral-100 border-t px-4">

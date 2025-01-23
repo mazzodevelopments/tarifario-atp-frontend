@@ -10,20 +10,13 @@ import {
   ChevronRight,
 } from "lucide-react";
 import Button from "@/components/Button";
-
-interface Cotizacion {
-  id: string;
-  name: string;
-  client: string;
-  date: string;
-  value: number;
-}
+import { QuotationData } from "@/types/QuotationData";
 
 interface QuotationSliderProps {
-  cotizaciones: Cotizacion[];
+  quotations: QuotationData[];
 }
 
-export function QuotationSlider({ cotizaciones }: QuotationSliderProps) {
+export function QuotationSlider({ quotations }: QuotationSliderProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false });
 
   const scrollPrev = React.useCallback(() => {
@@ -38,7 +31,7 @@ export function QuotationSlider({ cotizaciones }: QuotationSliderProps) {
     <div className="w-full h-[35%] bg-white border border-neutral-200 shadow-sm rounded-[18px] relative overflow-hidden select-none">
       <div className="flex flex-col p-3 relative">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-md font-[600] text-black">
+          <h2 className="text-lg font-[800] text-black">
             Cotizaciones completadas
           </h2>
           <div className="flex gap-2">
@@ -52,29 +45,29 @@ export function QuotationSlider({ cotizaciones }: QuotationSliderProps) {
         </div>
         <div className="overflow-visible" ref={emblaRef}>
           <div className="flex">
-            {cotizaciones.map((cotizacion) => (
+            {quotations.map((quotation) => (
               <div
-                key={cotizacion.id}
+                key={quotation.taskNumber}
                 className="flex-[0_0_100%] min-w-0 mr-4 bg-white border-[0.5px] border-[#ebebebcc] rounded-lg p-4 cursor-pointer hover:bg-gray-50 flex flex-col"
               >
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
                     <h3 className="text-black font-[800] mb-2">
-                      {cotizacion.name}
+                      {quotation.taskNumber}
                     </h3>
                     <div className="text-sm text-gray-500 flex items-center gap-2">
                       <User size={16} className="text-gray-400" />
-                      {cotizacion.client}
+                      {quotation.client}
                     </div>
                   </div>
                   <div className="flex flex-col items-end gap-2">
                     <div className="flex items-center gap-2 text-sm text-gray-500">
                       <Calendar size={16} className="text-gray-400" />
-                      {cotizacion.date.split("T")[0]}
+                      {quotation.expirationDateTime.split("T")[0]}
                     </div>
                     <div className="flex items-center text-primary font-[800]">
                       <DollarSign size={16} />
-                      {cotizacion.value}
+                      56000
                     </div>
                   </div>
                 </div>
