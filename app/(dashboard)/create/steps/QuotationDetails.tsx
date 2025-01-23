@@ -42,7 +42,7 @@ export default function QuotationDetails({
 }: QuotationDetailsProps) {
   const [formData, setFormData] = useState<Omit<QuotationData, "id">>(
     initialData || {
-      taskNumber: "",
+      taskNumber: "A25R-0001",
       client: "",
       buyer: "",
       receptionDate: new Date().toISOString().split("T")[0],
@@ -82,6 +82,7 @@ export default function QuotationDetails({
         onChange={handleInputChange}
         placeholder="N# Tarea"
         label="N# Tarea"
+        disabled
       />
 
       <div className="grid grid-cols-2 gap-4">

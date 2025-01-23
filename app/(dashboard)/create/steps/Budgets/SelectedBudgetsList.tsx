@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import Button from "@/components/Button";
 import type { Budget } from "@/types/Budget";
-import { Printer } from "lucide-react";
+import { Mail, Printer } from "lucide-react";
 
 interface SelectedBudgetsListProps {
   selectedBudgets: Budget[];
@@ -111,7 +111,7 @@ export default function SelectedBudgetsList({
         </Table>
       </div>
 
-      <div className="flex justify-center items-center w-full mt-6">
+      <div className="flex justify-center items-center w-full mt-6 gap-4">
         <Button
           onClick={handlePrint}
           className="text-sm px-4 py-2 bg-primary text-white flex items-center gap-2"
@@ -119,6 +119,14 @@ export default function SelectedBudgetsList({
         >
           <Printer size={16} />
           Imprimir Cotización
+        </Button>
+        <Button
+          onClick={handlePrint}
+          className="text-sm px-4 py-2 bg-primary text-white flex items-center gap-2"
+          disabled={selectedBudgets.length === 0}
+        >
+          <Mail size={16} />
+          Enviar Por Mail
         </Button>
       </div>
     </div>
