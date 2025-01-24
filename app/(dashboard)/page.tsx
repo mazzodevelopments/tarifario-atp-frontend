@@ -16,12 +16,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown, LogOut, Settings } from "lucide-react";
+import { ChevronDown, LogOut, Settings, UserPen } from "lucide-react";
 import Link from "next/link";
-import { QuotationSlider } from "./QuotationCarousel";
-import CurrentQuotationCard from "./CurrentQuotation";
+import { QuotationSlider } from "./components/QuotationCarousel";
+import CurrentQuotationCard from "./components/CurrentQuotation";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { NewUserDialog } from "./NewUserDialog";
+import { NewUserDialog } from "./components/NewUserDialog";
 import { QuotationData } from "@/types/QuotationData";
 
 export default function Dashboard() {
@@ -216,7 +216,7 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-      <div className="flex flex-row items-start w-full h-full">
+      <div className="flex flex-row items-start w-full">
         <div className="w-1/3 h-full flex flex-col border-r border-neutral-200 relative p-6">
           <div className="w-full flex flex-col pb-4">
             <h2 className="text-3xl font-[800]">Mis cotizaciones</h2>
@@ -231,14 +231,14 @@ export default function Dashboard() {
         </div>
 
         <div className="w-2/3 h-full flex flex-col relative p-6 gap-3">
+          <div className="w-full flex flex-col pb-1">
+            <h2 className="text-3xl font-[800]">Panel Administrador</h2>
+            <p className="text-gray-500 ml-1">
+              Panel de acciones de administrador
+            </p>
+          </div>
           <div className="flex flex-row gap-3 h-[60%]">
             <div className="flex flex-col w-[65%]">
-              <div className="w-full flex flex-col pb-4">
-                <h2 className="text-3xl font-[800]">Panel Administrador</h2>
-                <p className="text-gray-500 ml-1">
-                  Panel de acciones de administrador
-                </p>
-              </div>
               <div className="flex flex-col p-4 relative bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full">
                 <div className="flex items-center justify-start mb-3">
                   <div className="w-7 h-7 mr-2 bg-red-700 rounded-full flex justify-center items-center">
@@ -266,7 +266,7 @@ export default function Dashboard() {
                 <h2 className="text-lg font-[800] mb-2 mx-4">
                   Lista de Usuarios
                 </h2>
-                <ScrollArea className="flex-grow border-neutral-100 border-t px-4">
+                <ScrollArea className="flex-grow border-neutral-100 border-t px-4 h-[31vw]">
                   <div className="space-y-4 mt-2">
                     {users.map((user) => (
                       <div
