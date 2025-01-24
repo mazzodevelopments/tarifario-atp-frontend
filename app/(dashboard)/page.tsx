@@ -249,14 +249,14 @@ export default function Dashboard() {
 
                 <div className="absolute bottom-4 right-4 w-auto flex justify-end gap-2 items-end h-auto">
                   <Button variant="secondary" className="px-3 py-2 text-sm">
-                    Agregar cotización
+                    Ver más ventas
                   </Button>
 
                   <Button
                     variant="primary"
                     className="px-3 py-2 bg-neutral-900 text-white text-sm"
                   >
-                    Agregar cotización
+                    Agregar Venta
                   </Button>
                 </div>
               </div>
