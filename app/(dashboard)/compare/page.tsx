@@ -285,12 +285,20 @@ const QuoteComparison = () => {
     );
   };
 
-  const compareValues = (key: string, value1: any, value2: any) => {
+  const compareValues = (
+    key: string,
+    value1: string | number,
+    value2: string | number,
+  ) => {
     if (value1 === value2) return false;
     return true;
   };
 
-  const renderComparisonRow = (label: string, value1: any, value2: any) => {
+  const renderComparisonRow = (
+    label: string,
+    value1: string | number,
+    value2: string | number,
+  ) => {
     const hasChanged = compareValues(label, value1, value2);
     return (
       <TableRow>
