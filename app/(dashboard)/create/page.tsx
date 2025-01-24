@@ -7,8 +7,9 @@ import Button from "@/components/Button";
 import Header from "@/app/(dashboard)/components/Header";
 import QuotationDetails from "@/app/(dashboard)/create/steps/QuotationDetails";
 import ItemsList from "@/app/(dashboard)/create/steps/Items/ItemList";
-import BudgetList from "@/app/(dashboard)/create/steps/Budgets/BudgetList";
-import SelectedBudgetsList from "@/app/(dashboard)/create/steps/Budgets/SelectedBudgetsList";
+import PurchaseList from "@/app/(dashboard)/create/steps/Purchase/PurchaseList";
+import LogisticList from "@/app/(dashboard)/create/steps/Logistics/LogisticList";
+import SelectedBudgetsList from "@/app/(dashboard)/create/steps/Purchase/SelectedBudgetsList";
 import type { QuotationData } from "@/types/QuotationData";
 import type { Item } from "@/types/Item";
 import type { Budget } from "@/types/Budget";
@@ -16,7 +17,9 @@ import type { Budget } from "@/types/Budget";
 const steps = [
   { title: "Cargar Datos Cotización" },
   { title: "Agregar Items" },
-  { title: "Configurar y Seleccionar Presupuestos" },
+  { title: "Cargar Compras" },
+  { title: "Agregar Logística" },
+  { title: "Cargar Ventas" },
   { title: "Revisar Presupuestos Seleccionados" },
   { title: "Confirmar y Crear" },
 ];
@@ -219,7 +222,7 @@ export default function Create() {
     if (currentStep === 1) {
       return items.length === 0;
     }
-    if (currentStep === 2) {
+    if (currentStep === 4) {
       return budgets.length === 0 || selectedBudgets.length === 0;
     }
     return false;
@@ -242,7 +245,7 @@ export default function Create() {
         return <ItemsList items={items} setItems={setItems} />;
       case 2:
         return (
-          <BudgetList
+          <PurchaseList
             budgets={budgets}
             setBudgets={setBudgets}
             items={items}
@@ -250,6 +253,14 @@ export default function Create() {
           />
         );
       case 3:
+        return (
+          <LogisticList
+            budgets={budgets}
+            setBudgets={setBudgets}
+            items={items}
+          />
+        );
+      case 4:
         return <SelectedBudgetsList selectedBudgets={selectedBudgets} />;
       default:
         return <p>Contenido de la etapa {currentStep + 1}</p>;

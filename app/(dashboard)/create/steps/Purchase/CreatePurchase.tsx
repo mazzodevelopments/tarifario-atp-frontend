@@ -15,30 +15,45 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import CreateCustom from "@/app/(dashboard)/create/steps/Customs/CreateCustom";
-import CreateTransport from "@/app/(dashboard)/create/steps/Transports/CreateTransport";
+import CreateCustom from "@/app/(dashboard)/create/steps/Logistics/CreateCustom";
+import CreateTransport from "@/app/(dashboard)/create/steps/Logistics/CreateTransport";
 import { Budget } from "@/types/Budget";
 import { Item } from "@/types/Item";
 import { PortBondedWarehouse } from "@/types/PortBondedWarehouse";
 import { AirportFreightCourier } from "@/types/AirportFreightCourier";
-import { Trash } from "lucide-react";
 
-interface EditBudgetProps {
-  budget: Budget;
-  onBudgetEdited: (budget: Budget) => void;
-  onBudgetDeleted: (budgetId: string) => void;
+interface CreateBudgetProps {
+  onBudgetCreated: (budget: Budget) => void;
   items: Item[];
   onCancel?: () => void;
 }
 
-export default function EditBudget({
-  budget,
-  onBudgetEdited,
-  onBudgetDeleted,
+export default function CreatePurchase({
+  onBudgetCreated,
   items,
   onCancel,
-}: EditBudgetProps) {
-  const [formData, setFormData] = useState<Budget>(budget);
+}: CreateBudgetProps) {
+  const [formData, setFormData] = useState<Omit<Budget, "id">>({
+    date: new Date().toISOString().split("T")[0],
+    item: "",
+    origin: "",
+    destination: "",
+    supplier: "",
+    deliveryTime: 0,
+    unitPrice: 0,
+    currency: "",
+    margin: 0,
+    unitWeight: 0,
+    totalWeight: 0,
+    totalPrice: 0,
+    unit: "",
+    incoterm: "",
+    custom: null,
+    transport: null,
+    delivery: null,
+    numbering: "",
+    stage: "COTI",
+  });
   const [selectedItemQuantity, setSelectedItemQuantity] = useState<number>(0);
   const [buttonsState, setButtonsState] = useState({
     transport: false,
@@ -47,17 +62,9 @@ export default function EditBudget({
   });
   const [isCustomModalOpen, setIsCustomModalOpen] = useState(false);
   const [isTransportModalOpen, setIsTransportModalOpen] = useState(false);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const isWithinArgentina =
     formData.origin === "Argentina" && formData.destination === "Argentina";
-
-  useEffect(() => {
-    const selectedItem = items.find((i) => i.detail === budget.item);
-    if (selectedItem) {
-      setSelectedItemQuantity(selectedItem.quantity);
-    }
-  }, [budget.item, items]);
 
   // CALCULO TOTAL DEL PESO
   useEffect(() => {
@@ -144,39 +151,22 @@ export default function EditBudget({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // CHECKEO DE QUE LOS INPUTS NUMERICOS TENGAN VALORES
-    const requiredNumericFields = [
-      "deliveryTime",
-      "unitPrice",
-      "margin",
-      "unitWeight",
-    ];
-    const hasEmptyFields = requiredNumericFields.some(
-      (field) => !formData[field as keyof typeof formData],
-    );
-
-    if (hasEmptyFields) {
-      alert("Please fill in all required fields with non-zero values.");
-      return;
-    }
-
-    onBudgetEdited(formData);
+    const newBudget: Budget = {
+      id: Math.random().toString(36).slice(2, 9),
+      ...formData,
+    };
+    onBudgetCreated(newBudget);
   };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value, type } = e.target;
-    let numericValue: string | number = value;
-
-    if (type === "number") {
-      const parsedValue = Number.parseFloat(value);
-      numericValue = isNaN(parsedValue) ? "" : Math.max(0, parsedValue);
-    }
 
     setFormData((prev) => ({
       ...prev,
-      [name]: numericValue,
+      [name]:
+        type === "number" && value !== "" ? Math.max(0, Number(value)) : value,
     }));
   };
 
@@ -189,14 +179,6 @@ export default function EditBudget({
         setSelectedItemQuantity(selectedItem.quantity);
       }
     }
-  };
-
-  const handleDelete = () => {
-    setShowDeleteConfirm(true);
-  };
-
-  const confirmDelete = () => {
-    onBudgetDeleted(formData.id);
   };
 
   const fetchSuppliers = async (): Promise<DropdownItem[]> => {
@@ -281,7 +263,6 @@ export default function EditBudget({
           label="Tiempo de Entrega (Días)"
           required
           min="0"
-          step="1"
         />
       </div>
       <Dropdown
@@ -302,7 +283,6 @@ export default function EditBudget({
           label="Precio Unitario"
           required
           min="0"
-          step="10"
         />
         <Dropdown
           value={formData.currency}
@@ -319,7 +299,6 @@ export default function EditBudget({
           label="Margen (%)"
           required
           min="0"
-          step="10"
         />
         <Input
           type="number"
@@ -339,7 +318,6 @@ export default function EditBudget({
           label="Peso Unitario"
           required
           min="0"
-          step="10"
         />
         <Dropdown
           value={formData.unit}
@@ -442,35 +420,25 @@ export default function EditBudget({
         </div>
       )}
 
-      <div className="flex justify-between items-center">
+      <div className="flex justify-end gap-2">
         <Button
           type="button"
           variant="secondary"
-          className="text-sm bg-red-100 text-red-600"
-          onClick={handleDelete}
+          className="text-sm"
+          onClick={onCancel}
         >
-          <Trash size={18} />
+          Cancelar
         </Button>
-        <div className="flex gap-2">
-          <Button
-            type="button"
-            variant="secondary"
-            className="text-sm"
-            onClick={onCancel}
-          >
-            Cancelar
-          </Button>
-          <Button type="submit" className="text-sm bg-primary text-white">
-            Guardar Cambios
-          </Button>
-        </div>
+        <Button type="submit" className="text-sm bg-primary text-white">
+          Crear Presupuesto
+        </Button>
       </div>
 
       <Dialog open={isCustomModalOpen} onOpenChange={setIsCustomModalOpen}>
         <DialogContent className="max-w-4xl">
           <DialogHeader>
             <DialogTitle className="text-2xl">
-              {formData.custom ? "Editar" : "Agregar"} Gasto de Aduana
+              Agregar Gasto de Aduana
             </DialogTitle>
           </DialogHeader>
           <CreateCustom
@@ -491,9 +459,7 @@ export default function EditBudget({
       >
         <DialogContent className="max-w-4xl">
           <DialogHeader>
-            <DialogTitle className="text-2xl">
-              {formData.transport ? "Editar" : "Agregar"} Transporte
-            </DialogTitle>
+            <DialogTitle className="text-2xl">Agregar Transporte</DialogTitle>
           </DialogHeader>
           <CreateTransport
             onTransportCreated={(
@@ -506,36 +472,6 @@ export default function EditBudget({
               setIsTransportModalOpen(false);
             }}
           />
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-[600]">
-              Confirmar eliminación
-            </DialogTitle>
-          </DialogHeader>
-          <p className="text-md font-medium mb-2">
-            ¿Está seguro que desea eliminar este presupuesto?
-          </p>
-          <div className="flex justify-end gap-2">
-            <Button
-              type="button"
-              variant="secondary"
-              className="text-sm"
-              onClick={() => setShowDeleteConfirm(false)}
-            >
-              Cancelar
-            </Button>
-            <Button
-              type="button"
-              className="text-sm bg-red-100 text-red-600"
-              onClick={confirmDelete}
-            >
-              Eliminar
-            </Button>
-          </div>
         </DialogContent>
       </Dialog>
     </form>
