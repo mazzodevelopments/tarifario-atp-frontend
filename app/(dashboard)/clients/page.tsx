@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import Button from "@/components/Button";
-import { Mail, Phone, Pin, Plus, Trash2 } from "lucide-react";
+import { Mail, Phone, Pin } from "lucide-react";
 
 interface Client {
   id: number;

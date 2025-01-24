@@ -16,7 +16,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown, LogOut, Settings, UserPen } from "lucide-react";
+import { ChevronDown, LogOut, Settings } from "lucide-react";
 import Link from "next/link";
 import { QuotationSlider } from "./components/QuotationCarousel";
 import CurrentQuotationCard from "./components/CurrentQuotation";
