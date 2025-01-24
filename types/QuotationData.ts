@@ -9,6 +9,5 @@ export interface QuotationData {
   expirationDateTime: string;
   materialsNeededDate: string;
   customerRequestNumber: string;
-  atpInternRequestNumber: string;
   budgets: Budget[] | null;
 }

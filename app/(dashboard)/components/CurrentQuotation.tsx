@@ -21,7 +21,6 @@ export default function CurrentQuotationCard() {
     expirationDateTime: "2025-02-05T20:00:00",
     materialsNeededDate: "2025-02-01",
     customerRequestNumber: "REQ-2025-005",
-    atpInternRequestNumber: "ATP-INT-9042",
     budgets: null,
   };
 

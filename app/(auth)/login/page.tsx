@@ -31,7 +31,7 @@ export default function Register() {
           />
         </div>
         <h2 className="text-4xl font-extrabold text-primary text-center">
-          ATP Solutions
+          ATP
         </h2>
         <p className="mt-4 text-lg text-muted-foreground text-center max-w-md">
           Tarifario Web

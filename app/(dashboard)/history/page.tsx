@@ -13,7 +13,6 @@ const quotations: QuotationData[] = [
     expirationDateTime: "2025-02-15T23:59:59",
     materialsNeededDate: "2025-01-30",
     customerRequestNumber: "REQ-2025-001",
-    atpInternRequestNumber: "ATP-INT-9001",
     budgets: [
       {
         id: "1",

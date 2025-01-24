@@ -50,7 +50,6 @@ export default function QuotationDetails({
       expirationDateTime: `${new Date().toISOString().split("T")[0]}T00:00`,
       materialsNeededDate: new Date().toISOString().split("T")[0],
       customerRequestNumber: "",
-      atpInternRequestNumber: "",
       budgets: null,
     },
   );
@@ -141,14 +140,6 @@ export default function QuotationDetails({
         onChange={handleInputChange}
         placeholder="Número de Solicitud del Cliente"
         label="Número de Solicitud del Cliente"
-      />
-      <Input
-        id="atpInternRequestNumber"
-        name="atpInternRequestNumber"
-        value={formData.atpInternRequestNumber}
-        onChange={handleInputChange}
-        placeholder="Número de Solicitud Interna ATP"
-        label="Número de Solicitud Interna ATP"
       />
     </div>
   );

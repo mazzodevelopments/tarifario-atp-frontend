@@ -52,15 +52,6 @@ const QuotationCard: React.FC<QuotationData> = (quotation) => {
               <p className="font-semibold">{quotation.customerRequestNumber}</p>
             </div>
           </div>
-          <div className="flex items-center space-x-3">
-            <Hash className="text-gray-400 flex-shrink-0" size={20} />
-            <div className="min-w-0 flex-1">
-              <p className="text-sm text-gray-500">Número Interno ATP</p>
-              <p className="font-semibold">
-                {quotation.atpInternRequestNumber}
-              </p>
-            </div>
-          </div>
         </div>
         <div className="p-[20px] w-full items-center flex justify-end">
           <Button
