@@ -16,7 +16,7 @@ const quotations: QuotationData[] = [
     atpInternRequestNumber: "ATP-INT-9001",
     budgets: [
       {
-        id: "BUD-001",
+        id: "1",
         date: "2025-01-17",
         item: "Motor eléctrico",
         origin: "China",
@@ -62,11 +62,11 @@ const quotations: QuotationData[] = [
           total: 1150,
         },
         delivery: null,
-        numbering: "NUM-001",
+        numbering: "COTI 0000000001",
         stage: "Quote Sent",
       },
       {
-        id: "BUD-002",
+        id: "2",
         date: "2025-01-12",
         item: "Bomba hidráulica",
         origin: "Alemania",
@@ -86,7 +86,7 @@ const quotations: QuotationData[] = [
         delivery: {
           total: 300,
         },
-        numbering: "NUM-002",
+        numbering: "COTI 0000000002",
         stage: "Quote Sent",
       },
     ],

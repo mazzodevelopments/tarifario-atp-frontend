@@ -6,7 +6,14 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Package2, Truck, Building2, DollarSign } from "lucide-react";
+import {
+  Package2,
+  Truck,
+  Building2,
+  DollarSign,
+  Plane,
+  Container,
+} from "lucide-react";
 import type { Budget } from "@/types/Budget";
 import type { AirportFreightCourier } from "@/types/AirportFreightCourier";
 import type { PortBondedWarehouse } from "@/types/PortBondedWarehouse";
@@ -29,7 +36,7 @@ export function BudgetDetails({ budget, isOpen, onClose }: BudgetDetailsProps) {
       <DialogContent className="max-w-3xl max-h-[90vh]">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">
-            Detalles del Presupuesto {budget.numbering}
+            Detalles de {budget.numbering}
           </DialogTitle>
         </DialogHeader>
         <ScrollArea className="h-[calc(90vh-120px)] pr-4">
@@ -126,7 +133,7 @@ export function BudgetDetails({ budget, isOpen, onClose }: BudgetDetailsProps) {
             {budget.transport && (
               <section className="space-y-4">
                 <h3 className="text-lg font-semibold flex items-center gap-2">
-                  <Truck className="h-5 w-5" />
+                  <Plane className="h-5 w-5" />
                   Información de Transporte{" "}
                   {isAirTransport ? "Aéreo" : "Marítimo"}
                 </h3>
@@ -323,7 +330,10 @@ export function BudgetDetails({ budget, isOpen, onClose }: BudgetDetailsProps) {
             {/* Custom Information */}
             {budget.custom && (
               <section className="space-y-4">
-                <h3 className="text-lg font-semibold">Información de Aduana</h3>
+                <h3 className="text-lg font-semibold flex items-center gap-2">
+                  <Container className="h-5 w-5" />
+                  Información de Aduana
+                </h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-gray-500">Base Imponible</p>
@@ -364,7 +374,8 @@ export function BudgetDetails({ budget, isOpen, onClose }: BudgetDetailsProps) {
             {/* Delivery Information */}
             {budget.delivery && (
               <section className="space-y-4">
-                <h3 className="text-lg font-semibold">
+                <h3 className="text-lg font-semibold flex items-center gap-2">
+                  <Truck className="h-5 w-5" />
                   Información de Entrega
                 </h3>
                 <div>
