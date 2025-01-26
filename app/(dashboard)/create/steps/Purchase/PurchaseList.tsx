@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/dialog";
 import type { Budget } from "@/types/Budget";
 import type { Item } from "@/types/Item";
+import { PurchaseData } from "@/types/PurchaseData";
 
 interface BudgetListProps {
   budgets: Budget[];
@@ -33,7 +34,18 @@ export default function PurchaseList({
 }: BudgetListProps) {
   const [showCreateModal, setShowCreateModal] = useState(false);
 
-  const handleBudgetCreated = (newBudget: Budget) => {
+  const onPurchaseCreated = (newPurchase: PurchaseData) => {
+    const newBudget = {
+      numbering: `00000000${Math.floor(Math.random() * 100)
+        .toString()
+        .padStart(2, "0")}`,
+      purchaseData: newPurchase,
+      transport: null,
+      custom: null,
+      delivery: null,
+      salesData: null,
+      stage: "COTI",
+    };
     setBudgets([...budgets, newBudget]);
     setShowCreateModal(false);
   };
@@ -65,14 +77,16 @@ export default function PurchaseList({
               </TableRow>
             ) : (
               budgets.map((budget) => (
-                <TableRow key={budget.id} className="h-12">
+                <TableRow key={budget.numbering} className="h-12">
                   <TableCell>{budget.stage + " " + budget.numbering}</TableCell>
-                  <TableCell>{budget.item}</TableCell>
-                  <TableCell>{budget.supplier}</TableCell>
-                  <TableCell>{budget.origin}</TableCell>
-                  <TableCell>{budget.destination}</TableCell>
-                  <TableCell>{budget.deliveryTime} días</TableCell>
-                  <TableCell>{budget.incoterm}</TableCell>
+                  <TableCell>{budget.purchaseData?.item}</TableCell>
+                  <TableCell>{budget.purchaseData?.supplier}</TableCell>
+                  <TableCell>{budget.purchaseData?.origin}</TableCell>
+                  <TableCell>{budget.purchaseData?.destination}</TableCell>
+                  <TableCell>
+                    {budget.purchaseData?.deliveryTime} días
+                  </TableCell>
+                  <TableCell>{budget.purchaseData?.incoterm}</TableCell>
                 </TableRow>
               ))
             )}
@@ -85,7 +99,7 @@ export default function PurchaseList({
           <DialogTrigger asChild>
             <Button className="text-sm px-4 py-2 bg-primary text-white flex items-center gap-2">
               <span className="text-md mr-2">+</span>
-              Agregar Presupuesto
+              Agregar Datos De Compra
             </Button>
           </DialogTrigger>
         </div>
@@ -96,7 +110,7 @@ export default function PurchaseList({
           </DialogHeader>
           <div className="bg-white rounded-lg w-full">
             <CreatePurchase
-              onBudgetCreated={handleBudgetCreated}
+              onPurchaseCreated={onPurchaseCreated}
               items={items}
               onCancel={() => setShowCreateModal(false)}
             />

@@ -1,67 +1,36 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import {
-  COUNTRIES,
-  INCOTERMS,
-  UNITS,
-  CURRENCIES,
-} from "@/app/(dashboard)/create/data";
+import { COUNTRIES, INCOTERMS, UNITS } from "@/app/(dashboard)/create/data";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Dropdown, { type DropdownItem } from "@/components/Dropdown";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import CreateCustom from "@/app/(dashboard)/create/steps/Logistics/CreateCustom";
-import CreateTransport from "@/app/(dashboard)/create/steps/Logistics/CreateTransport";
-import { Budget } from "@/types/Budget";
 import { Item } from "@/types/Item";
-import { PortBondedWarehouse } from "@/types/PortBondedWarehouse";
-import { AirportFreightCourier } from "@/types/AirportFreightCourier";
+import { PurchaseData } from "@/types/PurchaseData";
 
-interface CreateBudgetProps {
-  onBudgetCreated: (budget: Budget) => void;
+interface CreatePurchaseProps {
+  onPurchaseCreated: (purchaseData: PurchaseData) => void;
   items: Item[];
   onCancel?: () => void;
 }
 
 export default function CreatePurchase({
-  onBudgetCreated,
+  onPurchaseCreated,
   items,
   onCancel,
-}: CreateBudgetProps) {
-  const [formData, setFormData] = useState<Omit<Budget, "id">>({
+}: CreatePurchaseProps) {
+  const [formData, setFormData] = useState<PurchaseData>({
     date: new Date().toISOString().split("T")[0],
     item: "",
     origin: "",
     destination: "",
     supplier: "",
     deliveryTime: 0,
-    unitPrice: 0,
-    currency: "",
-    margin: 0,
     unitWeight: 0,
     totalWeight: 0,
-    totalPrice: 0,
     unit: "",
     incoterm: "",
-    custom: null,
-    transport: null,
-    delivery: null,
-    numbering: "",
-    stage: "COTI",
   });
   const [selectedItemQuantity, setSelectedItemQuantity] = useState<number>(0);
-  const [buttonsState, setButtonsState] = useState({
-    transport: false,
-    customs: false,
-    delivery: false,
-  });
-  const [isCustomModalOpen, setIsCustomModalOpen] = useState(false);
-  const [isTransportModalOpen, setIsTransportModalOpen] = useState(false);
 
   const isWithinArgentina =
     formData.origin === "Argentina" && formData.destination === "Argentina";
@@ -74,88 +43,9 @@ export default function CreatePurchase({
     }));
   }, [formData.unitWeight, selectedItemQuantity]);
 
-  // CALCULO DE TOTAL
-  useEffect(() => {
-    const basePrice = formData.unitPrice * selectedItemQuantity;
-    const marginMultiplier = 1 + formData.margin / 100;
-    const calculatedTotalPrice = basePrice * marginMultiplier;
-    setFormData((prev) => ({
-      ...prev,
-      totalPrice: calculatedTotalPrice,
-    }));
-  }, [formData.unitPrice, selectedItemQuantity, formData.margin]);
-
-  useEffect(() => {
-    if (isWithinArgentina) {
-      setButtonsState({
-        transport: false,
-        customs: false,
-        delivery: true,
-      });
-      setFormData((prev) => ({
-        ...prev,
-        incoterm: "",
-        transport: null,
-        custom: null,
-      }));
-      return;
-    }
-
-    const updateButtonStates = (incoterm: string) => {
-      switch (incoterm) {
-        case "EXW":
-          setButtonsState({ transport: true, customs: true, delivery: true });
-          break;
-        case "FOB":
-          setButtonsState({ transport: true, customs: true, delivery: true });
-          break;
-        case "FCA":
-          setButtonsState({ transport: false, customs: true, delivery: false });
-          break;
-        case "CIF":
-          setButtonsState({ transport: false, customs: true, delivery: true });
-          break;
-        case "CFR":
-          setButtonsState({ transport: false, customs: true, delivery: true });
-          break;
-        case "DAT":
-          setButtonsState({ transport: false, customs: false, delivery: true });
-          break;
-        case "DAP":
-          setButtonsState({ transport: false, customs: false, delivery: true });
-          break;
-        case "DDP":
-          setButtonsState({
-            transport: false,
-            customs: false,
-            delivery: false,
-          });
-          break;
-        default:
-          setButtonsState({
-            transport: false,
-            customs: false,
-            delivery: false,
-          });
-      }
-    };
-
-    updateButtonStates(formData.incoterm);
-  }, [
-    formData.incoterm,
-    formData.origin,
-    formData.destination,
-    isWithinArgentina,
-  ]);
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    const newBudget: Budget = {
-      id: Math.random().toString(36).slice(2, 9),
-      ...formData,
-    };
-    onBudgetCreated(newBudget);
+    onPurchaseCreated(formData);
   };
 
   const handleChange = (
@@ -170,7 +60,7 @@ export default function CreatePurchase({
     }));
   };
 
-  const handleSelect = (field: keyof Budget) => (item: DropdownItem) => {
+  const handleSelect = (field: keyof PurchaseData) => (item: DropdownItem) => {
     setFormData((prev) => ({ ...prev, [field]: item.name }));
 
     if (field === "item") {
@@ -211,10 +101,6 @@ export default function CreatePurchase({
     return UNITS;
   };
 
-  const fetchCurrencies = async (): Promise<DropdownItem[]> => {
-    return CURRENCIES;
-  };
-
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <Input
@@ -224,14 +110,6 @@ export default function CreatePurchase({
         onChange={handleChange}
         label="Fecha"
         required
-      />
-      <Input
-        type="text"
-        name="numbering"
-        value={formData.numbering}
-        onChange={handleChange}
-        label="Numeración"
-        placeholder="Ej: 0000000001"
       />
       <Dropdown
         value={formData.item}
@@ -274,41 +152,6 @@ export default function CreatePurchase({
         required
       />
 
-      <div className="grid grid-cols-4 gap-4">
-        <Input
-          type="number"
-          name="unitPrice"
-          value={formData.unitPrice}
-          onChange={handleChange}
-          label="Precio Unitario"
-          required
-          min="0"
-        />
-        <Dropdown
-          value={formData.currency}
-          fetchItems={fetchCurrencies}
-          onSelect={handleSelect("currency")}
-          label="Moneda"
-          required
-        />
-        <Input
-          type="number"
-          name="margin"
-          value={formData.margin}
-          onChange={handleChange}
-          label="Margen (%)"
-          required
-          min="0"
-        />
-        <Input
-          type="number"
-          name="totalPrice"
-          value={formData.totalPrice.toFixed(2)}
-          label="Precio Total"
-          disabled
-        />
-      </div>
-
       <div className="grid grid-cols-3 gap-4">
         <Input
           type="number"
@@ -344,76 +187,6 @@ export default function CreatePurchase({
         disabled={isWithinArgentina}
       />
 
-      <div className="grid grid-cols-3 gap-4">
-        {formData.transport?.total && (
-          <div>
-            <label
-              htmlFor="transportTotal"
-              className="block text-sm font-semibold text-gray-700"
-            >
-              Precio Total Transporte
-            </label>
-            <span className="font-[600] text-xl">
-              ${formData.transport.total.toFixed(2)}
-            </span>
-          </div>
-        )}
-
-        {formData.custom?.total && (
-          <div>
-            <label
-              htmlFor="customTotal"
-              className="block text-sm font-semibold text-gray-700"
-            >
-              Precio Total Gastos de Aduana
-            </label>
-            <span className="font-[600] text-xl">
-              ${formData.custom.total.toFixed(2)}
-            </span>
-          </div>
-        )}
-      </div>
-
-      <div className="flex justify-center items-center">
-        <div className="flex gap-3">
-          <Button
-            type="button"
-            className={`text-sm ${
-              formData.transport === null
-                ? "bg-primary/10 text-primary"
-                : "bg-orange-100 text-orange-500"
-            }`}
-            disabled={!buttonsState.transport}
-            onClick={() => {
-              setIsTransportModalOpen(true);
-            }}
-          >
-            {formData.transport === null
-              ? "+Agregar Transporte"
-              : "Editar Transporte"}
-          </Button>
-          <Button
-            type="button"
-            className={`text-sm ${
-              formData.custom === null
-                ? "bg-primary/10 text-primary"
-                : "bg-orange-100 text-orange-500"
-            }`}
-            disabled={!buttonsState.customs}
-            onClick={() => setIsCustomModalOpen(true)}
-          >
-            {formData.custom === null ? "+Agregar Aduana" : "Editar Aduana"}
-          </Button>
-          <Button
-            type="button"
-            className="text-sm bg-primary/10 text-primary"
-            disabled={!buttonsState.delivery}
-          >
-            + Agregar Entrega
-          </Button>
-        </div>
-      </div>
-
       {isWithinArgentina && (
         <div className="flex items-center justify-center">
           <span className="text-sm font-[600] text-orange-500">Nacional</span>
@@ -430,50 +203,9 @@ export default function CreatePurchase({
           Cancelar
         </Button>
         <Button type="submit" className="text-sm bg-primary text-white">
-          Crear Presupuesto
+          Cargar Datos De Compra
         </Button>
       </div>
-
-      <Dialog open={isCustomModalOpen} onOpenChange={setIsCustomModalOpen}>
-        <DialogContent className="max-w-4xl">
-          <DialogHeader>
-            <DialogTitle className="text-2xl">
-              Agregar Gasto de Aduana
-            </DialogTitle>
-          </DialogHeader>
-          <CreateCustom
-            onCustomCreated={(newCustom) => {
-              setFormData((prev) => ({
-                ...prev,
-                custom: newCustom,
-              }));
-              setIsCustomModalOpen(false);
-            }}
-          />
-        </DialogContent>
-      </Dialog>
-
-      <Dialog
-        open={isTransportModalOpen}
-        onOpenChange={setIsTransportModalOpen}
-      >
-        <DialogContent className="max-w-4xl">
-          <DialogHeader>
-            <DialogTitle className="text-2xl">Agregar Transporte</DialogTitle>
-          </DialogHeader>
-          <CreateTransport
-            onTransportCreated={(
-              transportData: PortBondedWarehouse | AirportFreightCourier,
-            ) => {
-              setFormData((prev) => ({
-                ...prev,
-                transport: transportData,
-              }));
-              setIsTransportModalOpen(false);
-            }}
-          />
-        </DialogContent>
-      </Dialog>
     </form>
   );
 }

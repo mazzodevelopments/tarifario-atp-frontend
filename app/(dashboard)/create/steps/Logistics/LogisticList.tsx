@@ -41,7 +41,9 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
     if (selectedBudgetId) {
       setBudgets(
         budgets.map((budget) =>
-          budget.id === selectedBudgetId ? { ...budget, transport } : budget,
+          budget.numbering === selectedBudgetId
+            ? { ...budget, transport }
+            : budget,
         ),
       );
       setShowTransportModal(false);
@@ -52,7 +54,9 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
     if (selectedBudgetId) {
       setBudgets(
         budgets.map((budget) =>
-          budget.id === selectedBudgetId ? { ...budget, custom } : budget,
+          budget.numbering === selectedBudgetId
+            ? { ...budget, custom }
+            : budget,
         ),
       );
       setShowCustomModal(false);
@@ -78,7 +82,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
     const data = budget[type];
     const handleClick = (e: React.MouseEvent) => {
       e.stopPropagation();
-      setSelectedBudgetId(budget.id);
+      setSelectedBudgetId(budget.numbering);
       setShowModal(true);
     };
 
@@ -139,14 +143,16 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
               </TableRow>
             ) : (
               budgets.map((budget) => (
-                <TableRow key={budget.id} className="h-12">
+                <TableRow key={budget.numbering} className="h-12">
                   <TableCell>{budget.stage + " " + budget.numbering}</TableCell>
-                  <TableCell>{budget.item}</TableCell>
-                  <TableCell>{budget.supplier}</TableCell>
-                  <TableCell>{budget.origin}</TableCell>
-                  <TableCell>{budget.destination}</TableCell>
-                  <TableCell>{budget.deliveryTime} días</TableCell>
-                  <TableCell>{budget.incoterm}</TableCell>
+                  <TableCell>{budget.purchaseData?.item}</TableCell>
+                  <TableCell>{budget.purchaseData?.supplier}</TableCell>
+                  <TableCell>{budget.purchaseData?.origin}</TableCell>
+                  <TableCell>{budget.purchaseData?.destination}</TableCell>
+                  <TableCell>
+                    {budget.purchaseData?.deliveryTime} días
+                  </TableCell>
+                  <TableCell>{budget.purchaseData?.incoterm}</TableCell>
                   <TableCell>
                     {renderActionCell(
                       budget,
