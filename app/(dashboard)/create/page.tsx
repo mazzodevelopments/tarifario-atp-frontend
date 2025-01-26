@@ -21,7 +21,7 @@ const steps = [
   { title: "Cargar Compras" },
   { title: "Agregar Logística" },
   { title: "Cargar Ventas" },
-  { title: "Revisar Presupuestos Seleccionados" },
+  { title: "Revisar Presupuestos" },
   { title: "Confirmar y Crear" },
 ];
 
