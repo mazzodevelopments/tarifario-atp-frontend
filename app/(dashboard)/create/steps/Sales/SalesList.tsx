@@ -106,7 +106,7 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
               budgets.map((budget) => (
                 <TableRow key={budget.numbering} className="h-12">
                   <TableCell>{budget.stage + " " + budget.numbering}</TableCell>
-                  <TableCell>{budget.purchaseData?.item}</TableCell>
+                  <TableCell>{budget.purchaseData?.item?.detail}</TableCell>
                   <TableCell>{budget.purchaseData?.supplier}</TableCell>
                   <TableCell>{budget.purchaseData?.origin}</TableCell>
                   <TableCell>{budget.purchaseData?.destination}</TableCell>

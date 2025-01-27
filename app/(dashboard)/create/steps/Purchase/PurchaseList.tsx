@@ -59,7 +59,7 @@ export default function PurchaseList({
               <TableHead>Numeración</TableHead>
               <TableHead>Item</TableHead>
               <TableHead>Proveedor</TableHead>
-              <TableHead>Moneda</TableHead>
+              <TableHead>Precio Unitario</TableHead>
               <TableHead>Origen</TableHead>
               <TableHead>Destino</TableHead>
               <TableHead>T. Producción</TableHead>
@@ -80,9 +80,13 @@ export default function PurchaseList({
               budgets.map((budget) => (
                 <TableRow key={budget.numbering} className="h-12">
                   <TableCell>{budget.stage + " " + budget.numbering}</TableCell>
-                  <TableCell>{budget.purchaseData?.item}</TableCell>
+                  <TableCell>{budget.purchaseData?.item?.detail}</TableCell>
                   <TableCell>{budget.purchaseData?.supplier}</TableCell>
-                  <TableCell>{budget.purchaseData?.currency}</TableCell>
+                  <TableCell>
+                    {budget.purchaseData?.unitPrice.toFixed(2) +
+                      " " +
+                      budget.purchaseData?.currency}
+                  </TableCell>
                   <TableCell>{budget.purchaseData?.origin}</TableCell>
                   <TableCell>{budget.purchaseData?.destination}</TableCell>
                   <TableCell>

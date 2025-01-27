@@ -25,11 +25,12 @@ export default function CreatePurchase({
 }: CreatePurchaseProps) {
   const [formData, setFormData] = useState<PurchaseData>({
     date: new Date().toISOString().split("T")[0],
-    item: "",
+    item: null,
     origin: "",
     destination: "",
     supplier: "",
     currency: "",
+    unitPrice: 0,
     deliveryTime: 0,
     unitWeight: 0,
     totalWeight: 0,
@@ -122,7 +123,7 @@ export default function CreatePurchase({
         required
       />
       <Dropdown
-        value={formData.item}
+        value={formData.item?.detail}
         fetchItems={fetchItems}
         onSelect={handleSelect("item")}
         label="Item"
@@ -161,14 +162,24 @@ export default function CreatePurchase({
         label="Proovedor"
         required
       />
-      <Dropdown
-        value={formData.currency}
-        fetchItems={fetchCurrencies}
-        onSelect={handleSelect("currency")}
-        label="Moneda"
-        required
-      />
-
+      <div className="grid grid-cols-2 gap-4">
+        <Dropdown
+          value={formData.currency}
+          fetchItems={fetchCurrencies}
+          onSelect={handleSelect("currency")}
+          label="Moneda"
+          required
+        />
+        <Input
+          type="number"
+          name="unitPrice"
+          value={formData.unitPrice}
+          onChange={handleChange}
+          label="Peso Unitario Proovedor"
+          min="0"
+          required
+        />
+      </div>
       <div className="grid grid-cols-3 gap-4">
         <Input
           type="number"
