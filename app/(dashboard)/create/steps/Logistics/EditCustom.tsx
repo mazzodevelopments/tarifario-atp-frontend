@@ -1,70 +1,66 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+import type React from "react";
+import { useEffect, useState, useCallback } from "react";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import type { Custom } from "@/types/Custom";
 
-interface CreateCustomProps {
-  onCustomCreated: (custom: Custom) => void;
+interface EditCustomProps {
+  custom: Custom;
+  onCustomUpdated: (custom: Custom) => void;
+  onCustomDeleted: () => void;
   onCancel: () => void;
 }
 
-export default function CreateCustom({
-  onCustomCreated,
+export default function EditCustom({
+  custom,
+  onCustomUpdated,
+  onCustomDeleted,
   onCancel,
-}: CreateCustomProps) {
-  const [formData, setFormData] = useState<Custom>({
-    sediLegalizationFee: 50,
-    invoiceValueFOB: 0,
-    internationalFreightCost: 0,
-    taxableBase: 0,
-    importDutyRate: 0,
-    statisticsRate: 0,
-    ivaRate: 0,
-    additionalIvaRate: 0,
-    incomeTaxRate: 0,
-    grossIncomeRate: 0,
-    simFee: 10,
-    minimumCustomsDispatchCost: 250,
-    customsOperationalCharges: 210,
-    optionalElectricalSecurity: 150,
-    optionalSenasaFee: 50,
-    total: 0,
-  });
+}: EditCustomProps) {
+  const [formData, setFormData] = useState<Custom>(custom);
+  const [includeElectricalSecurity, setIncludeElectricalSecurity] = useState(
+    custom.optionalElectricalSecurity > 0,
+  );
+  const [includeSenasaFee, setIncludeSenasaFee] = useState(
+    custom.optionalSenasaFee > 0,
+  );
 
-  const [includeElectricalSecurity, setIncludeElectricalSecurity] =
-    useState(false);
-  const [includeSenasaFee, setIncludeSenasaFee] = useState(false);
+  const calculateCustoms = useCallback(() => {
+    const taxableBase =
+      formData.invoiceValueFOB +
+      formData.internationalFreightCost +
+      (formData.invoiceValueFOB + formData.internationalFreightCost) * 0.01;
+
+    const importDuty = taxableBase * formData.importDutyRate;
+    const statisticsRate = taxableBase * 0.03;
+    const ivaBase = importDuty + statisticsRate;
+    const ivaRate = ivaBase * 0.21;
+    const additionalIvaRate = ivaBase * 0.105;
+    const incomeTaxRate = taxableBase * 0.06;
+    const grossIncomeRate = taxableBase * 0.025;
+    const minimumCustomsDispatchCost = Math.max(250, taxableBase * 0.008);
+
+    return {
+      taxableBase,
+      statisticsRate,
+      ivaRate,
+      additionalIvaRate,
+      incomeTaxRate,
+      grossIncomeRate,
+      minimumCustomsDispatchCost,
+    };
+  }, [
+    formData.invoiceValueFOB,
+    formData.internationalFreightCost,
+    formData.importDutyRate,
+  ]);
 
   useEffect(() => {
-    const calculateCustoms = () => {
-      const taxableBase =
-        formData.invoiceValueFOB +
-        formData.internationalFreightCost +
-        (formData.invoiceValueFOB + formData.internationalFreightCost) * 0.01;
-
-      const importDuty = taxableBase * formData.importDutyRate;
-      const statisticsRate = taxableBase * 0.03;
-      const ivaBase = importDuty + statisticsRate;
-      const ivaRate = ivaBase * 0.21;
-      const additionalIvaRate = ivaBase * 0.105;
-      const incomeTaxRate = taxableBase * 0.06;
-      const grossIncomeRate = taxableBase * 0.025;
-      const minimumCustomsDispatchCost = Math.max(250, taxableBase * 0.008);
-
-      setFormData((prevData) => ({
-        ...prevData,
-        taxableBase,
-        statisticsRate,
-        ivaRate,
-        additionalIvaRate,
-        incomeTaxRate,
-        grossIncomeRate,
-        minimumCustomsDispatchCost,
-      }));
-    };
-
-    calculateCustoms();
+    const calculatedValues = calculateCustoms();
+    setFormData((prevData) => ({
+      ...prevData,
+      ...calculatedValues,
+    }));
   }, [
     formData.invoiceValueFOB,
     formData.internationalFreightCost,
@@ -100,7 +96,7 @@ export default function CreateCustom({
         total: newTotal,
       }));
     }
-  }, [includeElectricalSecurity, includeSenasaFee, formData]);
+  }, [formData, includeElectricalSecurity, includeSenasaFee]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -110,16 +106,24 @@ export default function CreateCustom({
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    onCustomCreated(formData);
+  const handleCheckboxChange = (
+    checkboxName: "includeElectricalSecurity" | "includeSenasaFee",
+    isChecked: boolean,
+  ) => {
+    if (checkboxName === "includeElectricalSecurity") {
+      setIncludeElectricalSecurity(isChecked);
+    } else {
+      setIncludeSenasaFee(isChecked);
+    }
   };
 
-  const handleCancel = (e: React.MouseEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    e.stopPropagation();
-    onCancel();
+    onCustomUpdated(formData);
+  };
+
+  const handleDelete = () => {
+    onCustomDeleted();
   };
 
   return (
@@ -129,7 +133,7 @@ export default function CreateCustom({
           type="number"
           name="invoiceValueFOB"
           value={formData.invoiceValueFOB}
-          label=" FOB (Valor de la INVOICE)"
+          label="FOB (Valor de la INVOICE)"
           onChange={handleInputChange}
         />
         <Input
@@ -225,39 +229,47 @@ export default function CreateCustom({
             type="checkbox"
             id="electricalSecurity"
             checked={includeElectricalSecurity}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setIncludeElectricalSecurity(e.target.checked)
+            onChange={(e) =>
+              handleCheckboxChange(
+                "includeElectricalSecurity",
+                e.target.checked,
+              )
             }
           />
           <label htmlFor="electricalSecurity" className="text-sm font-[600]">
-            Incluir Seguridad Eléctrica (${formData.optionalElectricalSecurity})
+            Incluir Seguridad Eléctrica ($150)
           </label>
         </div>
-
         <div className="flex items-center space-x-2">
           <input
             type="checkbox"
             id="senasaFee"
             checked={includeSenasaFee}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setIncludeSenasaFee(e.target.checked)
+            onChange={(e) =>
+              handleCheckboxChange("includeSenasaFee", e.target.checked)
             }
           />
           <label htmlFor="senasaFee" className="text-sm font-[600]">
-            Incluir SENASA (${formData.optionalSenasaFee})
+            Incluir SENASA ($50)
           </label>
         </div>
       </div>
       <div className="text-xl font-bold mt-4">
         Total: ${formData.total.toFixed(2)}
       </div>
-
       <div className="flex justify-end gap-2">
-        <Button type="button" variant="secondary" onClick={handleCancel}>
-          Cancelar
+        <Button type="button" variant="secondary" onClick={onCancel}>
+          Cancel
+        </Button>
+        <Button
+          type="button"
+          className="bg-red-100 text-red-500"
+          onClick={handleDelete}
+        >
+          Delete
         </Button>
         <Button type="submit" className="bg-primary text-white">
-          Crear Gasto de Aduana
+          Update Custom
         </Button>
       </div>
     </form>

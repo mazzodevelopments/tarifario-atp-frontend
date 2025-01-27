@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/dialog";
 import CreateTransport from "@/app/(dashboard)/create/steps/Logistics/CreateTransport";
 import CreateCustom from "@/app/(dashboard)/create/steps/Logistics/CreateCustom";
+import EditCustom from "@/app/(dashboard)/create/steps/Logistics/EditCustom";
 import type { Budget } from "@/types/Budget";
 import type { Item } from "@/types/Item";
 import type { AirportFreightCourier } from "@/types/AirportFreightCourier";
@@ -34,6 +35,9 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
   const [showCustomModal, setShowCustomModal] = useState(false);
   const [showDeliveryModal, setShowDeliveryModal] = useState(false);
   const [selectedBudgetId, setSelectedBudgetId] = useState<string | null>(null);
+  const [editingCustomBudgetId, setEditingCustomBudgetId] = useState<
+    string | null
+  >(null);
 
   const getButtonStates = (
     incoterm: string,
@@ -67,7 +71,10 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
       setBudgets(
         budgets.map((budget) =>
           budget.numbering === selectedBudgetId
-            ? { ...budget, transport }
+            ? {
+                ...budget,
+                transport,
+              }
             : budget,
         ),
       );
@@ -75,7 +82,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
     }
   };
 
-  const handleCustomCreated = (custom: Custom) => {
+  const handleCustomCreatedOrUpdated = (custom: Custom) => {
     if (selectedBudgetId) {
       setBudgets(
         budgets.map((budget) =>
@@ -85,6 +92,30 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
         ),
       );
       setShowCustomModal(false);
+      setEditingCustomBudgetId(null);
+      console.log(
+        JSON.stringify(
+          `${custom.optionalElectricalSecurity}` +
+            `${custom.optionalSenasaFee}`,
+        ),
+      );
+    }
+  };
+
+  const handleCustomDeleted = () => {
+    if (selectedBudgetId) {
+      setBudgets(
+        budgets.map((budget) =>
+          budget.numbering === selectedBudgetId
+            ? {
+                ...budget,
+                custom: null,
+              }
+            : budget,
+        ),
+      );
+      setShowCustomModal(false);
+      setEditingCustomBudgetId(null);
     }
   };
 
@@ -108,7 +139,12 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
         <div className="flex items-center gap-2">
           <span className="font-[600]">${data.total.toFixed(2)}</span>
           <Button
-            onClick={handleClick}
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedBudgetId(budget.numbering);
+              setEditingCustomBudgetId(budget.numbering);
+              setShowCustomModal(true);
+            }}
             variant="secondary"
             className="p-1 h-auto hover:bg-gray-100"
             disabled={!isEnabled}
@@ -198,7 +234,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
 
       {/* Transport Modal */}
       <Dialog open={showTransportModal} onOpenChange={setShowTransportModal}>
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="max-w-4xl">
           <DialogHeader>
             <DialogTitle className="text-2xl">Agregar transporte</DialogTitle>
           </DialogHeader>
@@ -213,22 +249,42 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
 
       {/* Custom Modal */}
       <Dialog open={showCustomModal} onOpenChange={setShowCustomModal}>
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="max-w-4xl">
           <DialogHeader>
-            <DialogTitle className="text-2xl">Agregar aduana</DialogTitle>
+            <DialogTitle className="text-2xl">
+              {editingCustomBudgetId ? "Edit Custom" : "Add Custom"}
+            </DialogTitle>
           </DialogHeader>
           <div className="bg-white rounded-lg w-full">
-            <CreateCustom
-              onCustomCreated={handleCustomCreated}
-              onCancel={() => setShowCustomModal(false)}
-            />
+            {editingCustomBudgetId ? (
+              <EditCustom
+                custom={
+                  budgets.find((b) => b.numbering === editingCustomBudgetId)
+                    ?.custom ??
+                  (() => {
+                    throw new Error("Custom budget not found");
+                  })()
+                }
+                onCustomUpdated={handleCustomCreatedOrUpdated}
+                onCustomDeleted={handleCustomDeleted}
+                onCancel={() => {
+                  setShowCustomModal(false);
+                  setEditingCustomBudgetId(null);
+                }}
+              />
+            ) : (
+              <CreateCustom
+                onCustomCreated={handleCustomCreatedOrUpdated}
+                onCancel={() => setShowCustomModal(false)}
+              />
+            )}
           </div>
         </DialogContent>
       </Dialog>
 
       {/* Delivery Modal */}
       <Dialog open={showDeliveryModal} onOpenChange={setShowDeliveryModal}>
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="max-w-4xl">
           <DialogHeader>
             <DialogTitle className="text-2xl">Agregar entrega</DialogTitle>
           </DialogHeader>
