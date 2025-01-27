@@ -54,9 +54,7 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
     if (budget.salesData) {
       return (
         <div className="flex items-center gap-2">
-          <span className="font-[600]">
-            ${budget.salesData.totalPrice.toFixed(2)}
-          </span>
+          <span className="font-[600]">%{budget.salesData.margin}</span>
         </div>
       );
     }
@@ -68,7 +66,7 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
         className="flex items-center gap-1 text-primary hover:text-primary-dark"
       >
         <Plus className="w-4 h-4" />
-        Agregar datos de venta
+        Agregar
       </Button>
     );
   };
@@ -89,7 +87,9 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
               <TableHead>Transporte</TableHead>
               <TableHead>Aduana</TableHead>
               <TableHead>Entrega</TableHead>
-              <TableHead>Datos de Venta</TableHead>
+              <TableHead>Precio Unitario</TableHead>
+              <TableHead>Margen</TableHead>
+              <TableHead>Precio Total</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className="bg-white divide-y divide-gray-200">
@@ -129,7 +129,17 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
                       ? `$${budget.delivery.total.toFixed(2)}`
                       : "-"}
                   </TableCell>
+                  <TableCell>
+                    {budget.salesData?.unitSalePrice
+                      ? `$${budget.salesData.unitSalePrice.toFixed(2)}`
+                      : "-"}
+                  </TableCell>
                   <TableCell>{renderSalesDataCell(budget)}</TableCell>
+                  <TableCell>
+                    {budget.salesData?.totalPrice
+                      ? `$${budget.salesData.totalPrice.toFixed(2)}`
+                      : "-"}
+                  </TableCell>
                 </TableRow>
               ))
             )}
@@ -140,9 +150,7 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
       <Dialog open={showSalesDataModal} onOpenChange={setShowSalesDataModal}>
         <DialogContent className="max-w-4xl">
           <DialogHeader>
-            <DialogTitle className="text-2xl">
-              Agregar datos de venta
-            </DialogTitle>
+            <DialogTitle className="text-2xl">Cargar Margen</DialogTitle>
           </DialogHeader>
           <div className="bg-white rounded-lg w-full">
             <CreateSalesData
