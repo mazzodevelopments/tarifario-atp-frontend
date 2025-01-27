@@ -1,14 +1,19 @@
-import { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import { useState } from "react";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import type { Custom } from "@/types/Custom";
 
 interface CreateCustomProps {
   onCustomCreated: (custom: Custom) => void;
+  onCancel: () => void;
 }
 
-export default function CreateCustom({ onCustomCreated }: CreateCustomProps) {
-  const [formData, setFormData] = useState<Omit<Custom, "id">>({
+export default function CreateCustom({
+  onCustomCreated,
+  onCancel,
+}: CreateCustomProps) {
+  const [formData, setFormData] = useState<Custom>({
     sediLegalizationFee: 50,
     invoiceValueFOB: 0,
     internationalFreightCost: 0,
@@ -107,11 +112,13 @@ export default function CreateCustom({ onCustomCreated }: CreateCustomProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    const newCustom: Custom = {
-      id: Math.random().toString(36).slice(2, 9),
-      ...formData,
-    };
-    onCustomCreated(newCustom);
+    onCustomCreated(formData);
+  };
+
+  const handleCancel = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onCancel();
   };
 
   return (
@@ -245,11 +252,7 @@ export default function CreateCustom({ onCustomCreated }: CreateCustomProps) {
       </div>
 
       <div className="flex justify-end gap-2">
-        <Button
-          type="button"
-          variant="secondary"
-          onClick={() => onCustomCreated({ id: "", ...formData })}
-        >
+        <Button type="button" variant="secondary" onClick={handleCancel}>
           Cancelar
         </Button>
         <Button type="submit" className="bg-primary text-white">

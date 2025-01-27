@@ -1,6 +1,5 @@
 /*** ADUANA ***/
 export interface Custom {
-  id: string;
   sediLegalizationFee: number; // USD 50
   // CALCULO DE BASE IMPONIBLE
   invoiceValueFOB: number; //

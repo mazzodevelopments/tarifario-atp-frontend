@@ -180,7 +180,10 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
             <DialogTitle className="text-2xl">Agregar transporte</DialogTitle>
           </DialogHeader>
           <div className="bg-white rounded-lg w-full">
-            <CreateTransport onTransportCreated={handleTransportCreated} />
+            <CreateTransport
+              onTransportCreated={handleTransportCreated}
+              onCancel={() => setShowTransportModal(false)}
+            />
           </div>
         </DialogContent>
       </Dialog>
@@ -192,7 +195,10 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
             <DialogTitle className="text-2xl">Agregar aduana</DialogTitle>
           </DialogHeader>
           <div className="bg-white rounded-lg w-full">
-            <CreateCustom onCustomCreated={handleCustomCreated} />
+            <CreateCustom
+              onCustomCreated={handleCustomCreated}
+              onCancel={() => setShowCustomModal(false)}
+            />
           </div>
         </DialogContent>
       </Dialog>

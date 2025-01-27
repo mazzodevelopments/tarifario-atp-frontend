@@ -12,10 +12,12 @@ interface CreateTransportProps {
   onTransportCreated: (
     transportData: PortBondedWarehouse | AirportFreightCourier,
   ) => void;
+  onCancel: () => void;
 }
 
 export default function CreateTransport({
   onTransportCreated,
+  onCancel,
 }: CreateTransportProps) {
   const [transportType, setTransportType] = useState<TransportType | null>(
     null,
@@ -146,6 +148,12 @@ export default function CreateTransport({
       ...prev,
       [name]: Number(value),
     }));
+  };
+
+  const handleCancel = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onCancel();
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -378,6 +386,28 @@ export default function CreateTransport({
   const renderAirForm = () => (
     <div className="space-y-4">
       <h3 className="text-lg font-semibold mb-4">Transporte Aereo - Courier</h3>
+      <div className="grid grid-cols-2 gap-4">
+        <Input
+          type="number"
+          name="internationalFreightCost"
+          value={airData.internationalFreightCost}
+          onChange={handleAirChange}
+          label="Flete Internacional"
+          className="w-full"
+          min={0}
+        />
+        <Input
+          type="number"
+          name="internationalInsurance"
+          value={airData.internationalInsurance}
+          onChange={handleAirChange}
+          label="Seguro Internacional (%)"
+          min={0.4}
+          step={0.1}
+          max={100}
+          className="w-full"
+        />
+      </div>
       <div className="grid grid-cols-3 gap-4">
         <Input
           type="number"
@@ -407,26 +437,6 @@ export default function CreateTransport({
         />
       </div>
       <div className="grid grid-cols-2 gap-4">
-        <Input
-          type="number"
-          name="internationalFreightCost"
-          value={airData.internationalFreightCost}
-          onChange={handleAirChange}
-          label="Flete Internacional"
-          className="w-full"
-          min={0}
-        />
-        <Input
-          type="number"
-          name="internationalInsurance"
-          value={airData.internationalInsurance}
-          onChange={handleAirChange}
-          label="Seguro Internacional (%)"
-          min={0.4}
-          step={0.1}
-          max={100}
-          className="w-full"
-        />
         <Input
           type="number"
           name="administrativeCharges"
@@ -469,7 +479,10 @@ export default function CreateTransport({
       {transportType === "MARITIME_TERRESTRIAL" && renderMaritimeForm()}
       {transportType === "AIR_COURIER" && renderAirForm()}
 
-      <div className="flex justify-end">
+      <div className="flex justify-end gap-2">
+        <Button type="button" variant="secondary" onClick={handleCancel}>
+          Cancelar
+        </Button>
         <Button
           type="submit"
           className="bg-primary text-white"
