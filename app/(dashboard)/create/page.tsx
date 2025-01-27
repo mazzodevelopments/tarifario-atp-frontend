@@ -14,13 +14,14 @@ import type { QuotationData } from "@/types/QuotationData";
 import type { Item } from "@/types/Item";
 import type { Budget } from "@/types/Budget";
 import { TEST_BUDGETS, TEST_ITEMS } from "@/app/(dashboard)/create/testData";
+import SalesList from "@/app/(dashboard)/create/steps/Sales/SalesList";
 
 const steps = [
   { title: "Cargar Datos Cotización" },
   { title: "Agregar Items" },
   { title: "Cargar Compras" },
   { title: "Agregar Logística" },
-  { title: "Cargar Ventas" },
+  { title: "Sector Ventas" },
   { title: "Revisar Presupuestos" },
   { title: "Confirmar y Crear" },
 ];
@@ -117,6 +118,8 @@ export default function Create() {
           />
         );
       case 4:
+        return <SalesList budgets={budgets} setBudgets={setBudgets} />;
+      case 5:
         return <SelectedBudgetsList selectedBudgets={selectedBudgets} />;
       default:
         return <p>Contenido de la etapa {currentStep + 1}</p>;
