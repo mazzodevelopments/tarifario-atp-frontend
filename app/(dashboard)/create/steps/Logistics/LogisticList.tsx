@@ -19,9 +19,9 @@ import CreateTransport from "@/app/(dashboard)/create/steps/Logistics/CreateTran
 import CreateCustom from "@/app/(dashboard)/create/steps/Logistics/CreateCustom";
 import type { Budget } from "@/types/Budget";
 import type { Item } from "@/types/Item";
-import { AirportFreightCourier } from "@/types/AirportFreightCourier";
-import { PortBondedWarehouse } from "@/types/PortBondedWarehouse";
-import { Custom } from "@/types/Custom";
+import type { AirportFreightCourier } from "@/types/AirportFreightCourier";
+import type { PortBondedWarehouse } from "@/types/PortBondedWarehouse";
+import type { Custom } from "@/types/Custom";
 
 interface BudgetListProps {
   budgets: Budget[];
@@ -34,6 +34,31 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
   const [showCustomModal, setShowCustomModal] = useState(false);
   const [showDeliveryModal, setShowDeliveryModal] = useState(false);
   const [selectedBudgetId, setSelectedBudgetId] = useState<string | null>(null);
+
+  const getButtonStates = (
+    incoterm: string,
+  ): { transport: boolean; custom: boolean; delivery: boolean } => {
+    switch (incoterm) {
+      case "EXW":
+        return { transport: true, custom: true, delivery: true };
+      case "FOB":
+        return { transport: true, custom: true, delivery: true };
+      case "FCA":
+        return { transport: false, custom: true, delivery: false };
+      case "CIF":
+        return { transport: false, custom: true, delivery: true };
+      case "CFR":
+        return { transport: false, custom: true, delivery: true };
+      case "DAT":
+        return { transport: false, custom: false, delivery: true };
+      case "DAP":
+        return { transport: false, custom: false, delivery: true };
+      case "DDP":
+        return { transport: false, custom: false, delivery: false };
+      default:
+        return { transport: false, custom: false, delivery: false };
+    }
+  };
 
   const handleTransportCreated = (
     transport: AirportFreightCourier | PortBondedWarehouse,
@@ -63,23 +88,15 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
     }
   };
 
-  // const handleDeliveryCreated = (delivery: any) => {
-  //   if (selectedBudgetId) {
-  //     setBudgets(
-  //       budgets.map((budget) =>
-  //         budget.id === selectedBudgetId ? { ...budget, delivery } : budget,
-  //       ),
-  //     );
-  //     setShowDeliveryModal(false);
-  //   }
-  // };
-
   const renderActionCell = (
     budget: Budget,
     type: "transport" | "custom" | "delivery",
     setShowModal: (show: boolean) => void,
   ) => {
     const data = budget[type];
+    const buttonStates = getButtonStates(budget.purchaseData?.incoterm || "");
+    const isEnabled = buttonStates[type];
+
     const handleClick = (e: React.MouseEvent) => {
       e.stopPropagation();
       setSelectedBudgetId(budget.numbering);
@@ -94,6 +111,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
             onClick={handleClick}
             variant="secondary"
             className="p-1 h-auto hover:bg-gray-100"
+            disabled={!isEnabled}
           >
             <Pencil className="w-4 h-4 text-primary" />
           </Button>
@@ -105,7 +123,12 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
       <Button
         onClick={handleClick}
         variant="secondary"
-        className="flex items-center gap-1 text-primary hover:text-primary-dark"
+        className={`flex items-center gap-1 ${
+          !isEnabled
+            ? "text-gray-400 cursor-not-allowed"
+            : "text-primary hover:text-primary-dark"
+        }`}
+        disabled={!isEnabled}
       >
         <Plus className="w-4 h-4" />
         Agregar
