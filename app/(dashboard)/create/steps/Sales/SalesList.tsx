@@ -82,13 +82,13 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
               <TableHead>Proveedor</TableHead>
               <TableHead>Origen</TableHead>
               <TableHead>Destino</TableHead>
-              <TableHead>T. Entrega</TableHead>
+              <TableHead>T. Producción</TableHead>
               <TableHead>Incoterm</TableHead>
               <TableHead>Transporte</TableHead>
               <TableHead>Aduana</TableHead>
               <TableHead>Entrega</TableHead>
-              <TableHead>Precio Unitario</TableHead>
               <TableHead>Margen</TableHead>
+              <TableHead>Precio Unitario</TableHead>
               <TableHead>Precio Total</TableHead>
             </TableRow>
           </TableHeader>
@@ -129,12 +129,12 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
                       ? `$${budget.delivery.total.toFixed(2)}`
                       : "-"}
                   </TableCell>
+                  <TableCell>{renderSalesDataCell(budget)}</TableCell>
                   <TableCell>
                     {budget.salesData?.unitSalePrice
                       ? `$${budget.salesData.unitSalePrice.toFixed(2)}`
                       : "-"}
                   </TableCell>
-                  <TableCell>{renderSalesDataCell(budget)}</TableCell>
                   <TableCell>
                     {budget.salesData?.totalPrice
                       ? `$${budget.salesData.totalPrice.toFixed(2)}`

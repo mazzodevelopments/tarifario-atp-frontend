@@ -73,7 +73,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   </div>
                   <div className="flex flex-col gap-0.5 mt-1 leading-none text-gray-800">
                     <span className="font-[600] whitespace-nowrap text-[1.1em]">
-                      <span className="font-[800]">ATP</span> Solutions
+                      <span className="font-[800]">ATP</span>{" "}
+                      <span className="text-primary">Tarifario Web</span>
                     </span>
                   </div>
                   <ChevronsUpDown className="ml-auto" />
