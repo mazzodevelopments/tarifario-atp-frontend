@@ -190,7 +190,7 @@ export default function CreatePurchase({
         <Input
           type="number"
           name="unitPrice"
-          value={formData.unitPrice}
+          value={formData.unitPrice.toFixed(2)}
           onChange={handleChange}
           label="Precio Unitario Proovedor"
           min="0"
