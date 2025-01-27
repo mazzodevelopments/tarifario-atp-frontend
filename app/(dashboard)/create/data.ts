@@ -18,16 +18,16 @@ export const STAGES = [
 ];
 
 export const CURRENCIES = [
-  { id: "USD", name: "Dólar Estadounidense (USD)" },
-  { id: "EUR", name: "Euro (EUR)" },
-  { id: "MXN", name: "Peso Mexicano (MXN)" },
-  { id: "GBP", name: "Libra Esterlina (GBP)" },
-  { id: "JPY", name: "Yen Japonés (JPY)" },
-  { id: "CAD", name: "Dólar Canadiense (CAD)" },
-  { id: "AUD", name: "Dólar Australiano (AUD)" },
-  { id: "CHF", name: "Franco Suizo (CHF)" },
-  { id: "CNY", name: "Yuan Chino (CNY)" },
-  { id: "BRL", name: "Real Brasileño (BRL)" },
+  { id: "1", name: "USD" },
+  { id: "2", name: "EUR" },
+  { id: "3", name: "MXN" },
+  { id: "4", name: "GBP" },
+  { id: "5", name: "JPY" },
+  { id: "6", name: "CAD" },
+  { id: "7", name: "AUD" },
+  { id: "8", name: "CHF" },
+  { id: "9", name: "CNY" },
+  { id: "10", name: "BRL" },
 ];
 
 export const UNITS = [

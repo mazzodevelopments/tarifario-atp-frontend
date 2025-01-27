@@ -8,6 +8,8 @@ export interface PurchaseData {
   supplier: string;
   currency: string;
   unitPrice: number;
+  margin: number;
+  appliedUnitPrice: number;
   deliveryTime: number;
   unitWeight: number;
   totalWeight: number;

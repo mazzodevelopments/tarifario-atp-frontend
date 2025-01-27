@@ -1,4 +1,4 @@
-import React from "react";
+import type React from "react";
 import { useState, useEffect } from "react";
 import {
   COUNTRIES,
@@ -9,8 +9,8 @@ import {
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Dropdown, { type DropdownItem } from "@/components/Dropdown";
-import { Item } from "@/types/Item";
-import { PurchaseData } from "@/types/PurchaseData";
+import type { Item } from "@/types/Item";
+import type { PurchaseData } from "@/types/PurchaseData";
 
 interface CreatePurchaseProps {
   onPurchaseCreated: (purchaseData: PurchaseData) => void;
@@ -31,24 +31,40 @@ export default function CreatePurchase({
     supplier: "",
     currency: "",
     unitPrice: 0,
+    margin: 0,
+    appliedUnitPrice: 0,
     deliveryTime: 0,
     unitWeight: 0,
     totalWeight: 0,
     unit: "",
     incoterm: "",
   });
-  const [selectedItemQuantity, setSelectedItemQuantity] = useState<number>(0);
 
   const isWithinArgentina =
     formData.origin === "Argentina" && formData.destination === "Argentina";
 
-  // CALCULO TOTAL DEL PESO
+  // CALCULO DEL PESO
+  useEffect(() => {
+    if (formData.item && formData.unitWeight) {
+      setFormData((prev) => ({
+        ...prev,
+        totalWeight: prev.unitWeight * (formData.item?.quantity || 1),
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        totalWeight: 0,
+      }));
+    }
+  }, [formData.item, formData.unitWeight]);
+
+  // CALCULO TOTAL PRECIO UNITARIO
   useEffect(() => {
     setFormData((prev) => ({
       ...prev,
-      totalWeight: prev.unitWeight * selectedItemQuantity,
+      appliedUnitPrice: prev.unitPrice * (1 + prev.margin / 100),
     }));
-  }, [formData.unitWeight, selectedItemQuantity]);
+  }, [formData.unitPrice, formData.margin]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,13 +84,14 @@ export default function CreatePurchase({
   };
 
   const handleSelect = (field: keyof PurchaseData) => (item: DropdownItem) => {
-    setFormData((prev) => ({ ...prev, [field]: item.name }));
-
     if (field === "item") {
-      const selectedItem = items.find((i) => i.detail === item.name);
-      if (selectedItem) {
-        setSelectedItemQuantity(selectedItem.quantity);
-      }
+      const selectedItem = items.find((i) => i.id === item.id);
+      setFormData((prev) => ({
+        ...prev,
+        [field]: selectedItem || null,
+      }));
+    } else {
+      setFormData((prev) => ({ ...prev, [field]: item.name }));
     }
   };
 
@@ -175,10 +192,34 @@ export default function CreatePurchase({
           name="unitPrice"
           value={formData.unitPrice}
           onChange={handleChange}
-          label="Peso Unitario Proovedor"
+          label="Precio Unitario Proovedor"
           min="0"
           required
         />
+        {!isWithinArgentina && (
+          <>
+            <Input
+              type="number"
+              name="margin"
+              value={formData.margin}
+              onChange={handleChange}
+              label="Margen (%)"
+              min="0"
+              max="100"
+              required
+            />
+            <Input
+              type="number"
+              name="appliedUnitPrice"
+              value={formData.appliedUnitPrice.toFixed(2)}
+              onChange={handleChange}
+              label="Precio Unitario Aplicado"
+              min="0"
+              required
+              disabled
+            />
+          </>
+        )}
       </div>
       <div className="grid grid-cols-3 gap-4">
         <Input

@@ -29,7 +29,6 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
     const newItem: Item = {
       id: Math.random().toString(36).slice(2, 9),
       ...formData,
-      quantity: Number(formData.quantity),
     };
     onItemCreated(newItem);
   };

@@ -2,7 +2,7 @@ import { Avenir } from "@/fonts/fonts";
 import "./globals.css";
 
 export const metadata = {
-  title: "ATP Solutions - Tarifario",
+  title: "ATP - Tarifario Web",
   description: "Tarifario web",
 };
 
