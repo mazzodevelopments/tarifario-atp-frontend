@@ -79,7 +79,7 @@ export default function Create() {
     if (currentStep === 1) {
       return items.length === 0;
     }
-    if (currentStep === 4) {
+    if (currentStep === 5) {
       return budgets.length === 0 || selectedBudgets.length === 0;
     }
     return false;

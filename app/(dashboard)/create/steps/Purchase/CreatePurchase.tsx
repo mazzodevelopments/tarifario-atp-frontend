@@ -138,7 +138,7 @@ export default function CreatePurchase({
           name="deliveryTime"
           value={formData.deliveryTime}
           onChange={handleChange}
-          label="Tiempo de Entrega (Días)"
+          label="Tiempo de Producción (Días)"
           required
           min="0"
         />

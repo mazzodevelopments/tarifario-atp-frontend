@@ -183,7 +183,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
               <TableHead>Proveedor</TableHead>
               <TableHead>Origen</TableHead>
               <TableHead>Destino</TableHead>
-              <TableHead>T. Entrega</TableHead>
+              <TableHead>T. Producción</TableHead>
               <TableHead>Incoterm</TableHead>
               <TableHead>Transporte</TableHead>
               <TableHead>Aduana</TableHead>

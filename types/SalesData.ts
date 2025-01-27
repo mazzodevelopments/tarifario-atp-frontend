@@ -4,3 +4,5 @@ export interface SalesData {
   margin: number;
   totalPrice: number;
 }
+
+// LO UNICO QUE HABRÍA QUE PONER ACÁ ES EL CURRENCY Y EL MARGEN

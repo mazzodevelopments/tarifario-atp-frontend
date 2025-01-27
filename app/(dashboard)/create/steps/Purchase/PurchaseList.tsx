@@ -61,7 +61,7 @@ export default function PurchaseList({
               <TableHead>Proveedor</TableHead>
               <TableHead>Origen</TableHead>
               <TableHead>Destino</TableHead>
-              <TableHead>T. Entrega</TableHead>
+              <TableHead>T. Producción</TableHead>
               <TableHead>Incoterm</TableHead>
             </TableRow>
           </TableHeader>
