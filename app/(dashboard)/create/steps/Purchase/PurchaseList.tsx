@@ -59,6 +59,7 @@ export default function PurchaseList({
               <TableHead>Numeración</TableHead>
               <TableHead>Item</TableHead>
               <TableHead>Proveedor</TableHead>
+              <TableHead>Moneda</TableHead>
               <TableHead>Origen</TableHead>
               <TableHead>Destino</TableHead>
               <TableHead>T. Producción</TableHead>
@@ -81,6 +82,7 @@ export default function PurchaseList({
                   <TableCell>{budget.stage + " " + budget.numbering}</TableCell>
                   <TableCell>{budget.purchaseData?.item}</TableCell>
                   <TableCell>{budget.purchaseData?.supplier}</TableCell>
+                  <TableCell>{budget.purchaseData?.currency}</TableCell>
                   <TableCell>{budget.purchaseData?.origin}</TableCell>
                   <TableCell>{budget.purchaseData?.destination}</TableCell>
                   <TableCell>

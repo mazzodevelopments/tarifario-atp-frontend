@@ -1,6 +1,11 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { COUNTRIES, INCOTERMS, UNITS } from "@/app/(dashboard)/create/data";
+import {
+  COUNTRIES,
+  INCOTERMS,
+  UNITS,
+  CURRENCIES,
+} from "@/app/(dashboard)/create/data";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Dropdown, { type DropdownItem } from "@/components/Dropdown";
@@ -24,6 +29,7 @@ export default function CreatePurchase({
     origin: "",
     destination: "",
     supplier: "",
+    currency: "",
     deliveryTime: 0,
     unitWeight: 0,
     totalWeight: 0,
@@ -101,6 +107,10 @@ export default function CreatePurchase({
     return UNITS;
   };
 
+  const fetchCurrencies = async (): Promise<DropdownItem[]> => {
+    return CURRENCIES;
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <Input
@@ -149,6 +159,13 @@ export default function CreatePurchase({
         fetchItems={fetchSuppliers}
         onSelect={handleSelect("supplier")}
         label="Proovedor"
+        required
+      />
+      <Dropdown
+        value={formData.currency}
+        fetchItems={fetchCurrencies}
+        onSelect={handleSelect("currency")}
+        label="Moneda"
         required
       />
 

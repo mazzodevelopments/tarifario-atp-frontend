@@ -4,6 +4,7 @@ export interface PurchaseData {
   origin: string;
   destination: string;
   supplier: string;
+  currency: string;
   deliveryTime: number;
   unitWeight: number;
   totalWeight: number;
