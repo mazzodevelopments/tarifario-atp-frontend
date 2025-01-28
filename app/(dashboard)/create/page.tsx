@@ -15,6 +15,7 @@ import type { Item } from "@/types/Item";
 import type { Budget } from "@/types/Budget";
 import { TEST_BUDGETS, TEST_ITEMS } from "@/app/(dashboard)/create/testData";
 import SalesList from "@/app/(dashboard)/create/steps/Sales/SalesList";
+import SelectableBudgetsList from "@/app/(dashboard)/create/steps/SelectableBudgetsList";
 
 const steps = [
   { title: "Cargar Datos Cotización" },
@@ -22,6 +23,7 @@ const steps = [
   { title: "Cargar Compras" },
   { title: "Agregar Logística" },
   { title: "Sector Ventas" },
+  { title: "Seleccionar Presupuestos" },
   { title: "Revisar Presupuestos" },
   { title: "Confirmar y Crear" },
 ];
@@ -120,6 +122,14 @@ export default function Create() {
       case 4:
         return <SalesList budgets={budgets} setBudgets={setBudgets} />;
       case 5:
+        return (
+          <SelectableBudgetsList
+            budgets={budgets}
+            selectedBudgets={selectedBudgets}
+            setSelectedBudgets={setSelectedBudgets}
+          />
+        );
+      case 6:
         return <SelectedBudgetsList selectedBudgets={selectedBudgets} />;
       default:
         return <p>Contenido de la etapa {currentStep + 1}</p>;

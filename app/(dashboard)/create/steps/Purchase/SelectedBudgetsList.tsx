@@ -18,22 +18,46 @@ interface SelectedBudgetsListProps {
 export default function SelectedBudgetsList({
   selectedBudgets,
 }: SelectedBudgetsListProps) {
-  const calculateTotal = (budget: Budget) => {
-    const budgetTotal = budget.totalPrice;
-    const transportTotal = budget.transport?.total || 0;
-    const customTotal = budget.custom?.total || 0;
-    return Number((budgetTotal + transportTotal + customTotal).toFixed(2));
-  };
-
-  const calculateGrandTotal = () =>
-    selectedBudgets.reduce(
-      (total, budget) => total + calculateTotal(budget),
-      0,
-    );
-
   const handlePrint = () => {
     console.log("Imprimir cotización:", selectedBudgets);
   };
+
+  const calculateTotalPrice = (budget: Budget): number => {
+    let total = 0;
+
+    if (budget.purchaseData) {
+      total +=
+        budget.purchaseData?.appliedUnitPrice *
+        (budget.purchaseData?.item?.quantity ?? 1);
+    }
+
+    if (budget.transport?.total) {
+      total += budget.transport.total;
+    }
+    if (budget.custom?.total) {
+      total += budget.custom.total;
+    }
+    if (budget.delivery?.total) {
+      total += budget.delivery.total;
+    }
+
+    return total;
+  };
+
+  const calculateAppliedTotalPrice = (budget: Budget): number => {
+    let total = 0;
+
+    total += calculateTotalPrice(budget);
+    if (budget.salesData?.margin) {
+      total = total * (1 + budget.salesData?.margin / 100);
+    }
+    return total;
+  };
+
+  const totalSum = selectedBudgets.reduce(
+    (sum, budget) => sum + calculateAppliedTotalPrice(budget),
+    0,
+  );
 
   return (
     <div className="w-full mx-auto">
@@ -46,66 +70,83 @@ export default function SelectedBudgetsList({
               <TableHead>Proveedor</TableHead>
               <TableHead>Origen</TableHead>
               <TableHead>Destino</TableHead>
-              <TableHead>T. Entrega</TableHead>
+              <TableHead>T. Producción</TableHead>
               <TableHead>Incoterm</TableHead>
-              <TableHead>Precio Total</TableHead>
               <TableHead>Transporte</TableHead>
               <TableHead>Aduana</TableHead>
               <TableHead>Entrega</TableHead>
-              <TableHead>Total</TableHead>
+              <TableHead>Precio Total</TableHead>
+              <TableHead>Margen x Linea</TableHead>
+              <TableHead>Precio V. Unitario</TableHead>
+              <TableHead>Precio V. Total</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className="bg-white divide-y divide-gray-200">
             {selectedBudgets.length === 0 ? (
               <TableRow className="h-24">
                 <TableCell
-                  colSpan={12}
+                  colSpan={14}
                   className="text-sm m-auto h-full text-center text-gray-500"
                 >
                   No hay presupuestos seleccionados
                 </TableCell>
               </TableRow>
             ) : (
-              selectedBudgets.map((budget) => (
-                <TableRow key={budget.id} className="text-sm">
-                  <TableCell>{budget.stage + " " + budget.numbering}</TableCell>
-                  <TableCell>{budget.item}</TableCell>
-                  <TableCell>{budget.supplier}</TableCell>
-                  <TableCell>{budget.origin}</TableCell>
-                  <TableCell>{budget.destination}</TableCell>
-                  <TableCell>{budget.deliveryTime} días</TableCell>
-                  <TableCell>{budget.incoterm}</TableCell>
-                  <TableCell>${budget.totalPrice.toFixed(2)}</TableCell>
-                  <TableCell>
-                    {budget.transport?.total
-                      ? `$${budget.transport.total.toFixed(2)}`
-                      : "-"}
+              <>
+                {selectedBudgets.map((budget) => (
+                  <TableRow key={budget.numbering} className="text-sm">
+                    <TableCell>
+                      {budget.stage + " " + budget.numbering}
+                    </TableCell>
+                    <TableCell>{budget.purchaseData?.item?.detail}</TableCell>
+                    <TableCell>{budget.purchaseData?.supplier}</TableCell>
+                    <TableCell>{budget.purchaseData?.origin}</TableCell>
+                    <TableCell>{budget.purchaseData?.destination}</TableCell>
+                    <TableCell>
+                      {budget.purchaseData?.deliveryTime} días
+                    </TableCell>
+                    <TableCell>{budget.purchaseData?.incoterm}</TableCell>
+                    <TableCell>
+                      {budget.transport?.total
+                        ? `$${budget.transport.total.toFixed(2)}`
+                        : "-"}
+                    </TableCell>
+                    <TableCell>
+                      {budget.custom?.total
+                        ? `$${budget.custom.total.toFixed(2)}`
+                        : "-"}
+                    </TableCell>
+                    <TableCell>
+                      {budget.delivery?.total
+                        ? `$${budget.delivery.total.toFixed(2)}`
+                        : "-"}
+                    </TableCell>
+                    <TableCell>{calculateTotalPrice(budget)} USD</TableCell>
+                    <TableCell>
+                      {(budget.salesData?.margin ?? 0) > 0
+                        ? budget.salesData?.margin
+                        : 0}
+                      %
+                    </TableCell>
+                    <TableCell className="font-[600]">
+                      {calculateAppliedTotalPrice(budget) /
+                        (budget.purchaseData?.item?.quantity ?? 1)}{" "}
+                      USD
+                    </TableCell>
+                    <TableCell className="font-[600]">
+                      {calculateAppliedTotalPrice(budget)} USD
+                    </TableCell>
+                  </TableRow>
+                ))}
+                <TableRow className="text-sm font-bold bg-gray-50">
+                  <TableCell colSpan={13} className="text-right">
+                    Total General:
                   </TableCell>
-                  <TableCell>
-                    {budget.custom?.total
-                      ? `$${budget.custom.total.toFixed(2)}`
-                      : "-"}
-                  </TableCell>
-                  <TableCell>
-                    {budget.delivery?.total
-                      ? `$${budget.delivery.total.toFixed(2)}`
-                      : "-"}
-                  </TableCell>
-                  <TableCell className="font-semibold">
-                    ${calculateTotal(budget).toFixed(2)}
+                  <TableCell className="font-bold">
+                    {totalSum.toFixed(2)} USD
                   </TableCell>
                 </TableRow>
-              ))
-            )}
-            {selectedBudgets.length > 0 && (
-              <TableRow>
-                <TableCell colSpan={11} className="text-right font-bold">
-                  Total General:
-                </TableCell>
-                <TableCell className="font-semibold">
-                  ${calculateGrandTotal().toFixed(2)}
-                </TableCell>
-              </TableRow>
+              </>
             )}
           </TableBody>
         </Table>

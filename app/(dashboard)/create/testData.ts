@@ -60,7 +60,11 @@ export const TEST_BUDGETS: Budget[] = [
     transport: null,
     custom: null,
     delivery: null,
-    salesData: null,
+    salesData: {
+      unitSalePrice: 0,
+      margin: 15,
+      totalPrice: 0,
+    },
     stage: "COTI",
   },
   {
