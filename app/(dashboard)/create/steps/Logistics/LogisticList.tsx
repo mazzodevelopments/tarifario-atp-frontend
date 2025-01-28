@@ -213,6 +213,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
                     {budget.purchaseData?.deliveryTime} días
                   </TableCell>
                   <TableCell>{budget.purchaseData?.incoterm}</TableCell>
+                  {/*ESTO ES HARDCODEADO*/}
                   <TableCell>
                     {renderActionCell(budget, "custom", setShowCustomModal)}
                   </TableCell>
