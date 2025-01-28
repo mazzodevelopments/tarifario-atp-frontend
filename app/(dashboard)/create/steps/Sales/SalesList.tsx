@@ -54,7 +54,7 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
     if (budget.salesData) {
       return (
         <div className="flex items-center gap-2">
-          <span className="font-[600]">%{budget.salesData.margin}</span>
+          %{budget.salesData.margin}
         </div>
       );
     }
@@ -69,6 +69,40 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
         Agregar
       </Button>
     );
+  };
+
+  const calculateTotalPrice = (budget: Budget): number => {
+    let total = 0;
+
+    // PRECIO EXTENDIDO (COMPRAS)
+    if (budget.purchaseData) {
+      total +=
+        budget.purchaseData?.appliedUnitPrice *
+        (budget.purchaseData?.item?.quantity ?? 1);
+    }
+
+    // SUMA COSTOS TRANSPORTE, ADUANA Y ENTREGA
+    if (budget.transport?.total) {
+      total += budget.transport.total;
+    }
+    if (budget.custom?.total) {
+      total += budget.custom.total;
+    }
+    if (budget.delivery?.total) {
+      total += budget.delivery.total;
+    }
+
+    return total;
+  };
+
+  const calculateAppliedTotalPrice = (budget: Budget): number => {
+    let total = 0;
+
+    total += calculateTotalPrice(budget);
+    if (budget.salesData?.margin) {
+      total = total * (1 + budget.salesData?.margin / 100);
+    }
+    return total;
   };
 
   return (
@@ -87,9 +121,10 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
               <TableHead>Transporte</TableHead>
               <TableHead>Aduana</TableHead>
               <TableHead>Entrega</TableHead>
-              <TableHead>Margen</TableHead>
-              <TableHead>Precio Unitario</TableHead>
               <TableHead>Precio Total</TableHead>
+              <TableHead>Margen x Linea</TableHead>
+              <TableHead>Precio V. Unitario</TableHead>
+              <TableHead>Precio V. Total</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className="bg-white divide-y divide-gray-200">
@@ -129,16 +164,15 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
                       ? `$${budget.delivery.total.toFixed(2)}`
                       : "-"}
                   </TableCell>
+                  <TableCell>{calculateTotalPrice(budget)} USD</TableCell>
                   <TableCell>{renderSalesDataCell(budget)}</TableCell>
-                  <TableCell>
-                    {budget.salesData?.unitSalePrice
-                      ? `$${budget.salesData.unitSalePrice.toFixed(2)}`
-                      : "-"}
+                  <TableCell className="font-[600]">
+                    {calculateAppliedTotalPrice(budget) /
+                      (budget.purchaseData?.item?.quantity ?? 1)}{" "}
+                    USD
                   </TableCell>
-                  <TableCell>
-                    {budget.salesData?.totalPrice
-                      ? `$${budget.salesData.totalPrice.toFixed(2)}`
-                      : "-"}
+                  <TableCell className="font-[600]">
+                    {calculateAppliedTotalPrice(budget)} USD
                   </TableCell>
                 </TableRow>
               ))
