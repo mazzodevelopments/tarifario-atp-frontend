@@ -185,9 +185,10 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
               <TableHead>Destino</TableHead>
               <TableHead>T. Producción</TableHead>
               <TableHead>Incoterm</TableHead>
+              <TableHead>Gastos Origen</TableHead>
               <TableHead>Transporte</TableHead>
               <TableHead>Aduana</TableHead>
-              <TableHead>Entrega</TableHead>
+              <TableHead>Gastos Destino</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className="bg-white divide-y divide-gray-200">
@@ -212,6 +213,9 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
                     {budget.purchaseData?.deliveryTime} días
                   </TableCell>
                   <TableCell>{budget.purchaseData?.incoterm}</TableCell>
+                  <TableCell>
+                    {renderActionCell(budget, "custom", setShowCustomModal)}
+                  </TableCell>
                   <TableCell>
                     {renderActionCell(
                       budget,
