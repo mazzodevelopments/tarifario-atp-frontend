@@ -81,14 +81,7 @@ export default function PurchaseList({
               budgets.map((budget) => (
                 <TableRow key={budget.numbering} className="h-12">
                   <TableCell>{budget.stage + " " + budget.numbering}</TableCell>
-                  <TableCell>
-                    {budget.purchaseData?.item?.detail}
-                    <span className="ml-2 text-xs text-primary">
-                      {budget.purchaseData?.item?.quantity +
-                        " " +
-                        budget.purchaseData?.item?.unit}
-                    </span>
-                  </TableCell>
+                  <TableCell>{budget.purchaseData?.item?.detail}</TableCell>
                   <TableCell>{budget.purchaseData?.supplier}</TableCell>
                   <TableCell>
                     {budget.purchaseData?.appliedUnitPrice +
