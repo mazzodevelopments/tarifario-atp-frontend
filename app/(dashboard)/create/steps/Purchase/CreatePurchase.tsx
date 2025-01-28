@@ -38,6 +38,7 @@ export default function CreatePurchase({
     totalWeight: 0,
     unit: "",
     incoterm: "",
+    additionalObservations: "",
   });
 
   const isWithinArgentina =
@@ -158,7 +159,7 @@ export default function CreatePurchase({
           value={formData.destination}
           fetchItems={fetchLocations}
           onSelect={handleSelect("destination")}
-          label="Destino"
+          label="L. Entrega"
           required
         />
         <Input
@@ -254,6 +255,15 @@ export default function CreatePurchase({
         label="Incoterm"
         required
         disabled={isWithinArgentina}
+      />
+      <Input
+        type="text"
+        name="additionalObservations"
+        value={formData.additionalObservations}
+        onChange={handleChange}
+        label="Observaciones Adicionales"
+        placeholder="Observaciones Adicionales"
+        isTextArea
       />
 
       {isWithinArgentina && (

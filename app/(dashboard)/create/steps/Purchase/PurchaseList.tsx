@@ -65,6 +65,7 @@ export default function PurchaseList({
               <TableHead>Destino</TableHead>
               <TableHead>T. Producción</TableHead>
               <TableHead>Incoterm</TableHead>
+              <TableHead>Observaciones Adicionales</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className="bg-white divide-y divide-gray-200">
@@ -100,6 +101,11 @@ export default function PurchaseList({
                     {budget.purchaseData?.deliveryTime} días
                   </TableCell>
                   <TableCell>{budget.purchaseData?.incoterm}</TableCell>
+                  <TableCell>
+                    {budget.purchaseData?.additionalObservations !== ""
+                      ? budget.purchaseData?.additionalObservations
+                      : "-"}
+                  </TableCell>
                 </TableRow>
               ))
             )}

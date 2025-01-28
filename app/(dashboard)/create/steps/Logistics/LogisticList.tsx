@@ -252,7 +252,9 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
         <DialogContent className="max-w-4xl">
           <DialogHeader>
             <DialogTitle className="text-2xl">
-              {editingCustomBudgetId ? "Edit Custom" : "Add Custom"}
+              {editingCustomBudgetId
+                ? "Editar Gastos de Aduana"
+                : "Agregar Gastos de Aduana"}
             </DialogTitle>
           </DialogHeader>
           <div className="bg-white rounded-lg w-full">

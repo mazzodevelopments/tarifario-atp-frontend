@@ -15,4 +15,5 @@ export interface PurchaseData {
   totalWeight: number;
   unit: string;
   incoterm: string;
+  additionalObservations: string;
 }
