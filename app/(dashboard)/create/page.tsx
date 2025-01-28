@@ -9,13 +9,13 @@ import QuotationDetails from "@/app/(dashboard)/create/steps/QuotationDetails";
 import ItemsList from "@/app/(dashboard)/create/steps/Items/ItemList";
 import PurchaseList from "@/app/(dashboard)/create/steps/Purchase/PurchaseList";
 import LogisticList from "@/app/(dashboard)/create/steps/Logistics/LogisticList";
-import SelectedBudgetsList from "@/app/(dashboard)/create/steps/Purchase/SelectedBudgetsList";
+import SelectedBudgetsList from "@/app/(dashboard)/create/steps/SelectBudgets/SelectedBudgetsList";
 import type { QuotationData } from "@/types/QuotationData";
 import type { Item } from "@/types/Item";
 import type { Budget } from "@/types/Budget";
 import { TEST_BUDGETS, TEST_ITEMS } from "@/app/(dashboard)/create/testData";
 import SalesList from "@/app/(dashboard)/create/steps/Sales/SalesList";
-import SelectableBudgetsList from "@/app/(dashboard)/create/steps/SelectableBudgetsList";
+import SelectableBudgetsList from "@/app/(dashboard)/create/steps/SelectBudgets/SelectableBudgetsList";
 
 const steps = [
   { title: "Cargar Datos Cotización" },
