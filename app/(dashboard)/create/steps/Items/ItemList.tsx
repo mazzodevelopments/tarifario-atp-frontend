@@ -72,7 +72,7 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
                   <TableCell>
                     <button
                       onClick={() => handleDeleteItem(item.id)}
-                      className="text-black hover:text-red-600"
+                      className="text-black hover:text-red-600 mx-2"
                     >
                       <X className="w-4" />
                     </button>

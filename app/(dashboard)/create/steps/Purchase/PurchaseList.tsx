@@ -19,6 +19,7 @@ import {
 import type { Budget } from "@/types/Budget";
 import type { Item } from "@/types/Item";
 import type { PurchaseData } from "@/types/PurchaseData";
+import { X } from "react-feather";
 
 interface BudgetListProps {
   budgets: Budget[];
@@ -50,6 +51,10 @@ export default function PurchaseList({
     setShowCreateModal(false);
   };
 
+  const handleDeleteBudget = async (numbering: string) => {
+    setBudgets(budgets.filter((budget) => budget.numbering !== numbering));
+  };
+
   return (
     <div className="w-full mx-auto">
       <div className="border rounded-md overflow-x-auto max-h-[30vw]">
@@ -66,6 +71,7 @@ export default function PurchaseList({
               <TableHead>T. Producción</TableHead>
               <TableHead>Incoterm</TableHead>
               <TableHead>Observaciones Adicionales</TableHead>
+              <TableHead></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className="bg-white divide-y divide-gray-200">
@@ -105,6 +111,14 @@ export default function PurchaseList({
                     {budget.purchaseData?.additionalObservations !== ""
                       ? budget.purchaseData?.additionalObservations
                       : "-"}
+                  </TableCell>
+                  <TableCell>
+                    <button
+                      onClick={() => handleDeleteBudget(budget.numbering)}
+                      className="text-black hover:text-red-600 mx-2"
+                    >
+                      <X className="w-4" />
+                    </button>
                   </TableCell>
                 </TableRow>
               ))
