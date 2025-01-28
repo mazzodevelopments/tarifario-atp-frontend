@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/dialog";
 import type { Budget } from "@/types/Budget";
 import type { Item } from "@/types/Item";
-import { PurchaseData } from "@/types/PurchaseData";
+import type { PurchaseData } from "@/types/PurchaseData";
 
 interface BudgetListProps {
   budgets: Budget[];
@@ -60,6 +60,7 @@ export default function PurchaseList({
               <TableHead>Item</TableHead>
               <TableHead>Proveedor</TableHead>
               <TableHead>Precio Unitario</TableHead>
+              <TableHead>Extendido</TableHead>
               <TableHead>Origen</TableHead>
               <TableHead>Destino</TableHead>
               <TableHead>T. Producción</TableHead>
@@ -80,10 +81,23 @@ export default function PurchaseList({
               budgets.map((budget) => (
                 <TableRow key={budget.numbering} className="h-12">
                   <TableCell>{budget.stage + " " + budget.numbering}</TableCell>
-                  <TableCell>{budget.purchaseData?.item?.detail}</TableCell>
+                  <TableCell>
+                    {budget.purchaseData?.item?.detail}
+                    <span className="ml-2 text-xs text-primary">
+                      {budget.purchaseData?.item?.quantity +
+                        " " +
+                        budget.purchaseData?.item?.unit}
+                    </span>
+                  </TableCell>
                   <TableCell>{budget.purchaseData?.supplier}</TableCell>
                   <TableCell>
-                    {budget.purchaseData?.unitPrice.toFixed(2) +
+                    {budget.purchaseData?.appliedUnitPrice +
+                      " " +
+                      budget.purchaseData?.currency}
+                  </TableCell>
+                  <TableCell>
+                    {(budget.purchaseData?.appliedUnitPrice ?? 0) *
+                      (budget.purchaseData?.item?.quantity ?? 1) +
                       " " +
                       budget.purchaseData?.currency}
                   </TableCell>
