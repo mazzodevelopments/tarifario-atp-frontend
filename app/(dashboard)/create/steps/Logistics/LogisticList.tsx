@@ -124,66 +124,24 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
     }
   };
 
-  const handleTransportCreatedOrUpdated = (transport: Transport | null) => {
-    if (selectedBudgetId) {
-      setBudgets(
-        budgets.map((budget) =>
-          budget.numbering === selectedBudgetId
-            ? {
-                ...budget,
-                transport,
-              }
-            : budget,
-        ),
-      );
-      setShowTransportModal(false);
-      setEditingTransport(null);
-    }
-  };
-
-  const handleOriginExpensesCreatedOrUpdated = (
-    expenses: OriginExpenses | null,
+  const handleBudgetUpdate = <
+    T extends Transport | OriginExpenses | Custom | DestinationExpenses | null,
+  >(
+    field: "transport" | "originExpenses" | "custom" | "destinationExpenses",
+    value: T,
+    setShowModal: (value: boolean) => void,
+    setEditing: (value: T | null) => void,
   ) => {
     if (selectedBudgetId) {
       setBudgets(
         budgets.map((budget) =>
           budget.numbering === selectedBudgetId
-            ? { ...budget, originExpenses: expenses }
+            ? { ...budget, [field]: value }
             : budget,
         ),
       );
-      setShowOriginExpensesModal(false);
-      setEditingOriginExpenses(null);
-    }
-  };
-
-  const handleCustomCreatedOrUpdated = (custom: Custom | null) => {
-    if (selectedBudgetId) {
-      setBudgets(
-        budgets.map((budget) =>
-          budget.numbering === selectedBudgetId
-            ? { ...budget, custom }
-            : budget,
-        ),
-      );
-      setShowCustomModal(false);
-      setEditingCustom(null);
-    }
-  };
-
-  const handleDestinationExpensesCreatedOrUpdated = (
-    expenses: DestinationExpenses | null,
-  ) => {
-    if (selectedBudgetId) {
-      setBudgets(
-        budgets.map((budget) =>
-          budget.numbering === selectedBudgetId
-            ? { ...budget, destinationExpenses: expenses }
-            : budget,
-        ),
-      );
-      setShowDestinationExpensesModal(false);
-      setEditingDestinationExpenses(null);
+      setShowModal(false);
+      setEditing(null);
     }
   };
 
@@ -344,7 +302,14 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
           </DialogHeader>
           <div className="bg-white rounded-lg w-full">
             <OriginExpensesForm
-              onOriginExpensesCreated={handleOriginExpensesCreatedOrUpdated}
+              onOriginExpensesCreated={(expenses) => {
+                handleBudgetUpdate(
+                  "originExpenses",
+                  expenses,
+                  setShowOriginExpensesModal,
+                  setEditingOriginExpenses,
+                );
+              }}
               onCancel={() => {
                 setShowOriginExpensesModal(false);
                 setEditingOriginExpenses(null);
@@ -365,7 +330,14 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
           </DialogHeader>
           <div className="bg-white rounded-lg w-full">
             <TransportForm
-              onTransportCreated={handleTransportCreatedOrUpdated}
+              onTransportCreated={(transport) =>
+                handleBudgetUpdate(
+                  "transport",
+                  transport,
+                  setShowTransportModal,
+                  setEditingTransport,
+                )
+              }
               onCancel={() => {
                 setShowTransportModal(false);
                 setEditingTransport(null);
@@ -388,7 +360,14 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
           </DialogHeader>
           <div className="bg-white rounded-lg w-full">
             <CustomForm
-              onCustomCreated={handleCustomCreatedOrUpdated}
+              onCustomCreated={(custom) => {
+                handleBudgetUpdate(
+                  "custom",
+                  custom,
+                  setShowCustomModal,
+                  setEditingCustom,
+                );
+              }}
               onCancel={() => {
                 setShowCustomModal(false);
                 setEditingCustom(null);
@@ -410,9 +389,14 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
           </DialogHeader>
           <div className="bg-white rounded-lg w-full">
             <DestinationExpensesForm
-              onDestinationExpensesCreated={
-                handleDestinationExpensesCreatedOrUpdated
-              }
+              onDestinationExpensesCreated={(expenses) => {
+                handleBudgetUpdate(
+                  "destinationExpenses",
+                  expenses,
+                  setShowDestinationExpensesModal,
+                  setEditingDestinationExpenses,
+                );
+              }}
               onCancel={() => {
                 setShowDestinationExpensesModal(false);
                 setEditingDestinationExpenses(null);
