@@ -19,7 +19,6 @@ import {
 import CreateTransport from "@/app/(dashboard)/create/steps/Logistics/CreateTransport";
 import CreateCustom from "@/app/(dashboard)/create/steps/Logistics/CreateCustom";
 import CreateOriginExpenses from "@/app/(dashboard)/create/steps/Logistics/CreateOriginExpenses";
-import EditCustom from "@/app/(dashboard)/create/steps/Logistics/EditCustom";
 import type { Budget } from "@/types/Budget";
 import type { Item } from "@/types/Item";
 import type { Custom } from "@/types/Custom";
@@ -38,14 +37,12 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
   const [showDeliveryModal, setShowDeliveryModal] = useState(false);
   const [showOriginExpensesModal, setShowOriginExpensesModal] = useState(false);
   const [selectedBudgetId, setSelectedBudgetId] = useState<string | null>(null);
-  const [editingCustomBudgetId, setEditingCustomBudgetId] = useState<
-    string | null
-  >(null);
   const [editingTransport, setEditingTransport] = useState<Transport | null>(
     null,
   );
   const [editingOriginExpenses, setEditingOriginExpenses] =
     useState<OriginExpenses | null>(null);
+  const [editingCustom, setEditingCustom] = useState<Custom | null>(null);
 
   const getButtonStates = (
     incoterm: string,
@@ -145,7 +142,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
     }
   };
 
-  const handleCustomCreatedOrUpdated = (custom: Custom) => {
+  const handleCustomCreatedOrUpdated = (custom: Custom | null) => {
     if (selectedBudgetId) {
       setBudgets(
         budgets.map((budget) =>
@@ -155,21 +152,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
         ),
       );
       setShowCustomModal(false);
-      setEditingCustomBudgetId(null);
-    }
-  };
-
-  const handleCustomDeleted = () => {
-    if (selectedBudgetId) {
-      setBudgets(
-        budgets.map((budget) =>
-          budget.numbering === selectedBudgetId
-            ? { ...budget, custom: null }
-            : budget,
-        ),
-      );
-      setShowCustomModal(false);
-      setEditingCustomBudgetId(null);
+      setEditingCustom(null);
     }
   };
 
@@ -197,7 +180,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
               e.stopPropagation();
               setSelectedBudgetId(budget.numbering);
               if (type === "custom") {
-                setEditingCustomBudgetId(budget.numbering);
+                setEditingCustom(budget.custom as Custom);
                 setShowCustomModal(true);
               } else if (type === "transport") {
                 setEditingTransport(budget.transport as Transport);
@@ -358,34 +341,20 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
         <DialogContent className="max-w-4xl">
           <DialogHeader>
             <DialogTitle className="text-2xl">
-              {editingCustomBudgetId
+              {editingCustom
                 ? "Editar Gastos de Aduana"
                 : "Agregar Gastos de Aduana"}
             </DialogTitle>
           </DialogHeader>
           <div className="bg-white rounded-lg w-full">
-            {editingCustomBudgetId ? (
-              <EditCustom
-                custom={
-                  budgets.find((b) => b.numbering === editingCustomBudgetId)
-                    ?.custom ??
-                  (() => {
-                    throw new Error("Custom budget not found");
-                  })()
-                }
-                onCustomUpdated={handleCustomCreatedOrUpdated}
-                onCustomDeleted={handleCustomDeleted}
-                onCancel={() => {
-                  setShowCustomModal(false);
-                  setEditingCustomBudgetId(null);
-                }}
-              />
-            ) : (
-              <CreateCustom
-                onCustomCreated={handleCustomCreatedOrUpdated}
-                onCancel={() => setShowCustomModal(false)}
-              />
-            )}
+            <CreateCustom
+              onCustomCreated={handleCustomCreatedOrUpdated}
+              onCancel={() => {
+                setShowCustomModal(false);
+                setEditingCustom(null);
+              }}
+              existingCustom={editingCustom}
+            />
           </div>
         </DialogContent>
       </Dialog>
@@ -397,7 +366,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
             <DialogTitle className="text-2xl">Agregar entrega</DialogTitle>
           </DialogHeader>
           <div className="bg-white rounded-lg w-full">
-            {/* TODO: Implement CreateDelivery component */}
+            {/* TODO: Implement CreateDelivery */}
             <p>Componente de entrega aún no implementado</p>
           </div>
         </DialogContent>

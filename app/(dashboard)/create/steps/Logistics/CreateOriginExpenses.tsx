@@ -17,7 +17,7 @@ export default function CreateOriginExpenses({
 }: CreateOriginExpensesProps) {
   const [formData, setFormData] = useState<OriginExpenses>(
     existingExpenses || {
-      pickup: 0,
+      pickup: 180,
       repackaging: false,
       palletFumigation: false,
       customExpenses: [],
@@ -152,7 +152,7 @@ export default function CreateOriginExpenses({
           className="rounded"
         />
         <label htmlFor="pickup" className="font-[600]">
-          PickUp
+          PickUp (USD 180 - 650)
         </label>
         {includePickup && (
           <Input
@@ -239,8 +239,12 @@ export default function CreateOriginExpenses({
         <Button type="button" variant="secondary" onClick={onCancel}>
           Cancelar
         </Button>
-        <Button type="submit" className="bg-primary text-white">
-          {existingExpenses ? "Actualizar" : "Guardar"} Gastos de Origen
+        <Button
+          type="submit"
+          className="bg-primary text-white"
+          disabled={formData.total === 0}
+        >
+          {existingExpenses ? "Actualizar" : "Guardar"}
         </Button>
       </div>
     </form>

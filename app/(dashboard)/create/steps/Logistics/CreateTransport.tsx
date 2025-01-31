@@ -106,7 +106,7 @@ export default function CreateTransport({
         <Button
           type="submit"
           variant="primary"
-          className="px-4 text-white"
+          className="px-4 bg-primary text-white"
           disabled={!selectedTransport}
         >
           {existingTransport ? "Actualizar" : "Guardar"}

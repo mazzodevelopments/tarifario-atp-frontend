@@ -1,40 +1,46 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import type { Custom } from "@/types/Custom";
 
 interface CreateCustomProps {
-  onCustomCreated: (custom: Custom) => void;
+  onCustomCreated: (custom: Custom | null) => void;
   onCancel: () => void;
+  existingCustom?: Custom | null;
 }
 
 export default function CreateCustom({
   onCustomCreated,
   onCancel,
+  existingCustom,
 }: CreateCustomProps) {
-  const [formData, setFormData] = useState<Custom>({
-    sediLegalizationFee: 50,
-    invoiceValueFOB: 0,
-    internationalFreightCost: 0,
-    taxableBase: 0,
-    importDutyRate: 0,
-    statisticsRate: 0,
-    ivaRate: 0,
-    additionalIvaRate: 0,
-    incomeTaxRate: 0,
-    grossIncomeRate: 0,
-    simFee: 10,
-    minimumCustomsDispatchCost: 250,
-    customsOperationalCharges: 210,
-    optionalElectricalSecurity: 150,
-    optionalSenasaFee: 50,
-    total: 0,
-  });
+  const [formData, setFormData] = useState<Custom>(
+    existingCustom || {
+      sediLegalizationFee: 50,
+      invoiceValueFOB: 0,
+      internationalFreightCost: 0,
+      taxableBase: 0,
+      importDutyRate: 0,
+      statisticsRate: 0,
+      ivaRate: 0,
+      additionalIvaRate: 0,
+      incomeTaxRate: 0,
+      grossIncomeRate: 0,
+      simFee: 10,
+      minimumCustomsDispatchCost: 250,
+      customsOperationalCharges: 210,
+      optionalElectricalSecurity: 150,
+      optionalSenasaFee: 50,
+      total: 0,
+    },
+  );
 
-  const [includeElectricalSecurity, setIncludeElectricalSecurity] =
-    useState(false);
-  const [includeSenasaFee, setIncludeSenasaFee] = useState(false);
+  const [includeElectricalSecurity, setIncludeElectricalSecurity] = useState(
+    existingCustom?.optionalElectricalSecurity ? true : false,
+  );
+  const [includeSenasaFee, setIncludeSenasaFee] = useState(
+    existingCustom?.optionalSenasaFee ? true : false,
+  );
 
   useEffect(() => {
     const calculateCustoms = () => {
@@ -120,6 +126,10 @@ export default function CreateCustom({
     e.preventDefault();
     e.stopPropagation();
     onCancel();
+  };
+
+  const handleDelete = () => {
+    onCustomCreated(null);
   };
 
   return (
@@ -253,11 +263,20 @@ export default function CreateCustom({
       </div>
 
       <div className="flex justify-end gap-2">
+        {existingCustom && (
+          <Button
+            type="button"
+            className="bg-red-100 text-red-500"
+            onClick={handleDelete}
+          >
+            Eliminar
+          </Button>
+        )}
         <Button type="button" variant="secondary" onClick={handleCancel}>
           Cancelar
         </Button>
         <Button type="submit" className="bg-primary text-white">
-          Crear Gasto de Aduana
+          {existingCustom ? "Actualizar" : "Guardar"}
         </Button>
       </div>
     </form>
