@@ -1,7 +1,10 @@
+"use client";
+
 import { Search } from "react-feather";
 import Header from "@/app/(dashboard)/components/Header";
 import QuotationCard from "./QuotationCard";
 import { QuotationData } from "@/types/QuotationData";
+import { useState } from "react";
 
 const quotations: QuotationData[] = [
   {
@@ -43,7 +46,7 @@ const quotations: QuotationData[] = [
     ],
   },
   {
-    taskNumber: "A25R-0002",
+    taskNumber: "B25R-0002",
     client: "Inmobiliaria Soluciones SA",
     buyer: "Juan Pérez",
     receptionDate: "2025-01-15",
@@ -81,7 +84,7 @@ const quotations: QuotationData[] = [
     ],
   },
   {
-    taskNumber: "A25R-0003",
+    taskNumber: "B35R-0003",
     client: "Inmobiliaria Soluciones SA",
     buyer: "Juan Pérez",
     receptionDate: "2025-01-15",
@@ -119,7 +122,7 @@ const quotations: QuotationData[] = [
     ],
   },
   {
-    taskNumber: "A25R-0004",
+    taskNumber: "C25R-0004",
     client: "Inmobiliaria Soluciones SA",
     buyer: "Juan Pérez",
     receptionDate: "2025-01-15",
@@ -157,7 +160,7 @@ const quotations: QuotationData[] = [
     ],
   },
   {
-    taskNumber: "A25R-0005",
+    taskNumber: "C75R-0005",
     client: "Inmobiliaria Soluciones SA",
     buyer: "Juan Pérez",
     receptionDate: "2025-01-15",
@@ -197,6 +200,12 @@ const quotations: QuotationData[] = [
 ];
 
 export default function History() {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredQuotations = quotations.filter((quotation) =>
+    quotation.taskNumber.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="flex justify-start w-full h-full flex-col bg-neutral-50">
       <div className="w-full h-auto  rounded-[18px] mb-2 flex-shrink-0">
@@ -216,13 +225,15 @@ export default function History() {
               <input
                 className="w-full h-10 rounded-[18px] pl-10 pr-4 bg-white shadow-sm border border-neutral-200  text-md focus:outline-none"
                 placeholder="Buscar cotización"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
           </div>
         </div>
         <div className="w-full">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-start mt-2">
-            {quotations.map((cotizacion) => (
+            {filteredQuotations.map((cotizacion) => (
               <QuotationCard
                 key={cotizacion.customerRequestNumber}
                 {...cotizacion}
