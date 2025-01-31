@@ -43,7 +43,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
   >(null);
 
   const getButtonStates = (
-    incoterm: string,
+    incoterm: string
   ): {
     transport: boolean;
     custom: boolean;
@@ -108,15 +108,15 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
   };
 
   const handleTransportCreated = (
-    transport: AirportFreightCourier | PortBondedWarehouse,
+    transport: AirportFreightCourier | PortBondedWarehouse
   ) => {
     if (selectedBudgetId) {
       setBudgets(
         budgets.map((budget) =>
           budget.numbering === selectedBudgetId
             ? { ...budget, transport }
-            : budget,
-        ),
+            : budget
+        )
       );
       setShowTransportModal(false);
     }
@@ -128,8 +128,8 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
         budgets.map((budget) =>
           budget.numbering === selectedBudgetId
             ? { ...budget, originExpenses: expenses }
-            : budget,
-        ),
+            : budget
+        )
       );
       setShowOriginExpensesModal(false);
     }
@@ -139,10 +139,8 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
     if (selectedBudgetId) {
       setBudgets(
         budgets.map((budget) =>
-          budget.numbering === selectedBudgetId
-            ? { ...budget, custom }
-            : budget,
-        ),
+          budget.numbering === selectedBudgetId ? { ...budget, custom } : budget
+        )
       );
       setShowCustomModal(false);
       setEditingCustomBudgetId(null);
@@ -155,8 +153,8 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
         budgets.map((budget) =>
           budget.numbering === selectedBudgetId
             ? { ...budget, custom: null }
-            : budget,
-        ),
+            : budget
+        )
       );
       setShowCustomModal(false);
       setEditingCustomBudgetId(null);
@@ -166,7 +164,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
   const renderActionCell = (
     budget: Budget,
     type: "transport" | "custom" | "delivery" | "origin",
-    setShowModal: (show: boolean) => void,
+    setShowModal: (show: boolean) => void
   ) => {
     const data = type === "origin" ? budget.originExpenses : budget[type];
     const buttonStates = getButtonStates(budget.purchaseData?.incoterm || "");
@@ -222,8 +220,8 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
 
   return (
     <div className="w-full mx-auto">
-      <div className="border rounded-md overflow-x-auto max-h-[30vw]">
-        <Table className="w-full">
+      <div className="border rounded-md max-h-[30vw] w-full">
+        <Table>
           <TableHeader className="border-b border-gray-200">
             <TableRow>
               <TableHead>Numeración</TableHead>
@@ -265,14 +263,14 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
                     {renderActionCell(
                       budget,
                       "origin",
-                      setShowOriginExpensesModal,
+                      setShowOriginExpensesModal
                     )}
                   </TableCell>
                   <TableCell>
                     {renderActionCell(
                       budget,
                       "transport",
-                      setShowTransportModal,
+                      setShowTransportModal
                     )}
                   </TableCell>
                   <TableCell>

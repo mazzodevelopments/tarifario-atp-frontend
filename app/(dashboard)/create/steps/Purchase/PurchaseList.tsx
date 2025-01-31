@@ -57,8 +57,8 @@ export default function PurchaseList({
   };
 
   return (
-    <div className="w-full mx-auto">
-      <div className="border rounded-md overflow-x-auto max-h-[30vw]">
+    <div className="w-full mx-auto overflow-hidden">
+      <div className="border rounded-md max-h-[30vw]">
         <Table className="w-full">
           <TableHeader className="border-b border-gray-200">
             <TableRow>

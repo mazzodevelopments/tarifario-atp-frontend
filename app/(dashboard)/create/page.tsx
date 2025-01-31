@@ -35,7 +35,7 @@ export default function Create() {
   const totalSteps = steps.length;
   // ESTADOS COTIZACIÓN
   const [quotationData, setQuotationData] = useState<QuotationData | null>(
-    null,
+    null
   );
   const [items, setItems] = useState<Item[]>(TEST_ITEMS);
   const [budgets, setBudgets] = useState<Budget[]>(TEST_BUDGETS);
@@ -74,7 +74,7 @@ export default function Create() {
             key !== "budgets" && // Ignorar la key 'budgets'
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
-            quotationData[key as keyof typeof quotationData].trim() === "",
+            quotationData[key as keyof typeof quotationData].trim() === ""
         )
       );
     }
@@ -147,15 +147,17 @@ export default function Create() {
         description="Crea una nueva cotización"
       />
       <div className="flex w-full h-full p-6">
-        <div className="flex-grow flex flex-col gap-6 w-full h-full p-[20px] border border-neutral-200 shadow-sm bg-white rounded-[18px] relative">
+        <div className="flex flex-col gap-6 w-full h-full p-[20px] border border-neutral-200 shadow-sm bg-white rounded-[18px] relative overflow-hidden">
           {isCreating || isSuccess ? (
             <SuccessAnimation isCreating={isCreating} isSuccess={isSuccess} />
           ) : (
-            <>
-              <div className="flex-grow overflow-hidden">
-                <div className="h-full relative flex flex-col">
-                  <h3 className="text-xl font-[800] mb-4">{`Etapa ${currentStep + 1} - ${renderStepTitle()}`}</h3>
-                  <div className="flex justify-center relative h-full items-center w-full mx-auto">
+            <div className="flex w-full flex-col h-full">
+              <div className="flex w-full justify-center items-center h-full overflow-hidden">
+                <div className="w-full h-full relative flex flex-col">
+                  <h3 className="text-xl font-[800]">{`Etapa ${
+                    currentStep + 1
+                  } - ${renderStepTitle()}`}</h3>
+                  <div className="flex justify-center relative h-full items-center w-full mx-auto overflow-hidden">
                     {renderStepContent()}
                   </div>
                 </div>
@@ -189,7 +191,7 @@ export default function Create() {
                   </Button>
                 )}
               </div>
-            </>
+            </div>
           )}
         </div>
         <div className="w-[25%] flex justify-center items-start gap-6">
