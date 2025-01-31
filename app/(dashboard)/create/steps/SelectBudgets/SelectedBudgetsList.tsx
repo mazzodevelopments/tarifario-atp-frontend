@@ -134,7 +134,7 @@ export default function SelectedBudgetsList({
                         : "-"}
                     </TableCell>
                     <TableCell>
-                      {calculateTotalPrice(budget).formatNumber()} USD
+                      ${calculateTotalPrice(budget).formatNumber()}
                     </TableCell>
                     <TableCell>
                       {(budget.salesData?.margin ?? 0) > 0
@@ -148,14 +148,14 @@ export default function SelectedBudgetsList({
                         : "-"}
                     </TableCell>
                     <TableCell className="font-[600]">
+                      $
                       {(
                         calculateAppliedTotalPrice(budget) /
                         (budget.purchaseData?.item?.quantity ?? 1)
                       ).formatNumber()}{" "}
-                      USD
                     </TableCell>
                     <TableCell className="font-[600]">
-                      {calculateAppliedTotalPrice(budget).formatNumber()} USD
+                      ${calculateAppliedTotalPrice(budget).formatNumber()}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -164,7 +164,7 @@ export default function SelectedBudgetsList({
                     Total General:
                   </TableCell>
                   <TableCell className="font-bold">
-                    {totalSum.formatNumber()} USD
+                    ${totalSum.formatNumber()}
                   </TableCell>
                 </TableRow>
               </>
