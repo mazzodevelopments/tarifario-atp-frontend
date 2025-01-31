@@ -17,7 +17,7 @@ export default function OriginExpensesForm({
 }: CreateOriginExpensesProps) {
   const [formData, setFormData] = useState<OriginExpenses>(
     existingExpenses || {
-      pickup: 180,
+      pickup: 0,
       repackaging: false,
       palletFumigation: false,
       customExpenses: [],
@@ -26,10 +26,18 @@ export default function OriginExpensesForm({
   );
 
   const [includePickup, setIncludePickup] = useState(
-    existingExpenses?.pickup ? true : false,
+    existingExpenses?.pickup ? existingExpenses.pickup > 0 : false,
   );
   const [newExpenseName, setNewExpenseName] = useState("");
   const [newExpenseValue, setNewExpenseValue] = useState("");
+
+  useEffect(() => {
+    if (includePickup && formData.pickup === 0) {
+      setFormData((prev) => ({ ...prev, pickup: 180 }));
+    } else if (!includePickup) {
+      setFormData((prev) => ({ ...prev, pickup: 0 }));
+    }
+  }, [includePickup]);
 
   useEffect(() => {
     const calculateTotal = () => {

@@ -383,7 +383,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
         open={showDestinationExpensesModal}
         onOpenChange={setShowDestinationExpensesModal}
       >
-        <DialogContent className="max-w-4xl">
+        <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle className="text-2xl">Agregar entrega</DialogTitle>
           </DialogHeader>
