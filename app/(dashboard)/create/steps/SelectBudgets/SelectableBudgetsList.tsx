@@ -86,7 +86,7 @@ export default function SelectableBudgetsList({
               <TableHead>Aduana</TableHead>
               <TableHead>Gastos Destino</TableHead>
               <TableHead>Precio Total</TableHead>
-              <TableHead>Margen x Linea</TableHead>
+              <TableHead>Margen</TableHead>
               <TableHead>Precio V. Unitario</TableHead>
               <TableHead>Precio V. Total</TableHead>
               <TableHead>Condición de Pago</TableHead>
