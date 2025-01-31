@@ -144,7 +144,7 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="flex justify-start w-full h-full flex-col bg-neutral-50">
+    <div className="flex justify-start w-full h-screen flex-col bg-neutral-50">
       <div className="w-full h-20 flex-shrink-0 border-b border-neutral-200">
         <div className="flex justify-between items-center h-full px-6 mb-4">
           <div className="flex flex-col justify-center items-start w-[12vw]">
@@ -213,7 +213,7 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-      <div className="flex flex-row items-start w-full">
+      <div className="flex flex-row items-start w-full h-[calc(100%-5rem)] bg-red-500">
         <div className="w-1/3 h-full flex flex-col border-r border-neutral-200 relative p-6">
           <div className="w-full flex flex-col pb-4">
             <h2 className="text-3xl font-[800]">Mis cotizaciones</h2>
