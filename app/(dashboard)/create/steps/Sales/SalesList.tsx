@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 import Button from "@/components/Button";
 import { Plus } from "lucide-react";
@@ -17,7 +18,8 @@ import {
 } from "@/components/ui/dialog";
 import type { Budget } from "@/types/Budget";
 import type { SalesData } from "@/types/SalesData";
-import CreateSalesData from "./CreateSalesData";
+import AddMargin from "./AddMargin";
+import AddPaymentCondition from "./AddPaymentCondition";
 
 interface SalesListProps {
   budgets: Budget[];
@@ -26,6 +28,8 @@ interface SalesListProps {
 
 export default function SalesList({ budgets, setBudgets }: SalesListProps) {
   const [showSalesDataModal, setShowSalesDataModal] = useState(false);
+  const [showPaymentConditionModal, setShowPaymentConditionModal] =
+    useState(false);
   const [selectedBudgetId, setSelectedBudgetId] = useState<string | null>(null);
 
   const handleSalesDataCreated = (salesData: SalesData) => {
@@ -44,6 +48,33 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
     }
   };
 
+  const handlePaymentConditionCreated = (paymentCondition: string) => {
+    if (selectedBudgetId) {
+      setBudgets(
+        budgets.map((budget) => {
+          if (budget.numbering === selectedBudgetId) {
+            const currentSalesData = budget.salesData || {
+              unitSalePrice: 0,
+              margin: 0,
+              totalPrice: 0,
+              paymentCondition: "",
+            };
+
+            return {
+              ...budget,
+              salesData: {
+                ...currentSalesData,
+                paymentCondition,
+              },
+            };
+          }
+          return budget;
+        }),
+      );
+      setShowPaymentConditionModal(false);
+    }
+  };
+
   const renderSalesDataCell = (budget: Budget) => {
     const handleClick = (e: React.MouseEvent) => {
       e.stopPropagation();
@@ -55,6 +86,33 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
       return (
         <div className="flex items-center gap-2">
           %{budget.salesData.margin}
+        </div>
+      );
+    }
+
+    return (
+      <Button
+        onClick={handleClick}
+        variant="secondary"
+        className="flex items-center gap-1 text-primary hover:text-primary-dark"
+      >
+        <Plus className="w-4 h-4" />
+        Agregar
+      </Button>
+    );
+  };
+
+  const renderPaymentConditionCell = (budget: Budget) => {
+    const handleClick = (e: React.MouseEvent) => {
+      e.stopPropagation();
+      setSelectedBudgetId(budget.numbering);
+      setShowPaymentConditionModal(true);
+    };
+
+    if (budget.salesData?.paymentCondition) {
+      return (
+        <div className="flex items-center gap-2">
+          {budget.salesData.paymentCondition}
         </div>
       );
     }
@@ -118,20 +176,22 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
               <TableHead>Destino</TableHead>
               <TableHead>T. Producción</TableHead>
               <TableHead>Incoterm</TableHead>
+              <TableHead>Gastos Origen</TableHead>
               <TableHead>Transporte</TableHead>
               <TableHead>Aduana</TableHead>
-              <TableHead>Entrega</TableHead>
+              <TableHead>Gastos Destino</TableHead>
               <TableHead>Precio Total</TableHead>
               <TableHead>Margen x Linea</TableHead>
               <TableHead>Precio V. Unitario</TableHead>
               <TableHead>Precio V. Total</TableHead>
+              <TableHead>Condición de Pago</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className="bg-white divide-y divide-gray-200">
             {budgets.length === 0 ? (
               <TableRow className="h-24">
                 <TableCell
-                  colSpan={11}
+                  colSpan={15}
                   className="text-sm m-auto h-full text-center text-gray-500"
                 >
                   No hay presupuestos agregados
@@ -149,6 +209,11 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
                     {budget.purchaseData?.deliveryTime} días
                   </TableCell>
                   <TableCell>{budget.purchaseData?.incoterm}</TableCell>
+                  <TableCell>
+                    {budget.originExpenses?.total
+                      ? `$${budget.originExpenses.total.toFixed(2)}`
+                      : "-"}
+                  </TableCell>
                   <TableCell>
                     {budget.transport?.total
                       ? `$${budget.transport.total.toFixed(2)}`
@@ -174,6 +239,7 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
                   <TableCell className="font-[600]">
                     {calculateAppliedTotalPrice(budget)} USD
                   </TableCell>
+                  <TableCell>{renderPaymentConditionCell(budget)}</TableCell>
                 </TableRow>
               ))
             )}
@@ -187,9 +253,26 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
             <DialogTitle className="text-2xl">Cargar Margen</DialogTitle>
           </DialogHeader>
           <div className="bg-white rounded-lg w-full">
-            <CreateSalesData
+            <AddMargin
               onSalesDataCreated={handleSalesDataCreated}
               onCancel={() => setShowSalesDataModal(false)}
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={showPaymentConditionModal}
+        onOpenChange={setShowPaymentConditionModal}
+      >
+        <DialogContent className="max-w-4xl">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">Condición de Pago</DialogTitle>
+          </DialogHeader>
+          <div className="bg-white rounded-lg w-full">
+            <AddPaymentCondition
+              onPaymentConditionCreated={handlePaymentConditionCreated}
+              onCancel={() => setShowPaymentConditionModal(false)}
             />
           </div>
         </DialogContent>

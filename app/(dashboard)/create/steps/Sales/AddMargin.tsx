@@ -4,15 +4,15 @@ import Button from "@/components/Button";
 import Input from "@/components/Input";
 import type { SalesData } from "@/types/SalesData";
 
-interface CreateSalesDataProps {
+interface AddMarginProps {
   onSalesDataCreated: (salesData: SalesData) => void;
   onCancel?: () => void;
 }
 
-export default function CreateSalesData({
+export default function AddMargin({
   onSalesDataCreated,
   onCancel,
-}: CreateSalesDataProps) {
+}: AddMarginProps) {
   const [formData, setFormData] = useState<SalesData>({
     unitSalePrice: 0,
     margin: 0,
