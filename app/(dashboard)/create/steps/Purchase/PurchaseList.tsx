@@ -45,6 +45,7 @@ export default function PurchaseList({
       custom: null,
       delivery: null,
       salesData: null,
+      originExpenses: null,
       stage: "COTI",
     };
     setBudgets([...budgets, newBudget]);
@@ -67,7 +68,7 @@ export default function PurchaseList({
               <TableHead>Precio Unitario</TableHead>
               <TableHead>Extendido</TableHead>
               <TableHead>Origen</TableHead>
-              <TableHead>Destino</TableHead>
+              <TableHead>L. Entrega</TableHead>
               <TableHead>T. Producción</TableHead>
               <TableHead>Incoterm</TableHead>
               <TableHead>Observaciones Adicionales</TableHead>
