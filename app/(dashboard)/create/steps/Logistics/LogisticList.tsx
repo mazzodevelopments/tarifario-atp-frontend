@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import type React from "react";
+import { useState } from "react";
 import Button from "@/components/Button";
 import { Plus, Pencil } from "lucide-react";
 import {
@@ -21,10 +22,9 @@ import CreateOriginExpenses from "@/app/(dashboard)/create/steps/Logistics/Creat
 import EditCustom from "@/app/(dashboard)/create/steps/Logistics/EditCustom";
 import type { Budget } from "@/types/Budget";
 import type { Item } from "@/types/Item";
-import type { AirportFreightCourier } from "@/types/AirportFreightCourier";
-import type { PortBondedWarehouse } from "@/types/PortBondedWarehouse";
 import type { Custom } from "@/types/Custom";
 import type { OriginExpenses } from "@/types/OriginExpenses";
+import type { Transport } from "@/types/Transport";
 
 interface BudgetListProps {
   budgets: Budget[];
@@ -43,7 +43,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
   >(null);
 
   const getButtonStates = (
-    incoterm: string
+    incoterm: string,
   ): {
     transport: boolean;
     custom: boolean;
@@ -107,16 +107,17 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
     }
   };
 
-  const handleTransportCreated = (
-    transport: AirportFreightCourier | PortBondedWarehouse
-  ) => {
+  const handleTransportCreated = (transport: Transport) => {
     if (selectedBudgetId) {
       setBudgets(
         budgets.map((budget) =>
           budget.numbering === selectedBudgetId
-            ? { ...budget, transport }
-            : budget
-        )
+            ? {
+                ...budget,
+                transport,
+              }
+            : budget,
+        ),
       );
       setShowTransportModal(false);
     }
@@ -128,8 +129,8 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
         budgets.map((budget) =>
           budget.numbering === selectedBudgetId
             ? { ...budget, originExpenses: expenses }
-            : budget
-        )
+            : budget,
+        ),
       );
       setShowOriginExpensesModal(false);
     }
@@ -139,8 +140,10 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
     if (selectedBudgetId) {
       setBudgets(
         budgets.map((budget) =>
-          budget.numbering === selectedBudgetId ? { ...budget, custom } : budget
-        )
+          budget.numbering === selectedBudgetId
+            ? { ...budget, custom }
+            : budget,
+        ),
       );
       setShowCustomModal(false);
       setEditingCustomBudgetId(null);
@@ -153,8 +156,8 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
         budgets.map((budget) =>
           budget.numbering === selectedBudgetId
             ? { ...budget, custom: null }
-            : budget
-        )
+            : budget,
+        ),
       );
       setShowCustomModal(false);
       setEditingCustomBudgetId(null);
@@ -164,7 +167,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
   const renderActionCell = (
     budget: Budget,
     type: "transport" | "custom" | "delivery" | "origin",
-    setShowModal: (show: boolean) => void
+    setShowModal: (show: boolean) => void,
   ) => {
     const data = type === "origin" ? budget.originExpenses : budget[type];
     const buttonStates = getButtonStates(budget.purchaseData?.incoterm || "");
@@ -263,14 +266,14 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
                     {renderActionCell(
                       budget,
                       "origin",
-                      setShowOriginExpensesModal
+                      setShowOriginExpensesModal,
                     )}
                   </TableCell>
                   <TableCell>
                     {renderActionCell(
                       budget,
                       "transport",
-                      setShowTransportModal
+                      setShowTransportModal,
                     )}
                   </TableCell>
                   <TableCell>
