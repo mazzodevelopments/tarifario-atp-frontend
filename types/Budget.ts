@@ -7,11 +7,11 @@ import { DestinationExpenses } from "@/types/DestinationExpenses";
 
 export interface Budget {
   numbering: string;
-  purchaseData: PurchaseData | null;
-  originExpenses: OriginExpenses | null;
+  purchaseData?: PurchaseData | null;
+  originExpenses?: OriginExpenses | null;
   transport: Transport | null;
   custom: Custom | null;
-  destinationExpenses: DestinationExpenses | null;
-  salesData: SalesData | null;
+  destinationExpenses?: DestinationExpenses | null;
+  salesData?: SalesData | null;
   stage: string;
 }
