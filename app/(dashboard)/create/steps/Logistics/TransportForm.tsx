@@ -9,7 +9,7 @@ interface CreateTransportProps {
   existingTransport?: Transport | null;
 }
 
-export default function CreateTransport({
+export default function TransportForm({
   onTransportCreated,
   onCancel,
   existingTransport,

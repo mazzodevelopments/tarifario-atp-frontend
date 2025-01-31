@@ -16,9 +16,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import CreateTransport from "@/app/(dashboard)/create/steps/Logistics/CreateTransport";
-import CreateCustom from "@/app/(dashboard)/create/steps/Logistics/CreateCustom";
-import CreateOriginExpenses from "@/app/(dashboard)/create/steps/Logistics/CreateOriginExpenses";
+import TransportForm from "@/app/(dashboard)/create/steps/Logistics/TransportForm";
+import CustomForm from "@/app/(dashboard)/create/steps/Logistics/CustomForm";
+import OriginExpensesForm from "@/app/(dashboard)/create/steps/Logistics/OriginExpensesForm";
 import type { Budget } from "@/types/Budget";
 import type { Item } from "@/types/Item";
 import type { Custom } from "@/types/Custom";
@@ -303,7 +303,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
             </DialogTitle>
           </DialogHeader>
           <div className="bg-white rounded-lg w-full">
-            <CreateOriginExpenses
+            <OriginExpensesForm
               onOriginExpensesCreated={handleOriginExpensesCreatedOrUpdated}
               onCancel={() => {
                 setShowOriginExpensesModal(false);
@@ -324,7 +324,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
             </DialogTitle>
           </DialogHeader>
           <div className="bg-white rounded-lg w-full">
-            <CreateTransport
+            <TransportForm
               onTransportCreated={handleTransportCreatedOrUpdated}
               onCancel={() => {
                 setShowTransportModal(false);
@@ -347,7 +347,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
             </DialogTitle>
           </DialogHeader>
           <div className="bg-white rounded-lg w-full">
-            <CreateCustom
+            <CustomForm
               onCustomCreated={handleCustomCreatedOrUpdated}
               onCancel={() => {
                 setShowCustomModal(false);

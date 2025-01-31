@@ -10,7 +10,7 @@ interface CreateOriginExpensesProps {
   existingExpenses?: OriginExpenses | null;
 }
 
-export default function CreateOriginExpenses({
+export default function OriginExpensesForm({
   onOriginExpensesCreated,
   onCancel,
   existingExpenses,
