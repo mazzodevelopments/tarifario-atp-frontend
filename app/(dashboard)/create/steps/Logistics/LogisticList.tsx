@@ -41,6 +41,9 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
   const [editingCustomBudgetId, setEditingCustomBudgetId] = useState<
     string | null
   >(null);
+  const [editingTransport, setEditingTransport] = useState<Transport | null>(
+    null,
+  );
 
   const getButtonStates = (
     incoterm: string,
@@ -107,7 +110,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
     }
   };
 
-  const handleTransportCreated = (transport: Transport) => {
+  const handleTransportCreatedOrUpdated = (transport: Transport | null) => {
     if (selectedBudgetId) {
       setBudgets(
         budgets.map((budget) =>
@@ -120,6 +123,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
         ),
       );
       setShowTransportModal(false);
+      setEditingTransport(null);
     }
   };
 
@@ -190,6 +194,9 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
               if (type === "custom") {
                 setEditingCustomBudgetId(budget.numbering);
                 setShowCustomModal(true);
+              } else if (type === "transport") {
+                setEditingTransport(budget.transport as Transport);
+                setShowTransportModal(true);
               } else {
                 setShowModal(true);
               }
@@ -311,12 +318,18 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
       <Dialog open={showTransportModal} onOpenChange={setShowTransportModal}>
         <DialogContent className="max-w-4xl">
           <DialogHeader>
-            <DialogTitle className="text-2xl">Agregar transporte</DialogTitle>
+            <DialogTitle className="text-2xl">
+              {editingTransport ? "Editar transporte" : "Agregar transporte"}
+            </DialogTitle>
           </DialogHeader>
           <div className="bg-white rounded-lg w-full">
             <CreateTransport
-              onTransportCreated={handleTransportCreated}
-              onCancel={() => setShowTransportModal(false)}
+              onTransportCreated={handleTransportCreatedOrUpdated}
+              onCancel={() => {
+                setShowTransportModal(false);
+                setEditingTransport(null);
+              }}
+              existingTransport={editingTransport}
             />
           </div>
         </DialogContent>
