@@ -5,23 +5,29 @@ import Input from "@/components/Input";
 import type { OriginExpenses } from "@/types/OriginExpenses";
 
 interface CreateOriginExpensesProps {
-  onOriginExpensesCreated: (expenses: OriginExpenses) => void;
+  onOriginExpensesCreated: (expenses: OriginExpenses | null) => void;
   onCancel: () => void;
+  existingExpenses?: OriginExpenses | null;
 }
 
 export default function CreateOriginExpenses({
   onOriginExpensesCreated,
   onCancel,
+  existingExpenses,
 }: CreateOriginExpensesProps) {
-  const [formData, setFormData] = useState<OriginExpenses>({
-    pickup: 0,
-    repackaging: false,
-    palletFumigation: false,
-    customExpenses: [],
-    total: 0,
-  });
+  const [formData, setFormData] = useState<OriginExpenses>(
+    existingExpenses || {
+      pickup: 0,
+      repackaging: false,
+      palletFumigation: false,
+      customExpenses: [],
+      total: 0,
+    },
+  );
 
-  const [includePickup, setIncludePickup] = useState(false);
+  const [includePickup, setIncludePickup] = useState(
+    existingExpenses?.pickup ? true : false,
+  );
   const [newExpenseName, setNewExpenseName] = useState("");
   const [newExpenseValue, setNewExpenseValue] = useState("");
 
@@ -89,6 +95,10 @@ export default function CreateOriginExpenses({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onOriginExpensesCreated(formData);
+  };
+
+  const handleDelete = () => {
+    onOriginExpensesCreated(null);
   };
 
   return (
@@ -217,11 +227,20 @@ export default function CreateOriginExpenses({
       </div>
 
       <div className="flex justify-end gap-2">
+        {existingExpenses && (
+          <Button
+            type="button"
+            className="bg-red-100 text-red-500"
+            onClick={handleDelete}
+          >
+            Eliminar
+          </Button>
+        )}
         <Button type="button" variant="secondary" onClick={onCancel}>
           Cancelar
         </Button>
         <Button type="submit" className="bg-primary text-white">
-          Guardar Gastos de Origen
+          {existingExpenses ? "Actualizar" : "Guardar"} Gastos de Origen
         </Button>
       </div>
     </form>

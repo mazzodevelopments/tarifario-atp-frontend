@@ -44,6 +44,8 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
   const [editingTransport, setEditingTransport] = useState<Transport | null>(
     null,
   );
+  const [editingOriginExpenses, setEditingOriginExpenses] =
+    useState<OriginExpenses | null>(null);
 
   const getButtonStates = (
     incoterm: string,
@@ -127,7 +129,9 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
     }
   };
 
-  const handleOriginExpensesCreated = (expenses: OriginExpenses) => {
+  const handleOriginExpensesCreatedOrUpdated = (
+    expenses: OriginExpenses | null,
+  ) => {
     if (selectedBudgetId) {
       setBudgets(
         budgets.map((budget) =>
@@ -137,6 +141,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
         ),
       );
       setShowOriginExpensesModal(false);
+      setEditingOriginExpenses(null);
     }
   };
 
@@ -197,6 +202,11 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
               } else if (type === "transport") {
                 setEditingTransport(budget.transport as Transport);
                 setShowTransportModal(true);
+              } else if (type === "origin") {
+                setEditingOriginExpenses(
+                  budget.originExpenses as OriginExpenses,
+                );
+                setShowOriginExpensesModal(true);
               } else {
                 setShowModal(true);
               }
@@ -303,12 +313,20 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
       >
         <DialogContent className="max-w-xl">
           <DialogHeader>
-            <DialogTitle className="text-2xl">Gastos de Origen</DialogTitle>
+            <DialogTitle className="text-2xl">
+              {editingOriginExpenses
+                ? "Editar Gastos de Origen"
+                : "Agregar Gastos de Origen"}
+            </DialogTitle>
           </DialogHeader>
           <div className="bg-white rounded-lg w-full">
             <CreateOriginExpenses
-              onOriginExpensesCreated={handleOriginExpensesCreated}
-              onCancel={() => setShowOriginExpensesModal(false)}
+              onOriginExpensesCreated={handleOriginExpensesCreatedOrUpdated}
+              onCancel={() => {
+                setShowOriginExpensesModal(false);
+                setEditingOriginExpenses(null);
+              }}
+              existingExpenses={editingOriginExpenses}
             />
           </div>
         </DialogContent>
@@ -379,11 +397,8 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
             <DialogTitle className="text-2xl">Agregar entrega</DialogTitle>
           </DialogHeader>
           <div className="bg-white rounded-lg w-full">
-            {/*<CreateDelivery*/}
-            {/*  onDeliveryCreated={handleDeliveryCreated}*/}
-            {/*  onCancel={() => setShowDeliveryModal(false)}*/}
-            {/*  budgetId={selectedBudgetId!}*/}
-            {/*/>*/}
+            {/* TODO: Implement CreateDelivery component */}
+            <p>Componente de entrega aún no implementado</p>
           </div>
         </DialogContent>
       </Dialog>
