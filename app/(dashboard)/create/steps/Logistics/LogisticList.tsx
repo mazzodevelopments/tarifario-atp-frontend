@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import Button from "@/components/Button";
 import { Plus, Pencil } from "lucide-react";
 import {
@@ -17,12 +17,14 @@ import {
 } from "@/components/ui/dialog";
 import CreateTransport from "@/app/(dashboard)/create/steps/Logistics/CreateTransport";
 import CreateCustom from "@/app/(dashboard)/create/steps/Logistics/CreateCustom";
+import CreateOriginExpenses from "@/app/(dashboard)/create/steps/Logistics/CreateOriginExpenses";
 import EditCustom from "@/app/(dashboard)/create/steps/Logistics/EditCustom";
 import type { Budget } from "@/types/Budget";
 import type { Item } from "@/types/Item";
 import type { AirportFreightCourier } from "@/types/AirportFreightCourier";
 import type { PortBondedWarehouse } from "@/types/PortBondedWarehouse";
 import type { Custom } from "@/types/Custom";
+import type { OriginExpenses } from "@/types/OriginExpenses";
 
 interface BudgetListProps {
   budgets: Budget[];
@@ -34,6 +36,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
   const [showTransportModal, setShowTransportModal] = useState(false);
   const [showCustomModal, setShowCustomModal] = useState(false);
   const [showDeliveryModal, setShowDeliveryModal] = useState(false);
+  const [showOriginExpensesModal, setShowOriginExpensesModal] = useState(false);
   const [selectedBudgetId, setSelectedBudgetId] = useState<string | null>(null);
   const [editingCustomBudgetId, setEditingCustomBudgetId] = useState<
     string | null
@@ -41,26 +44,66 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
 
   const getButtonStates = (
     incoterm: string,
-  ): { transport: boolean; custom: boolean; delivery: boolean } => {
+  ): {
+    transport: boolean;
+    custom: boolean;
+    delivery: boolean;
+    origin: boolean;
+  } => {
     switch (incoterm) {
       case "EXW":
-        return { transport: true, custom: true, delivery: true };
+        return { transport: true, custom: true, delivery: true, origin: true };
       case "FOB":
-        return { transport: true, custom: true, delivery: true };
+        return { transport: true, custom: true, delivery: true, origin: true };
       case "FCA":
-        return { transport: false, custom: true, delivery: false };
+        return {
+          transport: false,
+          custom: true,
+          delivery: false,
+          origin: true,
+        };
       case "CIF":
-        return { transport: false, custom: true, delivery: true };
+        return {
+          transport: false,
+          custom: true,
+          delivery: true,
+          origin: true,
+        };
       case "CFR":
-        return { transport: false, custom: true, delivery: true };
+        return {
+          transport: false,
+          custom: true,
+          delivery: true,
+          origin: true,
+        };
       case "DAT":
-        return { transport: false, custom: false, delivery: true };
+        return {
+          transport: false,
+          custom: false,
+          delivery: true,
+          origin: true,
+        };
       case "DAP":
-        return { transport: false, custom: false, delivery: true };
+        return {
+          transport: false,
+          custom: false,
+          delivery: true,
+          origin: true,
+        };
       case "DDP":
-        return { transport: false, custom: false, delivery: false };
+        return {
+          transport: false,
+          custom: false,
+          delivery: false,
+          origin: true,
+        };
       default:
-        return { transport: false, custom: false, delivery: false };
+        return {
+          transport: false,
+          custom: false,
+          delivery: false,
+          origin: true,
+        };
     }
   };
 
@@ -71,14 +114,24 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
       setBudgets(
         budgets.map((budget) =>
           budget.numbering === selectedBudgetId
-            ? {
-                ...budget,
-                transport,
-              }
+            ? { ...budget, transport }
             : budget,
         ),
       );
       setShowTransportModal(false);
+    }
+  };
+
+  const handleOriginExpensesCreated = (expenses: OriginExpenses) => {
+    if (selectedBudgetId) {
+      setBudgets(
+        budgets.map((budget) =>
+          budget.numbering === selectedBudgetId
+            ? { ...budget, originExpenses: expenses }
+            : budget,
+        ),
+      );
+      setShowOriginExpensesModal(false);
     }
   };
 
@@ -93,12 +146,6 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
       );
       setShowCustomModal(false);
       setEditingCustomBudgetId(null);
-      console.log(
-        JSON.stringify(
-          `${custom.optionalElectricalSecurity}` +
-            `${custom.optionalSenasaFee}`,
-        ),
-      );
     }
   };
 
@@ -107,10 +154,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
       setBudgets(
         budgets.map((budget) =>
           budget.numbering === selectedBudgetId
-            ? {
-                ...budget,
-                custom: null,
-              }
+            ? { ...budget, custom: null }
             : budget,
         ),
       );
@@ -121,10 +165,10 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
 
   const renderActionCell = (
     budget: Budget,
-    type: "transport" | "custom" | "delivery",
+    type: "transport" | "custom" | "delivery" | "origin",
     setShowModal: (show: boolean) => void,
   ) => {
-    const data = budget[type];
+    const data = type === "origin" ? budget.originExpenses : budget[type];
     const buttonStates = getButtonStates(budget.purchaseData?.incoterm || "");
     const isEnabled = buttonStates[type];
 
@@ -142,8 +186,12 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
             onClick={(e) => {
               e.stopPropagation();
               setSelectedBudgetId(budget.numbering);
-              setEditingCustomBudgetId(budget.numbering);
-              setShowCustomModal(true);
+              if (type === "custom") {
+                setEditingCustomBudgetId(budget.numbering);
+                setShowCustomModal(true);
+              } else {
+                setShowModal(true);
+              }
             }}
             variant="secondary"
             className="p-1 h-auto hover:bg-gray-100"
@@ -213,9 +261,12 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
                     {budget.purchaseData?.deliveryTime} días
                   </TableCell>
                   <TableCell>{budget.purchaseData?.incoterm}</TableCell>
-                  {/*ESTO ES HARDCODEADO*/}
                   <TableCell>
-                    {renderActionCell(budget, "custom", setShowCustomModal)}
+                    {renderActionCell(
+                      budget,
+                      "origin",
+                      setShowOriginExpensesModal,
+                    )}
                   </TableCell>
                   <TableCell>
                     {renderActionCell(
@@ -236,6 +287,24 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
           </TableBody>
         </Table>
       </div>
+
+      {/* Origin Expenses Modal */}
+      <Dialog
+        open={showOriginExpensesModal}
+        onOpenChange={setShowOriginExpensesModal}
+      >
+        <DialogContent className="max-w-xl">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">Gastos de Origen</DialogTitle>
+          </DialogHeader>
+          <div className="bg-white rounded-lg w-full">
+            <CreateOriginExpenses
+              onOriginExpensesCreated={handleOriginExpensesCreated}
+              onCancel={() => setShowOriginExpensesModal(false)}
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Transport Modal */}
       <Dialog open={showTransportModal} onOpenChange={setShowTransportModal}>
