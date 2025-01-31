@@ -76,8 +76,7 @@ export default function AddPaymentCondition({
         </Button>
         <Button
           type="submit"
-          variant="primary"
-          className="px-4 text-white"
+          className="text-sm bg-primary text-white"
           disabled={!selectedPaymentCondition}
         >
           Guardar

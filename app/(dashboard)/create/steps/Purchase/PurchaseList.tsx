@@ -20,6 +20,7 @@ import type { Budget } from "@/types/Budget";
 import type { Item } from "@/types/Item";
 import type { PurchaseData } from "@/types/PurchaseData";
 import { X } from "react-feather";
+import "@/app/utils/formatNumber";
 
 interface BudgetListProps {
   budgets: Budget[];
@@ -46,6 +47,7 @@ export default function PurchaseList({
       delivery: null,
       salesData: null,
       originExpenses: null,
+      destinationExpenses: null,
       stage: "COTI",
     };
     setBudgets([...budgets, newBudget]);
@@ -92,13 +94,15 @@ export default function PurchaseList({
                   <TableCell>{budget.purchaseData?.item?.detail}</TableCell>
                   <TableCell>{budget.purchaseData?.supplier}</TableCell>
                   <TableCell>
-                    {budget.purchaseData?.appliedUnitPrice +
+                    {budget.purchaseData?.appliedUnitPrice.formatNumber() +
                       " " +
                       budget.purchaseData?.currency}
                   </TableCell>
                   <TableCell>
-                    {(budget.purchaseData?.appliedUnitPrice ?? 0) *
-                      (budget.purchaseData?.item?.quantity ?? 1) +
+                    {(
+                      (budget.purchaseData?.appliedUnitPrice ?? 0) *
+                      (budget.purchaseData?.item?.quantity ?? 1)
+                    ).formatNumber() +
                       " " +
                       budget.purchaseData?.currency}
                   </TableCell>

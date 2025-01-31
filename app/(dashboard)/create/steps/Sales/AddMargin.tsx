@@ -59,7 +59,7 @@ export default function AddMargin({
           Cancelar
         </Button>
         <Button type="submit" className="text-sm bg-primary text-white">
-          Cargar Datos De Venta
+          Guardar
         </Button>
       </div>
     </form>

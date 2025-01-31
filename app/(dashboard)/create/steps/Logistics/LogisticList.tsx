@@ -26,6 +26,7 @@ import type { OriginExpenses } from "@/types/OriginExpenses";
 import type { Transport } from "@/types/Transport";
 import type { Custom } from "@/types/Custom";
 import type { DestinationExpenses } from "@/types/DestinationExpenses";
+import "@/app/utils/formatNumber";
 
 interface BudgetListProps {
   budgets: Budget[];
@@ -163,7 +164,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
     if (data?.total) {
       return (
         <div className="flex items-center gap-2">
-          <span className="font-[600]">${data.total.toFixed(2)}</span>
+          <span className="font-[600]">${data.total.formatNumber()}</span>
           <Button
             onClick={(e) => {
               e.stopPropagation();

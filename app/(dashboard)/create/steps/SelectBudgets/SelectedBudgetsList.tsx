@@ -10,6 +10,7 @@ import {
 import Button from "@/components/Button";
 import type { Budget } from "@/types/Budget";
 import { Mail, Printer } from "lucide-react";
+import "@/app/utils/formatNumber";
 
 interface SelectedBudgetsListProps {
   selectedBudgets: Budget[];
@@ -114,25 +115,27 @@ export default function SelectedBudgetsList({
                     <TableCell>{budget.purchaseData?.incoterm}</TableCell>
                     <TableCell>
                       {budget.originExpenses?.total
-                        ? `$${budget.originExpenses.total.toFixed(2)}`
+                        ? `$${budget.originExpenses.total.formatNumber()}`
                         : "-"}
                     </TableCell>
                     <TableCell>
                       {budget.transport?.total
-                        ? `$${budget.transport.total.toFixed(2)}`
+                        ? `$${budget.transport.total.formatNumber()}`
                         : "-"}
                     </TableCell>
                     <TableCell>
                       {budget.custom?.total
-                        ? `$${budget.custom.total.toFixed(2)}`
+                        ? `$${budget.custom.total.formatNumber()}`
                         : "-"}
                     </TableCell>
                     <TableCell>
                       {budget.destinationExpenses?.total
-                        ? `$${budget.destinationExpenses.total.toFixed(2)}`
+                        ? `$${budget.destinationExpenses.total.formatNumber()}`
                         : "-"}
                     </TableCell>
-                    <TableCell>{calculateTotalPrice(budget)} USD</TableCell>
+                    <TableCell>
+                      {calculateTotalPrice(budget).formatNumber()} USD
+                    </TableCell>
                     <TableCell>
                       {(budget.salesData?.margin ?? 0) > 0
                         ? budget.salesData?.margin
@@ -145,12 +148,14 @@ export default function SelectedBudgetsList({
                         : "-"}
                     </TableCell>
                     <TableCell className="font-[600]">
-                      {calculateAppliedTotalPrice(budget) /
-                        (budget.purchaseData?.item?.quantity ?? 1)}{" "}
+                      {(
+                        calculateAppliedTotalPrice(budget) /
+                        (budget.purchaseData?.item?.quantity ?? 1)
+                      ).formatNumber()}{" "}
                       USD
                     </TableCell>
                     <TableCell className="font-[600]">
-                      {calculateAppliedTotalPrice(budget)} USD
+                      {calculateAppliedTotalPrice(budget).formatNumber()} USD
                     </TableCell>
                   </TableRow>
                 ))}
@@ -159,7 +164,7 @@ export default function SelectedBudgetsList({
                     Total General:
                   </TableCell>
                   <TableCell className="font-bold">
-                    {totalSum.toFixed(2)} USD
+                    {totalSum.formatNumber()} USD
                   </TableCell>
                 </TableRow>
               </>

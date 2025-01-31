@@ -20,6 +20,7 @@ import type { Budget } from "@/types/Budget";
 import type { SalesData } from "@/types/SalesData";
 import AddMargin from "./AddMargin";
 import AddPaymentCondition from "./AddPaymentCondition";
+import "@/app/utils/formatNumber";
 
 interface SalesListProps {
   budgets: Budget[];
@@ -215,33 +216,37 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
                   <TableCell>{budget.purchaseData?.incoterm}</TableCell>
                   <TableCell>
                     {budget.originExpenses?.total
-                      ? `$${budget.originExpenses.total.toFixed(2)}`
+                      ? `$${budget.originExpenses.total.formatNumber()}`
                       : "-"}
                   </TableCell>
                   <TableCell>
                     {budget.transport?.total
-                      ? `$${budget.transport.total.toFixed(2)}`
+                      ? `$${budget.transport.total.formatNumber()}`
                       : "-"}
                   </TableCell>
                   <TableCell>
                     {budget.custom?.total
-                      ? `$${budget.custom.total.toFixed(2)}`
+                      ? `$${budget.custom.total.formatNumber()}`
                       : "-"}
                   </TableCell>
                   <TableCell>
                     {budget.destinationExpenses?.total
-                      ? `$${budget.destinationExpenses.total.toFixed(2)}`
+                      ? `$${budget.destinationExpenses.total.formatNumber()}`
                       : "-"}
                   </TableCell>
-                  <TableCell>{calculateTotalPrice(budget)} USD</TableCell>
+                  <TableCell>
+                    {calculateTotalPrice(budget).formatNumber()} USD
+                  </TableCell>
                   <TableCell>{renderSalesDataCell(budget)}</TableCell>
                   <TableCell className="font-[600]">
-                    {calculateAppliedTotalPrice(budget) /
-                      (budget.purchaseData?.item?.quantity ?? 1)}{" "}
+                    {(
+                      calculateAppliedTotalPrice(budget) /
+                      (budget.purchaseData?.item?.quantity ?? 1)
+                    ).formatNumber()}{" "}
                     USD
                   </TableCell>
                   <TableCell className="font-[600]">
-                    {calculateAppliedTotalPrice(budget)} USD
+                    {calculateAppliedTotalPrice(budget).formatNumber()} USD
                   </TableCell>
                   <TableCell>{renderPaymentConditionCell(budget)}</TableCell>
                 </TableRow>
