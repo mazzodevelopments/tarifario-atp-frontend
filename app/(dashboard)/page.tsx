@@ -213,7 +213,7 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-      <div className="flex flex-row items-start w-full h-[calc(100%-5rem)] bg-red-500">
+      <div className="flex flex-row items-start w-full h-[calc(100%-5rem)]">
         <div className="w-1/3 h-full flex flex-col border-r border-neutral-200 relative p-6">
           <div className="w-full flex flex-col pb-4">
             <h2 className="text-3xl font-[800]">Mis cotizaciones</h2>
