@@ -27,7 +27,7 @@ const QuotationCard: React.FC<QuotationData> = (quotation) => {
             </button>
           </div>
         </div>
-        <div className="px-[20px] space-y-4">
+        <div className="px-[20px] space-y-6">
           <div className="flex items-center space-x-3">
             <Briefcase className="text-gray-400 flex-shrink-0" size={20} />
             <div className="min-w-0 flex-1">
@@ -42,15 +42,52 @@ const QuotationCard: React.FC<QuotationData> = (quotation) => {
               <p className="font-semibold truncate">{quotation.buyer}</p>
             </div>
           </div>
-          <div className="flex items-center space-x-3">
-            <Calendar className="text-gray-400 flex-shrink-0" size={20} />
-            <div className="min-w-0 flex-1">
-              <p className="text-sm text-gray-500">Fecha de Expiración</p>
-              <p className="font-semibold">
-                {new Date(quotation.expirationDateTime).toLocaleDateString(
-                  "es-ES"
-                )}
-              </p>
+          <div className="flex w-[85%] gap-16 items-center">
+            <div className="flex items-center space-x-3">
+              <Calendar className="text-gray-400 flex-shrink-0" size={20} />
+              <div className="min-w-0 flex-1">
+                <p className="text-sm text-gray-500">Fecha de Recepción</p>
+                <p className="font-semibold">
+                  {new Date(quotation.expirationDateTime).toLocaleDateString(
+                    "es-ES"
+                  )}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-3">
+              <Calendar className="text-gray-400 flex-shrink-0" size={20} />
+              <div className="min-w-0 flex-1">
+                <p className="text-sm text-gray-500">Fecha de Carga</p>
+                <p className="font-semibold">
+                  {new Date(quotation.expirationDateTime).toLocaleDateString(
+                    "es-ES"
+                  )}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="flex w-[85%] gap-16 items-center">
+            <div className="flex items-center space-x-3">
+              <Calendar className="text-gray-400 flex-shrink-0" size={20} />
+              <div className="min-w-0 flex-1">
+                <p className="text-sm text-gray-500">Fecha de Expiración</p>
+                <p className="font-semibold">
+                  {new Date(quotation.expirationDateTime).toLocaleDateString(
+                    "es-ES"
+                  )}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-3">
+              <Calendar className="text-gray-400 flex-shrink-0" size={20} />
+              <div className="min-w-0 flex-1">
+                <p className="text-sm text-gray-500">Fecha de Materiales</p>
+                <p className="font-semibold">
+                  {new Date(quotation.expirationDateTime).toLocaleDateString(
+                    "es-ES"
+                  )}
+                </p>
+              </div>
             </div>
           </div>
           <div className="flex items-center space-x-3">
