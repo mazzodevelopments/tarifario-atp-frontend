@@ -157,7 +157,12 @@ export default function SelectableBudgetsList({
                   <TableCell className="font-[600]">
                     {calculateAppliedTotalPrice(budget).formatNumber()} USD
                   </TableCell>
-                  <TableCell>{budget.salesData?.paymentCondition}</TableCell>
+                  <TableCell>
+                    {" "}
+                    {budget.salesData?.paymentCondition
+                      ? budget.salesData?.paymentCondition
+                      : "-"}
+                  </TableCell>
                   <TableCell>
                     <div className="flex items-center justify-center">
                       <div
