@@ -248,7 +248,7 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
       </div>
 
       <Dialog open={showSalesDataModal} onOpenChange={setShowSalesDataModal}>
-        <DialogContent className="max-w-4xl">
+        <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle className="text-2xl">Cargar Margen</DialogTitle>
           </DialogHeader>
@@ -265,7 +265,7 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
         open={showPaymentConditionModal}
         onOpenChange={setShowPaymentConditionModal}
       >
-        <DialogContent className="max-w-4xl">
+        <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle className="text-2xl">Condición de Pago</DialogTitle>
           </DialogHeader>
