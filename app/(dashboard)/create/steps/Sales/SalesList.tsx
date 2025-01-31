@@ -140,6 +140,10 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
     }
 
     // SUMA COSTOS TRANSPORTE, ADUANA Y ENTREGA
+    if (budget.originExpenses?.total) {
+      total += budget.originExpenses.total;
+    }
+
     if (budget.transport?.total) {
       total += budget.transport.total;
     }

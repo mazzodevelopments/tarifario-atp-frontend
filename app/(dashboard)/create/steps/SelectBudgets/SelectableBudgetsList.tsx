@@ -40,6 +40,10 @@ export default function SelectableBudgetsList({
         (budget.purchaseData?.item?.quantity ?? 1);
     }
 
+    if (budget.originExpenses?.total) {
+      total += budget.originExpenses.total;
+    }
+
     if (budget.transport?.total) {
       total += budget.transport.total;
     }
@@ -76,13 +80,15 @@ export default function SelectableBudgetsList({
               <TableHead>Destino</TableHead>
               <TableHead>T. Producción</TableHead>
               <TableHead>Incoterm</TableHead>
+              <TableHead>Gastos Origen</TableHead>
               <TableHead>Transporte</TableHead>
               <TableHead>Aduana</TableHead>
-              <TableHead>Entrega</TableHead>
+              <TableHead>Gastos Destino</TableHead>
               <TableHead>Precio Total</TableHead>
               <TableHead>Margen x Linea</TableHead>
               <TableHead>Precio V. Unitario</TableHead>
               <TableHead>Precio V. Total</TableHead>
+              <TableHead>Condición de Pago</TableHead>
               <TableHead>Seleccionar</TableHead>
             </TableRow>
           </TableHeader>
@@ -111,6 +117,11 @@ export default function SelectableBudgetsList({
                     {budget.purchaseData?.deliveryTime} días
                   </TableCell>
                   <TableCell>{budget.purchaseData?.incoterm}</TableCell>
+                  <TableCell>
+                    {budget.originExpenses?.total
+                      ? `$${budget.originExpenses.total.toFixed(2)}`
+                      : "-"}
+                  </TableCell>
                   <TableCell>
                     {budget.transport?.total
                       ? `$${budget.transport.total.toFixed(2)}`
@@ -141,6 +152,7 @@ export default function SelectableBudgetsList({
                   <TableCell className="font-[600]">
                     {calculateAppliedTotalPrice(budget)} USD
                   </TableCell>
+                  <TableCell>{budget.salesData?.paymentCondition}</TableCell>
                   <TableCell>
                     <div className="flex items-center justify-center">
                       <div

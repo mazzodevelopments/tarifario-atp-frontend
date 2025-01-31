@@ -31,6 +31,10 @@ export default function SelectedBudgetsList({
         (budget.purchaseData?.item?.quantity ?? 1);
     }
 
+    if (budget.originExpenses?.total) {
+      total += budget.originExpenses.total;
+    }
+
     if (budget.transport?.total) {
       total += budget.transport.total;
     }
@@ -72,11 +76,13 @@ export default function SelectedBudgetsList({
               <TableHead>Destino</TableHead>
               <TableHead>T. Producción</TableHead>
               <TableHead>Incoterm</TableHead>
+              <TableHead>Gastos Origen</TableHead>
               <TableHead>Transporte</TableHead>
               <TableHead>Aduana</TableHead>
-              <TableHead>Entrega</TableHead>
+              <TableHead>Gastos Destino</TableHead>
               <TableHead>Precio Total</TableHead>
               <TableHead>Margen x Linea</TableHead>
+              <TableHead>Condición de Pago</TableHead>
               <TableHead>Precio V. Unitario</TableHead>
               <TableHead>Precio V. Total</TableHead>
             </TableRow>
@@ -107,6 +113,11 @@ export default function SelectedBudgetsList({
                     </TableCell>
                     <TableCell>{budget.purchaseData?.incoterm}</TableCell>
                     <TableCell>
+                      {budget.originExpenses?.total
+                        ? `$${budget.originExpenses.total.toFixed(2)}`
+                        : "-"}
+                    </TableCell>
+                    <TableCell>
                       {budget.transport?.total
                         ? `$${budget.transport.total.toFixed(2)}`
                         : "-"}
@@ -128,6 +139,11 @@ export default function SelectedBudgetsList({
                         : 0}
                       %
                     </TableCell>
+                    <TableCell>
+                      {budget.salesData?.paymentCondition
+                        ? `${budget.salesData.paymentCondition}`
+                        : "-"}
+                    </TableCell>
                     <TableCell className="font-[600]">
                       {calculateAppliedTotalPrice(budget) /
                         (budget.purchaseData?.item?.quantity ?? 1)}{" "}
@@ -139,7 +155,7 @@ export default function SelectedBudgetsList({
                   </TableRow>
                 ))}
                 <TableRow className="text-sm font-bold bg-gray-50">
-                  <TableCell colSpan={13} className="text-right">
+                  <TableCell colSpan={15} className="text-right">
                     Total General:
                   </TableCell>
                   <TableCell className="font-bold">
