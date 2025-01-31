@@ -17,6 +17,7 @@ export default function AddMargin({
     unitSalePrice: 0,
     margin: 0,
     totalPrice: 0,
+    paymentCondition: "",
   });
 
   const handleSubmit = (e: React.FormEvent) => {

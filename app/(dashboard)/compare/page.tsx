@@ -451,7 +451,7 @@ const QuoteComparison = () => {
           </>
         )}
 
-        {/* Delivery comparison */}
+        {/* DestinationExpenses comparison */}
         {(leftBudget.delivery || rightBudget.delivery) && (
           <>
             <h5 className="font-semibold mt-6 mb-3 text-md">Entrega</h5>

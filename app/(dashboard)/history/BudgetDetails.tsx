@@ -371,7 +371,7 @@ export function BudgetDetails({ budget, isOpen, onClose }: BudgetDetailsProps) {
               </section>
             )}
 
-            {/* Delivery Information */}
+            {/* DestinationExpenses Information */}
             {budget.delivery && (
               <section className="space-y-4">
                 <h3 className="text-lg font-semibold flex items-center gap-2">

@@ -150,8 +150,8 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
     if (budget.custom?.total) {
       total += budget.custom.total;
     }
-    if (budget.delivery?.total) {
-      total += budget.delivery.total;
+    if (budget.destinationExpenses?.total) {
+      total += budget.destinationExpenses.total;
     }
 
     return total;
@@ -229,8 +229,8 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
                       : "-"}
                   </TableCell>
                   <TableCell>
-                    {budget.delivery?.total
-                      ? `$${budget.delivery.total.toFixed(2)}`
+                    {budget.destinationExpenses?.total
+                      ? `$${budget.destinationExpenses.total.toFixed(2)}`
                       : "-"}
                   </TableCell>
                   <TableCell>{calculateTotalPrice(budget)} USD</TableCell>

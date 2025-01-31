@@ -1,6 +1,5 @@
 import type React from "react";
 import { useState } from "react";
-import Button from "@/components/Button";
 import { Plus, Pencil } from "lucide-react";
 import {
   Table,
@@ -16,14 +15,17 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import Button from "@/components/Button";
 import TransportForm from "@/app/(dashboard)/create/steps/Logistics/TransportForm";
 import CustomForm from "@/app/(dashboard)/create/steps/Logistics/CustomForm";
 import OriginExpensesForm from "@/app/(dashboard)/create/steps/Logistics/OriginExpensesForm";
+import DestinationExpensesForm from "@/app/(dashboard)/create/steps/Logistics/DestinationExpensesForm";
 import type { Budget } from "@/types/Budget";
 import type { Item } from "@/types/Item";
-import type { Custom } from "@/types/Custom";
 import type { OriginExpenses } from "@/types/OriginExpenses";
 import type { Transport } from "@/types/Transport";
+import type { Custom } from "@/types/Custom";
+import type { DestinationExpenses } from "@/types/DestinationExpenses";
 
 interface BudgetListProps {
   budgets: Budget[];
@@ -32,78 +34,91 @@ interface BudgetListProps {
 }
 
 export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
+  const [selectedBudgetId, setSelectedBudgetId] = useState<string | null>(null);
+  const [showOriginExpensesModal, setShowOriginExpensesModal] = useState(false);
   const [showTransportModal, setShowTransportModal] = useState(false);
   const [showCustomModal, setShowCustomModal] = useState(false);
-  const [showDeliveryModal, setShowDeliveryModal] = useState(false);
-  const [showOriginExpensesModal, setShowOriginExpensesModal] = useState(false);
-  const [selectedBudgetId, setSelectedBudgetId] = useState<string | null>(null);
-  const [editingTransport, setEditingTransport] = useState<Transport | null>(
-    null,
-  );
+  const [showDestinationExpensesModal, setShowDestinationExpensesModal] =
+    useState(false);
   const [editingOriginExpenses, setEditingOriginExpenses] =
     useState<OriginExpenses | null>(null);
   const [editingCustom, setEditingCustom] = useState<Custom | null>(null);
+  const [editingTransport, setEditingTransport] = useState<Transport | null>(
+    null,
+  );
+  const [editingDestinationExpenses, setEditingDestinationExpenses] =
+    useState<DestinationExpenses | null>(null);
 
   const getButtonStates = (
     incoterm: string,
   ): {
     transport: boolean;
     custom: boolean;
-    delivery: boolean;
+    destinationExpenses: boolean;
     origin: boolean;
   } => {
     switch (incoterm) {
       case "EXW":
-        return { transport: true, custom: true, delivery: true, origin: true };
+        return {
+          transport: true,
+          custom: true,
+          destinationExpenses: true,
+          origin: true,
+        };
       case "FOB":
-        return { transport: true, custom: true, delivery: true, origin: true };
+        return {
+          transport: true,
+          custom: true,
+          destinationExpenses: true,
+          origin: true,
+        };
       case "FCA":
         return {
           transport: false,
           custom: true,
-          delivery: false,
+          destinationExpenses: false,
           origin: true,
         };
       case "CIF":
         return {
           transport: false,
           custom: true,
-          delivery: true,
+          destinationExpenses: true,
           origin: true,
         };
       case "CFR":
         return {
           transport: false,
           custom: true,
-          delivery: true,
+          destinationExpenses: true,
           origin: true,
         };
       case "DAT":
         return {
           transport: false,
           custom: false,
-          delivery: true,
+          destinationExpenses: true,
           origin: true,
         };
       case "DAP":
         return {
           transport: false,
           custom: false,
-          delivery: true,
+          destinationExpenses: true,
           origin: true,
         };
       case "DDP":
         return {
           transport: false,
           custom: false,
-          delivery: false,
+          destinationExpenses: false,
           origin: true,
         };
       default:
         return {
           transport: false,
           custom: false,
-          delivery: false,
+          destinationExpenses: false,
           origin: true,
         };
     }
@@ -156,9 +171,25 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
     }
   };
 
+  const handleDestinationExpensesCreatedOrUpdated = (
+    expenses: DestinationExpenses | null,
+  ) => {
+    if (selectedBudgetId) {
+      setBudgets(
+        budgets.map((budget) =>
+          budget.numbering === selectedBudgetId
+            ? { ...budget, destinationExpenses: expenses }
+            : budget,
+        ),
+      );
+      setShowDestinationExpensesModal(false);
+      setEditingDestinationExpenses(null);
+    }
+  };
+
   const renderActionCell = (
     budget: Budget,
-    type: "transport" | "custom" | "delivery" | "origin",
+    type: "transport" | "custom" | "destinationExpenses" | "origin",
     setShowModal: (show: boolean) => void,
   ) => {
     const data = type === "origin" ? budget.originExpenses : budget[type];
@@ -190,6 +221,11 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
                   budget.originExpenses as OriginExpenses,
                 );
                 setShowOriginExpensesModal(true);
+              } else if (type === "destinationExpenses") {
+                setEditingDestinationExpenses(
+                  budget.destinationExpenses as DestinationExpenses,
+                );
+                setShowDestinationExpensesModal(true);
               } else {
                 setShowModal(true);
               }
@@ -280,7 +316,11 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
                     {renderActionCell(budget, "custom", setShowCustomModal)}
                   </TableCell>
                   <TableCell>
-                    {renderActionCell(budget, "delivery", setShowDeliveryModal)}
+                    {renderActionCell(
+                      budget,
+                      "destinationExpenses",
+                      setShowDestinationExpensesModal,
+                    )}
                   </TableCell>
                 </TableRow>
               ))
@@ -289,12 +329,12 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
         </Table>
       </div>
 
-      {/* Origin Expenses Modal */}
+      {/* MODAL GASTOS ORIGEN */}
       <Dialog
         open={showOriginExpensesModal}
         onOpenChange={setShowOriginExpensesModal}
       >
-        <DialogContent className="max-w-xl">
+        <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle className="text-2xl">
               {editingOriginExpenses
@@ -315,9 +355,9 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
         </DialogContent>
       </Dialog>
 
-      {/* Transport Modal */}
+      {/* MODAL TRANSPORTE */}
       <Dialog open={showTransportModal} onOpenChange={setShowTransportModal}>
-        <DialogContent className="max-w-4xl">
+        <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle className="text-2xl">
               {editingTransport ? "Editar transporte" : "Agregar transporte"}
@@ -336,7 +376,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
         </DialogContent>
       </Dialog>
 
-      {/* Custom Modal */}
+      {/* MODAL ADUANA */}
       <Dialog open={showCustomModal} onOpenChange={setShowCustomModal}>
         <DialogContent className="max-w-4xl">
           <DialogHeader>
@@ -359,15 +399,26 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
         </DialogContent>
       </Dialog>
 
-      {/* Delivery Modal */}
-      <Dialog open={showDeliveryModal} onOpenChange={setShowDeliveryModal}>
+      {/* MODAL GASTOS DESTINO */}
+      <Dialog
+        open={showDestinationExpensesModal}
+        onOpenChange={setShowDestinationExpensesModal}
+      >
         <DialogContent className="max-w-4xl">
           <DialogHeader>
             <DialogTitle className="text-2xl">Agregar entrega</DialogTitle>
           </DialogHeader>
           <div className="bg-white rounded-lg w-full">
-            {/* TODO: Implement CreateDelivery */}
-            <p>Componente de entrega aún no implementado</p>
+            <DestinationExpensesForm
+              onDestinationExpensesCreated={
+                handleDestinationExpensesCreatedOrUpdated
+              }
+              onCancel={() => {
+                setShowDestinationExpensesModal(false);
+                setEditingDestinationExpenses(null);
+              }}
+              existingDestinationExpenses={editingDestinationExpenses}
+            />
           </div>
         </DialogContent>
       </Dialog>
