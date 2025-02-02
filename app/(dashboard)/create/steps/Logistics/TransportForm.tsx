@@ -15,10 +15,10 @@ export default function TransportForm({
   existingTransport,
 }: CreateTransportProps) {
   const [selectedTransport, setSelectedTransport] = useState<string>(
-    existingTransport?.type || "",
+    existingTransport?.type || ""
   );
   const [transportValue, setTransportValue] = useState<number>(
-    existingTransport?.total || 0,
+    existingTransport?.total || 0
   );
 
   useEffect(() => {
@@ -87,11 +87,7 @@ export default function TransportForm({
       />
       <div className="flex justify-end gap-2">
         {existingTransport && (
-          <Button
-            type="button"
-            onClick={handleDelete}
-            className="px-4 bg-red-100 text-red-500"
-          >
+          <Button type="button" onClick={handleDelete} variant="danger">
             Eliminar
           </Button>
         )}

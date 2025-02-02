@@ -22,11 +22,11 @@ export default function OriginExpensesForm({
       palletFumigation: false,
       customExpenses: [],
       total: 0,
-    },
+    }
   );
 
   const [includePickup, setIncludePickup] = useState(
-    existingExpenses?.pickup ? existingExpenses.pickup > 0 : false,
+    existingExpenses?.pickup ? existingExpenses.pickup > 0 : false
   );
   const [newExpenseName, setNewExpenseName] = useState("");
   const [newExpenseValue, setNewExpenseValue] = useState("");
@@ -236,11 +236,7 @@ export default function OriginExpensesForm({
 
       <div className="flex justify-end gap-2">
         {existingExpenses && (
-          <Button
-            type="button"
-            className="bg-red-100 text-red-500"
-            onClick={handleDelete}
-          >
+          <Button type="button" variant="danger" onClick={handleDelete}>
             Eliminar
           </Button>
         )}

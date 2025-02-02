@@ -32,14 +32,14 @@ export default function CustomForm({
       optionalElectricalSecurity: 150,
       optionalSenasaFee: 50,
       total: 0,
-    },
+    }
   );
 
   const [includeElectricalSecurity, setIncludeElectricalSecurity] = useState(
-    existingCustom?.optionalElectricalSecurity ? true : false,
+    existingCustom?.optionalElectricalSecurity ? true : false
   );
   const [includeSenasaFee, setIncludeSenasaFee] = useState(
-    existingCustom?.optionalSenasaFee ? true : false,
+    existingCustom?.optionalSenasaFee ? true : false
   );
 
   useEffect(() => {
@@ -90,7 +90,7 @@ export default function CustomForm({
         }
         return sum;
       },
-      0,
+      0
     );
 
     const optionalTotal =
@@ -264,11 +264,7 @@ export default function CustomForm({
 
       <div className="flex justify-end gap-2">
         {existingCustom && (
-          <Button
-            type="button"
-            className="bg-red-100 text-red-500"
-            onClick={handleDelete}
-          >
+          <Button type="button" variant="danger" onClick={handleDelete}>
             Eliminar
           </Button>
         )}

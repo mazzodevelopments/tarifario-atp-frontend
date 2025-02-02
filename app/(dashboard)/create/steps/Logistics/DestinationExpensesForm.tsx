@@ -6,7 +6,7 @@ import { DestinationExpenses } from "@/types/DestinationExpenses";
 
 interface DestinationExpensesFormProps {
   onDestinationExpensesCreated: (
-    destinationExpenses: DestinationExpenses | null,
+    destinationExpenses: DestinationExpenses | null
   ) => void;
   onCancel: () => void;
   existingDestinationExpenses?: DestinationExpenses | null;
@@ -18,7 +18,7 @@ export default function DestinationExpensesForm({
   existingDestinationExpenses,
 }: DestinationExpensesFormProps) {
   const [selectedType, setSelectedType] = useState<string>(
-    existingDestinationExpenses?.type || "",
+    existingDestinationExpenses?.type || ""
   );
   const [destinationExpensesValue, setDestinationExpensesValue] =
     useState<number>(existingDestinationExpenses?.total || 0);
@@ -89,11 +89,7 @@ export default function DestinationExpensesForm({
       />
       <div className="flex justify-end gap-2">
         {existingDestinationExpenses && (
-          <Button
-            type="button"
-            onClick={handleDelete}
-            className="px-4 bg-red-100 text-red-500"
-          >
+          <Button type="button" onClick={handleDelete} variant="danger">
             Eliminar
           </Button>
         )}
