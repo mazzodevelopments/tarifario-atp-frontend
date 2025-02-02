@@ -1,5 +1,5 @@
 export interface Item {
-  id: string;
+  numbering: string;
   family: string;
   subfamily: string;
   detail: string;
@@ -7,5 +7,4 @@ export interface Item {
   quantity: number;
   unit: string;
   partNumber: string;
-  numbering: string;
 }

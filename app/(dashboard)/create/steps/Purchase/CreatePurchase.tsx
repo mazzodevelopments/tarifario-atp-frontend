@@ -86,7 +86,7 @@ export default function CreatePurchase({
 
   const handleSelect = (field: keyof PurchaseData) => (item: DropdownItem) => {
     if (field === "item") {
-      const selectedItem = items.find((i) => i.id === item.id);
+      const selectedItem = items.find((i) => i.numbering === item.id);
       setFormData((prev) => ({
         ...prev,
         [field]: selectedItem || null,
@@ -110,7 +110,7 @@ export default function CreatePurchase({
 
   const fetchItems = async (): Promise<DropdownItem[]> => {
     return items.map((item) => {
-      return { id: item.id, name: item.detail };
+      return { id: item.numbering, name: item.detail };
     });
   };
 

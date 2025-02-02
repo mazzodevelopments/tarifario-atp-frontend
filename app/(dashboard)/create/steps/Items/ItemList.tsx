@@ -30,7 +30,7 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
   };
 
   const handleDeleteItem = async (id: string) => {
-    setItems(items.filter((item) => item.id !== id));
+    setItems(items.filter((item) => item.numbering !== id));
   };
 
   return (
@@ -61,7 +61,7 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
               </TableRow>
             ) : (
               items.map((item) => (
-                <TableRow key={item.id} className="text-sm">
+                <TableRow key={item.numbering} className="text-sm">
                   <TableCell>{item.numbering}</TableCell>
                   <TableCell>{item.detail}</TableCell>
                   <TableCell>{item.family}</TableCell>
@@ -71,7 +71,7 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
                   <TableCell>{item.partNumber}</TableCell>
                   <TableCell>
                     <button
-                      onClick={() => handleDeleteItem(item.id)}
+                      onClick={() => handleDeleteItem(item.numbering)}
                       className="text-black hover:text-red-600 mx-2"
                     >
                       <X className="w-4" />

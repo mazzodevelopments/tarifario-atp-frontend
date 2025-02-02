@@ -13,7 +13,7 @@ interface CreateItemProps {
 }
 
 export default function CreateItem({ onItemCreated }: CreateItemProps) {
-  const [formData, setFormData] = useState<Omit<Item, "id">>({
+  const [formData, setFormData] = useState<Omit<Item, "numbering">>({
     family: "",
     subfamily: "",
     detail: "",
@@ -21,13 +21,14 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
     quantity: 0,
     unit: "",
     partNumber: "",
-    numbering: "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newItem: Item = {
-      id: Math.random().toString(36).slice(2, 9),
+      numbering: `P${Math.floor(Math.random() * 100)
+        .toString()
+        .padStart(9, "0")}`,
       ...formData,
     };
     onItemCreated(newItem);
@@ -158,16 +159,6 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
         onChange={handleChange}
         placeholder="Part Number"
         label="Part Number (PN)"
-        required
-      />
-      <Input
-        type="text"
-        id="numbering"
-        name="numbering"
-        value={formData.numbering}
-        onChange={handleChange}
-        placeholder="Numeración"
-        label="Numeración"
         required
       />
 
