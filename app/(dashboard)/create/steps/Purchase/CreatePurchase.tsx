@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import {
   COUNTRIES,
   INCOTERMS,
-  UNITS,
   CURRENCIES,
+  WEIGHT_UNITS,
 } from "@/app/(dashboard)/create/data";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
@@ -123,7 +123,7 @@ export default function CreatePurchase({
   };
 
   const fetchUnits = async (): Promise<DropdownItem[]> => {
-    return UNITS;
+    return WEIGHT_UNITS;
   };
 
   const fetchCurrencies = async (): Promise<DropdownItem[]> => {

@@ -9,14 +9,6 @@ export const INCOTERMS = [
   { id: "8", name: "DDP" },
 ];
 
-export const STAGES = [
-  { id: "1", name: "COTI" },
-  { id: "2", name: "PER" },
-  { id: "3", name: "SUSP" },
-  { id: "4", name: "GAN" },
-  { id: "4", name: "ANU" },
-];
-
 export const CURRENCIES = [
   { id: "1", name: "USD" },
   { id: "2", name: "EUR" },
@@ -35,6 +27,11 @@ export const UNITS = [
   { id: "2", name: "Kilogramo" },
   { id: "3", name: "Litro" },
   { id: "4", name: "Pieza" },
+];
+
+export const WEIGHT_UNITS = [
+  { id: "1", name: "Kgrs." },
+  { id: "2", name: "Lbs." },
 ];
 
 export const VÍAS = [
