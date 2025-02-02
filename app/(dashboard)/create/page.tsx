@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import ProgressBar from "./ProgressBar";
 import SuccessAnimation from "./SuccesAnimation";
 import Button from "@/components/Button";
 import Header from "@/app/(dashboard)/components/Header";
@@ -35,7 +34,7 @@ export default function Create() {
   const totalSteps = steps.length;
   // ESTADOS COTIZACIÓN
   const [quotationData, setQuotationData] = useState<QuotationData | null>(
-    null
+    null,
   );
   const [items, setItems] = useState<Item[]>(TEST_ITEMS);
   const [budgets, setBudgets] = useState<Budget[]>(TEST_BUDGETS);
@@ -74,7 +73,7 @@ export default function Create() {
             key !== "budgets" && // Ignorar la key 'budgets'
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
-            quotationData[key as keyof typeof quotationData].trim() === ""
+            quotationData[key as keyof typeof quotationData].trim() === "",
         )
       );
     }
