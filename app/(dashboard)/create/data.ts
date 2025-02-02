@@ -9,6 +9,34 @@ export const INCOTERMS = [
   { id: "8", name: "DDP" },
 ];
 
+export const PAYMENT_CONDITIONS = [
+  { id: "1", name: "A Convenir" },
+  { id: "2", name: "50% Ant. | 50% Deliv." },
+  { id: "3", name: "30% Ant. | 70% Deliv." },
+  { id: "4", name: "30% Ant. | 70% 15 días." },
+  { id: "5", name: "30% Ant. | 70% 30 días." },
+  { id: "6", name: "50% Ant. | 50% 30 días." },
+  { id: "7", name: "40% Ant. | 60% 30 días." },
+  { id: "8", name: "50% Ant. | 50% 15 días." },
+  { id: "9", name: "50% F/F | 50% 30 días." },
+  { id: "10", name: "50% Deliv. | 50% 30 días." },
+  { id: "11", name: "50% Ant. | 50% Previo despacho" },
+  { id: "12", name: "50% Ant. | 50% Previo embarque" },
+  { id: "13", name: "50% Aprob. SIRA | 50% Pre-embarque" },
+  { id: "14", name: "30% Aprov. SIRA | 70% Deliv." },
+  { id: "15", name: "100% Ant. Cheque 30 días" },
+  { id: "16", name: "100% Ant." },
+  { id: "17", name: "100% Deliv." },
+  { id: "18", name: "7 Días F/F" },
+  { id: "19", name: "15 días F/F" },
+  { id: "20", name: "20 días F/F" },
+  { id: "21", name: "30 días F/F" },
+  { id: "22", name: "60 días F/F" },
+  { id: "23", name: "90 días F/F" },
+  { id: "24", name: "Echeck 30 días" },
+  { id: "25", name: "Echeck 60 días" },
+];
+
 export const CURRENCIES = [
   { id: "1", name: "USD" },
   { id: "2", name: "EUR" },
