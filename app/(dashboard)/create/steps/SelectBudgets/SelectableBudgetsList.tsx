@@ -25,7 +25,7 @@ export default function SelectableBudgetsList({
     e.stopPropagation();
     if (selectedBudgets.some((b) => b.numbering === budget.numbering)) {
       setSelectedBudgets(
-        selectedBudgets.filter((b) => b.numbering !== budget.numbering),
+        selectedBudgets.filter((b) => b.numbering !== budget.numbering)
       );
     } else {
       setSelectedBudgets([...selectedBudgets, budget]);
@@ -69,8 +69,8 @@ export default function SelectableBudgetsList({
   };
 
   return (
-    <div className="w-full mx-auto">
-      <div className="border rounded-md overflow-x-auto max-h-[30vw]">
+    <div className="w-full flex justify-center items-center max-w-4xl flex-col">
+      <div className="border rounded-md max-h-[30vw] relative overflow-auto w-[54vw]">
         <Table className="w-full">
           <TableHeader className="border-b border-gray-200">
             <TableRow>
@@ -169,14 +169,14 @@ export default function SelectableBudgetsList({
                         onClick={(e) => handleBudgetSelection(e, budget)}
                         className={`w-5 h-5 rounded border ${
                           selectedBudgets.some(
-                            (b) => b.numbering === budget.numbering,
+                            (b) => b.numbering === budget.numbering
                           )
                             ? "bg-primary border-primary"
                             : "border-gray-300"
                         } flex items-center justify-center cursor-pointer hover:border-primary transition-colors`}
                       >
                         {selectedBudgets.some(
-                          (b) => b.numbering === budget.numbering,
+                          (b) => b.numbering === budget.numbering
                         ) && <Check className="w-4 h-4 text-white" />}
                       </div>
                     </div>

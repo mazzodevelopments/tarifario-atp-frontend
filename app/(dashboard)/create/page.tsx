@@ -157,7 +157,7 @@ export default function Create() {
                   <h3 className="text-xl font-[800]">{`Etapa ${
                     currentStep + 1
                   } - ${renderStepTitle()}`}</h3>
-                  <div className="flex justify-center relative h-full items-center w-full">
+                  <div className="flex justify-center relative h-full items-center">
                     {renderStepContent()}
                   </div>
                 </div>

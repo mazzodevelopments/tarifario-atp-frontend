@@ -42,8 +42,8 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
                 ...budget,
                 salesData,
               }
-            : budget,
-        ),
+            : budget
+        )
       );
       setShowSalesDataModal(false);
     }
@@ -70,7 +70,7 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
             };
           }
           return budget;
-        }),
+        })
       );
       setShowPaymentConditionModal(false);
     }
@@ -169,8 +169,8 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
   };
 
   return (
-    <div className="w-full mx-auto">
-      <div className="border rounded-md overflow-x-auto max-h-[30vw]">
+    <div className="w-full flex justify-center items-center max-w-4xl flex-col">
+      <div className="border rounded-md max-h-[30vw] relative overflow-auto w-[54vw]">
         <Table className="w-full">
           <TableHeader className="border-b border-gray-200">
             <TableRow>

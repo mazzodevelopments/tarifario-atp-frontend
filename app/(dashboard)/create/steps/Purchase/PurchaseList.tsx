@@ -59,9 +59,9 @@ export default function PurchaseList({
   };
 
   return (
-    <div className="w-full mx-auto overflow-hidden">
-      <div className="border rounded-md max-h-[30vw]">
-        <Table className="w-full">
+    <div className="w-full flex justify-center items-center max-w-4xl flex-col">
+      <div className="border rounded-md max-h-[30vw] relative overflow-auto w-[54vw]">
+        <Table>
           <TableHeader className="border-b border-gray-200">
             <TableRow>
               <TableHead>Numeración</TableHead>
