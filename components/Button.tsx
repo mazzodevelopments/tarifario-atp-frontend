@@ -29,8 +29,8 @@ const Button: React.FC<ButtonProps> = ({
       hover:enabled:bg-neutral-50
     `,
     danger: `
-      bg-red-500 text-white border border-red-500
-      hover:enabled:bg-red-600
+      bg-red-50 text-red-500 border border-red-100
+      hover:enabled:bg-red-600 hover:enabled:text-white
     `,
   };
 
