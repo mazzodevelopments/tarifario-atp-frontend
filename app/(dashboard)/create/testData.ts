@@ -3,7 +3,6 @@ import { Budget } from "@/types/Budget";
 
 export const TEST_ITEMS: Item[] = [
   {
-    id: "1",
     family: "Motores",
     subfamily: "Eléctricos",
     detail: "Motor eléctrico",
@@ -14,7 +13,6 @@ export const TEST_ITEMS: Item[] = [
     numbering: "P000000001",
   },
   {
-    id: "2",
     family: "Hidráulicos",
     subfamily: "Bombas",
     detail: "Bomba hidráulica",
@@ -25,7 +23,6 @@ export const TEST_ITEMS: Item[] = [
     numbering: "P000000002",
   },
   {
-    id: "3",
     family: "Cables",
     subfamily: "Eléctricos",
     detail: "Cable eléctrico de cobre",
@@ -59,11 +56,12 @@ export const TEST_BUDGETS: Budget[] = [
     },
     transport: null,
     custom: null,
-    delivery: null,
+    destinationExpenses: null,
     salesData: {
       unitSalePrice: 0,
       margin: 15,
       totalPrice: 0,
+      paymentCondition: "A Convenir",
     },
     stage: "COTI",
   },
@@ -88,7 +86,7 @@ export const TEST_BUDGETS: Budget[] = [
     },
     transport: null,
     custom: null,
-    delivery: null,
+    destinationExpenses: null,
     salesData: null,
     stage: "COTI",
   },
@@ -113,7 +111,7 @@ export const TEST_BUDGETS: Budget[] = [
     },
     transport: null,
     custom: null,
-    delivery: null,
+    destinationExpenses: null,
     salesData: null,
     stage: "COTI",
   },
@@ -138,7 +136,7 @@ export const TEST_BUDGETS: Budget[] = [
     },
     transport: null,
     custom: null,
-    delivery: null,
+    destinationExpenses: null,
     salesData: null,
     stage: "COTI",
   },
@@ -163,7 +161,7 @@ export const TEST_BUDGETS: Budget[] = [
     },
     transport: null,
     custom: null,
-    delivery: null,
+    destinationExpenses: null,
     salesData: null,
     stage: "COTI",
   },
