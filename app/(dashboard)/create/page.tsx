@@ -147,17 +147,17 @@ export default function Create() {
         description="Crea una nueva cotización"
       />
       <div className="flex w-full h-full p-6">
-        <div className="flex flex-col gap-6 w-full h-full p-[20px] border border-neutral-200 shadow-sm bg-white rounded-[18px] relative overflow-hidden">
+        <div className="flex flex-col gap-6 w-full h-full p-[20px] border border-neutral-200 shadow-sm bg-white rounded-[18px] relative">
           {isCreating || isSuccess ? (
             <SuccessAnimation isCreating={isCreating} isSuccess={isSuccess} />
           ) : (
             <div className="flex w-full flex-col h-full">
-              <div className="flex w-full justify-center items-center h-full overflow-hidden">
+              <div className="flex w-full justify-center items-center h-full">
                 <div className="w-full h-full relative flex flex-col">
                   <h3 className="text-xl font-[800]">{`Etapa ${
                     currentStep + 1
                   } - ${renderStepTitle()}`}</h3>
-                  <div className="flex justify-center relative h-full items-center w-full mx-auto overflow-hidden">
+                  <div className="flex justify-center relative h-full items-center w-full">
                     {renderStepContent()}
                   </div>
                 </div>
@@ -194,13 +194,13 @@ export default function Create() {
             </div>
           )}
         </div>
-        <div className="w-[25%] flex justify-center items-start gap-6">
+        {/* <div className="w-[25%] flex justify-center items-start gap-6">
           <ProgressBar
             currentStep={currentStep}
             totalSteps={totalSteps}
             steps={steps}
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );
