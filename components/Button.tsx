@@ -2,7 +2,7 @@ import React, { ButtonHTMLAttributes } from "react";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
-  variant?: "primary" | "secondary";
+  variant?: "primary" | "secondary" | "danger";
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -27,6 +27,10 @@ const Button: React.FC<ButtonProps> = ({
     secondary: `
       bg-transparent text-neutral-900 border border-[#ebebebcc]
       hover:enabled:bg-neutral-50
+    `,
+    danger: `
+      bg-red-500 text-white border border-red-500
+      hover:enabled:bg-red-600
     `,
   };
 
