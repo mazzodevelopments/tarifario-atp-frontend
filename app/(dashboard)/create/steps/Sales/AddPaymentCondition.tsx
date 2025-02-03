@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Button from "@/components/Button";
-import Dropdown, { DropdownItem } from "@/components/Dropdown";
-import { PAYMENT_CONDITIONS } from "@/app/(dashboard)/create/data";
+import Dropdown from "@/components/Dropdown";
+import { SalesDataService } from "@/services/SalesDataService";
 
 interface AddPaymentConditionProps {
   onPaymentConditionCreated: (paymentCondition: string) => void;
@@ -21,21 +21,13 @@ export default function AddPaymentCondition({
     }
   };
 
-  const fetchPaymentConditions = async () => {
-    return PAYMENT_CONDITIONS;
-  };
-
-  const addPaymentCondition = async (name: string): Promise<DropdownItem> => {
-    return { id: Math.random().toString(36).substr(2, 9), name };
-  };
-
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-4">
         <Dropdown
           label="Condición de Pago"
-          fetchItems={fetchPaymentConditions}
-          addItem={addPaymentCondition}
+          fetchItems={SalesDataService.fetchPaymentConditions}
+          addItem={SalesDataService.addPaymentCondition}
           onSelect={(item) => setSelectedPaymentCondition(item.name)}
           required
         />
