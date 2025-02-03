@@ -1,32 +1,16 @@
 "use client";
 
-import type React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Dropdown, { type DropdownItem } from "@/components/Dropdown";
 import Input from "@/components/Input";
 import { QuotationData } from "@/types/QuotationData";
+import { CreateQuotationService } from "@/services/CreateQuotationService";
+import { QuotationDataService } from "@/services/QuotationDataService";
 
 interface QuotationDetailsProps {
   onFormDataChange: (formData: QuotationData) => void;
   initialData: QuotationData | null;
 }
-
-// SIMULACIÓN
-const fetchClients = async (): Promise<DropdownItem[]> => {
-  return [
-    { id: "1", name: "Client 1" },
-    { id: "2", name: "Client 2" },
-    { id: "3", name: "Client 3" },
-  ];
-};
-
-const fetchBuyers = async (): Promise<DropdownItem[]> => {
-  return [
-    { id: "1", name: "Buyer 1" },
-    { id: "2", name: "Buyer 2" },
-    { id: "3", name: "Buyer 3" },
-  ];
-};
 
 const addClient = async (name: string): Promise<DropdownItem> => {
   return { id: Date.now().toString(), name };
@@ -42,7 +26,7 @@ export default function QuotationDetails({
 }: QuotationDetailsProps) {
   const [formData, setFormData] = useState<Omit<QuotationData, "id">>(
     initialData || {
-      taskNumber: "A25R-0001",
+      taskNumber: "",
       client: "",
       buyer: "",
       receptionDate: new Date().toISOString().split("T")[0],
@@ -51,8 +35,15 @@ export default function QuotationDetails({
       materialsNeededDate: new Date().toISOString().split("T")[0],
       customerRequestNumber: "",
       budgets: null,
-    }
+    },
   );
+
+  useEffect(() => {
+    setFormData((prevData) => ({
+      ...prevData,
+      taskNumber: CreateQuotationService.fetchQuotationTaskNumber(),
+    }));
+  }, []);
 
   useEffect(() => {
     onFormDataChange(formData);
@@ -87,14 +78,14 @@ export default function QuotationDetails({
 
       <div className="grid grid-cols-2 gap-4">
         <Dropdown
-          fetchItems={fetchClients}
+          fetchItems={QuotationDataService.fetchClients}
           addItem={addClient}
           onSelect={handleDropdownSelect("client")}
           value={formData.client}
           label="Cliente"
         />
         <Dropdown
-          fetchItems={fetchBuyers}
+          fetchItems={QuotationDataService.fetchBuyers}
           addItem={addBuyer}
           onSelect={handleDropdownSelect("buyer")}
           value={formData.buyer}
