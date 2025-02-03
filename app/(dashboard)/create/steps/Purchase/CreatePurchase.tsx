@@ -1,16 +1,11 @@
 import type React from "react";
 import { useState, useEffect } from "react";
-import {
-  COUNTRIES,
-  INCOTERMS,
-  CURRENCIES,
-  WEIGHT_UNITS,
-} from "@/app/(dashboard)/create/data";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Dropdown, { type DropdownItem } from "@/components/Dropdown";
 import type { Item } from "@/types/Item";
 import type { PurchaseData } from "@/types/PurchaseData";
+import { PurchaseDataService } from "@/services/PurchaseDataService";
 
 interface CreatePurchaseProps {
   onPurchaseCreated: (purchaseData: PurchaseData) => void;
@@ -96,40 +91,6 @@ export default function CreatePurchase({
     }
   };
 
-  const fetchSuppliers = async (): Promise<DropdownItem[]> => {
-    return [
-      { id: "1", name: "Proveedor A" },
-      { id: "2", name: "Proveedor B" },
-      { id: "3", name: "Proveedor C" },
-    ];
-  };
-
-  const addSupplier = async (name: string): Promise<DropdownItem> => {
-    return { id: Math.random().toString(36).substr(2, 9), name };
-  };
-
-  const fetchItems = async (): Promise<DropdownItem[]> => {
-    return items.map((item) => {
-      return { id: item.numbering, name: item.detail };
-    });
-  };
-
-  const fetchLocations = async (): Promise<DropdownItem[]> => {
-    return COUNTRIES;
-  };
-
-  const fetchIncoterms = async (): Promise<DropdownItem[]> => {
-    return INCOTERMS;
-  };
-
-  const fetchUnits = async (): Promise<DropdownItem[]> => {
-    return WEIGHT_UNITS;
-  };
-
-  const fetchCurrencies = async (): Promise<DropdownItem[]> => {
-    return CURRENCIES;
-  };
-
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <Input
@@ -142,7 +103,7 @@ export default function CreatePurchase({
       />
       <Dropdown
         value={formData.item?.detail}
-        fetchItems={fetchItems}
+        fetchItems={() => PurchaseDataService.fetchItems(items)}
         onSelect={handleSelect("item")}
         label="Item"
         required
@@ -150,14 +111,14 @@ export default function CreatePurchase({
       <div className="grid grid-cols-3 gap-4">
         <Dropdown
           value={formData.origin}
-          fetchItems={fetchLocations}
+          fetchItems={PurchaseDataService.fetchLocations}
           onSelect={handleSelect("origin")}
           label="Origen"
           required
         />
         <Dropdown
           value={formData.destination}
-          fetchItems={fetchLocations}
+          fetchItems={PurchaseDataService.fetchLocations}
           onSelect={handleSelect("destination")}
           label="L. Entrega"
           required
@@ -174,8 +135,8 @@ export default function CreatePurchase({
       </div>
       <Dropdown
         value={formData.supplier}
-        addItem={addSupplier}
-        fetchItems={fetchSuppliers}
+        addItem={PurchaseDataService.addSupplier}
+        fetchItems={PurchaseDataService.fetchSuppliers}
         onSelect={handleSelect("supplier")}
         label="Proovedor"
         required
@@ -183,7 +144,7 @@ export default function CreatePurchase({
       <div className="grid grid-cols-2 gap-4">
         <Dropdown
           value={formData.currency}
-          fetchItems={fetchCurrencies}
+          fetchItems={PurchaseDataService.fetchCurrencies}
           onSelect={handleSelect("currency")}
           label="Moneda"
           required
@@ -234,7 +195,7 @@ export default function CreatePurchase({
         />
         <Dropdown
           value={formData.unit}
-          fetchItems={fetchUnits}
+          fetchItems={PurchaseDataService.fetchUnits}
           onSelect={handleSelect("unit")}
           label="Unidad"
           required
@@ -250,7 +211,7 @@ export default function CreatePurchase({
       </div>
       <Dropdown
         value={formData.incoterm}
-        fetchItems={fetchIncoterms}
+        fetchItems={PurchaseDataService.fetchIncoterms}
         onSelect={handleSelect("incoterm")}
         label="Incoterm"
         required
