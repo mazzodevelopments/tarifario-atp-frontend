@@ -3,12 +3,17 @@ import type { QuotationData } from "@/types/QuotationData";
 import { Calendar, FileText, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useState } from "react";
+import { Budget } from "@/types/Budget";
+import BudgetDetails from "./BudgetDetails";
 
 interface QuotationDetailsProps {
   quotation: QuotationData;
 }
 
 const QuotationDetails: React.FC<QuotationDetailsProps> = ({ quotation }) => {
+  const [selectedBudget, setSelectedBudget] = useState<Budget | null>(null);
+
   return (
     <ScrollArea className="h-[calc(100vh-120px)] pr-4">
       <div className="space-y-6">
@@ -105,10 +110,18 @@ const QuotationDetails: React.FC<QuotationDetailsProps> = ({ quotation }) => {
                   <Button
                     variant="outline"
                     className="justify-center items-center py-2 px-4 rounded-xl"
+                    onClick={() => setSelectedBudget(budget)}
                   >
                     Ver Detalles
                   </Button>
                 </div>
+                {selectedBudget && (
+                  <BudgetDetails
+                    budget={selectedBudget}
+                    isOpen={!!selectedBudget}
+                    onClose={() => setSelectedBudget(null)}
+                  />
+                )}
               </div>
             ))}
           </div>
