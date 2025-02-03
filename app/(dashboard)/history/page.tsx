@@ -93,7 +93,7 @@ const quotations: QuotationData[] = [
     ],
   },
   {
-    taskNumber: "B25R-0002",
+    taskNumber: "A25R-0002",
     client: "Inmobiliaria Soluciones SA",
     buyer: "Juan Pérez",
     receptionDate: "2025-01-15",
@@ -178,7 +178,7 @@ const quotations: QuotationData[] = [
     ],
   },
   {
-    taskNumber: "B35R-0003",
+    taskNumber: "A25R-0003",
     client: "Inmobiliaria Soluciones SA",
     buyer: "Juan Pérez",
     receptionDate: "2025-01-15",
@@ -263,7 +263,7 @@ const quotations: QuotationData[] = [
     ],
   },
   {
-    taskNumber: "C25R-0004",
+    taskNumber: "A25R-0004",
     client: "Inmobiliaria Soluciones SA",
     buyer: "Juan Pérez",
     receptionDate: "2025-01-15",
@@ -349,7 +349,7 @@ const quotations: QuotationData[] = [
     ],
   },
   {
-    taskNumber: "C75R-0005",
+    taskNumber: "A25R-0005",
     client: "Inmobiliaria Soluciones SA",
     buyer: "Juan Pérez",
     receptionDate: "2025-01-15",
@@ -439,7 +439,7 @@ export default function History() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredQuotations = quotations.filter((quotation) =>
-    quotation.taskNumber.toLowerCase().includes(searchTerm.toLowerCase()),
+    quotation.taskNumber.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
