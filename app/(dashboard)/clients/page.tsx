@@ -39,18 +39,35 @@ export default function Clients() {
     telefono: "",
   });
 
+  const [clienteEditando, setClienteEditando] = useState<Client | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setClients([...clients, { id: Date.now(), ...nuevoCliente }]);
-    setNuevoCliente({
-      nombre: "",
-      mail: "",
-      direccion: "",
-      telefono: "",
-    });
+    if (clienteEditando) {
+      setClients(
+        clients.map((c) =>
+          c.id === clienteEditando.id ? { ...clienteEditando } : c
+        )
+      );
+      setClienteEditando(null);
+    } else {
+      setClients([...clients, { id: Date.now(), ...nuevoCliente }]);
+      setNuevoCliente({
+        nombre: "",
+        mail: "",
+        direccion: "",
+        telefono: "",
+      });
+    }
     setDialogOpen(false);
+    setEditDialogOpen(false);
+  };
+
+  const handleEdit = (client: Client) => {
+    setClienteEditando(client);
+    setEditDialogOpen(true);
   };
 
   return (
@@ -155,7 +172,7 @@ export default function Clients() {
           </DialogContent>
         </Dialog>
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mt-6 px-6 pb-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-6 mt-6 px-6 pb-6">
         {clients.map((client) => (
           <div
             key={client.id}
@@ -175,9 +192,113 @@ export default function Clients() {
                 </p>
               </div>
             </div>
+            <div className="flex justify-end w-full gap-2">
+              <Button variant="secondary" onClick={() => handleEdit(client)}>
+                Editar
+              </Button>
+              <Button variant="primary" className="text-white">
+                Cotizaciones
+              </Button>
+            </div>
           </div>
         ))}
       </div>
+      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Editar Cliente</DialogTitle>
+          </DialogHeader>
+          {clienteEditando && (
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-4">
+                <div>
+                  <label
+                    htmlFor="edit-nombre"
+                    className="block text-sm font-medium mb-1"
+                  >
+                    Nombre
+                  </label>
+                  <Input
+                    id="edit-nombre"
+                    value={clienteEditando.nombre}
+                    onChange={(e) =>
+                      setClienteEditando({
+                        ...clienteEditando,
+                        nombre: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="edit-mail"
+                    className="block text-sm font-medium mb-1"
+                  >
+                    Email
+                  </label>
+                  <Input
+                    id="edit-mail"
+                    type="email"
+                    value={clienteEditando.mail}
+                    onChange={(e) =>
+                      setClienteEditando({
+                        ...clienteEditando,
+                        mail: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="edit-direccion"
+                    className="block text-sm font-medium mb-1"
+                  >
+                    Dirección
+                  </label>
+                  <Input
+                    id="edit-direccion"
+                    value={clienteEditando.direccion}
+                    onChange={(e) =>
+                      setClienteEditando({
+                        ...clienteEditando,
+                        direccion: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="edit-telefono"
+                    className="block text-sm font-medium mb-1"
+                  >
+                    Teléfono
+                  </label>
+                  <Input
+                    id="edit-telefono"
+                    value={clienteEditando.telefono}
+                    onChange={(e) =>
+                      setClienteEditando({
+                        ...clienteEditando,
+                        telefono: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                </div>
+              </div>
+              <Button
+                type="submit"
+                className="text-white text-center justify-center w-full"
+              >
+                Guardar Cambios
+              </Button>
+            </form>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
