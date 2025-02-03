@@ -4,18 +4,18 @@ import { useState } from "react";
 import SuccessAnimation from "./SuccesAnimation";
 import Button from "@/components/Button";
 import Header from "@/app/(dashboard)/components/Header";
+import ProgressBar from "@/app/(dashboard)/create/ProgressBar";
 import QuotationDetails from "@/app/(dashboard)/create/steps/QuotationDetails";
 import ItemsList from "@/app/(dashboard)/create/steps/Items/ItemList";
 import PurchaseList from "@/app/(dashboard)/create/steps/Purchase/PurchaseList";
 import LogisticList from "@/app/(dashboard)/create/steps/Logistics/LogisticList";
+import SalesList from "@/app/(dashboard)/create/steps/Sales/SalesList";
 import SelectedBudgetsList from "@/app/(dashboard)/create/steps/SelectBudgets/SelectedBudgetsList";
+import SelectableBudgetsList from "@/app/(dashboard)/create/steps/SelectBudgets/SelectableBudgetsList";
 import type { QuotationData } from "@/types/QuotationData";
 import type { Item } from "@/types/Item";
 import type { Budget } from "@/types/Budget";
 import { TEST_BUDGETS, TEST_ITEMS } from "@/app/(dashboard)/create/testData";
-import SalesList from "@/app/(dashboard)/create/steps/Sales/SalesList";
-import SelectableBudgetsList from "@/app/(dashboard)/create/steps/SelectBudgets/SelectableBudgetsList";
-import ProgressBar from "./ProgressBar";
 import { CreateQuotationService } from "@/services/CreateQuotationService";
 
 const steps = [
@@ -48,7 +48,51 @@ export default function Create() {
         await CreateQuotationService.loadInitialQuotationData(quotationData);
       } catch (error) {
         console.error("Error creating quotation:", error);
-        // Here you might want to show an error message to the user
+        return;
+      }
+    }
+
+    if (currentStep === 1 && items) {
+      try {
+        await CreateQuotationService.loadQuotationItems(items);
+      } catch (error) {
+        console.error("Error creating quotation:", error);
+        return;
+      }
+    }
+
+    if (currentStep === 2 && budgets) {
+      try {
+        await CreateQuotationService.loadPurchaseData(budgets);
+      } catch (error) {
+        console.error("Error creating quotation:", error);
+        return;
+      }
+    }
+
+    if (currentStep === 3 && budgets) {
+      try {
+        await CreateQuotationService.loadLogistics(budgets);
+      } catch (error) {
+        console.error("Error creating quotation:", error);
+        return;
+      }
+    }
+
+    if (currentStep === 4 && budgets) {
+      try {
+        await CreateQuotationService.loadSalesData(budgets);
+      } catch (error) {
+        console.error("Error creating quotation:", error);
+        return;
+      }
+    }
+
+    if (currentStep === 5 && selectedBudgets) {
+      try {
+        await CreateQuotationService.loadSelectedBudgets(selectedBudgets);
+      } catch (error) {
+        console.error("Error creating quotation:", error);
         return;
       }
     }
@@ -67,10 +111,16 @@ export default function Create() {
   const handleCreate = async () => {
     setIsCreating(true);
     setCurrentStep(currentStep + 1);
-    // Simular la creación de la cotización
     await new Promise((resolve) => setTimeout(resolve, 2000));
-    if (quotationData) {
-      console.log("Creando cotización con fecha:", quotationData?.uploadDate);
+    if (quotationData && selectedBudgets) {
+      try {
+        await CreateQuotationService.submitQuotation({
+          ...quotationData,
+          budgets: selectedBudgets,
+        });
+      } catch (error) {
+        console.error("Error submitting quotation:", error);
+      }
     }
     setIsCreating(false);
     setIsSuccess(true);
@@ -82,10 +132,9 @@ export default function Create() {
         !quotationData ||
         Object.keys(quotationData).some(
           (key) =>
-            key !== "budgets" && // Ignorar la key 'budgets'
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            quotationData[key as keyof typeof quotationData].trim() === "",
+            key !== "budgets" &&
+            typeof quotationData[key as keyof QuotationData] === "string" &&
+            (quotationData[key as keyof QuotationData] as string).trim() === "",
         )
       );
     }
