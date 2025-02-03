@@ -13,7 +13,6 @@ import SalesList from "@/app/(dashboard)/create/steps/Sales/SalesList";
 import SelectedBudgetsList from "@/app/(dashboard)/create/steps/SelectBudgets/SelectedBudgetsList";
 import SelectableBudgetsList from "@/app/(dashboard)/create/steps/SelectBudgets/SelectableBudgetsList";
 import type { QuotationData } from "@/types/QuotationData";
-import type { Item } from "@/types/Item";
 import type { Budget } from "@/types/Budget";
 import { TEST_BUDGETS, TEST_ITEMS } from "@/app/(dashboard)/create/testData";
 import { CreateQuotationService } from "@/services/CreateQuotationService";
@@ -38,7 +37,6 @@ export default function Create() {
   const [quotationData, setQuotationData] = useState<QuotationData | null>(
     null,
   );
-  const [items, setItems] = useState<Item[]>(TEST_ITEMS);
   const [budgets, setBudgets] = useState<Budget[]>(TEST_BUDGETS);
   const [selectedBudgets, setSelectedBudgets] = useState<Budget[]>([]);
 
@@ -46,17 +44,31 @@ export default function Create() {
     if (currentStep === 0 && quotationData) {
       try {
         await CreateQuotationService.loadInitialQuotationData(quotationData);
+        setQuotationData((prevData) => {
+          if (prevData) {
+            return {
+              ...prevData,
+              items: TEST_ITEMS,
+            };
+          }
+          return prevData;
+        });
       } catch (error) {
         console.error("Error cargando data inicial:", error);
         return;
       }
     }
 
-    if (currentStep === 1 && items && quotationData?.taskNumber) {
+    if (
+      currentStep === 1 &&
+      quotationData?.items &&
+      quotationData?.taskNumber
+    ) {
+      console.log("ITEMS: ", quotationData.items);
       try {
         await CreateQuotationService.loadQuotationItems(
           quotationData?.taskNumber,
-          items,
+          quotationData?.items,
         );
       } catch (error) {
         console.error("Error cargando items:", error);
@@ -153,8 +165,8 @@ export default function Create() {
         )
       );
     }
-    if (currentStep === 1) {
-      return items.length === 0;
+    if (currentStep === 1 && quotationData?.items) {
+      return quotationData?.items.length === 0;
     }
     if (currentStep === 5) {
       return budgets.length === 0 || selectedBudgets.length === 0;
@@ -176,23 +188,44 @@ export default function Create() {
           />
         );
       case 1:
-        return <ItemsList items={items} setItems={setItems} />;
+        return (
+          quotationData?.items && (
+            <ItemsList
+              items={quotationData?.items}
+              setItems={(newItems) =>
+                setQuotationData((prevData) => {
+                  if (prevData) {
+                    return {
+                      ...prevData,
+                      items: newItems,
+                    };
+                  }
+                  return prevData;
+                })
+              }
+            />
+          )
+        );
       case 2:
         return (
-          <PurchaseList
-            budgets={budgets}
-            setBudgets={setBudgets}
-            items={items}
-            setSelectedBudgets={setSelectedBudgets}
-          />
+          quotationData?.items && (
+            <PurchaseList
+              budgets={budgets}
+              setBudgets={setBudgets}
+              items={quotationData?.items}
+              setSelectedBudgets={setSelectedBudgets}
+            />
+          )
         );
       case 3:
         return (
-          <LogisticList
-            budgets={budgets}
-            setBudgets={setBudgets}
-            items={items}
-          />
+          quotationData?.items && (
+            <LogisticList
+              budgets={budgets}
+              setBudgets={setBudgets}
+              items={quotationData.items}
+            />
+          )
         );
       case 4:
         return <SalesList budgets={budgets} setBudgets={setBudgets} />;

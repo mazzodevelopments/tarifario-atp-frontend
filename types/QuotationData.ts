@@ -1,4 +1,5 @@
 import { Budget } from "@/types/Budget";
+import { Item } from "@/types/Item";
 
 export interface QuotationData {
   taskNumber: string;
@@ -10,4 +11,5 @@ export interface QuotationData {
   materialsNeededDate: string;
   customerRequestNumber: string;
   budgets: Budget[] | null;
+  items: Item[] | null;
 }
