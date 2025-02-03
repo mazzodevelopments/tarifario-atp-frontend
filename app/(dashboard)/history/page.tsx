@@ -435,6 +435,8 @@ const quotations: QuotationData[] = [
   },
 ];
 
+export { quotations };
+
 export default function History() {
   const [searchTerm, setSearchTerm] = useState("");
 

@@ -4,7 +4,8 @@ import { Briefcase, User, Calendar, Hash, Ellipsis } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { QuotationData } from "@/types/QuotationData";
 import { useState } from "react";
-import { QuotationDetails } from "./QuotationDetails";
+import QuotationDetails from "./QuotationDetails";
+import Link from "next/link";
 
 const QuotationCard: React.FC<QuotationData> = (quotation) => {
   const [showDetails, setShowDetails] = useState(false);
@@ -101,23 +102,16 @@ const QuotationCard: React.FC<QuotationData> = (quotation) => {
           </div>
         </div>
         <div className="p-[20px] w-full items-center flex justify-end">
-          <Button
-            variant="outline"
-            className="justify-center items-center py-2 px-4 rounded-xl"
-            onClick={() => setShowDetails(true)}
-          >
-            Ver Detalles
-          </Button>
+          <Link href={`/history/${quotation.taskNumber}`} passHref>
+            <Button
+              variant="outline"
+              className="justify-center items-center py-2 px-4 rounded-xl"
+            >
+              Ver Detalles
+            </Button>
+          </Link>
         </div>
       </div>
-
-      {quotation && (
-        <QuotationDetails
-          quotation={quotation}
-          isOpen={showDetails}
-          onClose={() => setShowDetails(false)}
-        />
-      )}
     </>
   );
 };
