@@ -29,13 +29,32 @@ export default function Proveedores() {
     nombre: "",
     tipo: "Nacional" as "Nacional" | "Internacional" | "Ambos",
   });
+  const [proveedorEditando, setProveedorEditando] = useState<Proveedor | null>(
+    null
+  );
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setProveedores([...proveedores, { id: Date.now(), ...nuevoProveedor }]);
-    setNuevoProveedor({ nombre: "", tipo: "Nacional" });
-    setDialogOpen(false);
+    if (proveedorEditando) {
+      setProveedores(
+        proveedores.map((p) =>
+          p.id === proveedorEditando.id ? { ...proveedorEditando } : p
+        )
+      );
+      setProveedorEditando(null);
+      setEditDialogOpen(false);
+    } else {
+      setProveedores([...proveedores, { id: Date.now(), ...nuevoProveedor }]);
+      setNuevoProveedor({ nombre: "", tipo: "Nacional" });
+      setDialogOpen(false);
+    }
+  };
+
+  const handleEdit = (proveedor: Proveedor) => {
+    setProveedorEditando(proveedor);
+    setEditDialogOpen(true);
   };
 
   return (
@@ -100,7 +119,7 @@ export default function Proveedores() {
           </DialogContent>
         </Dialog>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6 px-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6 px-6">
         {proveedores.map((proveedor) => (
           <div
             key={proveedor.id}
@@ -108,9 +127,73 @@ export default function Proveedores() {
           >
             <h3 className="font-semibold">{proveedor.nombre}</h3>
             <p className="text-sm text-gray-600">{proveedor.tipo}</p>
+            <div className="flex justify-end w-full gap-2">
+              <Button variant="secondary" onClick={() => handleEdit(proveedor)}>
+                Editar
+              </Button>
+              <Button variant="primary" className="text-white">
+                Cotizaciones
+              </Button>
+            </div>
           </div>
         ))}
       </div>
+      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Editar Proveedor</DialogTitle>
+          </DialogHeader>
+          {proveedorEditando && (
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="edit-nombre">Nombre</label>
+                <Input
+                  id="edit-nombre"
+                  value={proveedorEditando.nombre}
+                  onChange={(e) =>
+                    setProveedorEditando({
+                      ...proveedorEditando,
+                      nombre: e.target.value,
+                    })
+                  }
+                  required
+                />
+              </div>
+              <div>
+                <label>Tipo</label>
+                <RadioGroup
+                  value={proveedorEditando.tipo}
+                  onValueChange={(value) =>
+                    setProveedorEditando({
+                      ...proveedorEditando,
+                      tipo: value as "Nacional" | "Internacional" | "Ambos",
+                    })
+                  }
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="Nacional" id="edit-nacional" />
+                    <label htmlFor="edit-nacional">Nacional</label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem
+                      value="Internacional"
+                      id="edit-internacional"
+                    />
+                    <label htmlFor="edit-internacional">Internacional</label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="Ambos" id="edit-ambos" />
+                    <label htmlFor="edit-ambos">Ambos</label>
+                  </div>
+                </RadioGroup>
+              </div>
+              <Button type="submit" className="text-white">
+                Guardar Cambios
+              </Button>
+            </form>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
