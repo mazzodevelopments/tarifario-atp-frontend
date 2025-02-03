@@ -203,7 +203,7 @@ export default function History() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredQuotations = quotations.filter((quotation) =>
-    quotation.taskNumber.toLowerCase().includes(searchTerm.toLowerCase())
+    quotation.taskNumber.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   return (

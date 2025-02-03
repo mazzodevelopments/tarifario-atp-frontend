@@ -7,16 +7,15 @@ import {
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
-  Package2,
   Truck,
   Building2,
   DollarSign,
-  Plane,
   Container,
+  CalendarDays,
+  FileText,
+  ShoppingCart,
 } from "lucide-react";
 import type { Budget } from "@/types/Budget";
-import type { AirportFreightCourier } from "@/types/AirportFreightCourier";
-import type { PortBondedWarehouse } from "@/types/PortBondedWarehouse";
 
 interface BudgetDetailsProps {
   budget: Budget;
@@ -26,10 +25,6 @@ interface BudgetDetailsProps {
 
 export function BudgetDetails({ budget, isOpen, onClose }: BudgetDetailsProps) {
   if (!budget) return null;
-
-  // Determine transport type based on the presence of airwayBillCuttingFee
-  const isAirTransport =
-    budget.transport && "airwayBillCuttingFee" in budget.transport;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -41,287 +36,168 @@ export function BudgetDetails({ budget, isOpen, onClose }: BudgetDetailsProps) {
         </DialogHeader>
         <ScrollArea className="h-[calc(90vh-120px)] pr-4">
           <div className="space-y-6">
-            {/* Basic Information */}
-            <section className="space-y-4">
-              <h3 className="text-lg font-semibold flex items-center gap-2">
-                <Package2 className="h-5 w-5" />
-                Información Básica
-              </h3>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <p className="text-sm text-gray-500">Ítem</p>
-                  <p className="font-medium">{budget.item}</p>
+            {/* Purchase Data Information */}
+            {budget.purchaseData && (
+              <section className="space-y-4">
+                <h3 className="text-lg font-semibold flex items-center gap-2">
+                  <ShoppingCart className="h-5 w-5" />
+                  Información de Compra
+                </h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-gray-500">Ítem</p>
+                    <p className="font-medium">
+                      {budget.purchaseData.item?.detail}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Fecha</p>
+                    <p className="font-medium">
+                      {new Date(budget.purchaseData.date).toLocaleDateString()}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Origen</p>
+                    <p className="font-medium">{budget.purchaseData.origin}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Destino</p>
+                    <p className="font-medium">
+                      {budget.purchaseData.destination}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Proveedor</p>
+                    <p className="font-medium">
+                      {budget.purchaseData.supplier}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Tiempo de Entrega</p>
+                    <p className="font-medium">
+                      {budget.purchaseData.deliveryTime} días
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Precio Unitario</p>
+                    <p className="font-medium">
+                      {budget.purchaseData.unitPrice}{" "}
+                      {budget.purchaseData.currency}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Precio Aplicado</p>
+                    <p className="font-medium">
+                      {budget.purchaseData.appliedUnitPrice}{" "}
+                      {budget.purchaseData.currency}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Margen</p>
+                    <p className="font-medium">
+                      {budget.purchaseData.margin * 100}%
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Peso Unitario</p>
+                    <p className="font-medium">
+                      {budget.purchaseData.unitWeight}{" "}
+                      {budget.purchaseData.unit}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Peso Total</p>
+                    <p className="font-medium">
+                      {budget.purchaseData.totalWeight}{" "}
+                      {budget.purchaseData.unit}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Incoterm</p>
+                    <p className="font-medium">
+                      {budget.purchaseData.incoterm}
+                    </p>
+                  </div>
+                  {budget.purchaseData.additionalObservations && (
+                    <div className="col-span-2">
+                      <p className="text-sm text-gray-500">
+                        Observaciones Adicionales
+                      </p>
+                      <p className="font-medium">
+                        {budget.purchaseData.additionalObservations}
+                      </p>
+                    </div>
+                  )}
                 </div>
-                <div>
-                  <p className="text-sm text-gray-500">Fecha</p>
-                  <p className="font-medium">
-                    {new Date(budget.date).toLocaleDateString()}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Origen</p>
-                  <p className="font-medium">{budget.origin}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Destino</p>
-                  <p className="font-medium">{budget.destination}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Proveedor</p>
-                  <p className="font-medium">{budget.supplier}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Tiempo de Entrega</p>
-                  <p className="font-medium">{budget.deliveryTime} días</p>
-                </div>
-              </div>
-            </section>
+              </section>
+            )}
 
-            {/* Pricing Information */}
-            <section className="space-y-4">
-              <h3 className="text-lg font-semibold flex items-center gap-2">
-                <DollarSign className="h-5 w-5" />
-                Información de Precios
-              </h3>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <p className="text-sm text-gray-500">Precio Unitario</p>
-                  <p className="font-medium">
-                    {budget.unitPrice} {budget.currency}
-                  </p>
+            {/* Origin Expenses */}
+            {budget.originExpenses && (
+              <section className="space-y-4">
+                <h3 className="text-lg font-semibold flex items-center gap-2">
+                  <FileText className="h-5 w-5" />
+                  Gastos de Origen
+                </h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-gray-500">Pickup</p>
+                    <p className="font-medium">
+                      {budget.originExpenses.pickup}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Reembalaje</p>
+                    <p className="font-medium">
+                      {budget.originExpenses.repackaging ? "Sí" : "No"}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">
+                      Fumigación de Pallets
+                    </p>
+                    <p className="font-medium">
+                      {budget.originExpenses.palletFumigation ? "Sí" : "No"}
+                    </p>
+                  </div>
+                  {budget.originExpenses.customExpenses.length > 0 && (
+                    <div className="col-span-2">
+                      <p className="text-sm text-gray-500">
+                        Gastos Adicionales
+                      </p>
+                      {budget.originExpenses.customExpenses.map(
+                        (expense, index) => (
+                          <div key={index} className="flex justify-between">
+                            <span>{expense.name}</span>
+                            <span>{expense.value}</span>
+                          </div>
+                        ),
+                      )}
+                    </div>
+                  )}
+                  <div>
+                    <p className="text-sm text-gray-500">Total</p>
+                    <p className="font-medium">{budget.originExpenses.total}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-sm text-gray-500">Margen</p>
-                  <p className="font-medium">{budget.margin * 100}%</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Precio Total</p>
-                  <p className="font-medium">
-                    {budget.totalPrice} {budget.currency}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Incoterm</p>
-                  <p className="font-medium">{budget.incoterm}</p>
-                </div>
-              </div>
-            </section>
-
-            {/* Weight Information */}
-            <section className="space-y-4">
-              <h3 className="text-lg font-semibold flex items-center gap-2">
-                <Building2 className="h-5 w-5" />
-                Información de Peso
-              </h3>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <p className="text-sm text-gray-500">Peso Unitario</p>
-                  <p className="font-medium">
-                    {budget.unitWeight} {budget.unit}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Peso Total</p>
-                  <p className="font-medium">
-                    {budget.totalWeight} {budget.unit}
-                  </p>
-                </div>
-              </div>
-            </section>
+              </section>
+            )}
 
             {/* Transport Information */}
             {budget.transport && (
               <section className="space-y-4">
                 <h3 className="text-lg font-semibold flex items-center gap-2">
-                  <Plane className="h-5 w-5" />
-                  Información de Transporte{" "}
-                  {isAirTransport ? "Aéreo" : "Marítimo"}
+                  <Truck className="h-5 w-5" />
+                  Información de Transporte
                 </h3>
                 <div className="grid grid-cols-2 gap-4">
-                  {/* Common fields for both transport types */}
                   <div>
-                    <p className="text-sm text-gray-500">Flete Internacional</p>
-                    <p className="font-medium">
-                      {
-                        (budget.transport as AirportFreightCourier)
-                          .internationalFreightCost
-                      }{" "}
-                      {budget.currency}
-                    </p>
+                    <p className="text-sm text-gray-500">Tipo</p>
+                    <p className="font-medium">{budget.transport.type}</p>
                   </div>
-                  <div>
-                    <p className="text-sm text-gray-500">
-                      Seguro Internacional
-                    </p>
-                    <p className="font-medium">
-                      {
-                        (budget.transport as AirportFreightCourier)
-                          .internationalInsurance
-                      }{" "}
-                      {budget.currency}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500">
-                      Cargos Administrativos
-                    </p>
-                    <p className="font-medium">
-                      {budget.transport.administrativeCharges} {budget.currency}
-                    </p>
-                  </div>
-
-                  {/* Air transport specific fields */}
-                  {isAirTransport && (
-                    <>
-                      <div>
-                        <p className="text-sm text-gray-500">
-                          Estadía EDCADASSA
-                        </p>
-                        <p className="font-medium">
-                          {
-                            (budget.transport as AirportFreightCourier)
-                              .edcadassaStayDuration
-                          }{" "}
-                          días a{" "}
-                          {
-                            (budget.transport as AirportFreightCourier)
-                              .edcadassaStayCostPerDay
-                          }{" "}
-                          {budget.currency}/día
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-500">Total EDCADASSA</p>
-                        <p className="font-medium">
-                          {
-                            (budget.transport as AirportFreightCourier)
-                              .edcadassaTotal
-                          }{" "}
-                          {budget.currency}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-500">
-                          Corte de Guía Aérea
-                        </p>
-                        <p className="font-medium">
-                          {
-                            (budget.transport as AirportFreightCourier)
-                              .airwayBillCuttingFee
-                          }{" "}
-                          {budget.currency}
-                        </p>
-                      </div>
-                    </>
-                  )}
-
-                  {/* Maritime transport specific fields */}
-                  {!isAirTransport && (
-                    <>
-                      <div>
-                        <p className="text-sm text-gray-500">
-                          Transferencia a Depósito Fiscal
-                        </p>
-                        <p className="font-medium">
-                          {
-                            (budget.transport as PortBondedWarehouse)
-                              .transferToCustomsWarehouse
-                          }{" "}
-                          {budget.currency}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-500">
-                          Desconsolidación
-                        </p>
-                        <p className="font-medium">
-                          {
-                            (budget.transport as PortBondedWarehouse)
-                              .deconsolidation
-                          }{" "}
-                          {budget.currency}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-500">
-                          Costos de Movimiento
-                        </p>
-                        <p className="font-medium">
-                          {
-                            (budget.transport as PortBondedWarehouse)
-                              .movementCharges
-                          }{" "}
-                          {budget.currency}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-500">
-                          Precinto Electrónico
-                        </p>
-                        <p className="font-medium">
-                          {
-                            (budget.transport as PortBondedWarehouse)
-                              .electronicSeal
-                          }{" "}
-                          {budget.currency}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-500">
-                          Días de Almacenaje
-                        </p>
-                        <p className="font-medium">
-                          {
-                            (budget.transport as PortBondedWarehouse)
-                              .storageDays
-                          }{" "}
-                          días
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-500">
-                          Costo por Día de Almacenaje
-                        </p>
-                        <p className="font-medium">
-                          {
-                            (budget.transport as PortBondedWarehouse)
-                              .storageDayPrice
-                          }{" "}
-                          {budget.currency}/día
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-500">
-                          Total de Almacenaje
-                        </p>
-                        <p className="font-medium">
-                          {
-                            (budget.transport as PortBondedWarehouse)
-                              .storageDaysTotal
-                          }{" "}
-                          {budget.currency}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-500">
-                          Limpieza de Contenedor
-                        </p>
-                        <p className="font-medium">
-                          {
-                            (budget.transport as PortBondedWarehouse)
-                              .containerCleaning
-                          }{" "}
-                          {budget.currency}
-                        </p>
-                      </div>
-                    </>
-                  )}
-
                   <div>
                     <p className="text-sm text-gray-500">Total</p>
-                    <p className="font-medium">
-                      {budget.transport.total} {budget.currency}
-                    </p>
+                    <p className="font-medium">{budget.transport.total}</p>
                   </div>
                 </div>
               </section>
@@ -336,59 +212,179 @@ export function BudgetDetails({ budget, isOpen, onClose }: BudgetDetailsProps) {
                 </h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm text-gray-500">Base Imponible</p>
+                    <p className="text-sm text-gray-500">Valor FOB Factura</p>
                     <p className="font-medium">
-                      {budget.custom.taxableBase} {budget.currency}
+                      {budget.custom.invoiceValueFOB}
                     </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">
+                      Costo Flete Internacional
+                    </p>
+                    <p className="font-medium">
+                      {budget.custom.internationalFreightCost}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Base Imponible</p>
+                    <p className="font-medium">{budget.custom.taxableBase}</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">
                       Derechos de Importación
                     </p>
                     <p className="font-medium">
-                      {budget.custom.importDutyRate} {budget.currency}
+                      {budget.custom.importDutyRate}
                     </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Tasa Estadística</p>
                     <p className="font-medium">
-                      {budget.custom.statisticsRate} {budget.currency}
+                      {budget.custom.statisticsRate}
                     </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">IVA</p>
+                    <p className="font-medium">{budget.custom.ivaRate}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">IVA Adicional</p>
                     <p className="font-medium">
-                      {budget.custom.ivaRate} {budget.currency}
+                      {budget.custom.additionalIvaRate}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Tasa de Ganancias</p>
+                    <p className="font-medium">{budget.custom.incomeTaxRate}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">
+                      Tasa de Ingresos Brutos
+                    </p>
+                    <p className="font-medium">
+                      {budget.custom.grossIncomeRate}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Cargo SIM</p>
+                    <p className="font-medium">{budget.custom.simFee}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">
+                      Costo Mínimo Despacho
+                    </p>
+                    <p className="font-medium">
+                      {budget.custom.minimumCustomsDispatchCost}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">
+                      Cargos Operativos Aduana
+                    </p>
+                    <p className="font-medium">
+                      {budget.custom.customsOperationalCharges}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">
+                      Seguridad Eléctrica (Opcional)
+                    </p>
+                    <p className="font-medium">
+                      {budget.custom.optionalElectricalSecurity}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">
+                      Cargo SENASA (Opcional)
+                    </p>
+                    <p className="font-medium">
+                      {budget.custom.optionalSenasaFee}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Total</p>
+                    <p className="font-medium">{budget.custom.total}</p>
+                  </div>
+                </div>
+              </section>
+            )}
+
+            {/* Destination Expenses */}
+            {budget.destinationExpenses && (
+              <section className="space-y-4">
+                <h3 className="text-lg font-semibold flex items-center gap-2">
+                  <Building2 className="h-5 w-5" />
+                  Gastos de Destino
+                </h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-gray-500">Tipo</p>
+                    <p className="font-medium">
+                      {budget.destinationExpenses.type}
                     </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Total</p>
                     <p className="font-medium">
-                      {budget.custom.total} {budget.currency}
+                      {budget.destinationExpenses.total}
                     </p>
                   </div>
                 </div>
               </section>
             )}
 
-            {/* DestinationExpenses Information */}
-            {budget.delivery && (
+            {/* Sales Data */}
+            {budget.salesData && (
               <section className="space-y-4">
                 <h3 className="text-lg font-semibold flex items-center gap-2">
-                  <Truck className="h-5 w-5" />
-                  Información de Entrega
+                  <DollarSign className="h-5 w-5" />
+                  Información de Venta
                 </h3>
-                <div>
-                  <p className="text-sm text-gray-500">Total</p>
-                  <p className="font-medium">
-                    {budget.delivery.total} {budget.currency}
-                  </p>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-gray-500">
+                      Precio Unitario de Venta
+                    </p>
+                    <p className="font-medium">
+                      {budget.salesData.unitSalePrice}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Margen</p>
+                    <p className="font-medium">
+                      {budget.salesData.margin * 100}%
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Precio Total</p>
+                    <p className="font-medium">{budget.salesData.totalPrice}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Condición de Pago</p>
+                    <p className="font-medium">
+                      {budget.salesData.paymentCondition}
+                    </p>
+                  </div>
                 </div>
               </section>
             )}
+
+            {/* Stage Information */}
+            <section className="space-y-4">
+              <h3 className="text-lg font-semibold flex items-center gap-2">
+                <CalendarDays className="h-5 w-5" />
+                Estado del Presupuesto
+              </h3>
+              <div>
+                <p className="text-sm text-gray-500">Etapa</p>
+                <p className="font-medium">{budget.stage}</p>
+              </div>
+            </section>
           </div>
         </ScrollArea>
       </DialogContent>
     </Dialog>
   );
 }
+
+export default BudgetDetails;

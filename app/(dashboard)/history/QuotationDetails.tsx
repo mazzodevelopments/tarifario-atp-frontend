@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Dialog,
   DialogContent,
@@ -8,10 +9,10 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { QuotationData } from "@/types/QuotationData";
+import type { QuotationData } from "@/types/QuotationData";
 import { BudgetDetails } from "./BudgetDetails";
 import { Calendar, FileText, User } from "lucide-react";
-import { Budget } from "@/types/Budget";
+import type { Budget } from "@/types/Budget";
 
 interface QuotationDetailsProps {
   quotation: QuotationData;
@@ -108,12 +109,6 @@ export function QuotationDetails({
                       {quotation.customerRequestNumber}
                     </p>
                   </div>
-                  <div className="space-y-1">
-                    <p className="text-sm text-gray-500">Número Interno ATP</p>
-                    <p className="font-medium">
-                      {quotation.atpInternRequestNumber}
-                    </p>
-                  </div>
                 </div>
               </div>
 
@@ -123,17 +118,21 @@ export function QuotationDetails({
                 <div className="grid grid-cols-1 gap-4">
                   {quotation.budgets?.map((budget) => (
                     <div
-                      key={budget.id}
+                      key={budget.numbering}
                       className="p-4 rounded-lg border border-gray-200"
                     >
                       <div className="flex justify-between items-start">
                         <div className="space-y-2">
-                          <p className="font-semibold">{budget.item}</p>
+                          <p className="font-semibold">
+                            {budget.purchaseData?.item?.detail}
+                          </p>
                           <p className="text-sm text-gray-500">
-                            {budget.origin} → {budget.destination}
+                            {budget.purchaseData?.origin} →{" "}
+                            {budget.purchaseData?.destination}
                           </p>
                           <p className="text-sm font-medium">
-                            {budget.totalPrice} {budget.currency}
+                            {budget.salesData?.totalPrice}{" "}
+                            {budget.purchaseData?.currency}
                           </p>
                         </div>
                         <Button
@@ -153,11 +152,13 @@ export function QuotationDetails({
         </DialogContent>
       </Dialog>
 
-      <BudgetDetails
-        budget={selectedBudget!}
-        isOpen={!!selectedBudget}
-        onClose={() => setSelectedBudget(null)}
-      />
+      {selectedBudget && (
+        <BudgetDetails
+          budget={selectedBudget}
+          isOpen={!!selectedBudget}
+          onClose={() => setSelectedBudget(null)}
+        />
+      )}
     </>
   );
 }
