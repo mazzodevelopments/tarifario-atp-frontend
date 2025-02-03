@@ -15,6 +15,7 @@ import type { Budget } from "@/types/Budget";
 import { TEST_BUDGETS, TEST_ITEMS } from "@/app/(dashboard)/create/testData";
 import SalesList from "@/app/(dashboard)/create/steps/Sales/SalesList";
 import SelectableBudgetsList from "@/app/(dashboard)/create/steps/SelectBudgets/SelectableBudgetsList";
+import ProgressBar from "./ProgressBar";
 
 const steps = [
   { title: "Cargar Datos Cotización" },
@@ -34,7 +35,7 @@ export default function Create() {
   const totalSteps = steps.length;
   // ESTADOS COTIZACIÓN
   const [quotationData, setQuotationData] = useState<QuotationData | null>(
-    null,
+    null
   );
   const [items, setItems] = useState<Item[]>(TEST_ITEMS);
   const [budgets, setBudgets] = useState<Budget[]>(TEST_BUDGETS);
@@ -73,7 +74,7 @@ export default function Create() {
             key !== "budgets" && // Ignorar la key 'budgets'
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
-            quotationData[key as keyof typeof quotationData].trim() === "",
+            quotationData[key as keyof typeof quotationData].trim() === ""
         )
       );
     }
@@ -193,13 +194,13 @@ export default function Create() {
             </div>
           )}
         </div>
-        {/* <div className="w-[25%] flex justify-center items-start gap-6">
+        <div className="w-[25%] flex justify-center items-start gap-6">
           <ProgressBar
             currentStep={currentStep}
             totalSteps={totalSteps}
             steps={steps}
           />
-        </div> */}
+        </div>
       </div>
     </div>
   );

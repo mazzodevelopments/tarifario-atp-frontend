@@ -145,7 +145,10 @@ export default function Clients() {
                   />
                 </div>
               </div>
-              <Button type="submit" className="text-white w-full">
+              <Button
+                type="submit"
+                className="text-white text-center justify-center w-full"
+              >
                 Guardar Cliente
               </Button>
             </form>
