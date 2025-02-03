@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Button from "@/components/Button";
 import Dropdown, { type DropdownItem } from "@/components/Dropdown";
 import type { Transport } from "@/types/Transport";
+import { LogisticDataService } from "@/services/LogisticDataService";
 
 interface CreateTransportProps {
   onTransportCreated: (transport: Transport | null) => void;
@@ -15,10 +16,10 @@ export default function TransportForm({
   existingTransport,
 }: CreateTransportProps) {
   const [selectedTransport, setSelectedTransport] = useState<string>(
-    existingTransport?.type || ""
+    existingTransport?.type || "",
   );
   const [transportValue, setTransportValue] = useState<number>(
-    existingTransport?.total || 0
+    existingTransport?.total || 0,
   );
 
   useEffect(() => {
@@ -41,18 +42,6 @@ export default function TransportForm({
 
   const handleDelete = () => {
     onTransportCreated(null);
-  };
-
-  const fetchTransportOptions = async (): Promise<DropdownItem[]> => {
-    return [
-      { id: "1", name: "Air" },
-      { id: "2", name: "DHL" },
-      { id: "3", name: "DHL #" },
-      { id: "4", name: "LCL" },
-      { id: "5", name: "FCL 20'" },
-      { id: "6", name: "FCL 40'" },
-      { id: "7", name: "Road" },
-    ];
   };
 
   const handleTransportChange = (item: DropdownItem) => {
@@ -80,7 +69,7 @@ export default function TransportForm({
     <form onSubmit={handleSubmit} className="space-y-4">
       <Dropdown
         label="Opción de Transporte"
-        fetchItems={fetchTransportOptions}
+        fetchItems={LogisticDataService.fetchTransportOptions}
         onSelect={handleTransportChange}
         required
         value={selectedTransport}

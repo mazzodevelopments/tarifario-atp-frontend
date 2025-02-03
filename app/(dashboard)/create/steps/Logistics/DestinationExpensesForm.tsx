@@ -3,10 +3,11 @@ import Button from "@/components/Button";
 import Dropdown, { type DropdownItem } from "@/components/Dropdown";
 import type { Transport } from "@/types/Transport";
 import { DestinationExpenses } from "@/types/DestinationExpenses";
+import { LogisticDataService } from "@/services/LogisticDataService";
 
 interface DestinationExpensesFormProps {
   onDestinationExpensesCreated: (
-    destinationExpenses: DestinationExpenses | null
+    destinationExpenses: DestinationExpenses | null,
   ) => void;
   onCancel: () => void;
   existingDestinationExpenses?: DestinationExpenses | null;
@@ -18,7 +19,7 @@ export default function DestinationExpensesForm({
   existingDestinationExpenses,
 }: DestinationExpensesFormProps) {
   const [selectedType, setSelectedType] = useState<string>(
-    existingDestinationExpenses?.type || ""
+    existingDestinationExpenses?.type || "",
   );
   const [destinationExpensesValue, setDestinationExpensesValue] =
     useState<number>(existingDestinationExpenses?.total || 0);
@@ -43,16 +44,6 @@ export default function DestinationExpensesForm({
 
   const handleDelete = () => {
     onDestinationExpensesCreated(null);
-  };
-
-  const fetchTransportOptions = async (): Promise<DropdownItem[]> => {
-    return [
-      { id: "1", name: "Moto" },
-      { id: "2", name: "Camión hasta 3.000 kg" },
-      { id: "3", name: "Camión hasta 7.000 kg" },
-      { id: "4", name: "Semi" },
-      { id: "5", name: "Contenedor" },
-    ];
   };
 
   const handleTransportChange = (item: DropdownItem) => {
@@ -82,7 +73,7 @@ export default function DestinationExpensesForm({
     <form onSubmit={handleSubmit} className="space-y-4">
       <Dropdown
         label="Seleccionar Gastos Destino"
-        fetchItems={fetchTransportOptions}
+        fetchItems={LogisticDataService.fetchDeliveryTransportOptions}
         onSelect={handleTransportChange}
         required
         value={selectedType}
