@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { UNITS } from "@/app/(dashboard)/create/data";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import Dropdown, { DropdownItem } from "@/components/Dropdown";
 import { DialogClose } from "@/components/ui/dialog";
 import { Item } from "@/types/Item";
+import { ItemsService } from "@/services/ItemsService";
 
 interface CreateItemProps {
   onItemCreated: (item: Item) => void;
@@ -49,66 +49,21 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
     setFormData((prev) => ({ ...prev, [field]: item.name }));
   };
 
-  const fetchBrands = async (): Promise<DropdownItem[]> => {
-    // Simular la obtención de marcas desde un servicio
-    return [
-      { id: "1", name: "Marca A" },
-      { id: "2", name: "Marca B" },
-      { id: "3", name: "Marca C" },
-    ];
-  };
-
-  const fetchFamilies = async (): Promise<DropdownItem[]> => {
-    // Simular la obtención de marcas desde un servicio
-    return [
-      { id: "1", name: "Familia A" },
-      { id: "2", name: "Familia B" },
-      { id: "3", name: "Familia C" },
-    ];
-  };
-
-  const fetchSubfamilies = async (): Promise<DropdownItem[]> => {
-    // Simular la obtención de marcas desde un servicio
-    return [
-      { id: "1", name: "Subfamilia A" },
-      { id: "2", name: "Subfamilia B" },
-      { id: "3", name: "Subfamilia C" },
-    ];
-  };
-
-  const addBrand = async (name: string): Promise<DropdownItem> => {
-    // Simular la adición de una nueva marca
-    return { id: Math.random().toString(36).substr(2, 9), name };
-  };
-  const addFamily = async (name: string): Promise<DropdownItem> => {
-    // Simular la adición de una nueva marca
-    return { id: Math.random().toString(36).substr(2, 9), name };
-  };
-  const addSubfamily = async (name: string): Promise<DropdownItem> => {
-    // Simular la adición de una nueva marca
-    return { id: Math.random().toString(36).substr(2, 9), name };
-  };
-
-  const fetchUnits = async (): Promise<DropdownItem[]> => {
-    // Simular la obtención de marcas desde un servicio
-    return UNITS;
-  };
-
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
         <Dropdown
           value={formData.family}
-          fetchItems={fetchFamilies}
-          addItem={addFamily}
+          fetchItems={ItemsService.fetchFamilies}
+          addItem={ItemsService.addFamily}
           onSelect={handleSelect("family")}
           label="Familia"
           required
         />
         <Dropdown
           value={formData.subfamily}
-          fetchItems={fetchSubfamilies}
-          addItem={addSubfamily}
+          fetchItems={ItemsService.fetchSubfamilies}
+          addItem={ItemsService.addSubfamily}
           onSelect={handleSelect("subfamily")}
           label="Subfamilia"
           required
@@ -126,8 +81,8 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
       />
       <Dropdown
         value={formData.brand}
-        fetchItems={fetchBrands}
-        addItem={addBrand}
+        fetchItems={ItemsService.fetchBrands}
+        addItem={ItemsService.addBrand}
         onSelect={handleSelect("brand")}
         label="Marca"
         required
@@ -145,7 +100,7 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
         />
         <Dropdown
           value={formData.unit}
-          fetchItems={fetchUnits}
+          fetchItems={ItemsService.fetchUnits}
           onSelect={handleSelect("unit")}
           label="Unidad de Medida"
           required
