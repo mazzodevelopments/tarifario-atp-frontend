@@ -16,6 +16,8 @@ import { TEST_BUDGETS, TEST_ITEMS } from "@/app/(dashboard)/create/testData";
 import SalesList from "@/app/(dashboard)/create/steps/Sales/SalesList";
 import SelectableBudgetsList from "@/app/(dashboard)/create/steps/SelectBudgets/SelectableBudgetsList";
 import ProgressBar from "./ProgressBar";
+import { QuotationDataService } from "@/services/QuotationDataService";
+import { CreateQuotationService } from "@/services/CreateQuotationService";
 
 const steps = [
   { title: "Cargar Datos Cotización" },
@@ -35,13 +37,23 @@ export default function Create() {
   const totalSteps = steps.length;
   // ESTADOS COTIZACIÓN
   const [quotationData, setQuotationData] = useState<QuotationData | null>(
-    null
+    null,
   );
   const [items, setItems] = useState<Item[]>(TEST_ITEMS);
   const [budgets, setBudgets] = useState<Budget[]>(TEST_BUDGETS);
   const [selectedBudgets, setSelectedBudgets] = useState<Budget[]>([]);
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    if (currentStep === 0 && quotationData) {
+      try {
+        await CreateQuotationService.loadInitialQuotationData(quotationData);
+      } catch (error) {
+        console.error("Error creating quotation:", error);
+        // Here you might want to show an error message to the user
+        return;
+      }
+    }
+
     if (currentStep < totalSteps - 1) {
       setCurrentStep(currentStep + 1);
     }
@@ -74,7 +86,7 @@ export default function Create() {
             key !== "budgets" && // Ignorar la key 'budgets'
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
-            quotationData[key as keyof typeof quotationData].trim() === ""
+            quotationData[key as keyof typeof quotationData].trim() === "",
         )
       );
     }
@@ -154,9 +166,9 @@ export default function Create() {
             <div className="flex w-full flex-col h-full">
               <div className="flex w-full justify-center items-center h-full">
                 <div className="w-full h-full relative flex flex-col">
-                  <h3 className="text-xl font-[800]">{`Etapa ${
-                    currentStep + 1
-                  } - ${renderStepTitle()}`}</h3>
+                  <h3 className="text-xl font-[800]">
+                    {`Etapa ${currentStep + 1} - ${renderStepTitle()}`}
+                  </h3>
                   <div className="flex justify-center relative h-full items-center">
                     {renderStepContent()}
                   </div>
