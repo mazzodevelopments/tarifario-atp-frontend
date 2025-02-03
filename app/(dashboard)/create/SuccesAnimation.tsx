@@ -3,11 +3,13 @@ import { Check } from "react-feather";
 interface SuccessAnimationProps {
   isCreating: boolean;
   isSuccess: boolean;
+  taskNumber: string;
 }
 
 export default function SuccessAnimation({
   isCreating,
   isSuccess,
+  taskNumber,
 }: SuccessAnimationProps) {
   return (
     <div className="absolute inset-0 flex flex-col items-center justify-center">
@@ -21,6 +23,12 @@ export default function SuccessAnimation({
           <p className="text-2xl font-[600] text-secondary">
             Cotización creada con éxito
           </p>
+          <a
+            className="text-md text-secondary hover:text-primary underline font-medium cursor-pointer"
+            href={`/history/${taskNumber}`}
+          >
+            Ir a la cotización
+          </a>
         </div>
       ) : null}
     </div>

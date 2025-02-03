@@ -47,52 +47,67 @@ export default function Create() {
       try {
         await CreateQuotationService.loadInitialQuotationData(quotationData);
       } catch (error) {
-        console.error("Error creating quotation:", error);
+        console.error("Error cargando data inicial:", error);
         return;
       }
     }
 
-    if (currentStep === 1 && items) {
+    if (currentStep === 1 && items && quotationData?.taskNumber) {
       try {
-        await CreateQuotationService.loadQuotationItems(items);
+        await CreateQuotationService.loadQuotationItems(
+          quotationData?.taskNumber,
+          items,
+        );
       } catch (error) {
-        console.error("Error creating quotation:", error);
+        console.error("Error cargando items:", error);
         return;
       }
     }
 
-    if (currentStep === 2 && budgets) {
+    if (currentStep === 2 && budgets && quotationData?.taskNumber) {
       try {
-        await CreateQuotationService.loadPurchaseData(budgets);
+        await CreateQuotationService.loadPurchaseData(
+          quotationData?.taskNumber,
+          budgets,
+        );
       } catch (error) {
-        console.error("Error creating quotation:", error);
+        console.error("Error cargando data de compras:", error);
         return;
       }
     }
 
-    if (currentStep === 3 && budgets) {
+    if (currentStep === 3 && budgets && quotationData?.taskNumber) {
       try {
-        await CreateQuotationService.loadLogistics(budgets);
+        await CreateQuotationService.loadLogistics(
+          quotationData?.taskNumber,
+          budgets,
+        );
       } catch (error) {
-        console.error("Error creating quotation:", error);
+        console.error("Error cargando data de logistica:", error);
         return;
       }
     }
 
-    if (currentStep === 4 && budgets) {
+    if (currentStep === 4 && budgets && quotationData?.taskNumber) {
       try {
-        await CreateQuotationService.loadSalesData(budgets);
+        await CreateQuotationService.loadSalesData(
+          quotationData?.taskNumber,
+          budgets,
+        );
       } catch (error) {
-        console.error("Error creating quotation:", error);
+        console.error("Error cargando data de ventas", error);
         return;
       }
     }
 
-    if (currentStep === 5 && selectedBudgets) {
+    if (currentStep === 5 && selectedBudgets && quotationData?.taskNumber) {
       try {
-        await CreateQuotationService.loadSelectedBudgets(selectedBudgets);
+        await CreateQuotationService.loadSelectedBudgets(
+          quotationData?.taskNumber,
+          selectedBudgets,
+        );
       } catch (error) {
-        console.error("Error creating quotation:", error);
+        console.error("Error seleccionando presupuestos:", error);
         return;
       }
     }
@@ -209,7 +224,11 @@ export default function Create() {
       <div className="flex w-full h-full p-6">
         <div className="flex flex-col gap-6 w-full h-full p-[20px] border border-neutral-200 shadow-sm bg-white rounded-[18px] relative">
           {isCreating || isSuccess ? (
-            <SuccessAnimation isCreating={isCreating} isSuccess={isSuccess} />
+            <SuccessAnimation
+              isCreating={isCreating}
+              isSuccess={isSuccess}
+              taskNumber={quotationData?.taskNumber ?? ""}
+            />
           ) : (
             <div className="flex w-full flex-col h-full">
               <div className="flex w-full justify-center items-center h-full">
