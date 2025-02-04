@@ -45,13 +45,13 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
     useState<OriginExpenses | null>(null);
   const [editingCustom, setEditingCustom] = useState<Custom | null>(null);
   const [editingTransport, setEditingTransport] = useState<Transport | null>(
-    null
+    null,
   );
   const [editingDestinationExpenses, setEditingDestinationExpenses] =
     useState<DestinationExpenses | null>(null);
 
   const getButtonStates = (
-    incoterm: string
+    incoterm: string,
   ): {
     transport: boolean;
     custom: boolean;
@@ -126,20 +126,20 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
   };
 
   const handleBudgetUpdate = <
-    T extends Transport | OriginExpenses | Custom | DestinationExpenses | null
+    T extends Transport | OriginExpenses | Custom | DestinationExpenses | null,
   >(
     field: "transport" | "originExpenses" | "custom" | "destinationExpenses",
     value: T,
     setShowModal: (value: boolean) => void,
-    setEditing: (value: T | null) => void
+    setEditing: (value: T | null) => void,
   ) => {
     if (selectedBudgetId) {
       setBudgets(
         budgets.map((budget) =>
           budget.numbering === selectedBudgetId
             ? { ...budget, [field]: value }
-            : budget
-        )
+            : budget,
+        ),
       );
       setShowModal(false);
       setEditing(null);
@@ -149,7 +149,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
   const renderActionCell = (
     budget: Budget,
     type: "transport" | "custom" | "destinationExpenses" | "origin",
-    setShowModal: (show: boolean) => void
+    setShowModal: (show: boolean) => void,
   ) => {
     const data = type === "origin" ? budget.originExpenses : budget[type];
     const buttonStates = getButtonStates(budget.purchaseData?.incoterm || "");
@@ -177,12 +177,12 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
                 setShowTransportModal(true);
               } else if (type === "origin") {
                 setEditingOriginExpenses(
-                  budget.originExpenses as OriginExpenses
+                  budget.originExpenses as OriginExpenses,
                 );
                 setShowOriginExpensesModal(true);
               } else if (type === "destinationExpenses") {
                 setEditingDestinationExpenses(
-                  budget.destinationExpenses as DestinationExpenses
+                  budget.destinationExpenses as DestinationExpenses,
                 );
                 setShowDestinationExpensesModal(true);
               } else {
@@ -225,6 +225,8 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
               <TableHead>Numeración</TableHead>
               <TableHead>Item</TableHead>
               <TableHead>Proveedor</TableHead>
+              <TableHead>Precio Unitario</TableHead>
+              <TableHead>Extendido</TableHead>
               <TableHead>Origen</TableHead>
               <TableHead>L. Entrega</TableHead>
               <TableHead>T. Producción</TableHead>
@@ -251,6 +253,16 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
                   <TableCell>{budget.stage + " " + budget.numbering}</TableCell>
                   <TableCell>{budget.purchaseData?.item?.detail}</TableCell>
                   <TableCell>{budget.purchaseData?.supplier}</TableCell>
+                  <TableCell>
+                    ${budget.purchaseData?.appliedUnitPrice.formatNumber()}
+                  </TableCell>
+                  <TableCell>
+                    $
+                    {(
+                      (budget.purchaseData?.appliedUnitPrice ?? 0) *
+                      (budget.purchaseData?.item?.quantity ?? 1)
+                    ).formatNumber()}
+                  </TableCell>
                   <TableCell>{budget.purchaseData?.origin}</TableCell>
                   <TableCell>{budget.purchaseData?.destination}</TableCell>
                   <TableCell>
@@ -261,14 +273,14 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
                     {renderActionCell(
                       budget,
                       "origin",
-                      setShowOriginExpensesModal
+                      setShowOriginExpensesModal,
                     )}
                   </TableCell>
                   <TableCell>
                     {renderActionCell(
                       budget,
                       "transport",
-                      setShowTransportModal
+                      setShowTransportModal,
                     )}
                   </TableCell>
                   <TableCell>
@@ -278,7 +290,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
                     {renderActionCell(
                       budget,
                       "destinationExpenses",
-                      setShowDestinationExpensesModal
+                      setShowDestinationExpensesModal,
                     )}
                   </TableCell>
                 </TableRow>
@@ -308,7 +320,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
                   "originExpenses",
                   expenses,
                   setShowOriginExpensesModal,
-                  setEditingOriginExpenses
+                  setEditingOriginExpenses,
                 );
               }}
               onCancel={() => {
@@ -336,7 +348,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
                   "transport",
                   transport,
                   setShowTransportModal,
-                  setEditingTransport
+                  setEditingTransport,
                 )
               }
               onCancel={() => {
@@ -366,7 +378,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
                   "custom",
                   custom,
                   setShowCustomModal,
-                  setEditingCustom
+                  setEditingCustom,
                 );
               }}
               onCancel={() => {
@@ -395,7 +407,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
                   "destinationExpenses",
                   expenses,
                   setShowDestinationExpensesModal,
-                  setEditingDestinationExpenses
+                  setEditingDestinationExpenses,
                 );
               }}
               onCancel={() => {

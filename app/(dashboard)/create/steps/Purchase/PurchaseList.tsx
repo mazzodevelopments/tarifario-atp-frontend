@@ -26,7 +26,6 @@ interface BudgetListProps {
   budgets: Budget[];
   setBudgets: (budgets: Budget[]) => void;
   items: Item[];
-  setSelectedBudgets: (selectedBudgets: Budget[]) => void;
 }
 
 export default function PurchaseList({

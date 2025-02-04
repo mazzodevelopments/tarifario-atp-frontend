@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import { useState } from "react";
 import SuccessAnimation from "./SuccesAnimation";
 import Button from "@/components/Button";
@@ -11,7 +12,6 @@ import SelectablePurchaseList from "@/app/(dashboard)/create/steps/Purchase/Sele
 import LogisticList from "@/app/(dashboard)/create/steps/Logistics/LogisticList";
 import SalesList from "@/app/(dashboard)/create/steps/Sales/SalesList";
 import SelectedBudgetsList from "@/app/(dashboard)/create/steps/SelectBudgets/SelectedBudgetsList";
-import SelectableBudgetsList from "@/app/(dashboard)/create/steps/SelectBudgets/SelectableBudgetsList";
 import type { QuotationData } from "@/types/QuotationData";
 import type { Budget } from "@/types/Budget";
 import { TEST_BUDGETS, TEST_ITEMS } from "@/app/(dashboard)/create/testData";
@@ -24,7 +24,6 @@ const steps = [
   { title: "Seleccionar Compras" },
   { title: "Agregar Logística" },
   { title: "Sector Ventas" },
-  { title: "Seleccionar Presupuestos" },
   { title: "Revisar Presupuestos" },
   { title: "Confirmar y Crear" },
 ];
@@ -38,8 +37,9 @@ export default function Create() {
   const [quotationData, setQuotationData] = useState<QuotationData | null>(
     null,
   );
+  const [originalBudgets, setOriginalBudgets] =
+    useState<Budget[]>(TEST_BUDGETS);
   const [budgets, setBudgets] = useState<Budget[]>(TEST_BUDGETS);
-  const [selectedBudgets, setSelectedBudgets] = useState<Budget[]>([]);
   const [selectedPurchases, setSelectedPurchases] = useState<Budget[]>([]);
 
   const handleNext = async () => {
@@ -66,7 +66,6 @@ export default function Create() {
       quotationData?.items &&
       quotationData?.taskNumber
     ) {
-      console.log("ITEMS: ", quotationData.items);
       try {
         await CreateQuotationService.loadQuotationItems(
           quotationData?.taskNumber,
@@ -84,10 +83,17 @@ export default function Create() {
           quotationData?.taskNumber,
           budgets,
         );
+        // Guardar los budgets originales antes de la selección
+        setOriginalBudgets(budgets);
       } catch (error) {
         console.error("Error cargando data de compras:", error);
         return;
       }
+    }
+
+    // Update budgets with selected purchases when moving from step 3 to 4
+    if (currentStep === 3) {
+      setBudgets(selectedPurchases);
     }
 
     if (currentStep === 4 && budgets && quotationData?.taskNumber) {
@@ -102,7 +108,7 @@ export default function Create() {
       }
     }
 
-    if (currentStep === 5 && budgets && quotationData?.taskNumber) {
+    if (currentStep === 5 && quotationData?.taskNumber) {
       try {
         await CreateQuotationService.loadSalesData(
           quotationData?.taskNumber,
@@ -114,11 +120,11 @@ export default function Create() {
       }
     }
 
-    if (currentStep === 6 && selectedBudgets && quotationData?.taskNumber) {
+    if (currentStep === 6 && quotationData?.taskNumber) {
       try {
         await CreateQuotationService.loadSelectedBudgets(
           quotationData?.taskNumber,
-          selectedBudgets,
+          budgets,
         );
       } catch (error) {
         console.error("Error seleccionando presupuestos:", error);
@@ -133,6 +139,10 @@ export default function Create() {
 
   const handlePrevious = () => {
     if (currentStep > 0) {
+      // Si estamos volviendo del paso 4 al 3, restauramos los budgets originales
+      if (currentStep === 4) {
+        setBudgets(originalBudgets);
+      }
       setCurrentStep(currentStep - 1);
     }
   };
@@ -141,11 +151,11 @@ export default function Create() {
     setIsCreating(true);
     setCurrentStep(currentStep + 1);
     await new Promise((resolve) => setTimeout(resolve, 2000));
-    if (quotationData && selectedBudgets) {
+    if (quotationData) {
       try {
         await CreateQuotationService.submitQuotation({
           ...quotationData,
-          budgets: selectedBudgets,
+          budgets,
         });
       } catch (error) {
         console.error("Error submitting quotation:", error);
@@ -173,8 +183,8 @@ export default function Create() {
     if (currentStep === 3) {
       return selectedPurchases.length === 0;
     }
-    if (currentStep === 6) {
-      return budgets.length === 0 || selectedBudgets.length === 0;
+    if (currentStep === 5) {
+      return budgets.length === 0;
     }
     return false;
   };
@@ -218,7 +228,6 @@ export default function Create() {
               budgets={budgets}
               setBudgets={setBudgets}
               items={quotationData?.items}
-              setSelectedBudgets={setSelectedBudgets}
             />
           )
         );
@@ -234,7 +243,7 @@ export default function Create() {
         return (
           quotationData?.items && (
             <LogisticList
-              budgets={selectedPurchases}
+              budgets={budgets}
               setBudgets={setBudgets}
               items={quotationData.items}
             />
@@ -243,15 +252,7 @@ export default function Create() {
       case 5:
         return <SalesList budgets={budgets} setBudgets={setBudgets} />;
       case 6:
-        return (
-          <SelectableBudgetsList
-            budgets={budgets}
-            selectedBudgets={selectedBudgets}
-            setSelectedBudgets={setSelectedBudgets}
-          />
-        );
-      case 7:
-        return <SelectedBudgetsList selectedBudgets={selectedBudgets} />;
+        return <SelectedBudgetsList selectedBudgets={selectedPurchases} />;
       default:
         return <p>Contenido de la etapa {currentStep + 1}</p>;
     }
@@ -301,7 +302,6 @@ export default function Create() {
                     onClick={handleCreate}
                     className="text-white"
                     variant="primary"
-                    disabled={selectedBudgets.length === 0}
                   >
                     Crear Cotización
                   </Button>
