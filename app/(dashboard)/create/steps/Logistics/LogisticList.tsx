@@ -28,6 +28,16 @@ import type { Custom } from "@/types/Custom";
 import type { DestinationExpenses } from "@/types/DestinationExpenses";
 import "@/app/utils/formatNumber";
 
+interface Freight {
+  id: string;
+  name: string;
+  originExpenses: OriginExpenses | null;
+  transport: Transport | null;
+  custom: Custom | null;
+  destinationExpenses: DestinationExpenses | null;
+  total: number;
+}
+
 interface BudgetListProps {
   budgets: Budget[];
   setBudgets: (budgets: Budget[]) => void;
@@ -35,7 +45,16 @@ interface BudgetListProps {
 }
 
 export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
-  const [selectedBudgetId, setSelectedBudgetId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<"logistics" | "freights">(
+    "logistics",
+  );
+  const [freights, setFreights] = useState<Freight[]>([]);
+  const [selectedFreightId, setSelectedFreightId] = useState<string | null>(
+    null,
+  );
+  const [selectedFreights, setSelectedFreights] = useState<
+    Record<string, string>
+  >({});
   const [showOriginExpensesModal, setShowOriginExpensesModal] = useState(false);
   const [showTransportModal, setShowTransportModal] = useState(false);
   const [showCustomModal, setShowCustomModal] = useState(false);
@@ -50,82 +69,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
   const [editingDestinationExpenses, setEditingDestinationExpenses] =
     useState<DestinationExpenses | null>(null);
 
-  const getButtonStates = (
-    incoterm: string,
-  ): {
-    transport: boolean;
-    custom: boolean;
-    destinationExpenses: boolean;
-    origin: boolean;
-  } => {
-    switch (incoterm) {
-      case "EXW":
-        return {
-          transport: true,
-          custom: true,
-          destinationExpenses: true,
-          origin: true,
-        };
-      case "FOB":
-        return {
-          transport: true,
-          custom: true,
-          destinationExpenses: true,
-          origin: true,
-        };
-      case "FCA":
-        return {
-          transport: false,
-          custom: true,
-          destinationExpenses: false,
-          origin: true,
-        };
-      case "CIF":
-        return {
-          transport: false,
-          custom: true,
-          destinationExpenses: true,
-          origin: true,
-        };
-      case "CFR":
-        return {
-          transport: false,
-          custom: true,
-          destinationExpenses: true,
-          origin: true,
-        };
-      case "DAT":
-        return {
-          transport: false,
-          custom: false,
-          destinationExpenses: true,
-          origin: true,
-        };
-      case "DAP":
-        return {
-          transport: false,
-          custom: false,
-          destinationExpenses: true,
-          origin: true,
-        };
-      case "DDP":
-        return {
-          transport: false,
-          custom: false,
-          destinationExpenses: false,
-          origin: true,
-        };
-      default:
-        return {
-          transport: false,
-          custom: false,
-          destinationExpenses: false,
-          origin: true,
-        };
-    }
-  };
-
-  const handleBudgetUpdate = <
+  const handleFreightUpdate = <
     T extends Transport | OriginExpenses | Custom | DestinationExpenses | null,
   >(
     field: "transport" | "originExpenses" | "custom" | "destinationExpenses",
@@ -133,12 +77,19 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
     setShowModal: (value: boolean) => void,
     setEditing: (value: T | null) => void,
   ) => {
-    if (selectedBudgetId) {
-      setBudgets(
-        budgets.map((budget) =>
-          budget.numbering === selectedBudgetId
-            ? { ...budget, [field]: value }
-            : budget,
+    if (selectedFreightId) {
+      setFreights(
+        freights.map((freight) =>
+          freight.id === selectedFreightId
+            ? {
+                ...freight,
+                [field]: value,
+                total: calculateTotal({
+                  ...freight,
+                  [field]: value,
+                }),
+              }
+            : freight,
         ),
       );
       setShowModal(false);
@@ -146,52 +97,155 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
     }
   };
 
-  const renderActionCell = (
-    budget: Budget,
+  const calculateTotal = (freight: Partial<Freight>) => {
+    return [
+      freight.originExpenses?.total || 0,
+      freight.transport?.total || 0,
+      freight.custom?.total || 0,
+      freight.destinationExpenses?.total || 0,
+    ].reduce((a, b) => a + b, 0);
+  };
+
+  const createNewFreight = () => {
+    const newFreight: Freight = {
+      id: `freight-${freights.length + 1}`,
+      name: `Flete ${freights.length + 1}`,
+      originExpenses: null,
+      transport: null,
+      custom: null,
+      destinationExpenses: null,
+      total: 0,
+    };
+    setFreights([...freights, newFreight]);
+  };
+
+  const handleAssignFreight = (budgetId: string, freightId: string) => {
+    const freight = freights.find((f) => f.id === freightId);
+    if (freight) {
+      setSelectedFreights((prev) => ({
+        ...prev,
+        [budgetId]: freightId,
+      }));
+
+      setBudgets(
+        budgets.map((budget) =>
+          budget.numbering === budgetId
+            ? {
+                ...budget,
+                originExpenses: freight.originExpenses,
+                transport: freight.transport,
+                custom: freight.custom,
+                destinationExpenses: freight.destinationExpenses,
+              }
+            : budget,
+        ),
+      );
+    }
+  };
+
+  const renderLogisticsTable = () => (
+    <Table>
+      <TableHeader className="border-b border-gray-200">
+        <TableRow>
+          <TableHead>Numeración</TableHead>
+          <TableHead>Item</TableHead>
+          <TableHead>Proveedor</TableHead>
+          <TableHead>Precio Unitario</TableHead>
+          <TableHead>Extendido</TableHead>
+          <TableHead>Origen</TableHead>
+          <TableHead>L. Entrega</TableHead>
+          <TableHead>T. Producción</TableHead>
+          <TableHead>Incoterm</TableHead>
+          <TableHead>Flete</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody className="bg-white divide-y divide-gray-200">
+        {budgets.length === 0 ? (
+          <TableRow className="h-24">
+            <TableCell
+              colSpan={10}
+              className="text-sm m-auto h-full text-center text-gray-500"
+            >
+              No hay presupuestos agregados
+            </TableCell>
+          </TableRow>
+        ) : (
+          budgets.map((budget) => (
+            <TableRow key={budget.numbering} className="h-12">
+              <TableCell>{budget.stage + " " + budget.numbering}</TableCell>
+              <TableCell>{budget.purchaseData?.item?.detail}</TableCell>
+              <TableCell>{budget.purchaseData?.supplier}</TableCell>
+              <TableCell>
+                ${budget.purchaseData?.appliedUnitPrice.formatNumber()}
+              </TableCell>
+              <TableCell>
+                $
+                {(
+                  (budget.purchaseData?.appliedUnitPrice ?? 0) *
+                  (budget.purchaseData?.item?.quantity ?? 1)
+                ).formatNumber()}
+              </TableCell>
+              <TableCell>{budget.purchaseData?.origin}</TableCell>
+              <TableCell>{budget.purchaseData?.destination}</TableCell>
+              <TableCell>{budget.purchaseData?.deliveryTime} días</TableCell>
+              <TableCell>{budget.purchaseData?.incoterm}</TableCell>
+              <TableCell>
+                <select
+                  className="border rounded p-1"
+                  value={selectedFreights[budget.numbering] || ""}
+                  onChange={(e) =>
+                    handleAssignFreight(budget.numbering, e.target.value)
+                  }
+                >
+                  <option value="">Seleccionar Flete</option>
+                  {freights.map((freight) => (
+                    <option key={freight.id} value={freight.id}>
+                      {freight.name} (${freight.total.formatNumber()})
+                    </option>
+                  ))}
+                </select>
+              </TableCell>
+            </TableRow>
+          ))
+        )}
+      </TableBody>
+    </Table>
+  );
+
+  const renderFreightActionCell = (
+    freight: Freight,
     type: "transport" | "custom" | "destinationExpenses" | "origin",
     setShowModal: (show: boolean) => void,
   ) => {
-    const data = type === "origin" ? budget.originExpenses : budget[type];
-    const buttonStates = getButtonStates(budget.purchaseData?.incoterm || "");
-    const isEnabled = buttonStates[type];
-
-    const handleClick = (e: React.MouseEvent) => {
-      e.stopPropagation();
-      setSelectedBudgetId(budget.numbering);
-      setShowModal(true);
-    };
+    const data = type === "origin" ? freight.originExpenses : freight[type];
 
     if (data?.total) {
       return (
         <div className="flex items-center gap-2">
           <span className="font-[600]">${data.total.formatNumber()}</span>
           <Button
-            onClick={(e) => {
-              e.stopPropagation();
-              setSelectedBudgetId(budget.numbering);
+            onClick={() => {
+              setSelectedFreightId(freight.id);
               if (type === "custom") {
-                setEditingCustom(budget.custom as Custom);
+                setEditingCustom(freight.custom as Custom);
                 setShowCustomModal(true);
               } else if (type === "transport") {
-                setEditingTransport(budget.transport as Transport);
+                setEditingTransport(freight.transport as Transport);
                 setShowTransportModal(true);
               } else if (type === "origin") {
                 setEditingOriginExpenses(
-                  budget.originExpenses as OriginExpenses,
+                  freight.originExpenses as OriginExpenses,
                 );
                 setShowOriginExpensesModal(true);
               } else if (type === "destinationExpenses") {
                 setEditingDestinationExpenses(
-                  budget.destinationExpenses as DestinationExpenses,
+                  freight.destinationExpenses as DestinationExpenses,
                 );
                 setShowDestinationExpensesModal(true);
-              } else {
-                setShowModal(true);
               }
             }}
             variant="secondary"
             className="p-1 h-auto hover:bg-gray-100"
-            disabled={!isEnabled}
           >
             <Pencil className="w-4 h-4 text-primary" />
           </Button>
@@ -201,14 +255,12 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
 
     return (
       <Button
-        onClick={handleClick}
+        onClick={() => {
+          setSelectedFreightId(freight.id);
+          setShowModal(true);
+        }}
         variant="secondary"
-        className={`flex items-center gap-1 ${
-          !isEnabled
-            ? "text-gray-400 cursor-not-allowed"
-            : "text-primary hover:text-primary-dark"
-        }`}
-        disabled={!isEnabled}
+        className="flex items-center gap-1 text-primary hover:text-primary-dark"
       >
         <Plus className="w-4 h-4" />
         Agregar
@@ -216,89 +268,101 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
     );
   };
 
-  return (
-    <div className="w-full flex justify-center items-center max-w-4xl flex-col">
-      <div className="border rounded-md max-h-[30vw] relative overflow-auto w-[54vw]">
+  const renderFreightsTable = () => (
+    <>
+      {freights.length === 0 ? (
+        <div className="flex flex-col items-center justify-center h-48 gap-4">
+          <p className="text-gray-500">No hay fletes creados</p>
+        </div>
+      ) : (
         <Table>
           <TableHeader className="border-b border-gray-200">
             <TableRow>
-              <TableHead>Numeración</TableHead>
-              <TableHead>Item</TableHead>
-              <TableHead>Proveedor</TableHead>
-              <TableHead>Precio Unitario</TableHead>
-              <TableHead>Extendido</TableHead>
-              <TableHead>Origen</TableHead>
-              <TableHead>L. Entrega</TableHead>
-              <TableHead>T. Producción</TableHead>
-              <TableHead>Incoterm</TableHead>
+              <TableHead>Nombre</TableHead>
               <TableHead>Gastos Origen</TableHead>
               <TableHead>Transporte</TableHead>
               <TableHead>Aduana</TableHead>
               <TableHead>Gastos Destino</TableHead>
+              <TableHead>Total</TableHead>
+              <TableHead></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className="bg-white divide-y divide-gray-200">
-            {budgets.length === 0 ? (
-              <TableRow className="h-24">
-                <TableCell
-                  colSpan={12}
-                  className="text-sm m-auto h-full text-center text-gray-500"
-                >
-                  No hay presupuestos agregados
+            {freights.map((freight) => (
+              <TableRow key={freight.id} className="h-12">
+                <TableCell>{freight.name}</TableCell>
+                <TableCell>
+                  {renderFreightActionCell(
+                    freight,
+                    "origin",
+                    setShowOriginExpensesModal,
+                  )}
                 </TableCell>
+                <TableCell>
+                  {renderFreightActionCell(
+                    freight,
+                    "transport",
+                    setShowTransportModal,
+                  )}
+                </TableCell>
+                <TableCell>
+                  {renderFreightActionCell(
+                    freight,
+                    "custom",
+                    setShowCustomModal,
+                  )}
+                </TableCell>
+                <TableCell>
+                  {renderFreightActionCell(
+                    freight,
+                    "destinationExpenses",
+                    setShowDestinationExpensesModal,
+                  )}
+                </TableCell>
+                <TableCell>${freight.total.formatNumber()}</TableCell>
+                <TableCell></TableCell>
               </TableRow>
-            ) : (
-              budgets.map((budget) => (
-                <TableRow key={budget.numbering} className="h-12">
-                  <TableCell>{budget.stage + " " + budget.numbering}</TableCell>
-                  <TableCell>{budget.purchaseData?.item?.detail}</TableCell>
-                  <TableCell>{budget.purchaseData?.supplier}</TableCell>
-                  <TableCell>
-                    ${budget.purchaseData?.appliedUnitPrice.formatNumber()}
-                  </TableCell>
-                  <TableCell>
-                    $
-                    {(
-                      (budget.purchaseData?.appliedUnitPrice ?? 0) *
-                      (budget.purchaseData?.item?.quantity ?? 1)
-                    ).formatNumber()}
-                  </TableCell>
-                  <TableCell>{budget.purchaseData?.origin}</TableCell>
-                  <TableCell>{budget.purchaseData?.destination}</TableCell>
-                  <TableCell>
-                    {budget.purchaseData?.deliveryTime} días
-                  </TableCell>
-                  <TableCell>{budget.purchaseData?.incoterm}</TableCell>
-                  <TableCell>
-                    {renderActionCell(
-                      budget,
-                      "origin",
-                      setShowOriginExpensesModal,
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {renderActionCell(
-                      budget,
-                      "transport",
-                      setShowTransportModal,
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {renderActionCell(budget, "custom", setShowCustomModal)}
-                  </TableCell>
-                  <TableCell>
-                    {renderActionCell(
-                      budget,
-                      "destinationExpenses",
-                      setShowDestinationExpensesModal,
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
+            ))}
           </TableBody>
         </Table>
+      )}
+    </>
+  );
+
+  return (
+    <div className="w-full flex justify-center items-center max-w-4xl flex-col">
+      <div className="w-full mb-4 flex gap-4 border-b">
+        <button
+          className={`px-4 py-2 ${activeTab === "logistics" ? "border-b-2 border-primary text-primary" : "text-gray-500"}`}
+          onClick={() => setActiveTab("logistics")}
+        >
+          Logística
+        </button>
+        <button
+          className={`px-4 py-2 ${activeTab === "freights" ? "border-b-2 border-primary text-primary" : "text-gray-500"}`}
+          onClick={() => setActiveTab("freights")}
+        >
+          Fletes
+        </button>
       </div>
+
+      <div className="border rounded-md max-h-[30vw] relative overflow-auto w-[54vw]">
+        {activeTab === "logistics"
+          ? renderLogisticsTable()
+          : renderFreightsTable()}
+      </div>
+
+      {activeTab === "freights" && (
+        <div className="flex justify-center items-center w-full mt-6">
+          <Button
+            onClick={createNewFreight}
+            className="text-sm px-4 py-2 bg-primary text-white flex items-center gap-2"
+          >
+            <span className="text-md mr-2">+</span>
+            Crear Nuevo Flete
+          </Button>
+        </div>
+      )}
 
       {/* MODAL GASTOS ORIGEN */}
       <Dialog
@@ -316,7 +380,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
           <div className="bg-white rounded-lg w-full">
             <OriginExpensesForm
               onOriginExpensesCreated={(expenses) => {
-                handleBudgetUpdate(
+                handleFreightUpdate(
                   "originExpenses",
                   expenses,
                   setShowOriginExpensesModal,
@@ -344,7 +408,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
           <div className="bg-white rounded-lg w-full">
             <TransportForm
               onTransportCreated={(transport) =>
-                handleBudgetUpdate(
+                handleFreightUpdate(
                   "transport",
                   transport,
                   setShowTransportModal,
@@ -374,7 +438,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
           <div className="bg-white rounded-lg w-full">
             <CustomForm
               onCustomCreated={(custom) => {
-                handleBudgetUpdate(
+                handleFreightUpdate(
                   "custom",
                   custom,
                   setShowCustomModal,
@@ -403,7 +467,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
           <div className="bg-white rounded-lg w-full">
             <DestinationExpensesForm
               onDestinationExpensesCreated={(expenses) => {
-                handleBudgetUpdate(
+                handleFreightUpdate(
                   "destinationExpenses",
                   expenses,
                   setShowDestinationExpensesModal,
