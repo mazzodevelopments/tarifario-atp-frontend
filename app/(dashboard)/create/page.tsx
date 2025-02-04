@@ -16,6 +16,7 @@ import type { Budget } from "@/types/Budget";
 import { TEST_BUDGETS, TEST_ITEMS } from "@/app/(dashboard)/create/testData";
 import { CreateQuotationService } from "@/services/CreateQuotationService";
 import SelectableBudgetsList from "@/app/(dashboard)/create/steps/SelectBudgets/SelectableBudgetsList";
+import { Freight } from "@/types/Freight";
 
 const steps = [
   { title: "Cargar Datos Cotización" },
@@ -39,6 +40,7 @@ export default function Create() {
   );
   const [budgets, setBudgets] = useState<Budget[]>(TEST_BUDGETS);
   const [selectedBudgets, setSelectedBudgets] = useState<Budget[]>([]);
+  const [freights, setFreights] = useState<Freight[]>([]);
 
   const handleNext = async () => {
     if (currentStep === 0 && quotationData) {
@@ -226,6 +228,8 @@ export default function Create() {
               budgets={budgets}
               setBudgets={setBudgets}
               items={quotationData.items}
+              freights={freights}
+              setFreights={setFreights}
             />
           )
         );

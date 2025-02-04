@@ -1,4 +1,3 @@
-import type React from "react";
 import { useState } from "react";
 import { Plus, Pencil } from "lucide-react";
 import {
@@ -26,29 +25,26 @@ import type { OriginExpenses } from "@/types/OriginExpenses";
 import type { Transport } from "@/types/Transport";
 import type { Custom } from "@/types/Custom";
 import type { DestinationExpenses } from "@/types/DestinationExpenses";
+import type { Freight } from "@/types/Freight";
 import "@/app/utils/formatNumber";
-
-interface Freight {
-  id: string;
-  name: string;
-  originExpenses: OriginExpenses | null;
-  transport: Transport | null;
-  custom: Custom | null;
-  destinationExpenses: DestinationExpenses | null;
-  total: number;
-}
 
 interface BudgetListProps {
   budgets: Budget[];
   setBudgets: (budgets: Budget[]) => void;
   items: Item[];
+  freights: Freight[];
+  setFreights: (freigths: Freight[]) => void;
 }
 
-export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
+export default function LogisticList({
+  budgets,
+  setBudgets,
+  freights,
+  setFreights,
+}: BudgetListProps) {
   const [activeTab, setActiveTab] = useState<"logistics" | "freights">(
     "logistics",
   );
-  const [freights, setFreights] = useState<Freight[]>([]);
   const [selectedFreightId, setSelectedFreightId] = useState<string | null>(
     null,
   );
@@ -132,10 +128,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
           budget.numbering === budgetId
             ? {
                 ...budget,
-                originExpenses: freight.originExpenses,
-                transport: freight.transport,
-                custom: freight.custom,
-                destinationExpenses: freight.destinationExpenses,
+                freight: freight,
               }
             : budget,
         ),

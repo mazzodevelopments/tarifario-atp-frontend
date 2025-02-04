@@ -41,12 +41,8 @@ export default function PurchaseList({
         .toString()
         .padStart(2, "0")}`,
       purchaseData: newPurchase,
-      transport: null,
-      custom: null,
-      delivery: null,
+      freight: null,
       salesData: null,
-      originExpenses: null,
-      destinationExpenses: null,
       stage: "COTI",
     };
     setBudgets([...budgets, newBudget]);

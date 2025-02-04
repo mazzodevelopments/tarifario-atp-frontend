@@ -42,8 +42,8 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
                 ...budget,
                 salesData,
               }
-            : budget
-        )
+            : budget,
+        ),
       );
       setShowSalesDataModal(false);
     }
@@ -70,7 +70,7 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
             };
           }
           return budget;
-        })
+        }),
       );
       setShowPaymentConditionModal(false);
     }
@@ -141,18 +141,8 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
     }
 
     // SUMA COSTOS TRANSPORTE, ADUANA Y ENTREGA
-    if (budget.originExpenses?.total) {
-      total += budget.originExpenses.total;
-    }
-
-    if (budget.transport?.total) {
-      total += budget.transport.total;
-    }
-    if (budget.custom?.total) {
-      total += budget.custom.total;
-    }
-    if (budget.destinationExpenses?.total) {
-      total += budget.destinationExpenses.total;
+    if (budget.freight?.total) {
+      total += budget.freight.total;
     }
 
     return total;
@@ -181,10 +171,7 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
               <TableHead>Destino</TableHead>
               <TableHead>T. Producción</TableHead>
               <TableHead>Incoterm</TableHead>
-              <TableHead>Gastos Origen</TableHead>
-              <TableHead>Transporte</TableHead>
-              <TableHead>Aduana</TableHead>
-              <TableHead>Gastos Destino</TableHead>
+              <TableHead>Total Flete</TableHead>
               <TableHead>Precio Total</TableHead>
               <TableHead>Margen</TableHead>
               <TableHead>Precio V. Unitario</TableHead>
@@ -215,23 +202,8 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
                   </TableCell>
                   <TableCell>{budget.purchaseData?.incoterm}</TableCell>
                   <TableCell>
-                    {budget.originExpenses?.total
-                      ? `$${budget.originExpenses.total.formatNumber()}`
-                      : "-"}
-                  </TableCell>
-                  <TableCell>
-                    {budget.transport?.total
-                      ? `$${budget.transport.total.formatNumber()}`
-                      : "-"}
-                  </TableCell>
-                  <TableCell>
-                    {budget.custom?.total
-                      ? `$${budget.custom.total.formatNumber()}`
-                      : "-"}
-                  </TableCell>
-                  <TableCell>
-                    {budget.destinationExpenses?.total
-                      ? `$${budget.destinationExpenses.total.formatNumber()}`
+                    {budget.freight?.total
+                      ? `$${budget.freight.total.formatNumber()}`
                       : "-"}
                   </TableCell>
                   <TableCell>
