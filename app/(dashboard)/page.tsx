@@ -35,6 +35,7 @@ export default function Dashboard() {
       expirationDateTime: "2025-02-01T18:00:00",
       materialsNeededDate: "2025-01-25",
       customerRequestNumber: "REQ-2025-003",
+      items: null,
       budgets: null,
     },
     {
@@ -46,6 +47,7 @@ export default function Dashboard() {
       expirationDateTime: "2025-02-09T15:30:00",
       materialsNeededDate: "2025-01-28",
       customerRequestNumber: "REQ-2025-004",
+      items: null,
       budgets: null,
     },
     {
@@ -57,6 +59,7 @@ export default function Dashboard() {
       expirationDateTime: "2025-02-05T20:00:00",
       materialsNeededDate: "2025-02-01",
       customerRequestNumber: "REQ-2025-005",
+      items: null,
       budgets: null,
     },
   ];
