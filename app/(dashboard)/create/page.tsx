@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import SuccessAnimation from "./SuccesAnimation";
 import Button from "@/components/Button";
@@ -8,6 +7,7 @@ import ProgressBar from "@/app/(dashboard)/create/ProgressBar";
 import QuotationDetails from "@/app/(dashboard)/create/steps/QuotationDetails";
 import ItemsList from "@/app/(dashboard)/create/steps/Items/ItemList";
 import PurchaseList from "@/app/(dashboard)/create/steps/Purchase/PurchaseList";
+import SelectablePurchaseList from "@/app/(dashboard)/create/steps/Purchase/SelectablePurchaseList";
 import LogisticList from "@/app/(dashboard)/create/steps/Logistics/LogisticList";
 import SalesList from "@/app/(dashboard)/create/steps/Sales/SalesList";
 import SelectedBudgetsList from "@/app/(dashboard)/create/steps/SelectBudgets/SelectedBudgetsList";
@@ -21,6 +21,7 @@ const steps = [
   { title: "Cargar Datos Cotización" },
   { title: "Agregar Items" },
   { title: "Cargar Compras" },
+  { title: "Seleccionar Compras" },
   { title: "Agregar Logística" },
   { title: "Sector Ventas" },
   { title: "Seleccionar Presupuestos" },
@@ -39,6 +40,7 @@ export default function Create() {
   );
   const [budgets, setBudgets] = useState<Budget[]>(TEST_BUDGETS);
   const [selectedBudgets, setSelectedBudgets] = useState<Budget[]>([]);
+  const [selectedPurchases, setSelectedPurchases] = useState<Budget[]>([]);
 
   const handleNext = async () => {
     if (currentStep === 0 && quotationData) {
@@ -88,7 +90,7 @@ export default function Create() {
       }
     }
 
-    if (currentStep === 3 && budgets && quotationData?.taskNumber) {
+    if (currentStep === 4 && budgets && quotationData?.taskNumber) {
       try {
         await CreateQuotationService.loadLogistics(
           quotationData?.taskNumber,
@@ -100,7 +102,7 @@ export default function Create() {
       }
     }
 
-    if (currentStep === 4 && budgets && quotationData?.taskNumber) {
+    if (currentStep === 5 && budgets && quotationData?.taskNumber) {
       try {
         await CreateQuotationService.loadSalesData(
           quotationData?.taskNumber,
@@ -112,7 +114,7 @@ export default function Create() {
       }
     }
 
-    if (currentStep === 5 && selectedBudgets && quotationData?.taskNumber) {
+    if (currentStep === 6 && selectedBudgets && quotationData?.taskNumber) {
       try {
         await CreateQuotationService.loadSelectedBudgets(
           quotationData?.taskNumber,
@@ -168,7 +170,10 @@ export default function Create() {
     if (currentStep === 1 && quotationData?.items) {
       return quotationData?.items.length === 0;
     }
-    if (currentStep === 5) {
+    if (currentStep === 3) {
+      return selectedPurchases.length === 0;
+    }
+    if (currentStep === 6) {
       return budgets.length === 0 || selectedBudgets.length === 0;
     }
     return false;
@@ -219,17 +224,25 @@ export default function Create() {
         );
       case 3:
         return (
+          <SelectablePurchaseList
+            budgets={budgets}
+            selectedPurchases={selectedPurchases}
+            setSelectedPurchases={setSelectedPurchases}
+          />
+        );
+      case 4:
+        return (
           quotationData?.items && (
             <LogisticList
-              budgets={budgets}
+              budgets={selectedPurchases}
               setBudgets={setBudgets}
               items={quotationData.items}
             />
           )
         );
-      case 4:
-        return <SalesList budgets={budgets} setBudgets={setBudgets} />;
       case 5:
+        return <SalesList budgets={budgets} setBudgets={setBudgets} />;
+      case 6:
         return (
           <SelectableBudgetsList
             budgets={budgets}
@@ -237,7 +250,7 @@ export default function Create() {
             setSelectedBudgets={setSelectedBudgets}
           />
         );
-      case 6:
+      case 7:
         return <SelectedBudgetsList selectedBudgets={selectedBudgets} />;
       default:
         return <p>Contenido de la etapa {currentStep + 1}</p>;
