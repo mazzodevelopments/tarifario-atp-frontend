@@ -3,7 +3,7 @@
 import { useParams } from "next/navigation";
 import Header from "@/app/(dashboard)/components/Header";
 import QuotationDetails from "../QuotationDetails";
-import { quotations } from "../page";
+import { quotations } from "@/app/(dashboard)/history/testData";
 
 export default function QuotationView() {
   const { id } = useParams();

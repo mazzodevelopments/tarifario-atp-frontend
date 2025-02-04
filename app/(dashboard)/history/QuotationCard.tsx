@@ -3,13 +3,9 @@ import type React from "react";
 import { Briefcase, User, Calendar, Hash, Ellipsis } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { QuotationData } from "@/types/QuotationData";
-import { useState } from "react";
-import QuotationDetails from "./QuotationDetails";
 import Link from "next/link";
 
-const QuotationCard: React.FC<QuotationData> = (quotation) => {
-  const [showDetails, setShowDetails] = useState(false);
-
+export default function QuotationCard(quotation: QuotationData) {
   return (
     <>
       <div className="bg-white shadow-sm border border-neutral-200 rounded-[18px] overflow-hidden w-full">
@@ -50,7 +46,7 @@ const QuotationCard: React.FC<QuotationData> = (quotation) => {
                 <p className="text-sm text-gray-500">Fecha de Recepción</p>
                 <p className="font-semibold">
                   {new Date(quotation.expirationDateTime).toLocaleDateString(
-                    "es-ES"
+                    "es-ES",
                   )}
                 </p>
               </div>
@@ -61,7 +57,7 @@ const QuotationCard: React.FC<QuotationData> = (quotation) => {
                 <p className="text-sm text-gray-500">Fecha de Carga</p>
                 <p className="font-semibold">
                   {new Date(quotation.expirationDateTime).toLocaleDateString(
-                    "es-ES"
+                    "es-ES",
                   )}
                 </p>
               </div>
@@ -74,7 +70,7 @@ const QuotationCard: React.FC<QuotationData> = (quotation) => {
                 <p className="text-sm text-gray-500">Fecha de Expiración</p>
                 <p className="font-semibold">
                   {new Date(quotation.expirationDateTime).toLocaleDateString(
-                    "es-ES"
+                    "es-ES",
                   )}
                 </p>
               </div>
@@ -85,7 +81,7 @@ const QuotationCard: React.FC<QuotationData> = (quotation) => {
                 <p className="text-sm text-gray-500">Fecha de Materiales</p>
                 <p className="font-semibold">
                   {new Date(quotation.expirationDateTime).toLocaleDateString(
-                    "es-ES"
+                    "es-ES",
                   )}
                 </p>
               </div>
@@ -114,6 +110,4 @@ const QuotationCard: React.FC<QuotationData> = (quotation) => {
       </div>
     </>
   );
-};
-
-export default QuotationCard;
+}
