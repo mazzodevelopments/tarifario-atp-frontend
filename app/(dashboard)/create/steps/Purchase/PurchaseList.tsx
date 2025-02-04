@@ -94,17 +94,14 @@ export default function PurchaseList({
                   <TableCell>{budget.purchaseData?.item?.detail}</TableCell>
                   <TableCell>{budget.purchaseData?.supplier}</TableCell>
                   <TableCell>
-                    {budget.purchaseData?.appliedUnitPrice.formatNumber() +
-                      " " +
-                      budget.purchaseData?.currency}
+                    ${budget.purchaseData?.appliedUnitPrice.formatNumber()}
                   </TableCell>
                   <TableCell>
+                    $
                     {(
                       (budget.purchaseData?.appliedUnitPrice ?? 0) *
                       (budget.purchaseData?.item?.quantity ?? 1)
-                    ).formatNumber() +
-                      " " +
-                      budget.purchaseData?.currency}
+                    ).formatNumber()}
                   </TableCell>
                   <TableCell>{budget.purchaseData?.origin}</TableCell>
                   <TableCell>{budget.purchaseData?.destination}</TableCell>
