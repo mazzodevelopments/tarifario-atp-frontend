@@ -8,7 +8,6 @@ import ProgressBar from "@/app/(dashboard)/create/ProgressBar";
 import QuotationDetails from "@/app/(dashboard)/create/steps/QuotationDetails";
 import ItemsList from "@/app/(dashboard)/create/steps/Items/ItemList";
 import PurchaseList from "@/app/(dashboard)/create/steps/Purchase/PurchaseList";
-import SelectablePurchaseList from "@/app/(dashboard)/create/steps/Purchase/SelectablePurchaseList";
 import LogisticList from "@/app/(dashboard)/create/steps/Logistics/LogisticList";
 import SalesList from "@/app/(dashboard)/create/steps/Sales/SalesList";
 import SelectedBudgetsList from "@/app/(dashboard)/create/steps/SelectBudgets/SelectedBudgetsList";
@@ -16,15 +15,16 @@ import type { QuotationData } from "@/types/QuotationData";
 import type { Budget } from "@/types/Budget";
 import { TEST_BUDGETS, TEST_ITEMS } from "@/app/(dashboard)/create/testData";
 import { CreateQuotationService } from "@/services/CreateQuotationService";
+import SelectableBudgetsList from "@/app/(dashboard)/create/steps/SelectBudgets/SelectableBudgetsList";
 
 const steps = [
   { title: "Cargar Datos Cotización" },
   { title: "Agregar Items" },
   { title: "Cargar Compras" },
-  { title: "Seleccionar Compras" },
   { title: "Agregar Logística" },
   { title: "Sector Ventas" },
   { title: "Revisar Presupuestos" },
+  { title: "Seleccionar Presupuestos" },
   { title: "Confirmar y Crear" },
 ];
 
@@ -37,10 +37,8 @@ export default function Create() {
   const [quotationData, setQuotationData] = useState<QuotationData | null>(
     null,
   );
-  const [originalBudgets, setOriginalBudgets] =
-    useState<Budget[]>(TEST_BUDGETS);
   const [budgets, setBudgets] = useState<Budget[]>(TEST_BUDGETS);
-  const [selectedPurchases, setSelectedPurchases] = useState<Budget[]>([]);
+  const [selectedBudgets, setSelectedBudgets] = useState<Budget[]>([]);
 
   const handleNext = async () => {
     if (currentStep === 0 && quotationData) {
@@ -83,17 +81,10 @@ export default function Create() {
           quotationData?.taskNumber,
           budgets,
         );
-        // Guardar los budgets originales antes de la selección
-        setOriginalBudgets(budgets);
       } catch (error) {
         console.error("Error cargando data de compras:", error);
         return;
       }
-    }
-
-    // Update budgets with selected purchases when moving from step 3 to 4
-    if (currentStep === 3) {
-      setBudgets(selectedPurchases);
     }
 
     if (currentStep === 4 && budgets && quotationData?.taskNumber) {
@@ -139,10 +130,6 @@ export default function Create() {
 
   const handlePrevious = () => {
     if (currentStep > 0) {
-      // Si estamos volviendo del paso 4 al 3, restauramos los budgets originales
-      if (currentStep === 4) {
-        setBudgets(originalBudgets);
-      }
       setCurrentStep(currentStep - 1);
     }
   };
@@ -180,8 +167,9 @@ export default function Create() {
     if (currentStep === 1 && quotationData?.items) {
       return quotationData?.items.length === 0;
     }
-    if (currentStep === 3) {
-      return selectedPurchases.length === 0;
+    if (currentStep === 2) {
+      console.log(quotationData?.budgets?.length);
+      return budgets.length === 0;
     }
     if (currentStep === 5) {
       return budgets.length === 0;
@@ -233,14 +221,6 @@ export default function Create() {
         );
       case 3:
         return (
-          <SelectablePurchaseList
-            budgets={budgets}
-            selectedPurchases={selectedPurchases}
-            setSelectedPurchases={setSelectedPurchases}
-          />
-        );
-      case 4:
-        return (
           quotationData?.items && (
             <LogisticList
               budgets={budgets}
@@ -249,10 +229,18 @@ export default function Create() {
             />
           )
         );
-      case 5:
+      case 4:
         return <SalesList budgets={budgets} setBudgets={setBudgets} />;
+      case 5:
+        return (
+          <SelectableBudgetsList
+            budgets={budgets}
+            selectedBudgets={selectedBudgets}
+            setSelectedBudgets={setSelectedBudgets}
+          />
+        );
       case 6:
-        return <SelectedBudgetsList selectedBudgets={selectedPurchases} />;
+        return <SelectedBudgetsList selectedBudgets={selectedBudgets} />;
       default:
         return <p>Contenido de la etapa {currentStep + 1}</p>;
     }
