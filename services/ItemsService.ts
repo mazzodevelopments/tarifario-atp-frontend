@@ -31,6 +31,14 @@ export const ItemsService = {
     ];
   },
 
+  fetchModels: async (): Promise<DropdownItem[]> => {
+    return [
+      { id: "1", name: "Modelo A" },
+      { id: "2", name: "Modelo B" },
+      { id: "3", name: "Modelo C" },
+    ];
+  },
+
   fetchUnits: async (): Promise<DropdownItem[]> => {
     return UNITS;
   },
@@ -44,6 +52,10 @@ export const ItemsService = {
   },
 
   addSubfamily: async (name: string): Promise<DropdownItem> => {
+    return { id: Math.random().toString(36).substr(2, 9), name };
+  },
+
+  addModel: async (name: string): Promise<DropdownItem> => {
     return { id: Math.random().toString(36).substr(2, 9), name };
   },
 };

@@ -17,10 +17,12 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
     family: "",
     subfamily: "",
     detail: "",
+    model: "",
     brand: "",
     quantity: 0,
     unit: "",
     partNumber: "",
+    productNumber: "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -87,6 +89,14 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
         label="Marca"
         required
       />
+      <Dropdown
+        value={formData.model}
+        fetchItems={ItemsService.fetchModels}
+        addItem={ItemsService.addModel}
+        onSelect={handleSelect("model")}
+        label="Marca"
+        required
+      />
       <div className="grid grid-cols-2 gap-4">
         <Input
           type="number"
@@ -106,6 +116,16 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
           required
         />
       </div>
+      <Input
+        type="text"
+        id="productNumber"
+        name="productNumber"
+        value={formData.productNumber}
+        onChange={handleChange}
+        placeholder="Numero Producto Cliente"
+        label="Numero Producto Cliente"
+        required
+      />
       <Input
         type="text"
         id="partNumber"

@@ -44,8 +44,10 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
               <TableHead>Familia</TableHead>
               <TableHead>Subfamilia</TableHead>
               <TableHead>Marca</TableHead>
+              <TableHead>Modelo</TableHead>
               <TableHead>Cantidad</TableHead>
               <TableHead>Part Number</TableHead>
+              <TableHead>Nro. Producto Cliente</TableHead>
               <TableHead></TableHead>
             </TableRow>
           </TableHeader>
@@ -67,8 +69,10 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
                   <TableCell>{item.family}</TableCell>
                   <TableCell>{item.subfamily}</TableCell>
                   <TableCell>{item.brand}</TableCell>
+                  <TableCell>{item.model}</TableCell>
                   <TableCell>{item.quantity + " " + item.unit}</TableCell>
                   <TableCell>{item.partNumber}</TableCell>
+                  <TableCell>{item.productNumber}</TableCell>
                   <TableCell>
                     <button
                       onClick={() => handleDeleteItem(item.numbering)}
