@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, Pencil } from "lucide-react";
 import {
   Table,
@@ -65,6 +65,17 @@ export default function LogisticList({
   const [editingDestinationExpenses, setEditingDestinationExpenses] =
     useState<DestinationExpenses | null>(null);
 
+  // Initialize selectedFreights from existing budget assignments
+  useEffect(() => {
+    const initialSelections: Record<string, string> = {};
+    budgets.forEach((budget) => {
+      if (budget.freight?.id) {
+        initialSelections[budget.numbering] = budget.freight.id;
+      }
+    });
+    setSelectedFreights(initialSelections);
+  }, []); // Only run once on component mount
+
   const handleFreightUpdate = <
     T extends Transport | OriginExpenses | Custom | DestinationExpenses | null,
   >(
@@ -88,6 +99,26 @@ export default function LogisticList({
             : freight,
         ),
       );
+
+      // Update budgets that use this freight to reflect the changes
+      setBudgets(
+        budgets.map((budget) =>
+          budget.freight?.id === selectedFreightId
+            ? {
+                ...budget,
+                freight: {
+                  ...budget.freight,
+                  [field]: value,
+                  total: calculateTotal({
+                    ...budget.freight,
+                    [field]: value,
+                  }),
+                },
+              }
+            : budget,
+        ),
+      );
+
       setShowModal(false);
       setEditing(null);
     }
@@ -455,7 +486,11 @@ export default function LogisticList({
       >
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle className="text-2xl">Agregar entrega</DialogTitle>
+            <DialogTitle className="text-2xl">
+              {editingDestinationExpenses
+                ? "Editar Gastos de Destino"
+                : "Agregar Gastos de Destino"}
+            </DialogTitle>
           </DialogHeader>
           <div className="bg-white rounded-lg w-full">
             <DestinationExpensesForm
