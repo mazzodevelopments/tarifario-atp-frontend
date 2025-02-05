@@ -40,10 +40,15 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
           budget.numbering === selectedBudgetId
             ? {
                 ...budget,
-                salesData,
+                salesData: {
+                  unitSalePrice: salesData.unitSalePrice,
+                  margin: salesData.margin,
+                  totalPrice: salesData.totalPrice,
+                  paymentCondition: budget.salesData?.paymentCondition || "",
+                },
               }
-            : budget,
-        ),
+            : budget
+        )
       );
       setShowSalesDataModal(false);
     }
@@ -56,7 +61,6 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
           if (budget.numbering === selectedBudgetId) {
             const currentSalesData = budget.salesData || {
               unitSalePrice: 0,
-              margin: 0,
               totalPrice: 0,
               paymentCondition: "",
             };
@@ -70,7 +74,7 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
             };
           }
           return budget;
-        }),
+        })
       );
       setShowPaymentConditionModal(false);
     }
@@ -83,10 +87,10 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
       setShowSalesDataModal(true);
     };
 
-    if (budget.salesData) {
+    if (budget.salesData?.margin && budget.salesData.margin > 0) {
       return (
         <div className="flex items-center gap-2">
-          %{budget.salesData.margin}
+          {budget.salesData.margin}%
         </div>
       );
     }
