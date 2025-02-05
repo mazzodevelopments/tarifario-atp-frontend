@@ -94,7 +94,7 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
         fetchItems={ItemsService.fetchModels}
         addItem={ItemsService.addModel}
         onSelect={handleSelect("model")}
-        label="Marca"
+        label="Modelo"
         required
       />
       <div className="grid grid-cols-2 gap-4">
