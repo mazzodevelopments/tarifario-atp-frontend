@@ -18,6 +18,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Item } from "@/types/Item";
+import { PlusCircle, Upload } from "lucide-react";
+import { useRef } from "react";
+import * as XLSX from "xlsx";
 
 interface ItemsListProps {
   items: Item[];
@@ -25,12 +28,32 @@ interface ItemsListProps {
 }
 
 export default function ItemsList({ items, setItems }: ItemsListProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const handleItemCreated = async (newItem: Item) => {
     setItems([...items, newItem]);
   };
 
   const handleDeleteItem = async (id: string) => {
     setItems(items.filter((item) => item.numbering !== id));
+  };
+
+  const handleItemsDocumentUpload = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const data = new Uint8Array(e.target?.result as ArrayBuffer);
+        const workbook = XLSX.read(data, { type: "array" });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet) as Item[];
+        setItems([...items, ...jsonData]);
+      };
+      reader.readAsArrayBuffer(file);
+    }
   };
 
   return (
@@ -88,10 +111,24 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
         </Table>
       </div>
       <Dialog>
-        <div className="flex justify-center items-center w-full mt-6">
+        <div className="flex justify-center items-center w-full mt-6 gap-1">
+          <input
+            type="file"
+            accept=".xlsx, .xls"
+            onChange={handleItemsDocumentUpload}
+            ref={fileInputRef}
+            className="hidden"
+          />
+          <Button
+            className="bg-primary/10 text-primary items-center gap-1"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <Upload size={14} />
+            Cargar Items
+          </Button>
           <DialogTrigger asChild>
-            <Button className="text-sm px-4 py-2 bg-primary text-white flex items-center gap-2">
-              <span className="text-md mr-2">+</span>
+            <Button className=" bg-primary text-white flex items-center gap-1">
+              <PlusCircle size={16} />
               Agregar Item
             </Button>
           </DialogTrigger>
