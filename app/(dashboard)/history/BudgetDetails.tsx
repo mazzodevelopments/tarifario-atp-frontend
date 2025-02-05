@@ -133,7 +133,7 @@ export function BudgetDetails({ budget, isOpen, onClose }: BudgetDetailsProps) {
             )}
 
             {/* Origin Expenses */}
-            {budget.originExpenses && (
+            {budget.freight?.originExpenses && (
               <section className="space-y-4">
                 <h3 className="text-lg font-semibold flex items-center gap-2">
                   <FileText className="h-5 w-5" />
@@ -143,13 +143,13 @@ export function BudgetDetails({ budget, isOpen, onClose }: BudgetDetailsProps) {
                   <div>
                     <p className="text-sm text-gray-500">Pickup</p>
                     <p className="font-medium">
-                      {budget.originExpenses.pickup}
+                      {budget.freight?.originExpenses.pickup}
                     </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Reembalaje</p>
                     <p className="font-medium">
-                      {budget.originExpenses.repackaging ? "Sí" : "No"}
+                      {budget.freight?.originExpenses.repackaging ? "Sí" : "No"}
                     </p>
                   </div>
                   <div>
@@ -157,15 +157,17 @@ export function BudgetDetails({ budget, isOpen, onClose }: BudgetDetailsProps) {
                       Fumigación de Pallets
                     </p>
                     <p className="font-medium">
-                      {budget.originExpenses.palletFumigation ? "Sí" : "No"}
+                      {budget.freight?.originExpenses.palletFumigation
+                        ? "Sí"
+                        : "No"}
                     </p>
                   </div>
-                  {budget.originExpenses.customExpenses.length > 0 && (
+                  {budget.freight?.originExpenses.customExpenses.length > 0 && (
                     <div className="col-span-2">
                       <p className="text-sm text-gray-500">
                         Gastos Adicionales
                       </p>
-                      {budget.originExpenses.customExpenses.map(
+                      {budget.freight?.originExpenses.customExpenses.map(
                         (expense, index) => (
                           <div key={index} className="flex justify-between">
                             <span>{expense.name}</span>
@@ -177,14 +179,16 @@ export function BudgetDetails({ budget, isOpen, onClose }: BudgetDetailsProps) {
                   )}
                   <div>
                     <p className="text-sm text-gray-500">Total</p>
-                    <p className="font-medium">{budget.originExpenses.total}</p>
+                    <p className="font-medium">
+                      {budget.freight?.originExpenses.total}
+                    </p>
                   </div>
                 </div>
               </section>
             )}
 
             {/* Transport Information */}
-            {budget.transport && (
+            {budget.freight?.transport && (
               <section className="space-y-4">
                 <h3 className="text-lg font-semibold flex items-center gap-2">
                   <Truck className="h-5 w-5" />
@@ -193,18 +197,22 @@ export function BudgetDetails({ budget, isOpen, onClose }: BudgetDetailsProps) {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-gray-500">Tipo</p>
-                    <p className="font-medium">{budget.transport.type}</p>
+                    <p className="font-medium">
+                      {budget.freight?.transport.type}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Total</p>
-                    <p className="font-medium">{budget.transport.total}</p>
+                    <p className="font-medium">
+                      {budget.freight?.transport.total}
+                    </p>
                   </div>
                 </div>
               </section>
             )}
 
             {/* Custom Information */}
-            {budget.custom && (
+            {budget.freight?.custom && (
               <section className="space-y-4">
                 <h3 className="text-lg font-semibold flex items-center gap-2">
                   <Container className="h-5 w-5" />
@@ -214,7 +222,7 @@ export function BudgetDetails({ budget, isOpen, onClose }: BudgetDetailsProps) {
                   <div>
                     <p className="text-sm text-gray-500">Valor FOB Factura</p>
                     <p className="font-medium">
-                      {budget.custom.invoiceValueFOB}
+                      {budget.freight?.custom.invoiceValueFOB}
                     </p>
                   </div>
                   <div>
@@ -222,59 +230,67 @@ export function BudgetDetails({ budget, isOpen, onClose }: BudgetDetailsProps) {
                       Costo Flete Internacional
                     </p>
                     <p className="font-medium">
-                      {budget.custom.internationalFreightCost}
+                      {budget.freight?.custom.internationalFreightCost}
                     </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Base Imponible</p>
-                    <p className="font-medium">{budget.custom.taxableBase}</p>
+                    <p className="font-medium">
+                      {budget.freight?.custom.taxableBase}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">
                       Derechos de Importación
                     </p>
                     <p className="font-medium">
-                      {budget.custom.importDutyRate}
+                      {budget.freight?.custom.importDutyRate}
                     </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Tasa Estadística</p>
                     <p className="font-medium">
-                      {budget.custom.statisticsRate}
+                      {budget.freight?.custom.statisticsRate}
                     </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">IVA</p>
-                    <p className="font-medium">{budget.custom.ivaRate}</p>
+                    <p className="font-medium">
+                      {budget.freight?.custom.ivaRate}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">IVA Adicional</p>
                     <p className="font-medium">
-                      {budget.custom.additionalIvaRate}
+                      {budget.freight?.custom.additionalIvaRate}
                     </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Tasa de Ganancias</p>
-                    <p className="font-medium">{budget.custom.incomeTaxRate}</p>
+                    <p className="font-medium">
+                      {budget.freight?.custom.incomeTaxRate}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">
                       Tasa de Ingresos Brutos
                     </p>
                     <p className="font-medium">
-                      {budget.custom.grossIncomeRate}
+                      {budget.freight?.custom.grossIncomeRate}
                     </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Cargo SIM</p>
-                    <p className="font-medium">{budget.custom.simFee}</p>
+                    <p className="font-medium">
+                      {budget.freight?.custom.simFee}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">
                       Costo Mínimo Despacho
                     </p>
                     <p className="font-medium">
-                      {budget.custom.minimumCustomsDispatchCost}
+                      {budget.freight?.custom.minimumCustomsDispatchCost}
                     </p>
                   </div>
                   <div>
@@ -282,7 +298,7 @@ export function BudgetDetails({ budget, isOpen, onClose }: BudgetDetailsProps) {
                       Cargos Operativos Aduana
                     </p>
                     <p className="font-medium">
-                      {budget.custom.customsOperationalCharges}
+                      {budget.freight?.custom.customsOperationalCharges}
                     </p>
                   </div>
                   <div>
@@ -290,7 +306,7 @@ export function BudgetDetails({ budget, isOpen, onClose }: BudgetDetailsProps) {
                       Seguridad Eléctrica (Opcional)
                     </p>
                     <p className="font-medium">
-                      {budget.custom.optionalElectricalSecurity}
+                      {budget.freight?.custom.optionalElectricalSecurity}
                     </p>
                   </div>
                   <div>
@@ -298,19 +314,21 @@ export function BudgetDetails({ budget, isOpen, onClose }: BudgetDetailsProps) {
                       Cargo SENASA (Opcional)
                     </p>
                     <p className="font-medium">
-                      {budget.custom.optionalSenasaFee}
+                      {budget.freight?.custom.optionalSenasaFee}
                     </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Total</p>
-                    <p className="font-medium">{budget.custom.total}</p>
+                    <p className="font-medium">
+                      {budget.freight?.custom.total}
+                    </p>
                   </div>
                 </div>
               </section>
             )}
 
             {/* Destination Expenses */}
-            {budget.destinationExpenses && (
+            {budget.freight?.destinationExpenses && (
               <section className="space-y-4">
                 <h3 className="text-lg font-semibold flex items-center gap-2">
                   <Building2 className="h-5 w-5" />
@@ -320,13 +338,13 @@ export function BudgetDetails({ budget, isOpen, onClose }: BudgetDetailsProps) {
                   <div>
                     <p className="text-sm text-gray-500">Tipo</p>
                     <p className="font-medium">
-                      {budget.destinationExpenses.type}
+                      {budget.freight?.destinationExpenses.type}
                     </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Total</p>
                     <p className="font-medium">
-                      {budget.destinationExpenses.total}
+                      {budget.freight?.destinationExpenses.total}
                     </p>
                   </div>
                 </div>
