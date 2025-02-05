@@ -32,18 +32,8 @@ export default function SelectedBudgetsList({
         (budget.purchaseData?.item?.quantity ?? 1);
     }
 
-    if (budget.originExpenses?.total) {
-      total += budget.originExpenses.total;
-    }
-
-    if (budget.transport?.total) {
-      total += budget.transport.total;
-    }
-    if (budget.custom?.total) {
-      total += budget.custom.total;
-    }
-    if (budget.destinationExpenses?.total) {
-      total += budget.destinationExpenses.total;
+    if (budget.freight?.total) {
+      total += budget.freight.total;
     }
 
     return total;
@@ -61,7 +51,7 @@ export default function SelectedBudgetsList({
 
   const totalSum = selectedBudgets.reduce(
     (sum, budget) => sum + calculateAppliedTotalPrice(budget),
-    0
+    0,
   );
 
   return (
@@ -77,10 +67,7 @@ export default function SelectedBudgetsList({
               <TableHead>Destino</TableHead>
               <TableHead>T. Producción</TableHead>
               <TableHead>Incoterm</TableHead>
-              <TableHead>Gastos Origen</TableHead>
-              <TableHead>Transporte</TableHead>
-              <TableHead>Aduana</TableHead>
-              <TableHead>Gastos Destino</TableHead>
+              <TableHead>Total Flete</TableHead>
               <TableHead>Precio Total</TableHead>
               <TableHead>Margen</TableHead>
               <TableHead>Condición de Pago</TableHead>
@@ -114,23 +101,8 @@ export default function SelectedBudgetsList({
                     </TableCell>
                     <TableCell>{budget.purchaseData?.incoterm}</TableCell>
                     <TableCell>
-                      {budget.originExpenses?.total
-                        ? `$${budget.originExpenses.total.formatNumber()}`
-                        : "-"}
-                    </TableCell>
-                    <TableCell>
-                      {budget.transport?.total
-                        ? `$${budget.transport.total.formatNumber()}`
-                        : "-"}
-                    </TableCell>
-                    <TableCell>
-                      {budget.custom?.total
-                        ? `$${budget.custom.total.formatNumber()}`
-                        : "-"}
-                    </TableCell>
-                    <TableCell>
-                      {budget.destinationExpenses?.total
-                        ? `$${budget.destinationExpenses.total.formatNumber()}`
+                      {budget.freight?.total
+                        ? `$${budget.freight.total.formatNumber()}`
                         : "-"}
                     </TableCell>
                     <TableCell>

@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/table";
 import type { Budget } from "@/types/Budget";
 import "@/app/utils/formatNumber";
+import React from "react";
 
 interface SelectableSalesListProps {
   budgets: Budget[];
@@ -25,7 +26,7 @@ export default function SelectableBudgetsList({
     e.stopPropagation();
     if (selectedBudgets.some((b) => b.numbering === budget.numbering)) {
       setSelectedBudgets(
-        selectedBudgets.filter((b) => b.numbering !== budget.numbering)
+        selectedBudgets.filter((b) => b.numbering !== budget.numbering),
       );
     } else {
       setSelectedBudgets([...selectedBudgets, budget]);
@@ -41,18 +42,8 @@ export default function SelectableBudgetsList({
         (budget.purchaseData?.item?.quantity ?? 1);
     }
 
-    if (budget.originExpenses?.total) {
-      total += budget.originExpenses.total;
-    }
-
-    if (budget.transport?.total) {
-      total += budget.transport.total;
-    }
-    if (budget.custom?.total) {
-      total += budget.custom.total;
-    }
-    if (budget.destinationExpenses?.total) {
-      total += budget.destinationExpenses.total;
+    if (budget.freight?.total) {
+      total += budget.freight.total;
     }
 
     return total;
@@ -81,10 +72,7 @@ export default function SelectableBudgetsList({
               <TableHead>Destino</TableHead>
               <TableHead>T. Producción</TableHead>
               <TableHead>Incoterm</TableHead>
-              <TableHead>Gastos Origen</TableHead>
-              <TableHead>Transporte</TableHead>
-              <TableHead>Aduana</TableHead>
-              <TableHead>Gastos Destino</TableHead>
+              <TableHead>Total Flete</TableHead>
               <TableHead>Precio Total</TableHead>
               <TableHead>Margen</TableHead>
               <TableHead>Precio V. Unitario</TableHead>
@@ -119,23 +107,8 @@ export default function SelectableBudgetsList({
                   </TableCell>
                   <TableCell>{budget.purchaseData?.incoterm}</TableCell>
                   <TableCell>
-                    {budget.originExpenses?.total
-                      ? `$${budget.originExpenses.total.formatNumber()}`
-                      : "-"}
-                  </TableCell>
-                  <TableCell>
-                    {budget.transport?.total
-                      ? `$${budget.transport.total.formatNumber()}`
-                      : "-"}
-                  </TableCell>
-                  <TableCell>
-                    {budget.custom?.total
-                      ? `$${budget.custom.total.formatNumber()}`
-                      : "-"}
-                  </TableCell>
-                  <TableCell>
-                    {budget.destinationExpenses?.total
-                      ? `$${budget.destinationExpenses.total.formatNumber()}`
+                    {budget.freight?.total
+                      ? `$${budget.freight.total.formatNumber()}`
                       : "-"}
                   </TableCell>
                   <TableCell>
@@ -169,14 +142,14 @@ export default function SelectableBudgetsList({
                         onClick={(e) => handleBudgetSelection(e, budget)}
                         className={`w-5 h-5 rounded border ${
                           selectedBudgets.some(
-                            (b) => b.numbering === budget.numbering
+                            (b) => b.numbering === budget.numbering,
                           )
                             ? "bg-primary border-primary"
                             : "border-gray-300"
                         } flex items-center justify-center cursor-pointer hover:border-primary transition-colors`}
                       >
                         {selectedBudgets.some(
-                          (b) => b.numbering === budget.numbering
+                          (b) => b.numbering === budget.numbering,
                         ) && <Check className="w-4 h-4 text-white" />}
                       </div>
                     </div>
