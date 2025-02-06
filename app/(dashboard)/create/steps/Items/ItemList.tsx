@@ -45,12 +45,52 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        const data = new Uint8Array(e.target?.result as ArrayBuffer);
-        const workbook = XLSX.read(data, { type: "array" });
-        const sheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[sheetName];
-        const jsonData = XLSX.utils.sheet_to_json(worksheet) as Item[];
-        setItems([...items, ...jsonData]);
+        try {
+          const data = new Uint8Array(e.target?.result as ArrayBuffer);
+          const workbook = XLSX.read(data, { type: "array" });
+          const sheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[sheetName];
+          const rawData = XLSX.utils.sheet_to_json(worksheet, {
+            header: 1,
+          }) as any[][];
+
+          // Skip header row and process data
+          const processedItems: Item[] = rawData.slice(1).map((row) => ({
+            numbering: row[0]?.toString() || "",
+            detail: row[1]?.toString() || "",
+            family: row[2]?.toString() || "",
+            subfamily: row[3]?.toString() || "",
+            brand: row[4]?.toString() || "",
+            model: row[5]?.toString() || "",
+            quantity: Number(row[6]) || 0,
+            unit: "unidad",
+            partNumber: row[7]?.toString() || "",
+            productNumber: row[8]?.toString() || "",
+          }));
+
+          // Validate items before adding
+          const validItems = processedItems.filter(
+            (item) => item.numbering && item.detail && item.quantity > 0
+          );
+
+          if (validItems.length === 0) {
+            console.error(
+              "No se encontraron items válidos en el archivo Excel"
+            );
+            return;
+          }
+
+          setItems([...items, ...validItems]);
+          console.log(`Se agregaron ${validItems.length} items correctamente`);
+
+          // Reset file input
+          if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+          }
+        } catch (error) {
+          console.error("Error processing Excel file:", error);
+          console.error("Error al procesar el archivo Excel");
+        }
       };
       reader.readAsArrayBuffer(file);
     }
