@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import Button from "@/components/Button";
-import { Plus } from "lucide-react";
+import { Plus, PlusCircle } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -98,11 +98,11 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
     return (
       <Button
         onClick={handleClick}
-        variant="secondary"
-        className="flex items-center gap-1 text-primary hover:text-primary-dark"
+        variant="primary"
+        className="flex items-center gap-1 text-primary border border-primary/20 bg-neutral-400/5 hover:text-primary-dark "
       >
-        <Plus className="w-4 h-4" />
-        Agregar
+        <PlusCircle className="w-4 h-4" />
+        <span className="mt-[2px]">Agregar</span>
       </Button>
     );
   };
@@ -125,11 +125,11 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
     return (
       <Button
         onClick={handleClick}
-        variant="secondary"
-        className="flex items-center gap-1 text-primary hover:text-primary-dark"
+        variant="primary"
+        className="flex items-center gap-1 text-primary border border-primary/20 bg-neutral-400/5 hover:text-primary-dark "
       >
-        <Plus className="w-4 h-4" />
-        Agregar
+        <PlusCircle className="w-4 h-4" />
+        <span className="mt-[2px]">Agregar</span>
       </Button>
     );
   };
@@ -164,74 +164,101 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
 
   return (
     <div className="w-full flex justify-center items-center max-w-4xl flex-col">
-      <div className="border rounded-md max-h-[30vw] relative overflow-auto w-[54vw]">
-        <Table className="w-full">
-          <TableHeader className="border-b border-gray-200">
-            <TableRow>
-              <TableHead>Numeración</TableHead>
-              <TableHead>Item</TableHead>
-              <TableHead>Proveedor</TableHead>
-              <TableHead>Origen</TableHead>
-              <TableHead>Destino</TableHead>
-              <TableHead>T. Producción</TableHead>
-              <TableHead>Incoterm</TableHead>
-              <TableHead>Total Flete</TableHead>
-              <TableHead>Precio Total</TableHead>
-              <TableHead>Margen</TableHead>
-              <TableHead>Precio V. Unitario</TableHead>
-              <TableHead>Precio V. Total</TableHead>
-              <TableHead>Condición de Pago</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody className="bg-white divide-y divide-gray-200">
-            {budgets.length === 0 ? (
-              <TableRow className="h-24">
-                <TableCell
-                  colSpan={15}
-                  className="text-sm m-auto h-full text-center text-gray-500"
-                >
-                  No hay presupuestos agregados
-                </TableCell>
+      <div className="w-auto h-auto overflow-hidden rounded-[12px] shadow-sm shadow-cyan-500/20">
+        <div className="border rounded-[12px] max-h-[30vw] relative overflow-auto w-[54vw]">
+          <Table className="w-full">
+            <TableHeader className="bg-primary/5">
+              <TableRow>
+                <TableHead className="text-primary font-[600]">
+                  Numeración
+                </TableHead>
+                <TableHead className="text-primary font-[600]">Item</TableHead>
+                <TableHead className="text-primary font-[600]">
+                  Proveedor
+                </TableHead>
+                <TableHead className="text-primary font-[600]">
+                  Origen
+                </TableHead>
+                <TableHead className="text-primary font-[600]">
+                  Destino
+                </TableHead>
+                <TableHead className="text-primary font-[600]">
+                  T. Producción
+                </TableHead>
+                <TableHead className="text-primary font-[600]">
+                  Incoterm
+                </TableHead>
+                <TableHead className="text-primary font-[600]">
+                  Total Flete
+                </TableHead>
+                <TableHead className="text-primary font-[600]">
+                  Precio Total
+                </TableHead>
+                <TableHead className="text-primary font-[600]">
+                  Margen
+                </TableHead>
+                <TableHead className="text-primary font-[600]">
+                  Precio V. Unitario
+                </TableHead>
+                <TableHead className="text-primary font-[600]">
+                  Precio V. Total
+                </TableHead>
+                <TableHead className="text-primary font-[600]">
+                  Condición de Pago
+                </TableHead>
               </TableRow>
-            ) : (
-              budgets.map((budget) => (
-                <TableRow key={budget.numbering} className="h-12">
-                  <TableCell>{budget.stage + " " + budget.numbering}</TableCell>
-                  <TableCell>{budget.purchaseData?.item?.detail}</TableCell>
-                  <TableCell>{budget.purchaseData?.supplier}</TableCell>
-                  <TableCell>{budget.purchaseData?.origin}</TableCell>
-                  <TableCell>{budget.purchaseData?.destination}</TableCell>
-                  <TableCell>
-                    {budget.purchaseData?.deliveryTime} días
+            </TableHeader>
+            <TableBody className="bg-white divide-y divide-gray-200">
+              {budgets.length === 0 ? (
+                <TableRow className="h-24">
+                  <TableCell
+                    colSpan={15}
+                    className="text-sm m-auto h-full text-center text-gray-500"
+                  >
+                    No hay presupuestos agregados
                   </TableCell>
-                  <TableCell>{budget.purchaseData?.incoterm}</TableCell>
-                  <TableCell>
-                    {budget.freight?.total
-                      ? `$${budget.freight.total.formatNumber()}`
-                      : "-"}
-                  </TableCell>
-                  <TableCell>
-                    ${calculateTotalPrice(budget).formatNumber()}
-                  </TableCell>
-                  <TableCell>{renderSalesDataCell(budget)}</TableCell>
-                  <TableCell className="font-[600]">
-                    $
-                    {(
-                      calculateAppliedTotalPrice(budget) /
-                      (budget.purchaseData?.item?.quantity ?? 1)
-                    ).formatNumber()}{" "}
-                  </TableCell>
-                  <TableCell className="font-[600]">
-                    ${calculateAppliedTotalPrice(budget).formatNumber()}
-                  </TableCell>
-                  <TableCell>{renderPaymentConditionCell(budget)}</TableCell>
                 </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+              ) : (
+                budgets.map((budget) => (
+                  <TableRow key={budget.numbering} className="h-12">
+                    <TableCell>
+                      {budget.stage + " " + budget.numbering}
+                    </TableCell>
+                    <TableCell>{budget.purchaseData?.item?.detail}</TableCell>
+                    <TableCell>{budget.purchaseData?.supplier}</TableCell>
+                    <TableCell>{budget.purchaseData?.origin}</TableCell>
+                    <TableCell>{budget.purchaseData?.destination}</TableCell>
+                    <TableCell>
+                      {budget.purchaseData?.deliveryTime} días
+                    </TableCell>
+                    <TableCell>{budget.purchaseData?.incoterm}</TableCell>
+                    <TableCell>
+                      {budget.freight?.total
+                        ? `$${budget.freight.total.formatNumber()}`
+                        : "-"}
+                    </TableCell>
+                    <TableCell>
+                      ${calculateTotalPrice(budget).formatNumber()}
+                    </TableCell>
+                    <TableCell>{renderSalesDataCell(budget)}</TableCell>
+                    <TableCell className="font-[600]">
+                      $
+                      {(
+                        calculateAppliedTotalPrice(budget) /
+                        (budget.purchaseData?.item?.quantity ?? 1)
+                      ).formatNumber()}{" "}
+                    </TableCell>
+                    <TableCell className="font-[600]">
+                      ${calculateAppliedTotalPrice(budget).formatNumber()}
+                    </TableCell>
+                    <TableCell>{renderPaymentConditionCell(budget)}</TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </div>
-
       <Dialog open={showSalesDataModal} onOpenChange={setShowSalesDataModal}>
         <DialogContent className="max-w-lg">
           <DialogHeader>

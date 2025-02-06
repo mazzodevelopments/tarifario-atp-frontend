@@ -173,7 +173,7 @@ export function BudgetDetails({ budget, isOpen, onClose }: BudgetDetailsProps) {
                             <span>{expense.name}</span>
                             <span>{expense.value}</span>
                           </div>
-                        ),
+                        )
                       )}
                     </div>
                   )}
@@ -370,7 +370,10 @@ export function BudgetDetails({ budget, isOpen, onClose }: BudgetDetailsProps) {
                   <div>
                     <p className="text-sm text-gray-500">Margen</p>
                     <p className="font-medium">
-                      {budget.salesData.margin * 100}%
+                      {budget.salesData?.margin
+                        ? budget.salesData.margin * 100
+                        : 0}
+                      %
                     </p>
                   </div>
                   <div>

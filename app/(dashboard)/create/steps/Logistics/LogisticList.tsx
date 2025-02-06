@@ -287,11 +287,11 @@ export default function LogisticList({
           setSelectedFreightId(freight.id);
           setShowModal(true);
         }}
-        variant="secondary"
-        className="flex items-center gap-1 text-primary hover:text-primary-dark"
+        variant="primary"
+        className="flex items-center gap-1 text-primary border border-primary/20 bg-neutral-400/5 hover:text-primary-dark "
       >
-        <Plus className="w-4 h-4" />
-        Agregar
+        <PlusCircle className="w-4 h-4" />
+        <span className="mt-[2px]">Agregar</span>
       </Button>
     );
   };
