@@ -17,10 +17,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Item } from "@/types/Item";
+import type { Item } from "@/types/Item";
 import { PlusCircle, Upload } from "lucide-react";
 import { useRef } from "react";
 import * as XLSX from "xlsx";
+import type React from "react"; // Added import for React
 
 interface ItemsListProps {
   items: Item[];
@@ -30,11 +31,11 @@ interface ItemsListProps {
 export default function ItemsList({ items, setItems }: ItemsListProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleItemCreated = async (newItem: Item) => {
+  const handleItemCreated = (newItem: Item) => {
     setItems([...items, newItem]);
   };
 
-  const handleDeleteItem = async (id: string) => {
+  const handleDeleteItem = (id: string) => {
     setItems(items.filter((item) => item.numbering !== id));
   };
 
@@ -44,7 +45,7 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = (e: ProgressEvent<FileReader>) => {
         try {
           const data = new Uint8Array(e.target?.result as ArrayBuffer);
           const workbook = XLSX.read(data, { type: "array" });
@@ -52,7 +53,7 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
           const worksheet = workbook.Sheets[sheetName];
           const rawData = XLSX.utils.sheet_to_json(worksheet, {
             header: 1,
-          }) as any[][];
+          }) as (string | number)[][];
 
           const processedItems: Item[] = rawData.slice(1).map((row) => ({
             numbering: row[0]?.toString() || "",

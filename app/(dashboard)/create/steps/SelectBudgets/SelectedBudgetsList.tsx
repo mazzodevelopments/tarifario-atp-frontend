@@ -170,7 +170,7 @@ export default function SelectedBudgetsList({
           </Table>
         </div>
       </div>
-      <div className="flex justify-center items-center w-full mt-6 gap-4">
+      <div className="flex justify-center items-center w-full mt-6 gap-2">
         <Button
           onClick={handlePrint}
           className="text-sm px-4 py-2 bg-primary text-white flex items-center gap-2"

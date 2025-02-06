@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import Button from "@/components/Button";
-import { Plus, PlusCircle } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import {
   Table,
   TableBody,
