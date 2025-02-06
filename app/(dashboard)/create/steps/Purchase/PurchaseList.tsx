@@ -21,6 +21,7 @@ import type { Item } from "@/types/Item";
 import type { PurchaseData } from "@/types/PurchaseData";
 import { X } from "react-feather";
 import "@/app/utils/formatNumber";
+import { PlusCircle } from "lucide-react";
 
 interface BudgetListProps {
   budgets: Budget[];
@@ -55,81 +56,102 @@ export default function PurchaseList({
 
   return (
     <div className="w-full flex justify-center items-center max-w-4xl flex-col">
-      <div className="border rounded-md max-h-[30vw] relative overflow-auto w-[54vw]">
-        <Table>
-          <TableHeader className="border-b border-gray-200">
-            <TableRow>
-              <TableHead>Numeración</TableHead>
-              <TableHead>Item</TableHead>
-              <TableHead>Proveedor</TableHead>
-              <TableHead>Precio Unitario</TableHead>
-              <TableHead>Extendido</TableHead>
-              <TableHead>Origen</TableHead>
-              <TableHead>L. Entrega</TableHead>
-              <TableHead>T. Producción</TableHead>
-              <TableHead>Incoterm</TableHead>
-              <TableHead>Observaciones Adicionales</TableHead>
-              <TableHead></TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody className="bg-white divide-y divide-gray-200">
-            {budgets.length === 0 ? (
-              <TableRow className="h-24">
-                <TableCell
-                  colSpan={12}
-                  className="text-sm m-auto h-full text-center text-gray-500"
-                >
-                  No hay presupuestos agregados
-                </TableCell>
+      <div className="w-auto h-auto overflow-hidden rounded-[12px] shadow-sm shadow-cyan-500/20">
+        <div className="border rounded-[12px] max-h-[30vw] relative overflow-auto w-[54vw] ">
+          <Table>
+            <TableHeader className="border-b border-gray-200">
+              <TableRow className="bg-primary/5">
+                <TableHead className="text-primary font-[600]">
+                  Numeración
+                </TableHead>
+                <TableHead className="text-primary font-[600]">Item</TableHead>
+                <TableHead className="text-primary font-[600]">
+                  Proveedor
+                </TableHead>
+                <TableHead className="text-primary font-[600]">
+                  Precio Unitario
+                </TableHead>
+                <TableHead className="text-primary font-[600]">
+                  Extendido
+                </TableHead>
+                <TableHead className="text-primary font-[600]">
+                  Origen
+                </TableHead>
+                <TableHead className="text-primary font-[600]">
+                  L. Entrega
+                </TableHead>
+                <TableHead className="text-primary font-[600]">
+                  T. Producción
+                </TableHead>
+                <TableHead className="text-primary font-[600]">
+                  Incoterm
+                </TableHead>
+                <TableHead className="text-primary font-[600]">
+                  Observaciones Adicionales
+                </TableHead>
+                <TableHead className="text-primary"></TableHead>
               </TableRow>
-            ) : (
-              budgets.map((budget) => (
-                <TableRow key={budget.numbering} className="h-12">
-                  <TableCell>{budget.stage + " " + budget.numbering}</TableCell>
-                  <TableCell>{budget.purchaseData?.item?.detail}</TableCell>
-                  <TableCell>{budget.purchaseData?.supplier}</TableCell>
-                  <TableCell>
-                    ${budget.purchaseData?.appliedUnitPrice.formatNumber()}
-                  </TableCell>
-                  <TableCell>
-                    $
-                    {(
-                      (budget.purchaseData?.appliedUnitPrice ?? 0) *
-                      (budget.purchaseData?.item?.quantity ?? 1)
-                    ).formatNumber()}
-                  </TableCell>
-                  <TableCell>{budget.purchaseData?.origin}</TableCell>
-                  <TableCell>{budget.purchaseData?.destination}</TableCell>
-                  <TableCell>
-                    {budget.purchaseData?.deliveryTime} días
-                  </TableCell>
-                  <TableCell>{budget.purchaseData?.incoterm}</TableCell>
-                  <TableCell>
-                    {budget.purchaseData?.additionalObservations !== ""
-                      ? budget.purchaseData?.additionalObservations
-                      : "-"}
-                  </TableCell>
-                  <TableCell>
-                    <button
-                      onClick={() => handleDeleteBudget(budget.numbering)}
-                      className="text-black hover:text-red-600 mx-2"
-                    >
-                      <X className="w-4" />
-                    </button>
+            </TableHeader>
+            <TableBody className="bg-white divide-y divide-gray-200">
+              {budgets.length === 0 ? (
+                <TableRow className="h-24">
+                  <TableCell
+                    colSpan={12}
+                    className="text-sm m-auto h-full text-center text-gray-500"
+                  >
+                    No hay presupuestos agregados
                   </TableCell>
                 </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+              ) : (
+                budgets.map((budget) => (
+                  <TableRow key={budget.numbering} className="h-12">
+                    <TableCell>
+                      {budget.stage + " " + budget.numbering}
+                    </TableCell>
+                    <TableCell>{budget.purchaseData?.item?.detail}</TableCell>
+                    <TableCell>{budget.purchaseData?.supplier}</TableCell>
+                    <TableCell>
+                      ${budget.purchaseData?.appliedUnitPrice.formatNumber()}
+                    </TableCell>
+                    <TableCell>
+                      $
+                      {(
+                        (budget.purchaseData?.appliedUnitPrice ?? 0) *
+                        (budget.purchaseData?.item?.quantity ?? 1)
+                      ).formatNumber()}
+                    </TableCell>
+                    <TableCell>{budget.purchaseData?.origin}</TableCell>
+                    <TableCell>{budget.purchaseData?.destination}</TableCell>
+                    <TableCell>
+                      {budget.purchaseData?.deliveryTime} días
+                    </TableCell>
+                    <TableCell>{budget.purchaseData?.incoterm}</TableCell>
+                    <TableCell>
+                      {budget.purchaseData?.additionalObservations !== ""
+                        ? budget.purchaseData?.additionalObservations
+                        : "-"}
+                    </TableCell>
+                    <TableCell>
+                      <button
+                        onClick={() => handleDeleteBudget(budget.numbering)}
+                        className="text-black hover:text-red-600 mx-2"
+                      >
+                        <X className="w-4" />
+                      </button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </div>
-
       <Dialog open={showCreateModal} onOpenChange={setShowCreateModal}>
         <div className="flex justify-center items-center w-full mt-6">
           <DialogTrigger asChild>
-            <Button className="text-sm px-4 py-2 bg-primary text-white flex items-center gap-2">
-              <span className="text-md mr-2">+</span>
-              Agregar Datos De Compra
+            <Button className=" bg-primary text-white flex items-center gap-1">
+              <PlusCircle size={16} />
+              <span className="mt-[1.5px]">Agregar Datos De Compra</span>
             </Button>
           </DialogTrigger>
         </div>

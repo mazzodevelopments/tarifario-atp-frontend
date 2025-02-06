@@ -54,7 +54,6 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
             header: 1,
           }) as any[][];
 
-          // Skip header row and process data
           const processedItems: Item[] = rawData.slice(1).map((row) => ({
             numbering: row[0]?.toString() || "",
             detail: row[1]?.toString() || "",
@@ -68,7 +67,6 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
             productNumber: row[8]?.toString() || "",
           }));
 
-          // Validate items before adding
           const validItems = processedItems.filter(
             (item) => item.numbering && item.detail && item.quantity > 0
           );
@@ -83,7 +81,6 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
           setItems([...items, ...validItems]);
           console.log(`Se agregaron ${validItems.length} items correctamente`);
 
-          // Reset file input
           if (fileInputRef.current) {
             fileInputRef.current.value = "";
           }
@@ -98,60 +95,78 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
 
   return (
     <div className="w-full flex justify-center items-center max-w-4xl flex-col">
-      <div className="border rounded-md max-h-[30vw] relative overflow-auto w-[54vw]">
-        <Table className="w-full">
-          <TableHeader>
-            <TableRow>
-              <TableHead>Numeración</TableHead>
-              <TableHead>Detalle</TableHead>
-              <TableHead>Familia</TableHead>
-              <TableHead>Subfamilia</TableHead>
-              <TableHead>Marca</TableHead>
-              <TableHead>Modelo</TableHead>
-              <TableHead>Cantidad</TableHead>
-              <TableHead>Part Number</TableHead>
-              <TableHead>Nro. Producto Cliente</TableHead>
-              <TableHead></TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {items.length === 0 ? (
-              <TableRow className="h-36">
-                <TableCell
-                  colSpan={8}
-                  className="text-sm m-auto h-full  text-center text-gray-500"
-                >
-                  No hay items agregados
-                </TableCell>
+      <div className="w-auto h-auto overflow-hidden rounded-[12px] shadow-sm shadow-cyan-500/20">
+        <div className="border rounded-[12px] overflow-auto max-h-[30vw] relative w-[54vw]">
+          <Table className="w-full">
+            <TableHeader>
+              <TableRow className="bg-primary/5">
+                <TableHead className="text-primary font-[600]">
+                  Numeración
+                </TableHead>
+                <TableHead className="text-primary font-[600]">
+                  Detalle
+                </TableHead>
+                <TableHead className="text-primary font-[600]">
+                  Familia
+                </TableHead>
+                <TableHead className="text-primary font-[600]">
+                  Subfamilia
+                </TableHead>
+                <TableHead className="text-primary font-[600]">Marca</TableHead>
+                <TableHead className="text-primary font-[600]">
+                  Modelo
+                </TableHead>
+                <TableHead className="text-primary font-[600]">
+                  Cantidad
+                </TableHead>
+                <TableHead className="text-primary font-[600]">
+                  Part Number
+                </TableHead>
+                <TableHead className="text-primary font-[600]">
+                  Nro. Producto Cliente
+                </TableHead>
+                <TableHead className="text-primary font-[600]"></TableHead>
               </TableRow>
-            ) : (
-              items.map((item) => (
-                <TableRow key={item.numbering} className="text-sm">
-                  <TableCell>{item.numbering}</TableCell>
-                  <TableCell>{item.detail}</TableCell>
-                  <TableCell>{item.family}</TableCell>
-                  <TableCell>{item.subfamily}</TableCell>
-                  <TableCell>{item.brand}</TableCell>
-                  <TableCell>{item.model}</TableCell>
-                  <TableCell>{item.quantity + " " + item.unit}</TableCell>
-                  <TableCell>{item.partNumber}</TableCell>
-                  <TableCell>{item.productNumber}</TableCell>
-                  <TableCell>
-                    <button
-                      onClick={() => handleDeleteItem(item.numbering)}
-                      className="text-black hover:text-red-600 mx-2"
-                    >
-                      <X className="w-4" />
-                    </button>
+            </TableHeader>
+            <TableBody>
+              {items.length === 0 ? (
+                <TableRow className="h-36">
+                  <TableCell
+                    colSpan={8}
+                    className="text-sm m-auto h-full  text-center text-gray-500"
+                  >
+                    No hay items agregados
                   </TableCell>
                 </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+              ) : (
+                items.map((item) => (
+                  <TableRow key={item.numbering} className="text-sm">
+                    <TableCell>{item.numbering}</TableCell>
+                    <TableCell>{item.detail}</TableCell>
+                    <TableCell>{item.family}</TableCell>
+                    <TableCell>{item.subfamily}</TableCell>
+                    <TableCell>{item.brand}</TableCell>
+                    <TableCell>{item.model}</TableCell>
+                    <TableCell>{item.quantity + " " + item.unit}</TableCell>
+                    <TableCell>{item.partNumber}</TableCell>
+                    <TableCell>{item.productNumber}</TableCell>
+                    <TableCell>
+                      <button
+                        onClick={() => handleDeleteItem(item.numbering)}
+                        className="text-black hover:text-red-600 mx-2"
+                      >
+                        <X className="w-4" />
+                      </button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </div>
       <Dialog>
-        <div className="flex justify-center items-center w-full mt-6 gap-1">
+        <div className="flex justify-center items-center w-full mt-6 gap-2">
           <input
             type="file"
             accept=".xlsx, .xls"
@@ -160,16 +175,16 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
             className="hidden"
           />
           <Button
-            className="bg-primary/10 text-primary items-center gap-1"
+            className="bg-primary/5 border border-primary/20 text-primary items-center gap-1"
             onClick={() => fileInputRef.current?.click()}
           >
-            <Upload size={14} />
+            <Upload size={14} className="mt-[-1px]" />
             Cargar Items
           </Button>
           <DialogTrigger asChild>
             <Button className=" bg-primary text-white flex items-center gap-1">
               <PlusCircle size={16} />
-              Agregar Item
+              <span className="mt-[1.5px]">Agregar Item</span>
             </Button>
           </DialogTrigger>
         </div>
