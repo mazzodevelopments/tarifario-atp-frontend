@@ -99,7 +99,7 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
       <Button
         onClick={handleClick}
         variant="primary"
-        className="flex items-center gap-1 text-primary border border-primary/20 bg-neutral-400/5 hover:text-primary-dark "
+        className="flex items-center gap-1 text-primary border border-primary/20 bg-primary/5 hover:text-primary-dark "
       >
         <PlusCircle className="w-4 h-4" />
         <span className="mt-[2px]">Agregar</span>
@@ -126,7 +126,7 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
       <Button
         onClick={handleClick}
         variant="primary"
-        className="flex items-center gap-1 text-primary border border-primary/20 bg-neutral-400/5 hover:text-primary-dark "
+        className="flex items-center gap-1 text-primary border border-primary/20 bg-primary/5 hover:text-primary-dark "
       >
         <PlusCircle className="w-4 h-4" />
         <span className="mt-[2px]">Agregar</span>
