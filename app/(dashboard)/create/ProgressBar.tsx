@@ -12,7 +12,7 @@ export default function ProgressBar({
   const progress = (currentStep / (totalSteps - 1)) * 100;
 
   return (
-    <div className="flex gap-6 items-start h-full py-48 px-10">
+    <div className="flex gap-6 items-start h-full py-20 px-10">
       <div className="relative h-full">
         <div className="h-full bg-gray-200 rounded-full w-2.5">
           <div
@@ -43,8 +43,8 @@ export default function ProgressBar({
               index === currentStep
                 ? "text-primary font-[600]"
                 : index < currentStep
-                  ? "text-gray-700"
-                  : "text-gray-400"
+                ? "text-gray-700"
+                : "text-gray-400"
             }`}
           >
             {step.title}

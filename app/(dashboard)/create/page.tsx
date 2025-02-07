@@ -19,14 +19,14 @@ import SelectableBudgetsList from "@/app/(dashboard)/create/steps/SelectBudgets/
 import { Freight } from "@/types/Freight";
 
 const steps = [
-  { title: "Cargar Datos Cotización" },
-  { title: "Agregar Items" },
-  { title: "Cargar Compras" },
-  { title: "Agregar Logística" },
-  { title: "Sector Ventas" },
-  { title: "Revisar Presupuestos" },
-  { title: "Seleccionar Presupuestos" },
-  { title: "Confirmar y Crear" },
+  { title: "Cargar Datos" },
+  { title: "Items" },
+  { title: "Compras" },
+  { title: "Logística" },
+  { title: "Ventas" },
+  { title: "Presupuestos" },
+  { title: "Selección" },
+  { title: "Confirmación" },
 ];
 
 export default function Create() {
@@ -36,7 +36,7 @@ export default function Create() {
   const totalSteps = steps.length;
   // ESTADOS COTIZACIÓN
   const [quotationData, setQuotationData] = useState<QuotationData | null>(
-    null,
+    null
   );
   const [budgets, setBudgets] = useState<Budget[]>(TEST_BUDGETS);
   const [selectedBudgets, setSelectedBudgets] = useState<Budget[]>([]);
@@ -69,7 +69,7 @@ export default function Create() {
       try {
         await CreateQuotationService.loadQuotationItems(
           quotationData?.taskNumber,
-          quotationData?.items,
+          quotationData?.items
         );
       } catch (error) {
         console.error("Error cargando items:", error);
@@ -81,7 +81,7 @@ export default function Create() {
       try {
         await CreateQuotationService.loadPurchaseData(
           quotationData?.taskNumber,
-          budgets,
+          budgets
         );
       } catch (error) {
         console.error("Error cargando data de compras:", error);
@@ -93,7 +93,7 @@ export default function Create() {
       try {
         await CreateQuotationService.loadLogistics(
           quotationData?.taskNumber,
-          budgets,
+          budgets
         );
       } catch (error) {
         console.error("Error cargando data de logistica:", error);
@@ -105,7 +105,7 @@ export default function Create() {
       try {
         await CreateQuotationService.loadSalesData(
           quotationData?.taskNumber,
-          budgets,
+          budgets
         );
       } catch (error) {
         console.error("Error cargando data de ventas", error);
@@ -117,7 +117,7 @@ export default function Create() {
       try {
         await CreateQuotationService.loadSelectedBudgets(
           quotationData?.taskNumber,
-          budgets,
+          budgets
         );
       } catch (error) {
         console.error("Error seleccionando presupuestos:", error);
@@ -162,7 +162,7 @@ export default function Create() {
           (key) =>
             key !== "budgets" &&
             typeof quotationData[key as keyof QuotationData] === "string" &&
-            (quotationData[key as keyof QuotationData] as string).trim() === "",
+            (quotationData[key as keyof QuotationData] as string).trim() === ""
         )
       );
     }
