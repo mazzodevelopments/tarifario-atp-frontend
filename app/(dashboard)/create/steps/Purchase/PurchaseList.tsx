@@ -57,7 +57,7 @@ export default function PurchaseList({
   return (
     <div className="w-full flex justify-center items-center max-w-4xl flex-col">
       <div className="w-auto h-auto overflow-hidden rounded-[12px] shadow-sm shadow-cyan-500/20">
-        <div className="border rounded-[12px] max-h-[30vw] relative overflow-auto w-[54vw] ">
+        <div className="border rounded-[12px] max-h-[25vw] relative overflow-auto w-[54vw] ">
           <Table>
             <TableHeader className="border-b border-gray-200">
               <TableRow className="bg-primary/5">

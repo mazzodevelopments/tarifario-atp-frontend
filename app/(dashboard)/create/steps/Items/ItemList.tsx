@@ -97,7 +97,7 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
   return (
     <div className="w-full flex justify-center items-center max-w-4xl flex-col">
       <div className="w-auto h-auto overflow-hidden rounded-[12px] shadow-sm shadow-cyan-500/20">
-        <div className="border rounded-[12px] overflow-auto max-h-[30vw] relative w-[54vw]">
+        <div className="border rounded-[12px] overflow-auto max-h-[25vw] relative w-[54vw]">
           <Table className="w-full">
             <TableHeader>
               <TableRow className="bg-primary/5">
@@ -190,7 +190,7 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
           </DialogTrigger>
         </div>
 
-        <DialogContent>
+        <DialogContent className="h-[]">
           <DialogHeader>
             <DialogTitle className="text-2xl">Agregar nuevo item</DialogTitle>
           </DialogHeader>

@@ -388,7 +388,7 @@ export default function LogisticList({
         </button>
       </div>
       <div className="w-auto h-auto overflow-hidden rounded-[12px] shadow-sm shadow-cyan-500/20">
-        <div className="border rounded-[12px] max-h-[30vw] relative overflow-auto w-[54vw]">
+        <div className="border rounded-[12px] max-h-[20vw] relative overflow-auto w-[54vw]">
           {activeTab === "logistics"
             ? renderLogisticsTable()
             : renderFreightsTable()}
