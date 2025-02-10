@@ -43,10 +43,10 @@ export default function LogisticList({
   setFreights,
 }: BudgetListProps) {
   const [activeTab, setActiveTab] = useState<"logistics" | "freights">(
-    "logistics"
+    "logistics",
   );
   const [selectedFreightId, setSelectedFreightId] = useState<string | null>(
-    null
+    null,
   );
   const [selectedFreights, setSelectedFreights] = useState<
     Record<string, string>
@@ -60,7 +60,7 @@ export default function LogisticList({
     useState<OriginExpenses | null>(null);
   const [editingCustom, setEditingCustom] = useState<Custom | null>(null);
   const [editingTransport, setEditingTransport] = useState<Transport | null>(
-    null
+    null,
   );
   const [editingDestinationExpenses, setEditingDestinationExpenses] =
     useState<DestinationExpenses | null>(null);
@@ -77,12 +77,12 @@ export default function LogisticList({
   }, []); // Only run once on component mount
 
   const handleFreightUpdate = <
-    T extends Transport | OriginExpenses | Custom | DestinationExpenses | null
+    T extends Transport | OriginExpenses | Custom | DestinationExpenses | null,
   >(
     field: "transport" | "originExpenses" | "custom" | "destinationExpenses",
     value: T,
     setShowModal: (value: boolean) => void,
-    setEditing: (value: T | null) => void
+    setEditing: (value: T | null) => void,
   ) => {
     if (selectedFreightId) {
       setFreights(
@@ -96,8 +96,8 @@ export default function LogisticList({
                   [field]: value,
                 }),
               }
-            : freight
-        )
+            : freight,
+        ),
       );
 
       // Update budgets that use this freight to reflect the changes
@@ -115,8 +115,8 @@ export default function LogisticList({
                   }),
                 },
               }
-            : budget
-        )
+            : budget,
+        ),
       );
 
       setShowModal(false);
@@ -161,8 +161,8 @@ export default function LogisticList({
                 ...budget,
                 freight: freight,
               }
-            : budget
-        )
+            : budget,
+        ),
       );
     }
   };
@@ -243,7 +243,7 @@ export default function LogisticList({
   const renderFreightActionCell = (
     freight: Freight,
     type: "transport" | "custom" | "destinationExpenses" | "origin",
-    setShowModal: (show: boolean) => void
+    setShowModal: (show: boolean) => void,
   ) => {
     const data = type === "origin" ? freight.originExpenses : freight[type];
 
@@ -262,12 +262,12 @@ export default function LogisticList({
                 setShowTransportModal(true);
               } else if (type === "origin") {
                 setEditingOriginExpenses(
-                  freight.originExpenses as OriginExpenses
+                  freight.originExpenses as OriginExpenses,
                 );
                 setShowOriginExpensesModal(true);
               } else if (type === "destinationExpenses") {
                 setEditingDestinationExpenses(
-                  freight.destinationExpenses as DestinationExpenses
+                  freight.destinationExpenses as DestinationExpenses,
                 );
                 setShowDestinationExpensesModal(true);
               }
@@ -287,8 +287,7 @@ export default function LogisticList({
           setSelectedFreightId(freight.id);
           setShowModal(true);
         }}
-        variant="primary"
-        className="flex items-center gap-1 text-primary border border-primary/20 bg-neutral-400/5 hover:text-primary-dark "
+        className="bg-primary/5 border border-primary/20 text-primary items-center gap-1"
       >
         <PlusCircle className="w-4 h-4" />
         <span className="mt-[2px]">Agregar</span>
@@ -329,28 +328,28 @@ export default function LogisticList({
                   {renderFreightActionCell(
                     freight,
                     "origin",
-                    setShowOriginExpensesModal
+                    setShowOriginExpensesModal,
                   )}
                 </TableCell>
                 <TableCell>
                   {renderFreightActionCell(
                     freight,
                     "transport",
-                    setShowTransportModal
+                    setShowTransportModal,
                   )}
                 </TableCell>
                 <TableCell>
                   {renderFreightActionCell(
                     freight,
                     "custom",
-                    setShowCustomModal
+                    setShowCustomModal,
                   )}
                 </TableCell>
                 <TableCell>
                   {renderFreightActionCell(
                     freight,
                     "destinationExpenses",
-                    setShowDestinationExpensesModal
+                    setShowDestinationExpensesModal,
                   )}
                 </TableCell>
                 <TableCell>${freight.total.formatNumber()}</TableCell>
@@ -427,7 +426,7 @@ export default function LogisticList({
                   "originExpenses",
                   expenses,
                   setShowOriginExpensesModal,
-                  setEditingOriginExpenses
+                  setEditingOriginExpenses,
                 );
               }}
               onCancel={() => {
@@ -455,7 +454,7 @@ export default function LogisticList({
                   "transport",
                   transport,
                   setShowTransportModal,
-                  setEditingTransport
+                  setEditingTransport,
                 )
               }
               onCancel={() => {
@@ -485,7 +484,7 @@ export default function LogisticList({
                   "custom",
                   custom,
                   setShowCustomModal,
-                  setEditingCustom
+                  setEditingCustom,
                 );
               }}
               onCancel={() => {
@@ -518,7 +517,7 @@ export default function LogisticList({
                   "destinationExpenses",
                   expenses,
                   setShowDestinationExpensesModal,
-                  setEditingDestinationExpenses
+                  setEditingDestinationExpenses,
                 );
               }}
               onCancel={() => {
