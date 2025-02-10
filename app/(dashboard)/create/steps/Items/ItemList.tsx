@@ -55,7 +55,7 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
             header: 1,
           }) as (string | number)[][];
 
-          const processedItems: Item[] = rawData.slice(1).map((row) => ({
+          const processedItems: Item[] = rawData.slice(2).map((row) => ({
             numbering: row[0]?.toString() || "",
             detail: row[1]?.toString() || "",
             family: row[2]?.toString() || "",
