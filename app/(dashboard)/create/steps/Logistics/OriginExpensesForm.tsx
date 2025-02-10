@@ -22,11 +22,11 @@ export default function OriginExpensesForm({
       palletFumigation: false,
       customExpenses: [],
       total: 0,
-    }
+    },
   );
 
   const [includePickup, setIncludePickup] = useState(
-    existingExpenses?.pickup ? existingExpenses.pickup > 0 : false
+    existingExpenses?.pickup ? existingExpenses.pickup > 0 : false,
   );
   const [newExpenseName, setNewExpenseName] = useState("");
   const [newExpenseValue, setNewExpenseValue] = useState("");
@@ -199,7 +199,7 @@ export default function OriginExpensesForm({
           <Button
             type="button"
             onClick={addCustomExpense}
-            variant="secondary"
+            className="bg-primary/5 border border-primary/20 text-primary items-center gap-1"
             disabled={!newExpenseName || !newExpenseValue}
           >
             Agregar
@@ -211,7 +211,7 @@ export default function OriginExpensesForm({
             {formData.customExpenses.map((expense, index) => (
               <div
                 key={index}
-                className="flex justify-between items-center bg-gray-50 p-2 rounded"
+                className="flex justify-between items-center bg-primary/5 p-2 rounded"
               >
                 <span>{expense.name}</span>
                 <div className="flex items-center gap-2">
