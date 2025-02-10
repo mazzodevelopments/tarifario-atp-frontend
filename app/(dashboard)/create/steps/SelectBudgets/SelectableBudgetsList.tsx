@@ -66,44 +66,46 @@ export default function SelectableBudgetsList({
           <Table className="w-full">
             <TableHeader className="bg-primary/5">
               <TableRow>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Numeración
                 </TableHead>
-                <TableHead className="text-primary font-[600]">Item</TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
+                  Item
+                </TableHead>
+                <TableHead className="text-primary font-[600] text-center">
                   Proveedor
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Origen
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Destino
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   T. Producción
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Incoterm
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Total Flete
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Precio Total
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Margen
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Precio V. Unitario
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Precio V. Total
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Condición de Pago
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Seleccionar
                 </TableHead>
               </TableRow>
@@ -122,7 +124,7 @@ export default function SelectableBudgetsList({
                 budgets.map((budget) => (
                   <TableRow
                     key={budget.numbering}
-                    className="h-12 hover:bg-gray-50"
+                    className="h-12 hover:bg-gray-50 text-center"
                   >
                     <TableCell>
                       {budget.stage + " " + budget.numbering}

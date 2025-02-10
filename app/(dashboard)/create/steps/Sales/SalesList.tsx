@@ -89,21 +89,23 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
 
     if (budget.salesData?.margin && budget.salesData.margin > 0) {
       return (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-center gap-2">
           {budget.salesData.margin}%
         </div>
       );
     }
 
     return (
-      <Button
-        onClick={handleClick}
-        variant="primary"
-        className="flex items-center gap-1 text-primary border border-primary/20 bg-primary/5 hover:text-primary-dark "
-      >
-        <PlusCircle className="w-4 h-4" />
-        <span className="mt-[2px]">Agregar</span>
-      </Button>
+      <div className="w-full flex justify-center">
+        <Button
+          onClick={handleClick}
+          variant="primary"
+          className="flex items-center gap-1 text-primary border border-primary/20 bg-primary/5 hover:text-primary-dark "
+        >
+          <PlusCircle className="w-4 h-4" />
+          <span className="mt-[2px]">Agregar</span>
+        </Button>
+      </div>
     );
   };
 
@@ -116,21 +118,23 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
 
     if (budget.salesData?.paymentCondition) {
       return (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-center gap-2">
           {budget.salesData.paymentCondition}
         </div>
       );
     }
 
     return (
-      <Button
-        onClick={handleClick}
-        variant="primary"
-        className="flex items-center gap-1 text-primary border border-primary/20 bg-primary/5 hover:text-primary-dark "
-      >
-        <PlusCircle className="w-4 h-4" />
-        <span className="mt-[2px]">Agregar</span>
-      </Button>
+      <div className="w-full flex justify-center">
+        <Button
+          onClick={handleClick}
+          variant="primary"
+          className="flex items-center gap-1 text-primary border border-primary/20 bg-primary/5 hover:text-primary-dark "
+        >
+          <PlusCircle className="w-4 h-4" />
+          <span className="mt-[2px]">Agregar</span>
+        </Button>
+      </div>
     );
   };
 
@@ -169,41 +173,43 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
           <Table className="w-full">
             <TableHeader className="bg-primary/5">
               <TableRow>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Numeración
                 </TableHead>
-                <TableHead className="text-primary font-[600]">Item</TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
+                  Item
+                </TableHead>
+                <TableHead className="text-primary font-[600] text-center">
                   Proveedor
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Origen
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Destino
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   T. Producción
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Incoterm
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Total Flete
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Precio Total
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Margen
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Precio V. Unitario
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Precio V. Total
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Condición de Pago
                 </TableHead>
               </TableRow>
@@ -220,7 +226,7 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
                 </TableRow>
               ) : (
                 budgets.map((budget) => (
-                  <TableRow key={budget.numbering} className="h-12">
+                  <TableRow key={budget.numbering} className="h-12 text-center">
                     <TableCell>
                       {budget.stage + " " + budget.numbering}
                     </TableCell>
@@ -246,7 +252,7 @@ export default function SalesList({ budgets, setBudgets }: SalesListProps) {
                       {(
                         calculateAppliedTotalPrice(budget) /
                         (budget.purchaseData?.item?.quantity ?? 1)
-                      ).formatNumber()}{" "}
+                      ).formatNumber()}
                     </TableCell>
                     <TableCell className="font-[600]">
                       ${calculateAppliedTotalPrice(budget).formatNumber()}

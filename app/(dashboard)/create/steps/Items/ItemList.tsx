@@ -101,32 +101,34 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
           <Table className="w-full">
             <TableHeader>
               <TableRow className="bg-primary/5">
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Numeración
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Detalle
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Familia
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Subfamilia
                 </TableHead>
-                <TableHead className="text-primary font-[600]">Marca</TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
+                  Marca
+                </TableHead>
+                <TableHead className="text-primary font-[600] text-center">
                   Modelo
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Cantidad
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Part Number
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Nro. Producto Cliente
                 </TableHead>
-                <TableHead className="text-primary font-[600]"></TableHead>
+                <TableHead className="text-primary font-[600] text-center"></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -141,7 +143,10 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
                 </TableRow>
               ) : (
                 items.map((item) => (
-                  <TableRow key={item.numbering} className="text-sm">
+                  <TableRow
+                    key={item.numbering}
+                    className="text-sm text-center"
+                  >
                     <TableCell>{item.numbering}</TableCell>
                     <TableCell>{item.detail}</TableCell>
                     <TableCell>{item.family}</TableCell>

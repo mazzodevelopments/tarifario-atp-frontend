@@ -43,10 +43,10 @@ export default function LogisticList({
   setFreights,
 }: BudgetListProps) {
   const [activeTab, setActiveTab] = useState<"logistics" | "freights">(
-    "logistics",
+    "logistics"
   );
   const [selectedFreightId, setSelectedFreightId] = useState<string | null>(
-    null,
+    null
   );
   const [selectedFreights, setSelectedFreights] = useState<
     Record<string, string>
@@ -60,7 +60,7 @@ export default function LogisticList({
     useState<OriginExpenses | null>(null);
   const [editingCustom, setEditingCustom] = useState<Custom | null>(null);
   const [editingTransport, setEditingTransport] = useState<Transport | null>(
-    null,
+    null
   );
   const [editingDestinationExpenses, setEditingDestinationExpenses] =
     useState<DestinationExpenses | null>(null);
@@ -77,12 +77,12 @@ export default function LogisticList({
   }, []); // Only run once on component mount
 
   const handleFreightUpdate = <
-    T extends Transport | OriginExpenses | Custom | DestinationExpenses | null,
+    T extends Transport | OriginExpenses | Custom | DestinationExpenses | null
   >(
     field: "transport" | "originExpenses" | "custom" | "destinationExpenses",
     value: T,
     setShowModal: (value: boolean) => void,
-    setEditing: (value: T | null) => void,
+    setEditing: (value: T | null) => void
   ) => {
     if (selectedFreightId) {
       setFreights(
@@ -96,8 +96,8 @@ export default function LogisticList({
                   [field]: value,
                 }),
               }
-            : freight,
-        ),
+            : freight
+        )
       );
 
       // Update budgets that use this freight to reflect the changes
@@ -115,8 +115,8 @@ export default function LogisticList({
                   }),
                 },
               }
-            : budget,
-        ),
+            : budget
+        )
       );
 
       setShowModal(false);
@@ -161,8 +161,8 @@ export default function LogisticList({
                 ...budget,
                 freight: freight,
               }
-            : budget,
-        ),
+            : budget
+        )
       );
     }
   };
@@ -171,20 +171,36 @@ export default function LogisticList({
     <Table>
       <TableHeader className="bg-primary/5">
         <TableRow>
-          <TableHead className="text-primary font-[600]">Numeración</TableHead>
-          <TableHead className="text-primary font-[600]">Item</TableHead>
-          <TableHead className="text-primary font-[600]">Proveedor</TableHead>
-          <TableHead className="text-primary font-[600]">
+          <TableHead className="text-primary font-[600] text-center">
+            Numeración
+          </TableHead>
+          <TableHead className="text-primary font-[600] text-center">
+            Item
+          </TableHead>
+          <TableHead className="text-primary font-[600] text-center">
+            Proveedor
+          </TableHead>
+          <TableHead className="text-primary font-[600] text-center">
             Precio Unitario
           </TableHead>
-          <TableHead className="text-primary font-[600]">Extendido</TableHead>
-          <TableHead className="text-primary font-[600]">Origen</TableHead>
-          <TableHead className="text-primary font-[600]">L. Entrega</TableHead>
-          <TableHead className="text-primary font-[600]">
+          <TableHead className="text-primary font-[600] text-center">
+            Extendido
+          </TableHead>
+          <TableHead className="text-primary font-[600] text-center">
+            Origen
+          </TableHead>
+          <TableHead className="text-primary font-[600] text-center">
+            L. Entrega
+          </TableHead>
+          <TableHead className="text-primary font-[600] text-center">
             T. Producción
           </TableHead>
-          <TableHead className="text-primary font-[600]">Incoterm</TableHead>
-          <TableHead className="text-primary font-[600]">Flete</TableHead>
+          <TableHead className="text-primary font-[600] text-center">
+            Incoterm
+          </TableHead>
+          <TableHead className="text-primary font-[600] text-center">
+            Flete
+          </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody className="bg-white divide-y divide-gray-200">
@@ -199,7 +215,7 @@ export default function LogisticList({
           </TableRow>
         ) : (
           budgets.map((budget) => (
-            <TableRow key={budget.numbering} className="h-12">
+            <TableRow key={budget.numbering} className="h-12 text-center">
               <TableCell>{budget.stage + " " + budget.numbering}</TableCell>
               <TableCell>{budget.purchaseData?.item?.detail}</TableCell>
               <TableCell>{budget.purchaseData?.supplier}</TableCell>
@@ -243,13 +259,13 @@ export default function LogisticList({
   const renderFreightActionCell = (
     freight: Freight,
     type: "transport" | "custom" | "destinationExpenses" | "origin",
-    setShowModal: (show: boolean) => void,
+    setShowModal: (show: boolean) => void
   ) => {
     const data = type === "origin" ? freight.originExpenses : freight[type];
 
     if (data?.total) {
       return (
-        <div className="flex items-center gap-2">
+        <div className="flex justify-center w-full ml-1 items-center gap-2">
           <span className="font-[600]">${data.total.formatNumber()}</span>
           <Button
             onClick={() => {
@@ -262,12 +278,12 @@ export default function LogisticList({
                 setShowTransportModal(true);
               } else if (type === "origin") {
                 setEditingOriginExpenses(
-                  freight.originExpenses as OriginExpenses,
+                  freight.originExpenses as OriginExpenses
                 );
                 setShowOriginExpensesModal(true);
               } else if (type === "destinationExpenses") {
                 setEditingDestinationExpenses(
-                  freight.destinationExpenses as DestinationExpenses,
+                  freight.destinationExpenses as DestinationExpenses
                 );
                 setShowDestinationExpensesModal(true);
               }
@@ -282,16 +298,18 @@ export default function LogisticList({
     }
 
     return (
-      <Button
-        onClick={() => {
-          setSelectedFreightId(freight.id);
-          setShowModal(true);
-        }}
-        className="bg-primary/5 border border-primary/20 text-primary items-center gap-1"
-      >
-        <PlusCircle className="w-4 h-4" />
-        <span className="mt-[2px]">Agregar</span>
-      </Button>
+      <div className="w-full justify-center flex">
+        <Button
+          onClick={() => {
+            setSelectedFreightId(freight.id);
+            setShowModal(true);
+          }}
+          className="bg-primary/5 border border-primary/20 text-primary items-center gap-1"
+        >
+          <PlusCircle className="w-4 h-4" />
+          <span className="mt-[2px]">Agregar</span>
+        </Button>
+      </div>
     );
   };
 
@@ -305,51 +323,57 @@ export default function LogisticList({
         <Table>
           <TableHeader className="bg-primary/5">
             <TableRow>
-              <TableHead className="text-primary font-[600]">Nombre</TableHead>
-              <TableHead className="text-primary font-[600]">
+              <TableHead className="text-primary font-[600] text-center">
+                Nombre
+              </TableHead>
+              <TableHead className="text-primary font-[600] text-center">
                 Gastos Origen
               </TableHead>
-              <TableHead className="text-primary font-[600]">
+              <TableHead className="text-primary font-[600] text-center">
                 Transporte
               </TableHead>
-              <TableHead className="text-primary font-[600]">Aduana</TableHead>
-              <TableHead className="text-primary font-[600]">
+              <TableHead className="text-primary font-[600] text-center">
+                Aduana
+              </TableHead>
+              <TableHead className="text-primary font-[600] text-center">
                 Gastos Destino
               </TableHead>
-              <TableHead className="text-primary font-[600]">Total</TableHead>
-              <TableHead className="text-primary font-[600]"></TableHead>
+              <TableHead className="text-primary font-[600] text-center">
+                Total
+              </TableHead>
+              <TableHead className="text-primary font-[600] text-center"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className="bg-white divide-y divide-gray-200">
             {freights.map((freight) => (
-              <TableRow key={freight.id} className="h-12">
+              <TableRow key={freight.id} className="h-12 text-center">
                 <TableCell>{freight.name}</TableCell>
                 <TableCell>
                   {renderFreightActionCell(
                     freight,
                     "origin",
-                    setShowOriginExpensesModal,
+                    setShowOriginExpensesModal
                   )}
                 </TableCell>
                 <TableCell>
                   {renderFreightActionCell(
                     freight,
                     "transport",
-                    setShowTransportModal,
+                    setShowTransportModal
                   )}
                 </TableCell>
                 <TableCell>
                   {renderFreightActionCell(
                     freight,
                     "custom",
-                    setShowCustomModal,
+                    setShowCustomModal
                   )}
                 </TableCell>
                 <TableCell>
                   {renderFreightActionCell(
                     freight,
                     "destinationExpenses",
-                    setShowDestinationExpensesModal,
+                    setShowDestinationExpensesModal
                   )}
                 </TableCell>
                 <TableCell>${freight.total.formatNumber()}</TableCell>
@@ -426,7 +450,7 @@ export default function LogisticList({
                   "originExpenses",
                   expenses,
                   setShowOriginExpensesModal,
-                  setEditingOriginExpenses,
+                  setEditingOriginExpenses
                 );
               }}
               onCancel={() => {
@@ -454,7 +478,7 @@ export default function LogisticList({
                   "transport",
                   transport,
                   setShowTransportModal,
-                  setEditingTransport,
+                  setEditingTransport
                 )
               }
               onCancel={() => {
@@ -484,7 +508,7 @@ export default function LogisticList({
                   "custom",
                   custom,
                   setShowCustomModal,
-                  setEditingCustom,
+                  setEditingCustom
                 );
               }}
               onCancel={() => {
@@ -517,7 +541,7 @@ export default function LogisticList({
                   "destinationExpenses",
                   expenses,
                   setShowDestinationExpensesModal,
-                  setEditingDestinationExpenses,
+                  setEditingDestinationExpenses
                 );
               }}
               onCancel={() => {

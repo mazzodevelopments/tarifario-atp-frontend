@@ -61,48 +61,50 @@ export default function SelectedBudgetsList({
           <Table>
             <TableHeader className="bg-primary/5">
               <TableRow>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Numeración
                 </TableHead>
-                <TableHead className="text-primary font-[600]">Item</TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
+                  Item
+                </TableHead>
+                <TableHead className="text-primary font-[600] text-center">
                   Proveedor
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Origen
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Destino
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   T. Producción
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Incoterm
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Total Flete
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Precio Total
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Margen
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Condición de Pago
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Precio V. Unitario
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Precio V. Total
                 </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody className="bg-white divide-y divide-gray-200">
               {selectedBudgets.length === 0 ? (
-                <TableRow className="h-24">
+                <TableRow className="h-24 ">
                   <TableCell
                     colSpan={14}
                     className="text-sm m-auto h-full text-center text-gray-500"
@@ -113,7 +115,10 @@ export default function SelectedBudgetsList({
               ) : (
                 <>
                   {selectedBudgets.map((budget) => (
-                    <TableRow key={budget.numbering} className="text-sm">
+                    <TableRow
+                      key={budget.numbering}
+                      className="text-sm text-center"
+                    >
                       <TableCell>
                         {budget.stage + " " + budget.numbering}
                       </TableCell>

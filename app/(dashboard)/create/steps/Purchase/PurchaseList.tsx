@@ -61,35 +61,37 @@ export default function PurchaseList({
           <Table>
             <TableHeader className="border-b border-gray-200">
               <TableRow className="bg-primary/5">
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Numeración
                 </TableHead>
-                <TableHead className="text-primary font-[600]">Item</TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
+                  Item
+                </TableHead>
+                <TableHead className="text-primary font-[600] text-center">
                   Proveedor
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Precio Unitario
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Extendido
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Origen
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   L. Entrega
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   T. Producción
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Incoterm
                 </TableHead>
-                <TableHead className="text-primary font-[600]">
+                <TableHead className="text-primary font-[600] text-center">
                   Observaciones Adicionales
                 </TableHead>
-                <TableHead className="text-primary"></TableHead>
+                <TableHead className="text-primary text-center"></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody className="bg-white divide-y divide-gray-200">
@@ -104,7 +106,7 @@ export default function PurchaseList({
                 </TableRow>
               ) : (
                 budgets.map((budget) => (
-                  <TableRow key={budget.numbering} className="h-12">
+                  <TableRow key={budget.numbering} className="h-12 text-center">
                     <TableCell>
                       {budget.stage + " " + budget.numbering}
                     </TableCell>
