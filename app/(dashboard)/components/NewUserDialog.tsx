@@ -14,6 +14,7 @@ import { Toaster } from "@/components/ui/toaster";
 export function NewUserDialog() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
 
@@ -70,6 +71,28 @@ export function NewUserDialog() {
                 onChange={(e) => setEmail(e.target.value)}
                 className="col-span-3"
               />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <label htmlFor="email" className="text-right">
+                Password
+              </label>
+              <Input
+                id="email"
+                type="password"
+                value={email}
+                onChange={(e) => setPassword(e.target.value)}
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <label htmlFor="email" className="text-right">
+                Rol
+              </label>
+              <select className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm">
+                <option value="superadmin">superadmin</option>
+                <option value="admin">admin</option>
+                <option value="user">user</option>
+              </select>
             </div>
             <Button type="submit" className="ml-auto text-white">
               Guardar usuario
