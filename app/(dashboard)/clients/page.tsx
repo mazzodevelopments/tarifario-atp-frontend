@@ -19,6 +19,7 @@ interface Client {
   mail: string;
   direccion: string;
   telefono: string;
+  buyers?: { id: number; name: string; email: string; phone: string }[];
 }
 
 export default function Clients() {
@@ -29,6 +30,44 @@ export default function Clients() {
       mail: "contacto@empresaa.com",
       direccion: "Calle Principal 123",
       telefono: "1234567890",
+      buyers: [
+        {
+          id: 1,
+          name: "Buyer A",
+          email: "buyerA@example.com",
+          phone: "111-222-3333",
+        },
+      ],
+    },
+    {
+      id: 2,
+      nombre: "Cliente A",
+      mail: "contacto@empresaa.com",
+      direccion: "Calle Principal 123",
+      telefono: "1234567890",
+      buyers: [
+        {
+          id: 1,
+          name: "Buyer A",
+          email: "buyerA@example.com",
+          phone: "111-222-3333",
+        },
+      ],
+    },
+    {
+      id: 3,
+      nombre: "Cliente A",
+      mail: "contacto@empresaa.com",
+      direccion: "Calle Principal 123",
+      telefono: "1234567890",
+      buyers: [
+        {
+          id: 1,
+          name: "Buyer A",
+          email: "buyerA@example.com",
+          phone: "111-222-3333",
+        },
+      ],
     },
   ]);
 
@@ -37,11 +76,17 @@ export default function Clients() {
     mail: "",
     direccion: "",
     telefono: "",
+    buyers: [],
   });
 
   const [clienteEditando, setClienteEditando] = useState<Client | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [nuevoBuyer, setNuevoBuyer] = useState({
+    name: "",
+    email: "",
+    phone: "",
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,6 +104,7 @@ export default function Clients() {
         mail: "",
         direccion: "",
         telefono: "",
+        buyers: [],
       });
     }
     setDialogOpen(false);
@@ -287,6 +333,117 @@ export default function Clients() {
                     }
                     required
                   />
+                </div>
+              </div>
+              <div className="space-y-4">
+                <h4 className="text-lg font-semibold">Compradores</h4>
+                {clienteEditando.buyers?.map((buyer, index) => (
+                  <div key={buyer.id} className="flex items-center space-x-2">
+                    <Input
+                      value={buyer.name}
+                      onChange={(e) => {
+                        const updatedBuyers = [...clienteEditando.buyers!];
+                        updatedBuyers[index] = {
+                          ...buyer,
+                          name: e.target.value,
+                        };
+                        setClienteEditando({
+                          ...clienteEditando,
+                          buyers: updatedBuyers,
+                        });
+                      }}
+                    />
+                    <Input
+                      type="email"
+                      value={buyer.email}
+                      onChange={(e) => {
+                        const updatedBuyers = [...clienteEditando.buyers!];
+                        updatedBuyers[index] = {
+                          ...buyer,
+                          email: e.target.value,
+                        };
+                        setClienteEditando({
+                          ...clienteEditando,
+                          buyers: updatedBuyers,
+                        });
+                      }}
+                    />
+                    <Input
+                      value={buyer.phone}
+                      onChange={(e) => {
+                        const updatedBuyers = [...clienteEditando.buyers!];
+                        updatedBuyers[index] = {
+                          ...buyer,
+                          phone: e.target.value,
+                        };
+                        setClienteEditando({
+                          ...clienteEditando,
+                          buyers: updatedBuyers,
+                        });
+                      }}
+                    />
+                    <Button
+                      type="button"
+                      variant="danger"
+                      className="w-20 justify-center items-center"
+                      onClick={() => {
+                        setClienteEditando({
+                          ...clienteEditando,
+                          buyers: clienteEditando.buyers!.filter(
+                            (_, i) => i !== index
+                          ),
+                        });
+                      }}
+                    >
+                      X
+                    </Button>
+                  </div>
+                ))}
+                <div className="space-y-2">
+                  <Input
+                    placeholder="Nombre del comprador"
+                    value={nuevoBuyer.name}
+                    onChange={(e) =>
+                      setNuevoBuyer({ ...nuevoBuyer, name: e.target.value })
+                    }
+                  />
+                  <Input
+                    type="email"
+                    placeholder="Email del comprador"
+                    value={nuevoBuyer.email}
+                    onChange={(e) =>
+                      setNuevoBuyer({ ...nuevoBuyer, email: e.target.value })
+                    }
+                  />
+                  <Input
+                    placeholder="Teléfono del comprador"
+                    value={nuevoBuyer.phone}
+                    onChange={(e) =>
+                      setNuevoBuyer({ ...nuevoBuyer, phone: e.target.value })
+                    }
+                  />
+                  <Button
+                    type="button"
+                    className="w-full text-primary bg-primary/5 border border-primary justify-center items-center"
+                    onClick={() => {
+                      if (
+                        nuevoBuyer.name &&
+                        nuevoBuyer.email &&
+                        nuevoBuyer.phone
+                      ) {
+                        setClienteEditando({
+                          ...clienteEditando,
+                          buyers: [
+                            ...clienteEditando!.buyers!,
+                            { id: Date.now(), ...nuevoBuyer },
+                          ],
+                        });
+                        setNuevoBuyer({ name: "", email: "", phone: "" });
+                      }
+                    }}
+                  >
+                    Agregar Comprador
+                  </Button>
                 </div>
               </div>
               <Button
