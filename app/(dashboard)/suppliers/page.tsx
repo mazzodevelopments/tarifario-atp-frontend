@@ -17,17 +17,39 @@ interface Proveedor {
   id: number;
   nombre: string;
   tipo: "Nacional" | "Internacional" | "Ambos";
+  email: string;
+  phone: string;
 }
 
 export default function Proveedores() {
   const [proveedores, setProveedores] = useState<Proveedor[]>([
-    { id: 1, nombre: "Proveedor A", tipo: "Nacional" },
-    { id: 2, nombre: "Proveedor B", tipo: "Internacional" },
-    { id: 3, nombre: "Proveedor C", tipo: "Ambos" },
+    {
+      id: 1,
+      nombre: "Proveedor A",
+      tipo: "Nacional",
+      email: "proveedora@email.com",
+      phone: "1134567890",
+    },
+    {
+      id: 2,
+      nombre: "Proveedor B",
+      tipo: "Internacional",
+      email: "proveedorb@email.com",
+      phone: "1187654321",
+    },
+    {
+      id: 3,
+      nombre: "Proveedor C",
+      tipo: "Ambos",
+      email: "proveedorc@email.com",
+      phone: "1122334455",
+    },
   ]);
   const [nuevoProveedor, setNuevoProveedor] = useState({
     nombre: "",
     tipo: "Nacional" as "Nacional" | "Internacional" | "Ambos",
+    email: "",
+    phone: "",
   });
   const [proveedorEditando, setProveedorEditando] = useState<Proveedor | null>(
     null
@@ -47,7 +69,7 @@ export default function Proveedores() {
       setEditDialogOpen(false);
     } else {
       setProveedores([...proveedores, { id: Date.now(), ...nuevoProveedor }]);
-      setNuevoProveedor({ nombre: "", tipo: "Nacional" });
+      setNuevoProveedor({ nombre: "", tipo: "Nacional", email: "", phone: "" });
       setDialogOpen(false);
     }
   };
@@ -82,6 +104,36 @@ export default function Proveedores() {
                     setNuevoProveedor({
                       ...nuevoProveedor,
                       nombre: e.target.value,
+                    })
+                  }
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="email">Email</label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={nuevoProveedor.email}
+                  onChange={(e) =>
+                    setNuevoProveedor({
+                      ...nuevoProveedor,
+                      email: e.target.value,
+                    })
+                  }
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="phone">Teléfono</label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  value={nuevoProveedor.phone}
+                  onChange={(e) =>
+                    setNuevoProveedor({
+                      ...nuevoProveedor,
+                      phone: e.target.value,
                     })
                   }
                   required
@@ -127,7 +179,9 @@ export default function Proveedores() {
           >
             <h3 className="font-semibold">{proveedor.nombre}</h3>
             <p className="text-sm text-gray-600">{proveedor.tipo}</p>
-            <div className="flex justify-end w-full gap-2">
+            <p className="text-sm text-gray-600">{proveedor.email}</p>
+            <p className="text-sm text-gray-600">{proveedor.phone}</p>
+            <div className="flex justify-end w-full gap-2 mt-2">
               <Button variant="secondary" onClick={() => handleEdit(proveedor)}>
                 Editar
               </Button>
@@ -154,6 +208,36 @@ export default function Proveedores() {
                     setProveedorEditando({
                       ...proveedorEditando,
                       nombre: e.target.value,
+                    })
+                  }
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="edit-email">Email</label>
+                <Input
+                  id="edit-email"
+                  type="email"
+                  value={proveedorEditando.email}
+                  onChange={(e) =>
+                    setProveedorEditando({
+                      ...proveedorEditando,
+                      email: e.target.value,
+                    })
+                  }
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="edit-phone">Teléfono</label>
+                <Input
+                  id="edit-phone"
+                  type="tel"
+                  value={proveedorEditando.phone}
+                  onChange={(e) =>
+                    setProveedorEditando({
+                      ...proveedorEditando,
+                      phone: e.target.value,
                     })
                   }
                   required
