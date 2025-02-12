@@ -69,6 +69,7 @@ export default function Dashboard() {
     name: string;
     email: string;
     avatar: string;
+    rol: string;
   };
 
   const users: User[] = [
@@ -77,72 +78,84 @@ export default function Dashboard() {
       name: "Alice Johnson",
       email: "alice@example.com",
       avatar: "defaultProfilePic",
+      rol: "Super Admin",
     },
     {
       id: 2,
       name: "Bob Smith",
       email: "bob@example.com",
       avatar: "defaultProfilePic",
+      rol: "Admin",
     },
     {
       id: 3,
       name: "Charlie Brown",
       email: "charlie@example.com",
       avatar: "defaultProfilePic",
+      rol: "User",
     },
     {
       id: 4,
       name: "Diana Ross",
       email: "diana@example.com",
       avatar: "defaultProfilePic",
+      rol: "User",
     },
     {
       id: 5,
       name: "Edward Norton",
       email: "edward@example.com",
       avatar: "defaultProfilePic",
+      rol: "User",
     },
     {
       id: 6,
       name: "Fiona Apple",
       email: "fiona@example.com",
       avatar: "defaultProfilePic",
+      rol: "User",
     },
     {
       id: 7,
       name: "George Clooney",
       email: "george@example.com",
       avatar: "defaultProfilePic",
+      rol: "User",
     },
     {
       id: 8,
       name: "Helen Mirren",
       email: "helen@example.com",
       avatar: "defaultProfilePic",
+      rol: "User",
     },
     {
       id: 9,
       name: "Edward Norton",
       email: "edward@example.com",
       avatar: "defaultProfilePic",
+      rol: "User",
     },
     {
       id: 10,
       name: "Fiona Apple",
       email: "fiona@example.com",
       avatar: "defaultProfilePic",
+      rol: "User",
     },
     {
       id: 11,
       name: "George Clooney",
       email: "george@example.com",
       avatar: "defaultProfilePic",
+      rol: "User",
     },
     {
       id: 12,
       name: "Helen Mirren",
       email: "helen@example.com",
       avatar: "defaultProfilePic",
+      rol: "User",
     },
   ];
 
@@ -269,26 +282,43 @@ export default function Dashboard() {
                 <ScrollArea className="flex-grow border-neutral-100 border-t px-4 h-[31vw]">
                   <div className="space-y-4 mt-2">
                     {users.map((user) => (
-                      <div
-                        key={user.id}
-                        className="flex items-center space-x-4"
-                      >
-                        <Image
-                          src={defaultProfilePic || "/placeholder.svg"}
-                          width={700}
-                          height={700}
-                          alt="Picture of the author"
-                          className="w-8 h-8 rounded-full"
-                        />
-                        <div>
-                          <p className="text-sm font-medium">{user.name}</p>
-                          <p className="text-xs text-gray-500">{user.email}</p>
+                      <div className="w-full flex items-center justify-between">
+                        <div
+                          key={user.id}
+                          className="flex items-center space-x-4"
+                        >
+                          <Image
+                            src={defaultProfilePic || "/placeholder.svg"}
+                            width={700}
+                            height={700}
+                            alt="Picture of the author"
+                            className="w-8 h-8 rounded-full"
+                          />
+                          <div>
+                            <p className="text-sm font-medium">{user.name}</p>
+                            <p className="text-xs text-gray-500">
+                              {user.email}
+                            </p>
+                          </div>
+                        </div>
+                        <div
+                          className={`px-2 rounded-md ${
+                            user.rol === "Super Admin"
+                              ? "bg-red-100 text-red-500  "
+                              : user.rol === "Admin"
+                              ? "bg-blue-100 text-blue-500"
+                              : "bg-neutral-100 text-black"
+                          }`}
+                        >
+                          <span className="text-[14px] font-semibold">
+                            {user.rol}
+                          </span>
                         </div>
                       </div>
                     ))}
                   </div>
                 </ScrollArea>
-                <div className="w-auto flex pr-4 justify-end gap-2 items-end h-auto pt-4 border-t border-neutral-100">
+                <div className="w-auto flex pr-2 justify-end gap-2 items-end h-auto pt-4 border-t border-neutral-100">
                   <NewUserDialog />
                 </div>
               </div>
