@@ -39,6 +39,12 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
     setItems(items.filter((item) => item.numbering !== id));
   };
 
+  const generateItemNumber = () => {
+    return `P${Math.floor(Math.random() * 100)
+      .toString()
+      .padStart(9, "0")}`;
+  };
+
   const handleItemsDocumentUpload = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -56,20 +62,20 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
           }) as (string | number)[][];
 
           const processedItems: Item[] = rawData.slice(2).map((row) => ({
-            numbering: row[0]?.toString() || "",
-            detail: row[1]?.toString() || "",
-            family: row[2]?.toString() || "",
-            subfamily: row[3]?.toString() || "",
-            brand: row[4]?.toString() || "",
-            model: row[5]?.toString() || "",
-            quantity: Number(row[6]) || 0,
-            unit: "unidad",
+            numbering: generateItemNumber(),
+            detail: row[0]?.toString() || "",
+            family: row[1]?.toString() || "",
+            subfamily: row[2]?.toString() || "",
+            brand: row[3]?.toString() || "",
+            model: row[4]?.toString() || "",
+            quantity: Number(row[5]) || 0,
+            unit: row[6]?.toString() || "",
             partNumber: row[7]?.toString() || "",
             productNumber: row[8]?.toString() || "",
           }));
 
           const validItems = processedItems.filter(
-            (item) => item.numbering && item.detail && item.quantity > 0
+            (item) => item.detail && item.quantity > 0
           );
 
           if (validItems.length === 0) {
