@@ -16,13 +16,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown, LogOut, Settings } from "lucide-react";
+import {
+  ChevronDown,
+  LogOut,
+  Settings,
+  DollarSign,
+  ArrowUpRight,
+  ArrowDownRight,
+} from "lucide-react";
 import Link from "next/link";
 import { QuotationSlider } from "./components/QuotationCarousel";
 import CurrentQuotationCard from "./components/CurrentQuotation";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { NewUserDialog } from "./components/NewUserDialog";
 import { QuotationData } from "@/types/QuotationData";
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
 export default function Dashboard() {
   const quotations: QuotationData[] = [
@@ -159,6 +167,15 @@ export default function Dashboard() {
     },
   ];
 
+  const salesData = [
+    { month: "Ene", sales: 4000 },
+    { month: "Feb", sales: 3000 },
+    { month: "Mar", sales: 5000 },
+    { month: "Abr", sales: 4500 },
+    { month: "May", sales: 6000 },
+    { month: "Jun", sales: 5500 },
+  ];
+
   return (
     <div className="flex justify-start w-full h-screen flex-col bg-neutral-50">
       <div className="w-full h-20 flex-shrink-0 border-b border-neutral-200">
@@ -253,23 +270,84 @@ export default function Dashboard() {
           <div className="flex flex-row gap-3 h-[60%]">
             <div className="flex flex-col w-[65%]">
               <div className="flex flex-col p-4 relative bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full">
-                <div className="flex items-center justify-start mb-3">
-                  <div className="w-7 h-7 mr-2 bg-red-700 rounded-full flex justify-center items-center">
-                    <Briefcase size={16} className="text-white" />
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center">
+                    <div className="w-7 h-7 mr-2 bg-red-700 rounded-full flex justify-center items-center">
+                      <Briefcase size={16} className="text-white" />
+                    </div>
+                    <h2 className="text-lg font-[800] text-black">Ventas</h2>
                   </div>
-                  <h2 className="text-lg font-[800] text-black">Ventas</h2>
+                  <Button variant="outline" size="sm" className="text-xs">
+                    Este mes
+                  </Button>
+                </div>
+
+                <div className="grid grid-cols-3 gap-4 mb-6">
+                  <div className="bg-neutral-50 p-3 rounded-lg">
+                    <p className="text-sm text-gray-500 mb-1">Ventas Totales</p>
+                    <div className="flex items-center">
+                      <DollarSign className="text-green-500 mr-1" size={20} />
+                      <span className="text-xl font-bold">120,000</span>
+                    </div>
+                    <div className="flex items-center text-xs text-green-500 mt-1">
+                      <ArrowUpRight size={12} />
+                      <span>8.2% vs mes anterior</span>
+                    </div>
+                  </div>
+                  <div className="bg-neutral-50 p-3 rounded-lg">
+                    <p className="text-sm text-gray-500 mb-1">
+                      Nuevos Clientes
+                    </p>
+                    <div className="flex items-center">
+                      <span className="text-xl font-bold">64</span>
+                    </div>
+                    <div className="flex items-center text-xs text-red-500 mt-1">
+                      <ArrowDownRight size={12} />
+                      <span>3.1% vs mes anterior</span>
+                    </div>
+                  </div>
+                  <div className="bg-neutral-50 p-3 rounded-lg">
+                    <p className="text-sm text-gray-500 mb-1">
+                      Tasa de Conversión
+                    </p>
+                    <div className="flex items-center">
+                      <span className="text-xl font-bold">5.2%</span>
+                    </div>
+                    <div className="flex items-center text-xs text-green-500 mt-1">
+                      <ArrowUpRight size={12} />
+                      <span>1.8% vs mes anterior</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex-grow">
+                  <ResponsiveContainer width="100%" height={200}>
+                    <BarChart data={salesData}>
+                      <XAxis
+                        dataKey="month"
+                        axisLine={false}
+                        tickLine={false}
+                        className="text-1xl"
+                      />
+                      <YAxis axisLine={false} tickLine={false} width={30} />
+                      <Bar
+                        dataKey="sales"
+                        fill="#ef4444"
+                        radius={[4, 4, 0, 0]}
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
                 </div>
 
                 <div className="absolute bottom-4 right-4 w-auto flex justify-end gap-2 items-end h-auto">
                   <Button variant="secondary" className="px-3 py-2 text-sm">
-                    Ver más ventas
+                    Ver informe detallado
                   </Button>
-
                   <Button
                     variant="primary"
                     className="px-3 py-2 bg-neutral-900 text-white text-sm"
                   >
-                    Agregar Venta
+                    Exportar datos
                   </Button>
                 </div>
               </div>
@@ -282,11 +360,11 @@ export default function Dashboard() {
                 <ScrollArea className="flex-grow border-neutral-100 border-t px-4 h-[31vw]">
                   <div className="space-y-4 mt-2">
                     {users.map((user) => (
-                      <div className="w-full flex items-center justify-between">
-                        <div
-                          key={user.id}
-                          className="flex items-center space-x-4"
-                        >
+                      <div
+                        key={user.id}
+                        className="w-full flex items-center justify-between"
+                      >
+                        <div className="flex items-center space-x-4">
                           <Image
                             src={defaultProfilePic || "/placeholder.svg"}
                             width={700}
