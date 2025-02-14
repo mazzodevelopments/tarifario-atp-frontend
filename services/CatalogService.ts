@@ -1,6 +1,7 @@
 import { DropdownItem } from "@/components/Dropdown";
 
 export const CatalogService = {
+  // BRAND
   listBrands: async (): Promise<DropdownItem[]> => {
     return [
       { id: 1, name: "Marca A" },
@@ -12,6 +13,7 @@ export const CatalogService = {
     return { id: Math.floor(Math.random() * 1000000), name };
   },
 
+  // MODEL
   listModels: async (brandId: number): Promise<DropdownItem[]> => {
     console.log(brandId);
     return [
@@ -23,6 +25,8 @@ export const CatalogService = {
   addModel: async (name: string): Promise<DropdownItem> => {
     return { id: Math.floor(Math.random() * 1000000), name };
   },
+
+  // FAMILY
   addFamily: async (name: string): Promise<DropdownItem> => {
     return { id: Math.floor(Math.random() * 1000000), name };
   },
@@ -34,6 +38,7 @@ export const CatalogService = {
     ];
   },
 
+  // SUBFAMILY
   listSubfamilies: async (familyId: number): Promise<DropdownItem[]> => {
     console.log(familyId);
     return [
@@ -45,6 +50,8 @@ export const CatalogService = {
   addSubfamily: async (name: string): Promise<DropdownItem> => {
     return { id: Math.floor(Math.random() * 1000000), name };
   },
+
+  // UNITS
   listUnits: async (): Promise<DropdownItem[]> => {
     return [
       { id: 1, name: "Unit A" },
