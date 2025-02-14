@@ -1,7 +1,8 @@
 import { useState } from "react";
 import Button from "@/components/Button";
 import Dropdown from "@/components/Dropdown";
-import { SalesDataService } from "@/services/SalesDataService";
+import { CatalogService } from "@/services/CatalogService";
+import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 
 interface AddPaymentConditionProps {
   onPaymentConditionCreated: (paymentCondition: string) => void;
@@ -21,13 +22,18 @@ export default function AddPaymentCondition({
     }
   };
 
+  const fetchPaymentConditions = async () => {
+    const paymentConditions = await CatalogService.listPaymentConditions();
+    return adaptToDropdown(paymentConditions, "id", "name");
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-4">
         <Dropdown
           label="Condición de Pago"
-          fetchItems={SalesDataService.fetchPaymentConditions}
-          addItem={SalesDataService.addPaymentCondition}
+          fetchItems={fetchPaymentConditions}
+          addItem={CatalogService.addPaymentCondition}
           onSelect={(item) => setSelectedPaymentCondition(item.name)}
           required
         />
