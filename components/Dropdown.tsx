@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 
 export interface DropdownItem {
-  id: string;
+  id: number;
   name: string;
 }
 
@@ -68,8 +68,8 @@ export default function Dropdown({
   useEffect(() => {
     setFilteredItems(
       items.filter((item) =>
-        item.name.toLowerCase().includes(inputValue.toLowerCase())
-      )
+        item.name.toLowerCase().includes(inputValue.toLowerCase()),
+      ),
     );
   }, [items, inputValue]);
 
