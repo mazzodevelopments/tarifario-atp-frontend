@@ -277,9 +277,7 @@ export default function Dashboard() {
                     </div>
                     <h2 className="text-lg font-[800] text-black">Ventas</h2>
                   </div>
-                  <Button variant="outline" size="sm" className="text-xs">
-                    Este mes
-                  </Button>
+                  <span className="text-xs">Este mes</span>
                 </div>
 
                 <div className="grid grid-cols-3 gap-4 mb-6">
@@ -321,15 +319,15 @@ export default function Dashboard() {
                 </div>
 
                 <div className="flex-grow">
-                  <ResponsiveContainer width="100%" height={200}>
+                  <ResponsiveContainer width="100%" height="80%">
                     <BarChart data={salesData}>
                       <XAxis
                         dataKey="month"
                         axisLine={false}
                         tickLine={false}
-                        className="text-1xl"
+                        className="font-[600]"
                       />
-                      <YAxis axisLine={false} tickLine={false} width={30} />
+                      <YAxis axisLine={false} tickLine={false} width={40} />
                       <Bar
                         dataKey="sales"
                         fill="#ef4444"
@@ -388,7 +386,7 @@ export default function Dashboard() {
                               : "bg-neutral-100 text-black"
                           }`}
                         >
-                          <span className="text-[14px] font-semibold">
+                          <span className="text-[0.65vw] font-semibold">
                             {user.rol}
                           </span>
                         </div>
