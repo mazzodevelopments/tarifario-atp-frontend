@@ -33,10 +33,10 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newItem = {
-      ...formData, // Primero se propagan los datos del formulario
+      ...formData,
       numbering: `P${Math.floor(Math.random() * 100)
         .toString()
-        .padStart(9, "0")}`, // Luego se sobreescribe numbering
+        .padStart(9, "0")}`,
     };
     onItemCreated({ ...newItem, id: 1 });
   };
@@ -57,12 +57,12 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
 
     if (field === "brand") {
       setSelectedBrandId(item.id); // Guardar el ID de la marca seleccionada
-      setFormData((prev) => ({ ...prev, model: "" })); // Reiniciar el modelo
+      setFormData((prev) => ({ ...prev, model: "" }));
     }
 
     if (field === "family") {
       setSelectedFamilyId(item.id); // Guardar el ID de la familia seleccionada
-      setFormData((prev) => ({ ...prev, subfamily: "" })); // Reiniciar la subfamilia
+      setFormData((prev) => ({ ...prev, subfamily: "" }));
     }
   };
 
@@ -111,7 +111,7 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
           onSelect={handleSelect("subfamily")}
           label="Subfamilia"
           required
-          disabled={!selectedFamilyId} // Deshabilitar hasta que se elija una familia
+          disabled={!selectedFamilyId}
         />
       </div>
       <Input
@@ -139,7 +139,7 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
         onSelect={handleSelect("model")}
         label="Modelo"
         required
-        disabled={!selectedBrandId} // Deshabilitar hasta que se elija una marca
+        disabled={!selectedBrandId}
       />
       <div className="grid grid-cols-2 gap-4">
         <Input
