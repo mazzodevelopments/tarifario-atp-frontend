@@ -5,7 +5,8 @@ import Input from "@/components/Input";
 import Dropdown, { type DropdownItem } from "@/components/Dropdown";
 import type { Item } from "@/types/Item";
 import type { PurchaseData } from "@/types/PurchaseData";
-import { PurchaseDataService } from "@/services/PurchaseDataService";
+import { CatalogService } from "@/services/CatalogService";
+import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 
 interface CreatePurchaseProps {
   onPurchaseCreated: (purchaseData: PurchaseData) => void;
@@ -81,7 +82,7 @@ export default function CreatePurchase({
 
   const handleSelect = (field: keyof PurchaseData) => (item: DropdownItem) => {
     if (field === "item") {
-      const selectedItem = items.find((i) => i.numbering === item.id);
+      const selectedItem = items.find((i) => i.id === item.id);
       setFormData((prev) => ({
         ...prev,
         [field]: selectedItem || null,
@@ -89,6 +90,35 @@ export default function CreatePurchase({
     } else {
       setFormData((prev) => ({ ...prev, [field]: item.name }));
     }
+  };
+
+  const fetchSuppliers = async () => {
+    const suppliers = await CatalogService.listSuppliers();
+    return adaptToDropdown(suppliers, "id", "name");
+  };
+
+  const fetchCurrencies = async () => {
+    const currencies = await CatalogService.listCurrencies();
+    return adaptToDropdown(currencies, "id", "name");
+  };
+
+  const fetchWeightUnits = async () => {
+    const weightUnits = await CatalogService.listWeightUnits();
+    return adaptToDropdown(weightUnits, "id", "name");
+  };
+
+  const fetchLocations = async () => {
+    const locations = await CatalogService.listLocations();
+    return adaptToDropdown(locations, "id", "name");
+  };
+
+  const fetchIncoterms = async () => {
+    const incoterms = await CatalogService.listIncoterms();
+    return adaptToDropdown(incoterms, "id", "name");
+  };
+
+  const fetchItems = async () => {
+    return adaptToDropdown(items, "id", "detail");
   };
 
   return (
@@ -103,7 +133,7 @@ export default function CreatePurchase({
       />
       <Dropdown
         value={formData.item?.detail}
-        fetchItems={() => PurchaseDataService.fetchItems(items)}
+        fetchItems={fetchItems}
         onSelect={handleSelect("item")}
         label="Item"
         required
@@ -111,14 +141,14 @@ export default function CreatePurchase({
       <div className="grid grid-cols-3 gap-4">
         <Dropdown
           value={formData.origin}
-          fetchItems={PurchaseDataService.fetchLocations}
+          fetchItems={fetchLocations}
           onSelect={handleSelect("origin")}
           label="Origen"
           required
         />
         <Dropdown
           value={formData.destination}
-          fetchItems={PurchaseDataService.fetchLocations}
+          fetchItems={fetchLocations}
           onSelect={handleSelect("destination")}
           label="L. Entrega"
           required
@@ -135,8 +165,8 @@ export default function CreatePurchase({
       </div>
       <Dropdown
         value={formData.supplier}
-        addItem={PurchaseDataService.addSupplier}
-        fetchItems={PurchaseDataService.fetchSuppliers}
+        addItem={CatalogService.addSupplier}
+        fetchItems={fetchSuppliers}
         onSelect={handleSelect("supplier")}
         label="Proovedor"
         required
@@ -144,7 +174,7 @@ export default function CreatePurchase({
       <div className="grid grid-cols-2 gap-4">
         <Dropdown
           value={formData.currency}
-          fetchItems={PurchaseDataService.fetchCurrencies}
+          fetchItems={fetchCurrencies}
           onSelect={handleSelect("currency")}
           label="Moneda"
           required
@@ -195,7 +225,7 @@ export default function CreatePurchase({
         />
         <Dropdown
           value={formData.unit}
-          fetchItems={PurchaseDataService.fetchUnits}
+          fetchItems={fetchWeightUnits}
           onSelect={handleSelect("unit")}
           label="Unidad"
           required
@@ -211,7 +241,7 @@ export default function CreatePurchase({
       </div>
       <Dropdown
         value={formData.incoterm}
-        fetchItems={PurchaseDataService.fetchIncoterms}
+        fetchItems={fetchIncoterms}
         onSelect={handleSelect("incoterm")}
         label="Incoterm"
         required

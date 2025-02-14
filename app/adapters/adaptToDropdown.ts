@@ -3,13 +3,13 @@ type Option = {
   name: string;
 };
 
-export const adaptToDropdown = <T>(
+export const adaptToDropdown = <T, K extends keyof T, N extends keyof T>(
   data: T[],
-  idKey: keyof T,
-  nameKey: keyof T,
+  idKey: K & (T[K] extends number ? K : never),
+  nameKey: N,
 ): Option[] => {
   return data.map((item) => ({
-    id: Number(item[idKey]), // Convertimos a string por si viene como número
+    id: item[idKey] as number,
     name: String(item[nameKey]),
   }));
 };

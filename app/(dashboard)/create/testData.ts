@@ -3,6 +3,7 @@ import { Budget } from "@/types/Budget";
 
 export const TEST_ITEMS: Item[] = [
   {
+    id: 1,
     family: "Motores",
     subfamily: "Eléctricos",
     detail: "Motor eléctrico",
@@ -15,6 +16,7 @@ export const TEST_ITEMS: Item[] = [
     productNumber: "CL-0001",
   },
   {
+    id: 2,
     family: "Hidráulicos",
     subfamily: "Bombas",
     detail: "Bomba hidráulica",
@@ -27,6 +29,7 @@ export const TEST_ITEMS: Item[] = [
     productNumber: "CL-0002",
   },
   {
+    id: 3,
     family: "Cables",
     subfamily: "Eléctricos",
     detail: "Cable eléctrico de cobre",
