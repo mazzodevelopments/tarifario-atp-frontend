@@ -282,38 +282,46 @@ export default function Dashboard() {
 
                 <div className="grid grid-cols-3 gap-4 mb-6">
                   <div className="bg-neutral-50 p-3 rounded-lg">
-                    <p className="text-sm text-gray-500 mb-1">Ventas Totales</p>
+                    <p className="text-[0.65vw] text-gray-500 mb-1">
+                      Ventas Totales
+                    </p>
                     <div className="flex items-center">
-                      <DollarSign className="text-green-500 mr-1" size={20} />
-                      <span className="text-xl font-bold">120,000</span>
+                      <DollarSign className="text-green-500" size={20} />
+                      <span className="text-[1.75vw] font-bold">120,000</span>
                     </div>
                     <div className="flex items-center text-xs text-green-500 mt-1">
                       <ArrowUpRight size={12} />
-                      <span>8.2% vs mes anterior</span>
+                      <span className="text-[0.65vw]">
+                        8.2% vs mes anterior
+                      </span>
                     </div>
                   </div>
                   <div className="bg-neutral-50 p-3 rounded-lg">
-                    <p className="text-sm text-gray-500 mb-1">
+                    <p className="text-[0.65vw] text-gray-500 mb-1">
                       Nuevos Clientes
                     </p>
                     <div className="flex items-center">
-                      <span className="text-xl font-bold">64</span>
+                      <span className="text-[1.75vw] font-bold">64</span>
                     </div>
                     <div className="flex items-center text-xs text-red-500 mt-1">
                       <ArrowDownRight size={12} />
-                      <span>3.1% vs mes anterior</span>
+                      <span className="text-[0.65vw]">
+                        3.1% vs mes anterior
+                      </span>
                     </div>
                   </div>
                   <div className="bg-neutral-50 p-3 rounded-lg">
-                    <p className="text-sm text-gray-500 mb-1">
+                    <p className="text-[0.65vw] text-gray-500 mb-1">
                       Tasa de Conversión
                     </p>
                     <div className="flex items-center">
-                      <span className="text-xl font-bold">5.2%</span>
+                      <span className="text-[1.75vw] font-bold">5.2%</span>
                     </div>
                     <div className="flex items-center text-xs text-green-500 mt-1">
                       <ArrowUpRight size={12} />
-                      <span>1.8% vs mes anterior</span>
+                      <span className="text-[0.65vw]">
+                        1.8% vs mes anterior
+                      </span>
                     </div>
                   </div>
                 </div>
