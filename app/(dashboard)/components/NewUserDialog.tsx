@@ -14,7 +14,6 @@ import { Toaster } from "@/components/ui/toaster";
 export function NewUserDialog() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
 
@@ -80,7 +79,6 @@ export function NewUserDialog() {
                 id="email"
                 type="password"
                 value={email}
-                onChange={(e) => setPassword(e.target.value)}
                 className="col-span-3"
               />
             </div>
