@@ -22,7 +22,8 @@ export const CatalogService = {
       { id: 3, name: "Buyer 3" },
     ];
   },
-  addBuyer: async (name: string) => {
+  addBuyer: async (name: string, clientId: number) => {
+    console.log(clientId);
     return { id: Math.floor(Math.random() * 1000000), name };
   },
 
@@ -47,7 +48,8 @@ export const CatalogService = {
       { id: 3, name: "Modelo C" },
     ];
   },
-  addModel: async (name: string) => {
+  addModel: async (name: string, brandId: number) => {
+    console.log(brandId);
     return { id: Math.floor(Math.random() * 1000000), name };
   },
 
@@ -72,7 +74,8 @@ export const CatalogService = {
       { id: 3, name: "Subfamilia C" },
     ];
   },
-  addSubfamily: async (name: string) => {
+  addSubfamily: async (name: string, familyId: number) => {
+    console.log(familyId);
     return { id: Math.floor(Math.random() * 1000000), name };
   },
 
