@@ -1,6 +1,31 @@
 import { DropdownItem } from "@/components/Dropdown";
 
 export const CatalogService = {
+  // CLIENT
+  listClients: async () => {
+    return [
+      { id: 1, name: "Client 1" },
+      { id: 2, name: "Client 2" },
+      { id: 3, name: "Client 3" },
+    ];
+  },
+  addClient: async (name: string) => {
+    return { id: Math.floor(Math.random() * 1000000), name };
+  },
+
+  // BUYER
+  listBuyers: async (clientId: number) => {
+    console.log(clientId);
+    return [
+      { id: 1, name: "Buyer 1" },
+      { id: 2, name: "Buyer 2" },
+      { id: 3, name: "Buyer 3" },
+    ];
+  },
+  addBuyer: async (name: string) => {
+    return { id: Math.floor(Math.random() * 1000000), name };
+  },
+
   // BRAND
   listBrands: async () => {
     return [
