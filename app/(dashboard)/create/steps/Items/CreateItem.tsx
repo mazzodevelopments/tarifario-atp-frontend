@@ -14,7 +14,8 @@ interface CreateItemProps {
 }
 
 export default function CreateItem({ onItemCreated }: CreateItemProps) {
-  const [formData, setFormData] = useState<Omit<Item, "numbering">>({
+  const [formData, setFormData] = useState<Omit<Item, "id">>({
+    numbering: "",
     family: "",
     subfamily: "",
     detail: "",
@@ -31,13 +32,13 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const newItem: Item = {
+    const newItem = {
+      ...formData, // Primero se propagan los datos del formulario
       numbering: `P${Math.floor(Math.random() * 100)
         .toString()
-        .padStart(9, "0")}`,
-      ...formData,
+        .padStart(9, "0")}`, // Luego se sobreescribe numbering
     };
-    onItemCreated(newItem);
+    onItemCreated({ ...newItem, id: 1 });
   };
 
   const handleChange = (
