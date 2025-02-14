@@ -12,6 +12,7 @@ export const quotations: QuotationData[] = [
     customerRequestNumber: "REQ-2025-001",
     items: [
       {
+        id: 1,
         family: "Motores",
         subfamily: "Eléctricos",
         detail: "Motor eléctrico",
@@ -24,6 +25,7 @@ export const quotations: QuotationData[] = [
         productNumber: "CL-0001",
       },
       {
+        id: 2,
         family: "Hidráulicos",
         subfamily: "Bombas",
         detail: "Bomba hidráulica",
@@ -36,6 +38,7 @@ export const quotations: QuotationData[] = [
         productNumber: "CL-0002",
       },
       {
+        id: 3,
         family: "Cables",
         subfamily: "Eléctricos",
         detail: "Cable eléctrico de cobre",
@@ -54,6 +57,7 @@ export const quotations: QuotationData[] = [
         purchaseData: {
           date: "2025-02-21",
           item: {
+            id: 1,
             family: "Motores",
             subfamily: "Eléctricos",
             detail: "Motor eléctrico",
@@ -142,6 +146,7 @@ export const quotations: QuotationData[] = [
     customerRequestNumber: "REQ-2025-002",
     items: [
       {
+        id: 1,
         family: "Motores",
         subfamily: "Eléctricos",
         detail: "Motor eléctrico",
@@ -154,6 +159,7 @@ export const quotations: QuotationData[] = [
         productNumber: "CL-0001",
       },
       {
+        id: 2,
         family: "Hidráulicos",
         subfamily: "Bombas",
         detail: "Bomba hidráulica",
@@ -166,6 +172,7 @@ export const quotations: QuotationData[] = [
         productNumber: "CL-0002",
       },
       {
+        id: 3,
         family: "Cables",
         subfamily: "Eléctricos",
         detail: "Cable eléctrico de cobre",
@@ -184,6 +191,7 @@ export const quotations: QuotationData[] = [
         purchaseData: {
           date: "2025-02-21",
           item: {
+            id: 1,
             family: "Motores",
             subfamily: "Eléctricos",
             detail: "Motor eléctrico",
@@ -272,6 +280,7 @@ export const quotations: QuotationData[] = [
     customerRequestNumber: "REQ-2025-003",
     items: [
       {
+        id: 1,
         family: "Motores",
         subfamily: "Eléctricos",
         detail: "Motor eléctrico",
@@ -284,6 +293,7 @@ export const quotations: QuotationData[] = [
         productNumber: "CL-0001",
       },
       {
+        id: 2,
         family: "Hidráulicos",
         subfamily: "Bombas",
         detail: "Bomba hidráulica",
@@ -296,6 +306,7 @@ export const quotations: QuotationData[] = [
         productNumber: "CL-0002",
       },
       {
+        id: 3,
         family: "Cables",
         subfamily: "Eléctricos",
         detail: "Cable eléctrico de cobre",
@@ -314,6 +325,7 @@ export const quotations: QuotationData[] = [
         purchaseData: {
           date: "2025-02-21",
           item: {
+            id: 1,
             family: "Motores",
             subfamily: "Eléctricos",
             detail: "Motor eléctrico",
@@ -402,6 +414,7 @@ export const quotations: QuotationData[] = [
     customerRequestNumber: "REQ-2025-004",
     items: [
       {
+        id: 1,
         family: "Motores",
         subfamily: "Eléctricos",
         detail: "Motor eléctrico",
@@ -414,6 +427,7 @@ export const quotations: QuotationData[] = [
         productNumber: "CL-0001",
       },
       {
+        id: 2,
         family: "Hidráulicos",
         subfamily: "Bombas",
         detail: "Bomba hidráulica",
@@ -426,6 +440,7 @@ export const quotations: QuotationData[] = [
         productNumber: "CL-0002",
       },
       {
+        id: 3,
         family: "Cables",
         subfamily: "Eléctricos",
         detail: "Cable eléctrico de cobre",
@@ -444,6 +459,7 @@ export const quotations: QuotationData[] = [
         purchaseData: {
           date: "2025-02-21",
           item: {
+            id: 1,
             family: "Motores",
             subfamily: "Eléctricos",
             detail: "Motor eléctrico",
@@ -532,6 +548,7 @@ export const quotations: QuotationData[] = [
     customerRequestNumber: "REQ-2025-005",
     items: [
       {
+        id: 1,
         family: "Motores",
         subfamily: "Eléctricos",
         detail: "Motor eléctrico",
@@ -544,6 +561,7 @@ export const quotations: QuotationData[] = [
         productNumber: "CL-0001",
       },
       {
+        id: 2,
         family: "Hidráulicos",
         subfamily: "Bombas",
         detail: "Bomba hidráulica",
@@ -556,6 +574,7 @@ export const quotations: QuotationData[] = [
         productNumber: "CL-0002",
       },
       {
+        id: 3,
         family: "Cables",
         subfamily: "Eléctricos",
         detail: "Cable eléctrico de cobre",
@@ -574,6 +593,7 @@ export const quotations: QuotationData[] = [
         purchaseData: {
           date: "2025-02-21",
           item: {
+            id: 1,
             family: "Motores",
             subfamily: "Eléctricos",
             detail: "Motor eléctrico",
