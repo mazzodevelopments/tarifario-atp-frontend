@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react"; // Importa useCallback
 import Dropdown, { type DropdownItem } from "@/components/Dropdown";
 import Input from "@/components/Input";
 import { QuotationData } from "@/types/QuotationData";
@@ -66,16 +66,16 @@ export default function QuotationDetails({
       }
     };
 
-  const fetchClients = async () => {
+  const fetchClients = useCallback(async () => {
     const clients = await CatalogService.listClients();
     return adaptToDropdown(clients, "id", "name");
-  };
+  }, []);
 
-  const fetchBuyers = async () => {
+  const fetchBuyers = useCallback(async () => {
     if (!selectedClientId) return [];
     const buyers = await CatalogService.listBuyers(selectedClientId);
     return adaptToDropdown(buyers, "id", "name");
-  };
+  }, [selectedClientId]);
 
   return (
     <div className="w-full max-w-2xl space-y-4">
@@ -100,7 +100,9 @@ export default function QuotationDetails({
         />
         <Dropdown
           fetchItems={fetchBuyers}
-          addItem={CatalogService.addBuyer}
+          addItem={(name: string) =>
+            CatalogService.addBuyer(name, selectedClientId!)
+          }
           onSelect={handleDropdownSelect("buyer")}
           value={formData.buyer}
           label="Comprador"

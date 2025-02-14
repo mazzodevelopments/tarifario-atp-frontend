@@ -1,6 +1,4 @@
-"use client";
-
-import { useState } from "react";
+import { useState, useCallback } from "react"; // Importa useCallback
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import Dropdown, { DropdownItem } from "@/components/Dropdown";
@@ -56,42 +54,42 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
     setFormData((prev) => ({ ...prev, [field]: item.name }));
 
     if (field === "brand") {
-      setSelectedBrandId(item.id); // Guardar el ID de la marca seleccionada
+      setSelectedBrandId(item.id);
       setFormData((prev) => ({ ...prev, model: "" }));
     }
 
     if (field === "family") {
-      setSelectedFamilyId(item.id); // Guardar el ID de la familia seleccionada
+      setSelectedFamilyId(item.id);
       setFormData((prev) => ({ ...prev, subfamily: "" }));
     }
   };
 
-  const fetchFamilies = async () => {
+  const fetchFamilies = useCallback(async () => {
     const families = await CatalogService.listFamilies();
     return adaptToDropdown(families, "id", "name");
-  };
+  }, []);
 
-  const fetchSubfamilies = async () => {
+  const fetchSubfamilies = useCallback(async () => {
     if (!selectedFamilyId) return [];
     const subfamilies = await CatalogService.listSubfamilies(selectedFamilyId);
     return adaptToDropdown(subfamilies, "id", "name");
-  };
+  }, [selectedFamilyId]);
 
-  const fetchBrands = async () => {
+  const fetchBrands = useCallback(async () => {
     const brands = await CatalogService.listBrands();
     return adaptToDropdown(brands, "id", "name");
-  };
+  }, []);
 
-  const fetchModels = async () => {
+  const fetchModels = useCallback(async () => {
     if (!selectedBrandId) return [];
     const models = await CatalogService.listModels(selectedBrandId);
     return adaptToDropdown(models, "id", "name");
-  };
+  }, [selectedBrandId]);
 
-  const fetchUnits = async () => {
+  const fetchUnits = useCallback(async () => {
     const units = await CatalogService.listUnits();
     return adaptToDropdown(units, "id", "name");
-  };
+  }, []);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -107,7 +105,9 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
         <Dropdown
           value={formData.subfamily}
           fetchItems={fetchSubfamilies}
-          addItem={CatalogService.addSubfamily}
+          addItem={(name: string) =>
+            CatalogService.addSubfamily(name, selectedFamilyId!)
+          }
           onSelect={handleSelect("subfamily")}
           label="Subfamilia"
           required
@@ -135,7 +135,9 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
       <Dropdown
         value={formData.model}
         fetchItems={fetchModels}
-        addItem={CatalogService.addModel}
+        addItem={(name: string) =>
+          CatalogService.addModel(name, selectedBrandId!)
+        }
         onSelect={handleSelect("model")}
         label="Modelo"
         required
