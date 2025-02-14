@@ -37,29 +37,11 @@ export const PAYMENT_CONDITIONS = [
   { id: "25", name: "Echeck 60 días" },
 ];
 
-export const CURRENCIES = [
-  { id: "1", name: "USD" },
-  { id: "2", name: "EUR" },
-  { id: "3", name: "MXN" },
-  { id: "4", name: "GBP" },
-  { id: "5", name: "JPY" },
-  { id: "6", name: "CAD" },
-  { id: "7", name: "AUD" },
-  { id: "8", name: "CHF" },
-  { id: "9", name: "CNY" },
-  { id: "10", name: "BRL" },
-];
-
 export const UNITS = [
   { id: "1", name: "Metro" },
   { id: "2", name: "Kilogramo" },
   { id: "3", name: "Litro" },
   { id: "4", name: "Pieza" },
-];
-
-export const WEIGHT_UNITS = [
-  { id: "1", name: "Kgrs." },
-  { id: "2", name: "Lbs." },
 ];
 
 export const VÍAS = [

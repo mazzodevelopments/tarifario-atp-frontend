@@ -39,6 +39,10 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
     setItems(items.filter((item) => item.numbering !== id));
   };
 
+  const generateItemId = () => {
+    return Math.floor(Math.random() * 100);
+  };
+
   const generateItemNumber = () => {
     return `P${Math.floor(Math.random() * 100)
       .toString()
@@ -46,7 +50,7 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
   };
 
   const handleItemsDocumentUpload = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -62,6 +66,7 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
           }) as (string | number)[][];
 
           const processedItems: Item[] = rawData.slice(2).map((row) => ({
+            id: generateItemId(),
             numbering: generateItemNumber(),
             detail: row[0]?.toString() || "",
             family: row[1]?.toString() || "",
@@ -75,12 +80,12 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
           }));
 
           const validItems = processedItems.filter(
-            (item) => item.detail && item.quantity > 0
+            (item) => item.detail && item.quantity > 0,
           );
 
           if (validItems.length === 0) {
             console.error(
-              "No se encontraron items válidos en el archivo Excel"
+              "No se encontraron items válidos en el archivo Excel",
             );
             return;
           }

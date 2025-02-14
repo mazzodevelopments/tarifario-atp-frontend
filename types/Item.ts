@@ -1,4 +1,5 @@
 export interface Item {
+  id: number;
   numbering: string;
   family: string;
   subfamily: string;
