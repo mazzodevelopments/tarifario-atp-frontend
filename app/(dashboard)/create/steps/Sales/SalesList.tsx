@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import Button from "@/components/Button";
 import { PlusCircle } from "lucide-react";
@@ -23,21 +23,32 @@ import AddPaymentCondition from "./AddPaymentCondition";
 import "@/app/utils/formatNumber";
 import { QuoteService } from "@/services/QuoteService";
 
-interface SalesListProps {
-  budgets: Budget[];
-  setBudgets: (budgets: Budget[]) => void;
-  quotationId: number;
-}
-
-export default function SalesList({
-  budgets,
-  setBudgets,
-  quotationId,
-}: SalesListProps) {
+export default function SalesList({ quotationId }: { quotationId: number }) {
+  const [budgets, setBudgets] = useState<Budget[]>([]);
+  const [shouldFetch, setShouldFetch] = useState(true);
   const [showSalesDataModal, setShowSalesDataModal] = useState(false);
   const [showPaymentConditionModal, setShowPaymentConditionModal] =
     useState(false);
   const [selectedBudgetId, setSelectedBudgetId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!shouldFetch) return;
+
+    const fetchQuotationBudgets = async () => {
+      try {
+        const quotationBudgets = await QuoteService.getQuotationBudgets(
+          quotationId,
+          "purchaseData",
+        );
+        setBudgets(quotationBudgets);
+        setShouldFetch(false);
+      } catch (error) {
+        console.error("Error fetching quotation budgets:", error);
+      }
+    };
+
+    fetchQuotationBudgets();
+  }, [shouldFetch]);
 
   const handleSalesDataCreated = async (salesData: SalesData) => {
     try {
@@ -59,6 +70,7 @@ export default function SalesList({
           ),
         );
         setShowSalesDataModal(false);
+        setShouldFetch(true);
       }
     } catch (error) {
       console.log(error);
@@ -90,6 +102,7 @@ export default function SalesList({
           }),
         );
         setShowPaymentConditionModal(false);
+        setShouldFetch(true);
       }
     } catch (error) {
       console.log(error);
