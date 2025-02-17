@@ -37,10 +37,9 @@ export default function Create() {
   const [quotationData, setQuotationData] = useState<QuotationData | null>(
     null,
   );
-  const [items, setItems] = useState<Item[]>([]);
-  const [budgets, setBudgets] = useState<Budget[]>([]);
-  const [selectedBudgets, setSelectedBudgets] = useState<Budget[]>([]);
   const [quotationId, setQuotationId] = useState<number | null>();
+  const [items, setItems] = useState<Item[]>([]);
+  const [selectedBudgets, setSelectedBudgets] = useState<Budget[]>([]);
 
   const handleNext = async () => {
     if (currentStep === 0 && quotationData) {
@@ -92,10 +91,7 @@ export default function Create() {
     await new Promise((resolve) => setTimeout(resolve, 2000));
     if (quotationData) {
       try {
-        await QuoteService.saveQuotation({
-          ...quotationData,
-          budgets,
-        });
+        await QuoteService.saveQuotation(quotationData);
       } catch (error) {
         console.error("Error submitting quotation:", error);
       }
@@ -119,9 +115,9 @@ export default function Create() {
     if (currentStep === 1 && items) {
       return items.length === 0;
     }
-    if (currentStep === 5) {
-      return budgets.length === 0;
-    }
+
+    // HABILITACION DE STEPS
+    // TODO
     return false;
   };
 
@@ -151,30 +147,19 @@ export default function Create() {
           items && <PurchaseList quotationId={quotationId!} items={items} />
         );
       case 3:
-        return items && <LogisticList quotationId={quotationId!} />;
+        return <LogisticList quotationId={quotationId!} />;
       case 4:
-        return (
-          <SalesList
-            quotationId={quotationId!}
-            budgets={budgets}
-            setBudgets={setBudgets}
-          />
-        );
+        return <SalesList quotationId={quotationId!} />;
       case 5:
         return (
           <SelectableBudgetsList
-            budgets={budgets}
+            quotationId={quotationId!}
             selectedBudgets={selectedBudgets}
             setSelectedBudgets={setSelectedBudgets}
           />
         );
       case 6:
-        return (
-          <SelectedBudgetsList
-            quotationId={quotationId!}
-            selectedBudgets={selectedBudgets}
-          />
-        );
+        return <SelectedBudgetsList quotationId={quotationId!} />;
       default:
         return <p>Contenido de la etapa {currentStep + 1}</p>;
     }

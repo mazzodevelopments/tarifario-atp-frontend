@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -13,15 +13,30 @@ import { Mail, Printer } from "lucide-react";
 import "@/app/utils/formatNumber";
 import { QuoteService } from "@/services/QuoteService";
 
-interface SelectedBudgetsListProps {
-  selectedBudgets: Budget[];
-  quotationId: number;
-}
-
 export default function SelectedBudgetsList({
-  selectedBudgets,
   quotationId,
-}: SelectedBudgetsListProps) {
+}: {
+  quotationId: number;
+}) {
+  const [selectedBudgets, setSelectedBudgets] = useState<Budget[]>([]);
+  const [shouldFetch, setShouldFetch] = useState(true);
+
+  useEffect(() => {
+    if (!shouldFetch) return;
+
+    const fetchQuotationSelectedBudgets = async () => {
+      try {
+        const selectedQuotationBudgets =
+          await QuoteService.getSelectedBudgets(quotationId);
+        setSelectedBudgets(selectedQuotationBudgets);
+        setShouldFetch(false);
+      } catch (error) {
+        console.error("Error fetching quotation budgets:", error);
+      }
+    };
+
+    fetchQuotationSelectedBudgets();
+  }, [shouldFetch]);
   const handlePrint = () => {
     QuoteService.printQuotation(quotationId);
     console.log("Imprimir cotización:", selectedBudgets);

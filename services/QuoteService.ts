@@ -84,6 +84,13 @@ export const QuoteService = {
   },
 
   // ETAPA 6
+  getSelectedBudgets: async (quotationId: number) => {
+    console.log(
+      "LLAMADO A LA API PARA OBTENER TODOS LOS BUDGETS SELECCIONADOS",
+      quotationId,
+    );
+    return TEST_BUDGETS.slice(0, 2);
+  },
   selectBudgets: async (budgetIds: string[], quotationId: number) => {
     // IDS DEBEN SER NUMBERS
     console.log(
