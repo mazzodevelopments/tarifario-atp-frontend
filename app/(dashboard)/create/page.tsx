@@ -177,13 +177,7 @@ export default function Create() {
       case 3:
         return (
           quotationData?.items && (
-            <LogisticList
-              budgets={budgets}
-              setBudgets={setBudgets}
-              items={quotationData.items}
-              freights={freights}
-              setFreights={setFreights}
-            />
+            <LogisticList budgets={budgets} setBudgets={setBudgets} />
           )
         );
       case 4:
