@@ -26,28 +26,30 @@ import type { Custom } from "@/types/Custom";
 import type { DestinationExpenses } from "@/types/DestinationExpenses";
 import type { Freight } from "@/types/Freight";
 import "@/app/utils/formatNumber";
+import { QuoteService } from "@/services/QuoteService";
 
-interface BudgetListProps {
-  budgets: Budget[];
-  setBudgets: (budgets: Budget[]) => void;
-}
-
-export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
+export default function LogisticList({ quotationId }: { quotationId: number }) {
+  // BUDGETS
+  const [budgets, setBudgets] = useState<Budget[]>([]);
+  const [shouldFetch, setShouldFetch] = useState(true);
   const [freights, setFreights] = useState<Freight[]>([]);
   const [activeTab, setActiveTab] = useState<"logistics" | "freights">(
     "logistics",
   );
+  // SELECTED FREIGHTS
   const [selectedFreightId, setSelectedFreightId] = useState<string | null>(
     null,
   );
   const [selectedFreights, setSelectedFreights] = useState<
     Record<string, string>
   >({});
+  // MODALS
   const [showOriginExpensesModal, setShowOriginExpensesModal] = useState(false);
   const [showTransportModal, setShowTransportModal] = useState(false);
   const [showCustomModal, setShowCustomModal] = useState(false);
   const [showDestinationExpensesModal, setShowDestinationExpensesModal] =
     useState(false);
+  // EDITING
   const [editingOriginExpenses, setEditingOriginExpenses] =
     useState<OriginExpenses | null>(null);
   const [editingCustom, setEditingCustom] = useState<Custom | null>(null);
@@ -57,7 +59,26 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
   const [editingDestinationExpenses, setEditingDestinationExpenses] =
     useState<DestinationExpenses | null>(null);
 
-  // Initialize selectedFreights from existing budget assignments
+  useEffect(() => {
+    if (!shouldFetch) return;
+
+    const fetchQuotationBudgets = async () => {
+      try {
+        const quotationBudgets = await QuoteService.getQuotationBudgets(
+          quotationId,
+          "logistic",
+        );
+        setBudgets(quotationBudgets);
+        setShouldFetch(false);
+      } catch (error) {
+        console.error("Error fetching quotation budgets:", error);
+      }
+    };
+
+    fetchQuotationBudgets();
+  }, [shouldFetch]);
+
+  // INICIALIZAR SELECTEDFREIGHTS DE UN BUDGET EXISTENTE
   useEffect(() => {
     const initialSelections: Record<string, string> = {};
     budgets.forEach((budget) => {
@@ -66,7 +87,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
       }
     });
     setSelectedFreights(initialSelections);
-  }, []); // Only run once on component mount
+  }, []);
 
   const handleFreightUpdate = <
     T extends Transport | OriginExpenses | Custom | DestinationExpenses | null,
@@ -92,7 +113,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
         ),
       );
 
-      // Update budgets that use this freight to reflect the changes
+      // ACTUALIZAR LOS BUDGETS QUE USEN ESE FLETE AL ACTUALIZARSE
       setBudgets(
         budgets.map((budget) =>
           budget.freight?.id === selectedFreightId
@@ -113,6 +134,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
 
       setShowModal(false);
       setEditing(null);
+      setShouldFetch(true);
     }
   };
 
@@ -136,6 +158,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
       total: 0,
     };
     setFreights([...freights, newFreight]);
+    setShouldFetch(true);
   };
 
   const handleAssignFreight = (budgetId: string, freightId: string) => {
@@ -156,6 +179,7 @@ export default function LogisticList({ budgets, setBudgets }: BudgetListProps) {
             : budget,
         ),
       );
+      setShouldFetch(true);
     }
   };
 

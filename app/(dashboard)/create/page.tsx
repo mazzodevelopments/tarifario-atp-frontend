@@ -119,9 +119,6 @@ export default function Create() {
     if (currentStep === 1 && items) {
       return items.length === 0;
     }
-    if (currentStep === 2) {
-      return budgets.length === 0;
-    }
     if (currentStep === 5) {
       return budgets.length === 0;
     }
@@ -154,9 +151,7 @@ export default function Create() {
           items && <PurchaseList quotationId={quotationId!} items={items} />
         );
       case 3:
-        return (
-          items && <LogisticList budgets={budgets} setBudgets={setBudgets} />
-        );
+        return items && <LogisticList quotationId={quotationId!} />;
       case 4:
         return (
           <SalesList
