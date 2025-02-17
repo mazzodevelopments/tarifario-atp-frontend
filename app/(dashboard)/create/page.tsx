@@ -13,10 +13,9 @@ import SalesList from "@/app/(dashboard)/create/steps/Sales/SalesList";
 import SelectedBudgetsList from "@/app/(dashboard)/create/steps/SelectBudgets/SelectedBudgetsList";
 import type { QuotationData } from "@/types/QuotationData";
 import type { Budget } from "@/types/Budget";
-import { TEST_BUDGETS } from "@/app/(dashboard)/create/testData";
 import { QuoteService } from "@/services/QuoteService";
 import SelectableBudgetsList from "@/app/(dashboard)/create/steps/SelectBudgets/SelectableBudgetsList";
-import { Freight } from "@/types/Freight";
+import { Item } from "@/types/Item";
 
 const steps = [
   { title: "Cargar Datos" },
@@ -38,9 +37,9 @@ export default function Create() {
   const [quotationData, setQuotationData] = useState<QuotationData | null>(
     null,
   );
-  const [budgets, setBudgets] = useState<Budget[]>(TEST_BUDGETS);
+  const [items, setItems] = useState<Item[]>([]);
+  const [budgets, setBudgets] = useState<Budget[]>([]);
   const [selectedBudgets, setSelectedBudgets] = useState<Budget[]>([]);
-  const [freights, setFreights] = useState<Freight[]>([]);
   const [quotationId, setQuotationId] = useState<number | null>();
 
   const handleNext = async () => {
@@ -117,11 +116,10 @@ export default function Create() {
         )
       );
     }
-    if (currentStep === 1 && quotationData?.items) {
-      return quotationData?.items.length === 0;
+    if (currentStep === 1 && items) {
+      return items.length === 0;
     }
     if (currentStep === 2) {
-      console.log(quotationData?.budgets?.length);
       return budgets.length === 0;
     }
     if (currentStep === 5) {
@@ -145,40 +143,19 @@ export default function Create() {
         );
       case 1:
         return (
-          quotationData?.items && (
-            <ItemsList
-              quotationId={quotationId!}
-              items={quotationData?.items}
-              setItems={(newItems) =>
-                setQuotationData((prevData) => {
-                  if (prevData) {
-                    return {
-                      ...prevData,
-                      items: newItems,
-                    };
-                  }
-                  return prevData;
-                })
-              }
-            />
-          )
+          <ItemsList
+            quotationId={quotationId!}
+            items={items}
+            setItems={setItems}
+          />
         );
       case 2:
         return (
-          quotationData?.items && (
-            <PurchaseList
-              quotationId={quotationId!}
-              budgets={budgets}
-              setBudgets={setBudgets}
-              items={quotationData?.items}
-            />
-          )
+          items && <PurchaseList quotationId={quotationId!} items={items} />
         );
       case 3:
         return (
-          quotationData?.items && (
-            <LogisticList budgets={budgets} setBudgets={setBudgets} />
-          )
+          items && <LogisticList budgets={budgets} setBudgets={setBudgets} />
         );
       case 4:
         return (

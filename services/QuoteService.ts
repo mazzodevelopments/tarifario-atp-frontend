@@ -30,8 +30,12 @@ export const QuoteService = {
   },
 
   // ETAPA 3
-  getQuotationBudgets: async (quotationId: number) => {
-    console.log("LLAMADO A LA API PARA OBTENER TODOS LOS BUDGETS", quotationId);
+  getQuotationBudgets: async (quotationId: number, query: string) => {
+    console.log(
+      "LLAMADO A LA API PARA OBTENER TODOS LOS BUDGETS",
+      quotationId,
+      query,
+    );
     return TEST_BUDGETS;
   },
   addPurchaseData: async (

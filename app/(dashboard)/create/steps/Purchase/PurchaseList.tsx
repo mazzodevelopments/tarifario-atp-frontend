@@ -25,28 +25,24 @@ import { PlusCircle } from "lucide-react";
 import { QuoteService } from "@/services/QuoteService";
 
 interface BudgetListProps {
-  budgets: Budget[];
-  setBudgets: (budgets: Budget[]) => void;
   items: Item[];
   quotationId: number;
 }
 
-export default function PurchaseList({
-  budgets,
-  setBudgets,
-  items,
-  quotationId,
-}: BudgetListProps) {
+export default function PurchaseList({ items, quotationId }: BudgetListProps) {
+  const [budgets, setBudgets] = useState<Budget[]>([]);
   const [shouldFetch, setShouldFetch] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   useEffect(() => {
     if (!shouldFetch) return;
 
-    const fetchQuotationItems = async () => {
+    const fetchQuotationBudgets = async () => {
       try {
-        const quotationBudgets =
-          await QuoteService.getQuotationBudgets(quotationId);
+        const quotationBudgets = await QuoteService.getQuotationBudgets(
+          quotationId,
+          "purchaseData",
+        );
         setBudgets(quotationBudgets);
         setShouldFetch(false);
       } catch (error) {
@@ -54,7 +50,7 @@ export default function PurchaseList({
       }
     };
 
-    fetchQuotationItems();
+    fetchQuotationBudgets();
   }, [shouldFetch]);
 
   const onPurchaseCreated = async (newPurchase: PurchaseData) => {
@@ -71,6 +67,7 @@ export default function PurchaseList({
       };
       setBudgets([...budgets, newBudget]);
       setShowCreateModal(false);
+      setShouldFetch(true);
     } catch (error) {
       console.error("Error creating Purchase Data:", error);
     }
@@ -79,6 +76,7 @@ export default function PurchaseList({
   const handleDeleteBudget = async (numbering: string) => {
     try {
       await QuoteService.deletePurchaseData(numbering);
+      setShouldFetch(true);
     } catch (error) {
       console.error("Error deleting budget:", error);
     }
