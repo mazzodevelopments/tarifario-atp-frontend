@@ -145,7 +145,7 @@ export default function UserPage() {
             <h2 className="text-3xl font-[800]">Panel de usuario</h2>
             <p className="text-gray-500">Información individual y grupal</p>
           </div>
-          <div className="flex flex-row gap-3 h-[60%]">
+          <div className="flex flex-row gap-3 h-[50%]">
             <div className="flex flex-col w-full">
               <div className="flex flex-col p-4 relative bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full">
                 <div className="absolute bottom-4 right-4 w-auto flex justify-end gap-2 items-end h-auto">
@@ -162,7 +162,34 @@ export default function UserPage() {
               </div>
             </div>
           </div>
-          <div className="h-[40%] bg-white shadow-sm border border-neutral-200 w-full rounded-[16px]"></div>
+          <div className="h-[50%]  w-full flex gap-3">
+            <div className="w-1/2 h-full bg-white shadow-sm border border-neutral-200 rounded-[16px] flex justify-center items-center p-10 flex-col gap-3">
+              <span className="text-center text-[0.85vw]">
+                Estás en el grupo de
+              </span>
+              <h3 className="text-center font-[700] text-[3vw] text-primary">
+                Logística
+              </h3>
+              <p className="text-center text-[0.85vw]">
+                Solo podrás participar en la etapa correspondiente a tu grupo en
+                cada cotización.
+              </p>
+            </div>
+            <div className="w-1/2 h-full bg-white shadow-sm border border-neutral-200 rounded-[16px] flex justify-center items-center p-10 flex-col">
+              <span className="text-center text-[0.85vw] w-[100%]">
+                Cotizaciones completadas
+              </span>
+              <h3 className="text-center font-[700] text-[4vw] text-primary">
+                50
+              </h3>
+              <Button
+                variant="primary"
+                className="bg-primary/5 text-primary border my-3 border-primary/30 px-4 py-3 justify-center items-center flex"
+              >
+                Ver mis cotizaciones
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
