@@ -19,24 +19,60 @@ import {
 } from "@/components/ui/dialog";
 import type { Item } from "@/types/Item";
 import { PlusCircle, Upload } from "lucide-react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as XLSX from "xlsx";
-import type React from "react"; // Added import for React
+import type React from "react";
+import { QuoteService } from "@/services/QuoteService";
 
 interface ItemsListProps {
   items: Item[];
   setItems: (items: Item[]) => void;
+  quotationId: number;
 }
 
-export default function ItemsList({ items, setItems }: ItemsListProps) {
+export default function ItemsList({
+  items,
+  setItems,
+  quotationId,
+}: ItemsListProps) {
+  const [shouldFetch, setShouldFetch] = useState(true);
+
+  useEffect(() => {
+    if (!shouldFetch) return;
+
+    const fetchQuotationItems = async () => {
+      try {
+        const quotationItems =
+          await QuoteService.getQuotationItems(quotationId);
+        setItems(quotationItems);
+        setShouldFetch(false);
+      } catch (error) {
+        console.error("Error fetching quotation items:", error);
+      }
+    };
+
+    fetchQuotationItems();
+  }, [shouldFetch]);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleItemCreated = (newItem: Item) => {
-    setItems([...items, newItem]);
+  const handleItemCreated = async (newItem: Item) => {
+    try {
+      await QuoteService.addItem(newItem);
+      setItems([...items, newItem]);
+      setShouldFetch(true);
+    } catch (error) {
+      console.error("Error adding item:", error);
+    }
   };
 
-  const handleDeleteItem = (id: string) => {
-    setItems(items.filter((item) => item.numbering !== id));
+  const handleDeleteItem = async (id: number) => {
+    try {
+      await QuoteService.deleteItem(id);
+      setItems(items.filter((item) => item.id !== id));
+    } catch (error) {
+      console.error("Error deleting item:", error);
+    }
   };
 
   const generateItemId = () => {
@@ -169,7 +205,7 @@ export default function ItemsList({ items, setItems }: ItemsListProps) {
                     <TableCell>{item.productNumber}</TableCell>
                     <TableCell>
                       <button
-                        onClick={() => handleDeleteItem(item.numbering)}
+                        onClick={() => handleDeleteItem(item.id)}
                         className="text-black hover:text-red-600 mx-2"
                       >
                         <X className="w-4" />
