@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from "react"; // Importa useC
 import Dropdown, { type DropdownItem } from "@/components/Dropdown";
 import Input from "@/components/Input";
 import { QuotationData } from "@/types/QuotationData";
-import { CreateQuotationService } from "@/services/CreateQuotationService";
+import { QuoteService } from "@/services/QuoteService";
 import { CatalogService } from "@/services/CatalogService";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 
@@ -37,7 +37,7 @@ export default function QuotationDetails({
   useEffect(() => {
     setFormData((prevData) => ({
       ...prevData,
-      taskNumber: CreateQuotationService.fetchQuotationTaskNumber(),
+      taskNumber: QuoteService.fetchQuotationTaskNumber(),
     }));
   }, []);
 

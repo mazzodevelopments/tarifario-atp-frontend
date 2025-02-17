@@ -21,62 +21,78 @@ import type { SalesData } from "@/types/SalesData";
 import AddMargin from "./AddMargin";
 import AddPaymentCondition from "./AddPaymentCondition";
 import "@/app/utils/formatNumber";
+import { QuoteService } from "@/services/QuoteService";
 
 interface SalesListProps {
   budgets: Budget[];
   setBudgets: (budgets: Budget[]) => void;
+  quotationId: number;
 }
 
-export default function SalesList({ budgets, setBudgets }: SalesListProps) {
+export default function SalesList({
+  budgets,
+  setBudgets,
+  quotationId,
+}: SalesListProps) {
   const [showSalesDataModal, setShowSalesDataModal] = useState(false);
   const [showPaymentConditionModal, setShowPaymentConditionModal] =
     useState(false);
   const [selectedBudgetId, setSelectedBudgetId] = useState<string | null>(null);
 
-  const handleSalesDataCreated = (salesData: SalesData) => {
-    if (selectedBudgetId) {
-      setBudgets(
-        budgets.map((budget) =>
-          budget.numbering === selectedBudgetId
-            ? {
-                ...budget,
-                salesData: {
-                  unitSalePrice: salesData.unitSalePrice,
-                  margin: salesData.margin,
-                  totalPrice: salesData.totalPrice,
-                  paymentCondition: budget.salesData?.paymentCondition || "",
-                },
-              }
-            : budget
-        )
-      );
-      setShowSalesDataModal(false);
+  const handleSalesDataCreated = async (salesData: SalesData) => {
+    try {
+      await QuoteService.addMargin(salesData.margin!, quotationId);
+      if (selectedBudgetId) {
+        setBudgets(
+          budgets.map((budget) =>
+            budget.numbering === selectedBudgetId
+              ? {
+                  ...budget,
+                  salesData: {
+                    unitSalePrice: salesData.unitSalePrice,
+                    margin: salesData.margin,
+                    totalPrice: salesData.totalPrice,
+                    paymentCondition: budget.salesData?.paymentCondition || "",
+                  },
+                }
+              : budget,
+          ),
+        );
+        setShowSalesDataModal(false);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
-  const handlePaymentConditionCreated = (paymentCondition: string) => {
-    if (selectedBudgetId) {
-      setBudgets(
-        budgets.map((budget) => {
-          if (budget.numbering === selectedBudgetId) {
-            const currentSalesData = budget.salesData || {
-              unitSalePrice: 0,
-              totalPrice: 0,
-              paymentCondition: "",
-            };
+  const handlePaymentConditionCreated = async (paymentCondition: string) => {
+    try {
+      await QuoteService.addPaymentCondition(paymentCondition, quotationId);
+      if (selectedBudgetId) {
+        setBudgets(
+          budgets.map((budget) => {
+            if (budget.numbering === selectedBudgetId) {
+              const currentSalesData = budget.salesData || {
+                unitSalePrice: 0,
+                totalPrice: 0,
+                paymentCondition: "",
+              };
 
-            return {
-              ...budget,
-              salesData: {
-                ...currentSalesData,
-                paymentCondition,
-              },
-            };
-          }
-          return budget;
-        })
-      );
-      setShowPaymentConditionModal(false);
+              return {
+                ...budget,
+                salesData: {
+                  ...currentSalesData,
+                  paymentCondition,
+                },
+              };
+            }
+            return budget;
+          }),
+        );
+        setShowPaymentConditionModal(false);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "@/components/Button";
 import CreatePurchase from "./CreatePurchase";
 import {
@@ -22,35 +22,66 @@ import type { PurchaseData } from "@/types/PurchaseData";
 import { X } from "react-feather";
 import "@/app/utils/formatNumber";
 import { PlusCircle } from "lucide-react";
+import { QuoteService } from "@/services/QuoteService";
 
 interface BudgetListProps {
   budgets: Budget[];
   setBudgets: (budgets: Budget[]) => void;
   items: Item[];
+  quotationId: number;
 }
 
 export default function PurchaseList({
   budgets,
   setBudgets,
   items,
+  quotationId,
 }: BudgetListProps) {
+  const [shouldFetch, setShouldFetch] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
 
-  const onPurchaseCreated = (newPurchase: PurchaseData) => {
-    const newBudget = {
-      numbering: `00000000${Math.floor(Math.random() * 100)
-        .toString()
-        .padStart(2, "0")}`,
-      purchaseData: newPurchase,
-      freight: null,
-      salesData: null,
-      stage: "COTI",
+  useEffect(() => {
+    if (!shouldFetch) return;
+
+    const fetchQuotationItems = async () => {
+      try {
+        const quotationBudgets =
+          await QuoteService.getQuotationBudgets(quotationId);
+        setBudgets(quotationBudgets);
+        setShouldFetch(false);
+      } catch (error) {
+        console.error("Error fetching quotation budgets:", error);
+      }
     };
-    setBudgets([...budgets, newBudget]);
-    setShowCreateModal(false);
+
+    fetchQuotationItems();
+  }, [shouldFetch]);
+
+  const onPurchaseCreated = async (newPurchase: PurchaseData) => {
+    try {
+      await QuoteService.addPurchaseData(newPurchase, quotationId);
+      const newBudget = {
+        numbering: `00000000${Math.floor(Math.random() * 100)
+          .toString()
+          .padStart(2, "0")}`,
+        purchaseData: newPurchase,
+        freight: null,
+        salesData: null,
+        stage: "COTI",
+      };
+      setBudgets([...budgets, newBudget]);
+      setShowCreateModal(false);
+    } catch (error) {
+      console.error("Error creating Purchase Data:", error);
+    }
   };
 
   const handleDeleteBudget = async (numbering: string) => {
+    try {
+      await QuoteService.deletePurchaseData(numbering);
+    } catch (error) {
+      console.error("Error deleting budget:", error);
+    }
     setBudgets(budgets.filter((budget) => budget.numbering !== numbering));
   };
 

@@ -11,15 +11,24 @@ import Button from "@/components/Button";
 import type { Budget } from "@/types/Budget";
 import { Mail, Printer } from "lucide-react";
 import "@/app/utils/formatNumber";
+import { QuoteService } from "@/services/QuoteService";
 
 interface SelectedBudgetsListProps {
   selectedBudgets: Budget[];
+  quotationId: number;
 }
 
 export default function SelectedBudgetsList({
   selectedBudgets,
+  quotationId,
 }: SelectedBudgetsListProps) {
   const handlePrint = () => {
+    QuoteService.printQuotation(quotationId);
+    console.log("Imprimir cotización:", selectedBudgets);
+  };
+
+  const handleMail = () => {
+    QuoteService.sendQuotationViaMail(quotationId);
     console.log("Imprimir cotización:", selectedBudgets);
   };
 
@@ -51,7 +60,7 @@ export default function SelectedBudgetsList({
 
   const totalSum = selectedBudgets.reduce(
     (sum, budget) => sum + calculateAppliedTotalPrice(budget),
-    0
+    0,
   );
 
   return (
@@ -185,7 +194,7 @@ export default function SelectedBudgetsList({
           Imprimir Cotización
         </Button>
         <Button
-          onClick={handlePrint}
+          onClick={handleMail}
           className="text-sm px-4 py-2 bg-primary text-white flex items-center gap-2"
           disabled={selectedBudgets.length === 0}
         >

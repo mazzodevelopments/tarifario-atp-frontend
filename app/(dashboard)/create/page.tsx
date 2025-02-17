@@ -13,8 +13,8 @@ import SalesList from "@/app/(dashboard)/create/steps/Sales/SalesList";
 import SelectedBudgetsList from "@/app/(dashboard)/create/steps/SelectBudgets/SelectedBudgetsList";
 import type { QuotationData } from "@/types/QuotationData";
 import type { Budget } from "@/types/Budget";
-import { TEST_BUDGETS, TEST_ITEMS } from "@/app/(dashboard)/create/testData";
-import { CreateQuotationService } from "@/services/CreateQuotationService";
+import { TEST_BUDGETS } from "@/app/(dashboard)/create/testData";
+import { QuoteService } from "@/services/QuoteService";
 import SelectableBudgetsList from "@/app/(dashboard)/create/steps/SelectBudgets/SelectableBudgetsList";
 import { Freight } from "@/types/Freight";
 
@@ -36,21 +36,24 @@ export default function Create() {
   const totalSteps = steps.length;
   // ESTADOS COTIZACIÓN
   const [quotationData, setQuotationData] = useState<QuotationData | null>(
-    null
+    null,
   );
   const [budgets, setBudgets] = useState<Budget[]>(TEST_BUDGETS);
   const [selectedBudgets, setSelectedBudgets] = useState<Budget[]>([]);
   const [freights, setFreights] = useState<Freight[]>([]);
+  const [quotationId, setQuotationId] = useState<number | null>();
 
   const handleNext = async () => {
     if (currentStep === 0 && quotationData) {
       try {
-        await CreateQuotationService.loadInitialQuotationData(quotationData);
+        console.log(quotationData);
+        const id = await QuoteService.createQuotation(quotationData);
+        setQuotationId(id);
         setQuotationData((prevData) => {
           if (prevData) {
             return {
               ...prevData,
-              items: TEST_ITEMS,
+              items: [],
             };
           }
           return prevData;
@@ -61,66 +64,14 @@ export default function Create() {
       }
     }
 
-    if (
-      currentStep === 1 &&
-      quotationData?.items &&
-      quotationData?.taskNumber
-    ) {
-      try {
-        await CreateQuotationService.loadQuotationItems(
-          quotationData?.taskNumber,
-          quotationData?.items
-        );
-      } catch (error) {
-        console.error("Error cargando items:", error);
-        return;
-      }
-    }
-
-    if (currentStep === 2 && budgets && quotationData?.taskNumber) {
-      try {
-        await CreateQuotationService.loadPurchaseData(
-          quotationData?.taskNumber,
-          budgets
-        );
-      } catch (error) {
-        console.error("Error cargando data de compras:", error);
-        return;
-      }
-    }
-
-    if (currentStep === 4 && budgets && quotationData?.taskNumber) {
-      try {
-        await CreateQuotationService.loadLogistics(
-          quotationData?.taskNumber,
-          budgets
-        );
-      } catch (error) {
-        console.error("Error cargando data de logistica:", error);
-        return;
-      }
-    }
-
     if (currentStep === 5 && quotationData?.taskNumber) {
       try {
-        await CreateQuotationService.loadSalesData(
-          quotationData?.taskNumber,
-          budgets
+        await QuoteService.selectBudgets(
+          selectedBudgets.map((b) => b.numbering),
+          quotationId!,
         );
       } catch (error) {
-        console.error("Error cargando data de ventas", error);
-        return;
-      }
-    }
-
-    if (currentStep === 6 && quotationData?.taskNumber) {
-      try {
-        await CreateQuotationService.loadSelectedBudgets(
-          quotationData?.taskNumber,
-          budgets
-        );
-      } catch (error) {
-        console.error("Error seleccionando presupuestos:", error);
+        console.error("Error seleccionando presupuestos", error);
         return;
       }
     }
@@ -142,7 +93,7 @@ export default function Create() {
     await new Promise((resolve) => setTimeout(resolve, 2000));
     if (quotationData) {
       try {
-        await CreateQuotationService.submitQuotation({
+        await QuoteService.saveQuotation({
           ...quotationData,
           budgets,
         });
@@ -162,7 +113,7 @@ export default function Create() {
           (key) =>
             key !== "budgets" &&
             typeof quotationData[key as keyof QuotationData] === "string" &&
-            (quotationData[key as keyof QuotationData] as string).trim() === ""
+            (quotationData[key as keyof QuotationData] as string).trim() === "",
         )
       );
     }
@@ -196,6 +147,7 @@ export default function Create() {
         return (
           quotationData?.items && (
             <ItemsList
+              quotationId={quotationId!}
               items={quotationData?.items}
               setItems={(newItems) =>
                 setQuotationData((prevData) => {
@@ -215,6 +167,7 @@ export default function Create() {
         return (
           quotationData?.items && (
             <PurchaseList
+              quotationId={quotationId!}
               budgets={budgets}
               setBudgets={setBudgets}
               items={quotationData?.items}
@@ -234,7 +187,13 @@ export default function Create() {
           )
         );
       case 4:
-        return <SalesList budgets={budgets} setBudgets={setBudgets} />;
+        return (
+          <SalesList
+            quotationId={quotationId!}
+            budgets={budgets}
+            setBudgets={setBudgets}
+          />
+        );
       case 5:
         return (
           <SelectableBudgetsList
@@ -244,7 +203,12 @@ export default function Create() {
           />
         );
       case 6:
-        return <SelectedBudgetsList selectedBudgets={selectedBudgets} />;
+        return (
+          <SelectedBudgetsList
+            quotationId={quotationId!}
+            selectedBudgets={selectedBudgets}
+          />
+        );
       default:
         return <p>Contenido de la etapa {currentStep + 1}</p>;
     }
