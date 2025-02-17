@@ -38,7 +38,7 @@ export default function SalesList({ quotationId }: { quotationId: number }) {
       try {
         const quotationBudgets = await QuoteService.getQuotationBudgets(
           quotationId,
-          "purchaseData",
+          "sales-data",
         );
         setBudgets(quotationBudgets);
         setShouldFetch(false);

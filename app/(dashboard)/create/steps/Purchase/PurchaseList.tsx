@@ -41,7 +41,7 @@ export default function PurchaseList({ items, quotationId }: BudgetListProps) {
       try {
         const quotationBudgets = await QuoteService.getQuotationBudgets(
           quotationId,
-          "purchaseData",
+          "purchase-data",
         );
         setBudgets(quotationBudgets);
         setShouldFetch(false);
