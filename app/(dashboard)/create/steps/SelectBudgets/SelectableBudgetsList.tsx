@@ -9,24 +9,47 @@ import {
 } from "@/components/ui/table";
 import type { Budget } from "@/types/Budget";
 import "@/app/utils/formatNumber";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { QuoteService } from "@/services/QuoteService";
 
 interface SelectableSalesListProps {
-  budgets: Budget[];
+  quotationId: number;
   selectedBudgets: Budget[];
   setSelectedBudgets: (budgets: Budget[]) => void;
 }
 
 export default function SelectableBudgetsList({
-  budgets,
+  quotationId,
   selectedBudgets,
   setSelectedBudgets,
 }: SelectableSalesListProps) {
+  const [budgets, setBudgets] = useState<Budget[]>([]);
+  const [shouldFetch, setShouldFetch] = useState(true);
+
+  useEffect(() => {
+    if (!shouldFetch) return;
+
+    const fetchQuotationBudgets = async () => {
+      try {
+        const quotationBudgets = await QuoteService.getQuotationBudgets(
+          quotationId,
+          "complete",
+        );
+        setBudgets(quotationBudgets);
+        setShouldFetch(false);
+      } catch (error) {
+        console.error("Error fetching quotation budgets:", error);
+      }
+    };
+
+    fetchQuotationBudgets();
+  }, [shouldFetch]);
+
   const handleBudgetSelection = (e: React.MouseEvent, budget: Budget) => {
     e.stopPropagation();
     if (selectedBudgets.some((b) => b.numbering === budget.numbering)) {
       setSelectedBudgets(
-        selectedBudgets.filter((b) => b.numbering !== budget.numbering)
+        selectedBudgets.filter((b) => b.numbering !== budget.numbering),
       );
     } else {
       setSelectedBudgets([...selectedBudgets, budget]);
@@ -173,14 +196,14 @@ export default function SelectableBudgetsList({
                           onClick={(e) => handleBudgetSelection(e, budget)}
                           className={`w-5 h-5 rounded border ${
                             selectedBudgets.some(
-                              (b) => b.numbering === budget.numbering
+                              (b) => b.numbering === budget.numbering,
                             )
                               ? "bg-primary border-primary"
                               : "border-gray-300"
                           } flex items-center justify-center cursor-pointer hover:border-primary transition-colors`}
                         >
                           {selectedBudgets.some(
-                            (b) => b.numbering === budget.numbering
+                            (b) => b.numbering === budget.numbering,
                           ) && <Check className="w-4 h-4 text-white" />}
                         </div>
                       </div>
