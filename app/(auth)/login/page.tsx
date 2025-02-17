@@ -20,7 +20,7 @@ export default function Register() {
   return (
     <div className="min-h-screen w-full flex">
       {/* Logo Side */}
-      <div className="hidden lg:flex w-1/2 bg-primary/5 flex-col items-center justify-center p-12">
+      <div className="hidden lg:flex w-1/2 bg-neutral-50 flex-col items-center justify-center p-12">
         <div className="w-64 h-64 relative mb-8">
           <Image
             src={logo.src}
@@ -39,7 +39,7 @@ export default function Register() {
       </div>
 
       {/* Form Side */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-background">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-background shadow-sm">
         <div className="w-full max-w-md">
           {/* Mobile Logo - Only shown on small screens */}
           <div className="lg:hidden flex flex-col items-center mb-8">
@@ -91,7 +91,7 @@ export default function Register() {
 
               <Button
                 type="submit"
-                className="flex justify-center items-center w-full h-12 text-lg font-medium bg-primary hover:bg-primary/90 text-primary-foreground transition-colors"
+                className="flex justify-center items-center w-full h-12 text-[0.85vw] font-medium bg-primary text-white"
               >
                 Login
               </Button>
