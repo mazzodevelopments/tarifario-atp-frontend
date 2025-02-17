@@ -58,7 +58,7 @@ export default function ItemsList({
 
   const handleItemCreated = async (newItem: Item) => {
     try {
-      await QuoteService.addItem(newItem);
+      await QuoteService.addItem(newItem, quotationId);
       setItems([...items, newItem]);
       setShouldFetch(true);
     } catch (error) {
