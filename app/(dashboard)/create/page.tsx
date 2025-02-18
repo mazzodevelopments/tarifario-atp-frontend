@@ -1,6 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SuccessAnimation from "./SuccesAnimation";
 import Button from "@/components/Button";
 import Header from "@/app/(dashboard)/components/Header";
@@ -130,12 +129,10 @@ export default function Create() {
       return budgetsToEnableButton.length === 0;
     }
 
-    if (currentStep === 3 && budgetsToEnableButton) {
-      return budgetsToEnableButton.every((b) => !b.freight);
+    if (currentStep === 4 && budgetsToEnableButton) {
+      return budgetsToEnableButton.length === 0;
     }
 
-    // HABILITACION DE STEPS
-    // TODO
     return false;
   };
 
@@ -173,7 +170,12 @@ export default function Create() {
       case 3:
         return <LogisticList quotationId={quotationId!} />;
       case 4:
-        return <SalesList quotationId={quotationId!} />;
+        return (
+          <SalesList
+            quotationId={quotationId!}
+            setBudgetsToEnableButton={setBudgetsToEnableButton}
+          />
+        );
       case 5:
         return (
           <SelectableBudgetsList

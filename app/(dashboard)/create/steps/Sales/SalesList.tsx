@@ -23,7 +23,15 @@ import AddPaymentCondition from "./AddPaymentCondition";
 import "@/app/utils/formatNumber";
 import { QuoteService } from "@/services/QuoteService";
 
-export default function SalesList({ quotationId }: { quotationId: number }) {
+interface SalesListProps {
+  quotationId: number;
+  setBudgetsToEnableButton: (budgets: Budget[]) => void;
+}
+
+export default function SalesList({
+  quotationId,
+  setBudgetsToEnableButton,
+}: SalesListProps) {
   const [budgets, setBudgets] = useState<Budget[]>([]);
   const [shouldFetch, setShouldFetch] = useState(true);
   const [showSalesDataModal, setShowSalesDataModal] = useState(false);
@@ -42,35 +50,60 @@ export default function SalesList({ quotationId }: { quotationId: number }) {
         );
         setBudgets(quotationBudgets);
         setShouldFetch(false);
+
+        // CHEQUEAR QUE LOS BUDGETS ESTEN COMPLETOS
+        const completeBudgets = quotationBudgets.filter(
+          (budget) =>
+            budget.salesData?.margin && budget.salesData?.paymentCondition,
+        );
+
+        // HABILITAR BOTÓN SI LOS BUDGETS ESTÁN COMPLETOS
+        if (completeBudgets.length === quotationBudgets.length) {
+          setBudgetsToEnableButton(completeBudgets);
+        } else {
+          setBudgetsToEnableButton([]);
+        }
       } catch (error) {
         console.error("Error fetching quotation budgets:", error);
       }
     };
 
     fetchQuotationBudgets();
-  }, [shouldFetch]);
+  }, [shouldFetch, setBudgetsToEnableButton]);
 
   const handleSalesDataCreated = async (salesData: SalesData) => {
     try {
       await QuoteService.addMargin(salesData.margin!, quotationId);
       if (selectedBudgetId) {
-        setBudgets(
-          budgets.map((budget) =>
-            budget.numbering === selectedBudgetId
-              ? {
-                  ...budget,
-                  salesData: {
-                    unitSalePrice: salesData.unitSalePrice,
-                    margin: salesData.margin,
-                    totalPrice: salesData.totalPrice,
-                    paymentCondition: budget.salesData?.paymentCondition || "",
-                  },
-                }
-              : budget,
-          ),
+        const updatedBudgets = budgets.map((budget) =>
+          budget.numbering === selectedBudgetId
+            ? {
+                ...budget,
+                salesData: {
+                  unitSalePrice: salesData.unitSalePrice,
+                  margin: salesData.margin,
+                  totalPrice: salesData.totalPrice,
+                  paymentCondition: budget.salesData?.paymentCondition || "",
+                },
+              }
+            : budget,
         );
+
+        setBudgets(updatedBudgets);
         setShowSalesDataModal(false);
         setShouldFetch(true);
+
+        // CHEQUEAR QUE BUDGETS TENGAN EL SALESDATA COMPLETO (PROBAR SI ESTO SE PUEDE SACAR)
+        const completeBudgets = updatedBudgets.filter(
+          (budget) =>
+            budget.salesData?.margin && budget.salesData?.paymentCondition,
+        );
+
+        if (completeBudgets.length === updatedBudgets.length) {
+          setBudgetsToEnableButton(completeBudgets);
+        } else {
+          setBudgetsToEnableButton([]);
+        }
       }
     } catch (error) {
       console.log(error);
@@ -81,28 +114,40 @@ export default function SalesList({ quotationId }: { quotationId: number }) {
     try {
       await QuoteService.addPaymentCondition(paymentCondition, quotationId);
       if (selectedBudgetId) {
-        setBudgets(
-          budgets.map((budget) => {
-            if (budget.numbering === selectedBudgetId) {
-              const currentSalesData = budget.salesData || {
-                unitSalePrice: 0,
-                totalPrice: 0,
-                paymentCondition: "",
-              };
+        const updatedBudgets = budgets.map((budget) => {
+          if (budget.numbering === selectedBudgetId) {
+            const currentSalesData = budget.salesData || {
+              unitSalePrice: 0,
+              totalPrice: 0,
+              paymentCondition: "",
+            };
 
-              return {
-                ...budget,
-                salesData: {
-                  ...currentSalesData,
-                  paymentCondition,
-                },
-              };
-            }
-            return budget;
-          }),
-        );
+            return {
+              ...budget,
+              salesData: {
+                ...currentSalesData,
+                paymentCondition,
+              },
+            };
+          }
+          return budget;
+        });
+
+        setBudgets(updatedBudgets);
         setShowPaymentConditionModal(false);
         setShouldFetch(true);
+
+        // CHEQUEAR QUE BUDGETS TENGAN EL SALESDATA COMPLETO (PROBAR SI ESTO SE PUEDE SACAR)
+        const completeBudgets = updatedBudgets.filter(
+          (budget) =>
+            budget.salesData?.margin && budget.salesData?.paymentCondition,
+        );
+
+        if (completeBudgets.length === updatedBudgets.length) {
+          setBudgetsToEnableButton(completeBudgets);
+        } else {
+          setBudgetsToEnableButton([]);
+        }
       }
     } catch (error) {
       console.log(error);
