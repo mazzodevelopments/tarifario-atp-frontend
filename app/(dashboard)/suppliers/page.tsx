@@ -1,5 +1,7 @@
 "use client";
 
+import type React from "react";
+
 import { useState } from "react";
 import Header from "@/app/(dashboard)/components/Header";
 import {
@@ -12,6 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import Button from "@/components/Button";
+import { X } from "lucide-react";
 
 interface Proveedor {
   id: number;
@@ -19,6 +22,7 @@ interface Proveedor {
   tipo: "Nacional" | "Internacional" | "Ambos";
   email: string;
   phone: string;
+  familias: string[];
 }
 
 export default function Proveedores() {
@@ -29,6 +33,7 @@ export default function Proveedores() {
       tipo: "Nacional",
       email: "proveedora@email.com",
       phone: "1134567890",
+      familias: ["Familia 1", "Familia 2"],
     },
     {
       id: 2,
@@ -36,6 +41,7 @@ export default function Proveedores() {
       tipo: "Internacional",
       email: "proveedorb@email.com",
       phone: "1187654321",
+      familias: ["Familia 3"],
     },
     {
       id: 3,
@@ -43,19 +49,23 @@ export default function Proveedores() {
       tipo: "Ambos",
       email: "proveedorc@email.com",
       phone: "1122334455",
+      familias: ["Familia 4", "Familia 5", "Familia 6"],
     },
   ]);
-  const [nuevoProveedor, setNuevoProveedor] = useState({
+  const [nuevoProveedor, setNuevoProveedor] = useState<Proveedor>({
+    id: 0,
     nombre: "",
-    tipo: "Nacional" as "Nacional" | "Internacional" | "Ambos",
+    tipo: "Nacional",
     email: "",
     phone: "",
+    familias: [],
   });
   const [proveedorEditando, setProveedorEditando] = useState<Proveedor | null>(
     null
   );
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [currentFamilia, setCurrentFamilia] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,8 +78,15 @@ export default function Proveedores() {
       setProveedorEditando(null);
       setEditDialogOpen(false);
     } else {
-      setProveedores([...proveedores, { id: Date.now(), ...nuevoProveedor }]);
-      setNuevoProveedor({ nombre: "", tipo: "Nacional", email: "", phone: "" });
+      setProveedores([...proveedores, { ...nuevoProveedor, id: Date.now() }]);
+      setNuevoProveedor({
+        id: 0,
+        nombre: "",
+        tipo: "Nacional",
+        email: "",
+        phone: "",
+        familias: [],
+      });
       setDialogOpen(false);
     }
   };
@@ -77,6 +94,38 @@ export default function Proveedores() {
   const handleEdit = (proveedor: Proveedor) => {
     setProveedorEditando(proveedor);
     setEditDialogOpen(true);
+  };
+
+  const addFamilia = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (currentFamilia.trim() !== "") {
+      if (proveedorEditando) {
+        setProveedorEditando({
+          ...proveedorEditando,
+          familias: [...proveedorEditando.familias, currentFamilia.trim()],
+        });
+      } else {
+        setNuevoProveedor({
+          ...nuevoProveedor,
+          familias: [...nuevoProveedor.familias, currentFamilia.trim()],
+        });
+      }
+      setCurrentFamilia("");
+    }
+  };
+
+  const removeFamilia = (index: number) => {
+    if (proveedorEditando) {
+      setProveedorEditando({
+        ...proveedorEditando,
+        familias: proveedorEditando.familias.filter((_, i) => i !== index),
+      });
+    } else {
+      setNuevoProveedor({
+        ...nuevoProveedor,
+        familias: nuevoProveedor.familias.filter((_, i) => i !== index),
+      });
+    }
   };
 
   return (
@@ -164,6 +213,41 @@ export default function Proveedores() {
                   </div>
                 </RadioGroup>
               </div>
+              <div>
+                <label htmlFor="familia">Familias de Items</label>
+                <div className="flex space-x-2">
+                  <Input
+                    id="familia"
+                    value={currentFamilia}
+                    onChange={(e) => setCurrentFamilia(e.target.value)}
+                    placeholder="Agregar familia de items"
+                  />
+                  <Button
+                    className="flex px-3 justify-center items-center text-white"
+                    type="button"
+                    onClick={addFamilia}
+                  >
+                    Agregar
+                  </Button>
+                </div>
+                <div className="mt-2 space-y-2">
+                  {nuevoProveedor.familias.map((familia, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between bg-gray-100 p-2 rounded"
+                    >
+                      <span>{familia}</span>
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        onClick={() => removeFamilia(index)}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
               <Button type="submit" className="text-white">
                 Guardar
               </Button>
@@ -181,6 +265,14 @@ export default function Proveedores() {
             <p className="text-sm text-gray-600">{proveedor.tipo}</p>
             <p className="text-sm text-gray-600">{proveedor.email}</p>
             <p className="text-sm text-gray-600">{proveedor.phone}</p>
+            <div className="mt-2">
+              <p className="text-sm font-semibold">Familias de Items:</p>
+              <ul className="text-sm text-gray-600 list-disc list-inside">
+                {proveedor.familias.map((familia, index) => (
+                  <li key={index}>{familia}</li>
+                ))}
+              </ul>
+            </div>
             <div className="flex justify-end w-full gap-2 mt-2">
               <Button variant="secondary" onClick={() => handleEdit(proveedor)}>
                 Editar
@@ -270,6 +362,37 @@ export default function Proveedores() {
                     <label htmlFor="edit-ambos">Ambos</label>
                   </div>
                 </RadioGroup>
+              </div>
+              <div>
+                <label htmlFor="edit-familia">Familias de Items</label>
+                <div className="flex space-x-2">
+                  <Input
+                    id="edit-familia"
+                    value={currentFamilia}
+                    onChange={(e) => setCurrentFamilia(e.target.value)}
+                    placeholder="Agregar familia de items"
+                  />
+                  <Button type="button" onClick={addFamilia}>
+                    Agregar
+                  </Button>
+                </div>
+                <div className="mt-2 space-y-2">
+                  {proveedorEditando.familias.map((familia, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between bg-gray-100 p-2 rounded"
+                    >
+                      <span>{familia}</span>
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        onClick={() => removeFamilia(index)}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
               </div>
               <Button type="submit" className="text-white">
                 Guardar Cambios
