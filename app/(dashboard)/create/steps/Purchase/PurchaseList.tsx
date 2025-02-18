@@ -27,11 +27,13 @@ import { QuoteService } from "@/services/QuoteService";
 interface PurchaseListProps {
   items: Item[];
   quotationId: number;
+  setBudgetsToEnableButton: (budgetsToEnableButton: Budget[]) => void;
 }
 
 export default function PurchaseList({
   items,
   quotationId,
+  setBudgetsToEnableButton,
 }: PurchaseListProps) {
   const [budgets, setBudgets] = useState<Budget[]>([]);
   const [shouldFetch, setShouldFetch] = useState(true);
@@ -47,6 +49,7 @@ export default function PurchaseList({
           "purchase-data",
         );
         setBudgets(quotationBudgets);
+        setBudgetsToEnableButton(quotationBudgets);
         setShouldFetch(false);
       } catch (error) {
         console.error("Error fetching quotation budgets:", error);

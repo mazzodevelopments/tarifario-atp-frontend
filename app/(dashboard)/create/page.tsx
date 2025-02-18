@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import SuccessAnimation from "./SuccesAnimation";
 import Button from "@/components/Button";
@@ -40,6 +40,16 @@ export default function Create() {
   const [quotationId, setQuotationId] = useState<number | null>();
   const [items, setItems] = useState<Item[]>([]);
   const [selectedBudgets, setSelectedBudgets] = useState<Budget[]>([]);
+  // ESTADO BUDGETS PARA HABILITAR BOTON DE NEXT
+  const [budgetsToEnableButton, setBudgetsToEnableButton] = useState<Budget[]>(
+    [],
+  );
+
+  useEffect(() => {
+    if (budgetsToEnableButton.length > 0) {
+      setBudgetsToEnableButton(budgetsToEnableButton);
+    }
+  }, [budgetsToEnableButton, setBudgetsToEnableButton]);
 
   const handleNext = async () => {
     if (currentStep === 0 && quotationData) {
@@ -116,6 +126,14 @@ export default function Create() {
       return items.length === 0;
     }
 
+    if (currentStep === 2 && budgetsToEnableButton) {
+      return budgetsToEnableButton.length === 0;
+    }
+
+    if (currentStep === 3 && budgetsToEnableButton) {
+      return budgetsToEnableButton.every((b) => !b.freight);
+    }
+
     // HABILITACION DE STEPS
     // TODO
     return false;
@@ -144,7 +162,13 @@ export default function Create() {
         );
       case 2:
         return (
-          items && <PurchaseList quotationId={quotationId!} items={items} />
+          items && (
+            <PurchaseList
+              quotationId={quotationId!}
+              items={items}
+              setBudgetsToEnableButton={setBudgetsToEnableButton}
+            />
+          )
         );
       case 3:
         return <LogisticList quotationId={quotationId!} />;
