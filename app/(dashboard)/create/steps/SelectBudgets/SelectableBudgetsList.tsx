@@ -16,12 +16,14 @@ interface SelectableSalesListProps {
   quotationId: number;
   selectedBudgets: Budget[];
   setSelectedBudgets: (budgets: Budget[]) => void;
+  setBudgetsToEnableButton: (budgets: Budget[]) => void;
 }
 
 export default function SelectableBudgetsList({
   quotationId,
   selectedBudgets,
   setSelectedBudgets,
+  setBudgetsToEnableButton,
 }: SelectableSalesListProps) {
   const [budgets, setBudgets] = useState<Budget[]>([]);
   const [shouldFetch, setShouldFetch] = useState(true);
@@ -45,14 +47,21 @@ export default function SelectableBudgetsList({
     fetchQuotationBudgets();
   }, [shouldFetch]);
 
+  // SELECCIONAR AL MENOS UNO PARA PODER HABILITAR EL BOTÓN DE NEXT
+  useEffect(() => {
+    setBudgetsToEnableButton(selectedBudgets);
+  }, [selectedBudgets, setBudgetsToEnableButton]);
+
   const handleBudgetSelection = (e: React.MouseEvent, budget: Budget) => {
     e.stopPropagation();
     if (selectedBudgets.some((b) => b.numbering === budget.numbering)) {
-      setSelectedBudgets(
-        selectedBudgets.filter((b) => b.numbering !== budget.numbering),
+      const updatedBudgets = selectedBudgets.filter(
+        (b) => b.numbering !== budget.numbering,
       );
+      setSelectedBudgets(updatedBudgets);
     } else {
-      setSelectedBudgets([...selectedBudgets, budget]);
+      const updatedBudgets = [...selectedBudgets, budget];
+      setSelectedBudgets(updatedBudgets);
     }
   };
 

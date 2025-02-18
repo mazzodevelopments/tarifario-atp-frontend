@@ -129,7 +129,15 @@ export default function Create() {
       return budgetsToEnableButton.length === 0;
     }
 
+    if (currentStep === 3 && budgetsToEnableButton) {
+      // TODO: TODOS LOS BUDGETS TIENEN QUE TENER UN FLETE ASIGNADO
+    }
+
     if (currentStep === 4 && budgetsToEnableButton) {
+      return budgetsToEnableButton.length === 0;
+    }
+
+    if (currentStep === 5 && budgetsToEnableButton) {
       return budgetsToEnableButton.length === 0;
     }
 
@@ -182,6 +190,7 @@ export default function Create() {
             quotationId={quotationId!}
             selectedBudgets={selectedBudgets}
             setSelectedBudgets={setSelectedBudgets}
+            setBudgetsToEnableButton={setBudgetsToEnableButton}
           />
         );
       case 6:
