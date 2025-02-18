@@ -24,12 +24,15 @@ import "@/app/utils/formatNumber";
 import { PlusCircle } from "lucide-react";
 import { QuoteService } from "@/services/QuoteService";
 
-interface BudgetListProps {
+interface PurchaseListProps {
   items: Item[];
   quotationId: number;
 }
 
-export default function PurchaseList({ items, quotationId }: BudgetListProps) {
+export default function PurchaseList({
+  items,
+  quotationId,
+}: PurchaseListProps) {
   const [budgets, setBudgets] = useState<Budget[]>([]);
   const [shouldFetch, setShouldFetch] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
