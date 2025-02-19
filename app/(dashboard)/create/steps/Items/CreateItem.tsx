@@ -58,7 +58,7 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
         .toString()
         .padStart(9, "0")}`,
       detail: formData.detail,
-      quantity: formData.quantity,
+      quantity: Number(formData.quantity),
       partNumber: formData.partNumber,
       productNumber: formData.productNumber,
       subfamilyId: formData.subfamilyId!,
@@ -74,8 +74,7 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
     const { name, value, type } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]:
-        type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
+      [name]: type === "number" ? Number(value) : value,
     }));
   };
 
