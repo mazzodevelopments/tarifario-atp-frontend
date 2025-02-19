@@ -242,11 +242,35 @@ export const CatalogService = {
   },
 
   // WEIGHT UNITS
-  listWeightUnits: async () => {
-    return [
-      { id: 1, name: "Kgrs." },
-      { id: 2, name: "Lbs." },
-    ];
+  listWeightUnits: async (): Promise<{ id: number; name: string }[]> => {
+    const response = await fetch(`${API_BASE_URL}/catalog/weight-units`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al traer unidades de peso");
+    }
+
+    return await response.json();
+  },
+
+  addWeightUnit: async (name: string) => {
+    // TODO AGREGAR VALOR DE KG
+    const response = await fetch(`${API_BASE_URL}/catalog/weight-unit`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, kgValue: 1 }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al agregar unidad de peso");
+    }
+
+    const data = await response.json();
+    console.log("Unidad de peso agregado:", data);
+    return data;
   },
 
   // CURRENCIES

@@ -274,6 +274,7 @@ export default function CreatePurchase({
         <Dropdown
           value={formData.weightUnit}
           fetchItems={fetchWeightUnits}
+          addItem={CatalogService.addWeightUnit}
           onSelect={handleSelect("weightUnit")}
           label="Unidad"
           required
