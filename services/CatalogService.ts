@@ -48,6 +48,7 @@ export const CatalogService = {
     return await response.json();
   },
   addBuyer: async (name: string, clientId: number): Promise<number> => {
+    // TODO
     const response = await fetch(`${API_BASE_URL}/catalog/buyer`, {
       method: "POST",
       headers: {
@@ -74,8 +75,9 @@ export const CatalogService = {
       { id: 3, name: "Marca C" },
     ];
   },
-  addBrand: async (name: string) => {
-    return { id: Math.floor(Math.random() * 1000000), name };
+  addBrand: async (name: string): Promise<number> => {
+    console.log(name);
+    return Math.floor(Math.random() * 1000000);
   },
 
   // MODEL
@@ -88,8 +90,8 @@ export const CatalogService = {
     ];
   },
   addModel: async (name: string, brandId: number) => {
-    console.log(brandId);
-    return { id: Math.floor(Math.random() * 1000000), name };
+    console.log(name, brandId);
+    return Math.floor(Math.random() * 1000000);
   },
 
   // FAMILY
@@ -123,17 +125,38 @@ export const CatalogService = {
   },
 
   // SUBFAMILY
-  listSubfamilies: async (familyId: number) => {
-    console.log(familyId);
-    return [
-      { id: 1, name: "Subfamilia A" },
-      { id: 2, name: "Subfamilia B" },
-      { id: 3, name: "Subfamilia C" },
-    ];
+  listSubfamilies: async (
+    familyId: number,
+  ): Promise<{ id: number; name: string }[]> => {
+    const response = await fetch(
+      `${API_BASE_URL}/catalog/subfamilies?familyId=${familyId}`,
+      {
+        method: "GET",
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Error al traer subfamilias");
+    }
+
+    return await response.json();
   },
-  addSubfamily: async (name: string, familyId: number) => {
-    console.log(familyId);
-    return { id: Math.floor(Math.random() * 1000000), name };
+  addSubfamily: async (name: string, familyId: number): Promise<number> => {
+    const response = await fetch(`${API_BASE_URL}/catalog/subfamily`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, familyId }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al agregar subfamilia");
+    }
+
+    const data = await response.json();
+    console.log("Subfamilia agregado:", data);
+    return data;
   },
 
   // SUPPLIER
