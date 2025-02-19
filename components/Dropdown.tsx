@@ -58,7 +58,6 @@ export default function Dropdown({
     }
   }, [fetchItems]);
 
-  // Load items when dropdown is opened
   useEffect(() => {
     if (isOpen) {
       loadItems();
@@ -102,6 +101,7 @@ export default function Dropdown({
 
   const handleAddItem = async (e: React.FormEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     if (!newItemName.trim() || !addItem) return;
 
     try {
