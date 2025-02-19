@@ -13,7 +13,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import Button from "@/components/Button";
 import TransportForm from "@/app/(dashboard)/create/steps/Logistics/TransportForm";
@@ -45,6 +44,11 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
   const [selectedFreights, setSelectedFreights] = useState<
     Record<string, string>
   >({});
+
+  // ROW SELECTION
+  const [selectedRows, setSelectedRows] = useState<string[]>([]);
+  const [lastSelectedRow, setLastSelectedRow] = useState<string | null>(null);
+
   // MODALS
   const [showOriginExpensesModal, setShowOriginExpensesModal] = useState(false);
   const [showTransportModal, setShowTransportModal] = useState(false);
@@ -60,15 +64,6 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
   );
   const [editingDestinationExpenses, setEditingDestinationExpenses] =
     useState<DestinationExpenses | null>(null);
-  const [checkboxStates, setCheckboxStates] = useState<
-    Record<
-      string,
-      {
-        applyToAll: boolean;
-        applyToCurrent: boolean;
-      }
-    >
-  >({});
 
   useEffect(() => {
     if (!shouldFetch) return;
@@ -100,6 +95,33 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
     setSelectedFreights(initialSelections);
   }, []);
 
+  const handleRowClick = (budgetNumbering: string, event: React.MouseEvent) => {
+    if (event.shiftKey && lastSelectedRow) {
+      const currentIndex = budgets.findIndex(
+        (b) => b.numbering === budgetNumbering
+      );
+      const lastIndex = budgets.findIndex(
+        (b) => b.numbering === lastSelectedRow
+      );
+
+      const start = Math.min(currentIndex, lastIndex);
+      const end = Math.max(currentIndex, lastIndex);
+
+      const newSelection = budgets
+        .slice(start, end + 1)
+        .map((b) => b.numbering);
+
+      setSelectedRows(newSelection);
+    } else {
+      if (selectedRows.includes(budgetNumbering)) {
+        setSelectedRows(selectedRows.filter((row) => row !== budgetNumbering));
+      } else {
+        setSelectedRows([...selectedRows, budgetNumbering]);
+      }
+      setLastSelectedRow(budgetNumbering);
+    }
+  };
+
   const handleFreightUpdate = <
     T extends Transport | OriginExpenses | Custom | DestinationExpenses | null
   >(
@@ -124,7 +146,6 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
         )
       );
 
-      // ACTUALIZAR LOS BUDGETS QUE USEN ESE FLETE AL ACTUALIZARSE
       setBudgets(
         budgets.map((budget) =>
           budget.freight?.id === selectedFreightId
@@ -175,93 +196,54 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
   const handleAssignFreight = (budgetId: string, freightId: string) => {
     const freight = freights.find((f) => f.id === freightId);
     if (freight) {
-      setSelectedFreights((prev) => ({
-        ...prev,
-        [budgetId]: freightId,
-      }));
-
-      setCheckboxStates((prev) => ({
-        ...prev,
-        [budgetId]: {
-          applyToAll: false,
-          applyToCurrent: false,
-        },
-      }));
+      // Apply freight to all selected rows if there are any
+      if (selectedRows.length > 0) {
+        const newSelectedFreights = { ...selectedFreights };
+        selectedRows.forEach((rowId) => {
+          newSelectedFreights[rowId] = freightId;
+        });
+        setSelectedFreights(newSelectedFreights);
+      } else {
+        setSelectedFreights((prev) => ({
+          ...prev,
+          [budgetId]: freightId,
+        }));
+      }
     }
   };
 
   const handleConfirmFreight = (budgetNumbering: string) => {
-    const currentState = checkboxStates[budgetNumbering];
     const currentFreightId = selectedFreights[budgetNumbering];
-
     if (!currentFreightId) return;
 
     const freight = freights.find((f) => f.id === currentFreightId);
     if (!freight) return;
 
-    if (currentState?.applyToAll) {
-      const currentIndex = budgets.findIndex(
-        (b) => b.numbering === budgetNumbering
-      );
+    // Apply freight to all selected rows or current row
+    const rowsToUpdate =
+      selectedRows.length > 0 ? selectedRows : [budgetNumbering];
 
-      const newSelectedFreights = { ...selectedFreights };
+    const updatedBudgets = budgets.map((budget) => {
+      if (rowsToUpdate.includes(budget.numbering)) {
+        return {
+          ...budget,
+          freight: {
+            ...freight,
+            id: freight.id,
+            name: freight.name,
+            originExpenses: freight.originExpenses,
+            transport: freight.transport,
+            custom: freight.custom,
+            destinationExpenses: freight.destinationExpenses,
+            total: freight.total,
+          },
+        };
+      }
+      return budget;
+    });
 
-      const updatedBudgets = budgets.map((budget, index) => {
-        if (index >= currentIndex) {
-          newSelectedFreights[budget.numbering] = currentFreightId;
-
-          return {
-            ...budget,
-            freight: {
-              ...freight,
-              id: freight.id,
-              name: freight.name,
-              originExpenses: freight.originExpenses,
-              transport: freight.transport,
-              custom: freight.custom,
-              destinationExpenses: freight.destinationExpenses,
-              total: freight.total,
-            },
-          };
-        }
-        return budget;
-      });
-
-      setBudgets(updatedBudgets);
-      setSelectedFreights(newSelectedFreights);
-
-      setShouldFetch(true);
-    } else if (currentState?.applyToCurrent) {
-      const updatedBudgets = budgets.map((budget) => {
-        if (budget.numbering === budgetNumbering) {
-          return {
-            ...budget,
-            freight: {
-              ...freight,
-              id: freight.id,
-              name: freight.name,
-              originExpenses: freight.originExpenses,
-              transport: freight.transport,
-              custom: freight.custom,
-              destinationExpenses: freight.destinationExpenses,
-              total: freight.total,
-            },
-          };
-        }
-        return budget;
-      });
-
-      setBudgets(updatedBudgets);
-      setShouldFetch(true);
-    }
-
-    setCheckboxStates((prev) => ({
-      ...prev,
-      [budgetNumbering]: {
-        applyToAll: false,
-        applyToCurrent: false,
-      },
-    }));
+    setBudgets(updatedBudgets);
+    setShouldFetch(true);
   };
 
   const renderLogisticsTable = () => (
@@ -312,7 +294,13 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
           </TableRow>
         ) : (
           budgets.map((budget) => (
-            <TableRow key={budget.numbering} className="h-12 text-center">
+            <TableRow
+              key={budget.numbering}
+              className={`h-12 select-none text-center cursor-pointer hover:bg-primary/15 ${
+                selectedRows.includes(budget.numbering) ? "bg-primary/15" : ""
+              }`}
+              onClick={(e) => handleRowClick(budget.numbering, e)}
+            >
               <TableCell>{budget.stage + " " + budget.numbering}</TableCell>
               <TableCell>{budget.purchaseData?.item?.detail}</TableCell>
               <TableCell>{budget.purchaseData?.supplier}</TableCell>
@@ -331,110 +319,33 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
               <TableCell>{budget.purchaseData?.deliveryTime} días</TableCell>
               <TableCell>{budget.purchaseData?.incoterm}</TableCell>
               <TableCell>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button className="px-2" variant="secondary">
-                      {selectedFreights[budget.numbering] ? (
-                        <>
-                          {
-                            freights.find(
-                              (f) => f.id === selectedFreights[budget.numbering]
-                            )?.name
-                          }
-                          ($
-                          {freights
-                            .find(
-                              (f) => f.id === selectedFreights[budget.numbering]
-                            )
-                            ?.total.formatNumber()}
-                          )
-                        </>
-                      ) : (
-                        "Seleccionar Flete"
-                      )}
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-[425px]">
-                    <DialogHeader>
-                      <DialogTitle>Seleccionar Flete</DialogTitle>
-                    </DialogHeader>
-                    <div className="flex flex-col items-center">
-                      <select
-                        className="border rounded p-1 mb-2"
-                        value={selectedFreights[budget.numbering] || ""}
-                        onChange={(e) =>
-                          handleAssignFreight(budget.numbering, e.target.value)
-                        }
-                      >
-                        <option value="">Seleccionar Flete</option>
-                        {freights.map((freight) => (
-                          <option key={freight.id} value={freight.id}>
-                            {freight.name} (${freight.total.formatNumber()})
-                          </option>
-                        ))}
-                      </select>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id={`apply-all-${budget.numbering}`}
-                          checked={
-                            checkboxStates[budget.numbering]?.applyToAll ||
-                            false
-                          }
-                          onCheckedChange={(checked) => {
-                            setCheckboxStates((prev) => ({
-                              ...prev,
-                              [budget.numbering]: {
-                                applyToAll: checked as boolean,
-                                applyToCurrent: false,
-                              },
-                            }));
-                          }}
-                        />
-                        <label
-                          htmlFor={`apply-all-${budget.numbering}`}
-                          className="text-sm"
-                        >
-                          Aplicar flete para todos los items inferiores
-                        </label>
-                      </div>
-                      <div className="flex items-center space-x-2 mt-1">
-                        <Checkbox
-                          id={`apply-current-${budget.numbering}`}
-                          checked={
-                            checkboxStates[budget.numbering]?.applyToCurrent ||
-                            false
-                          }
-                          onCheckedChange={(checked) => {
-                            setCheckboxStates((prev) => ({
-                              ...prev,
-                              [budget.numbering]: {
-                                applyToAll: false,
-                                applyToCurrent: checked as boolean,
-                              },
-                            }));
-                          }}
-                        />
-                        <label
-                          htmlFor={`apply-current-${budget.numbering}`}
-                          className="text-sm"
-                        >
-                          Aplicar flete solo para este item
-                        </label>
-                      </div>
-                      <Button
-                        onClick={() => handleConfirmFreight(budget.numbering)}
-                        className="mt-2 bg-primary text-white"
-                        disabled={
-                          !selectedFreights[budget.numbering] ||
-                          (!checkboxStates[budget.numbering]?.applyToAll &&
-                            !checkboxStates[budget.numbering]?.applyToCurrent)
-                        }
-                      >
-                        Confirmar
-                      </Button>
-                    </div>
-                  </DialogContent>
-                </Dialog>
+                <div className="flex flex-col items-center">
+                  <select
+                    className="border rounded p-1 mb-2"
+                    value={selectedFreights[budget.numbering] || ""}
+                    onChange={(e) =>
+                      handleAssignFreight(budget.numbering, e.target.value)
+                    }
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <option value="">Seleccionar Flete</option>
+                    {freights.map((freight) => (
+                      <option key={freight.id} value={freight.id}>
+                        {freight.name} (${freight.total.formatNumber()})
+                      </option>
+                    ))}
+                  </select>
+                  {/* <Button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleConfirmFreight(budget.numbering);
+                    }}
+                    className="mt-2 bg-primary text-white"
+                    disabled={!selectedFreights[budget.numbering]}
+                  >
+                    Confirmar
+                  </Button> */}
+                </div>
               </TableCell>
             </TableRow>
           ))
