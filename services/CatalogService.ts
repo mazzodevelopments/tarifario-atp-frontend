@@ -68,33 +68,82 @@ export const CatalogService = {
   },
 
   // BRAND
-  listBrands: async () => {
-    return [
-      { id: 1, name: "Marca A" },
-      { id: 2, name: "Marca B" },
-      { id: 3, name: "Marca C" },
-    ];
+  listBrands: async (): Promise<{ id: number; name: string }[]> => {
+    const response = await fetch(`${API_BASE_URL}/catalog/brands`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al traer marcas");
+    }
+
+    return await response.json();
   },
   addBrand: async (name: string): Promise<number> => {
-    console.log(name);
-    return Math.floor(Math.random() * 1000000);
+    const response = await fetch(`${API_BASE_URL}/catalog/brand`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al agregar marca");
+    }
+
+    const data = await response.json();
+    console.log("Marca agregado:", data);
+    return data;
   },
 
   // MODEL
-  listModels: async (brandId: number) => {
-    console.log(brandId);
-    return [
-      { id: 1, name: "Modelo A" },
-      { id: 2, name: "Modelo B" },
-      { id: 3, name: "Modelo C" },
-    ];
+  listModels: async (
+    brandId: number,
+  ): Promise<{ id: number; name: string }[]> => {
+    const response = await fetch(
+      `${API_BASE_URL}/catalog/models?brandId=${brandId}`,
+      {
+        method: "GET",
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Error al traer marcas");
+    }
+
+    return await response.json();
   },
   addModel: async (name: string, brandId: number) => {
-    console.log(name, brandId);
-    return Math.floor(Math.random() * 1000000);
+    const response = await fetch(`${API_BASE_URL}/catalog/model`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, brandId }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al agregar modelo");
+    }
+
+    const data = await response.json();
+    console.log("Modelo agregado:", data);
+    return data;
   },
 
   // FAMILY
+  listFamilies: async (): Promise<{ id: number; name: string }[]> => {
+    const response = await fetch(`${API_BASE_URL}/catalog/families`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al traer familias");
+    }
+
+    return await response.json();
+  },
   addFamily: async (name: string) => {
     const response = await fetch(`${API_BASE_URL}/catalog/family`, {
       method: "POST",
@@ -111,17 +160,6 @@ export const CatalogService = {
     const data = await response.json();
     console.log("Familia agregado:", data);
     return data;
-  },
-  listFamilies: async (): Promise<{ id: number; name: string }[]> => {
-    const response = await fetch(`${API_BASE_URL}/catalog/families`, {
-      method: "GET",
-    });
-
-    if (!response.ok) {
-      throw new Error("Error al traer familias");
-    }
-
-    return await response.json();
   },
 
   // SUBFAMILY
@@ -173,13 +211,34 @@ export const CatalogService = {
   },
 
   // UNITS
-  listUnits: async (): Promise<DropdownItem[]> => {
-    return [
-      { id: 1, name: "Unidad" },
-      { id: 2, name: "Metro" },
-      { id: 3, name: "Kilogramo" },
-      { id: 4, name: "Litro" },
-    ];
+  listUnits: async (): Promise<{ id: number; name: string }[]> => {
+    const response = await fetch(`${API_BASE_URL}/catalog/units`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al traer unidades");
+    }
+
+    return await response.json();
+  },
+
+  addUnit: async (name: string) => {
+    const response = await fetch(`${API_BASE_URL}/catalog/unit`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al agregar unidad");
+    }
+
+    const data = await response.json();
+    console.log("Unidad agregado:", data);
+    return data;
   },
 
   // WEIGHT UNITS

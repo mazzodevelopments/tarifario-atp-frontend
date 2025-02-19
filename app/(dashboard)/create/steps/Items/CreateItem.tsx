@@ -193,6 +193,7 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
         <Dropdown
           value={formData.unit}
           fetchItems={fetchUnits}
+          addItem={CatalogService.addUnit}
           onSelect={handleSelect("unit")}
           label="Unidad de Medida"
           required
