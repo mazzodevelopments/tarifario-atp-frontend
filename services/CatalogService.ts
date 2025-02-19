@@ -1,4 +1,5 @@
 import { DropdownItem } from "@/components/Dropdown";
+import { API_BASE_URL } from "@/app/utils/config";
 
 export const CatalogService = {
   // CLIENT
@@ -55,14 +56,32 @@ export const CatalogService = {
 
   // FAMILY
   addFamily: async (name: string): Promise<DropdownItem> => {
-    return { id: Math.floor(Math.random() * 1000000), name };
+    const response = await fetch(`${API_BASE_URL}/catalog/family`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al agregar familia");
+    }
+
+    const data = await response.json();
+    console.log("Familia agregado:", data);
+    return data;
   },
-  listFamilies: async () => {
-    return [
-      { id: 1, name: "Familia A" },
-      { id: 2, name: "Familia B" },
-      { id: 3, name: "Familia C" },
-    ];
+  listFamilies: async (): Promise<{ id: number; name: string }[]> => {
+    const response = await fetch(`${API_BASE_URL}/catalog/families`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al traer familias");
+    }
+
+    return await response.json();
   },
 
   // SUBFAMILY
