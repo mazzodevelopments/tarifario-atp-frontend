@@ -13,6 +13,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import Button from "@/components/Button";
 import TransportForm from "@/app/(dashboard)/create/steps/Logistics/TransportForm";
@@ -59,8 +60,6 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
   );
   const [editingDestinationExpenses, setEditingDestinationExpenses] =
     useState<DestinationExpenses | null>(null);
-  const [applyToAllItems, setApplyToAllItems] = useState(false);
-  const [applyToCurrentItem, setApplyToCurrentItem] = useState(false);
   const [checkboxStates, setCheckboxStates] = useState<
     Record<
       string,
@@ -332,80 +331,110 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
               <TableCell>{budget.purchaseData?.deliveryTime} días</TableCell>
               <TableCell>{budget.purchaseData?.incoterm}</TableCell>
               <TableCell>
-                <div className="flex flex-col items-center">
-                  <select
-                    className="border rounded p-1 mb-2"
-                    value={selectedFreights[budget.numbering] || ""}
-                    onChange={(e) =>
-                      handleAssignFreight(budget.numbering, e.target.value)
-                    }
-                  >
-                    <option value="">Seleccionar Flete</option>
-                    {freights.map((freight) => (
-                      <option key={freight.id} value={freight.id}>
-                        {freight.name} (${freight.total.formatNumber()})
-                      </option>
-                    ))}
-                  </select>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id={`apply-all-${budget.numbering}`}
-                      checked={
-                        checkboxStates[budget.numbering]?.applyToAll || false
-                      }
-                      onCheckedChange={(checked) => {
-                        setCheckboxStates((prev) => ({
-                          ...prev,
-                          [budget.numbering]: {
-                            applyToAll: checked as boolean,
-                            applyToCurrent: false,
-                          },
-                        }));
-                      }}
-                    />
-                    <label
-                      htmlFor={`apply-all-${budget.numbering}`}
-                      className="text-sm"
-                    >
-                      Aplicar flete para todos los items inferiores
-                    </label>
-                  </div>
-                  <div className="flex items-center space-x-2 mt-1">
-                    <Checkbox
-                      id={`apply-current-${budget.numbering}`}
-                      checked={
-                        checkboxStates[budget.numbering]?.applyToCurrent ||
-                        false
-                      }
-                      onCheckedChange={(checked) => {
-                        setCheckboxStates((prev) => ({
-                          ...prev,
-                          [budget.numbering]: {
-                            applyToAll: false,
-                            applyToCurrent: checked as boolean,
-                          },
-                        }));
-                      }}
-                    />
-                    <label
-                      htmlFor={`apply-current-${budget.numbering}`}
-                      className="text-sm"
-                    >
-                      Aplicar flete solo para este item
-                    </label>
-                  </div>
-                  <Button
-                    onClick={() => handleConfirmFreight(budget.numbering)}
-                    className="mt-2 bg-primary text-white"
-                    disabled={
-                      !selectedFreights[budget.numbering] ||
-                      (!checkboxStates[budget.numbering]?.applyToAll &&
-                        !checkboxStates[budget.numbering]?.applyToCurrent)
-                    }
-                  >
-                    Confirmar
-                  </Button>
-                </div>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button className="px-2" variant="secondary">
+                      {selectedFreights[budget.numbering] ? (
+                        <>
+                          {
+                            freights.find(
+                              (f) => f.id === selectedFreights[budget.numbering]
+                            )?.name
+                          }
+                          ($
+                          {freights
+                            .find(
+                              (f) => f.id === selectedFreights[budget.numbering]
+                            )
+                            ?.total.formatNumber()}
+                          )
+                        </>
+                      ) : (
+                        "Seleccionar Flete"
+                      )}
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <DialogTitle>Seleccionar Flete</DialogTitle>
+                    </DialogHeader>
+                    <div className="flex flex-col items-center">
+                      <select
+                        className="border rounded p-1 mb-2"
+                        value={selectedFreights[budget.numbering] || ""}
+                        onChange={(e) =>
+                          handleAssignFreight(budget.numbering, e.target.value)
+                        }
+                      >
+                        <option value="">Seleccionar Flete</option>
+                        {freights.map((freight) => (
+                          <option key={freight.id} value={freight.id}>
+                            {freight.name} (${freight.total.formatNumber()})
+                          </option>
+                        ))}
+                      </select>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id={`apply-all-${budget.numbering}`}
+                          checked={
+                            checkboxStates[budget.numbering]?.applyToAll ||
+                            false
+                          }
+                          onCheckedChange={(checked) => {
+                            setCheckboxStates((prev) => ({
+                              ...prev,
+                              [budget.numbering]: {
+                                applyToAll: checked as boolean,
+                                applyToCurrent: false,
+                              },
+                            }));
+                          }}
+                        />
+                        <label
+                          htmlFor={`apply-all-${budget.numbering}`}
+                          className="text-sm"
+                        >
+                          Aplicar flete para todos los items inferiores
+                        </label>
+                      </div>
+                      <div className="flex items-center space-x-2 mt-1">
+                        <Checkbox
+                          id={`apply-current-${budget.numbering}`}
+                          checked={
+                            checkboxStates[budget.numbering]?.applyToCurrent ||
+                            false
+                          }
+                          onCheckedChange={(checked) => {
+                            setCheckboxStates((prev) => ({
+                              ...prev,
+                              [budget.numbering]: {
+                                applyToAll: false,
+                                applyToCurrent: checked as boolean,
+                              },
+                            }));
+                          }}
+                        />
+                        <label
+                          htmlFor={`apply-current-${budget.numbering}`}
+                          className="text-sm"
+                        >
+                          Aplicar flete solo para este item
+                        </label>
+                      </div>
+                      <Button
+                        onClick={() => handleConfirmFreight(budget.numbering)}
+                        className="mt-2 bg-primary text-white"
+                        disabled={
+                          !selectedFreights[budget.numbering] ||
+                          (!checkboxStates[budget.numbering]?.applyToAll &&
+                            !checkboxStates[budget.numbering]?.applyToCurrent)
+                        }
+                      >
+                        Confirmar
+                      </Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </TableCell>
             </TableRow>
           ))
