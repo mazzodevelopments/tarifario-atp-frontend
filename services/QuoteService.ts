@@ -1,7 +1,7 @@
 import { QuotationData } from "@/types/QuotationData";
 import { TEST_BUDGETS, TEST_ITEMS } from "@/app/(dashboard)/create/testData";
 import { CreateItem, Item } from "@/types/Item";
-import { PurchaseData } from "@/types/PurchaseData";
+import { CreatePurchaseData, PurchaseData } from "@/types/PurchaseData";
 import { SalesData } from "@/types/SalesData";
 import { API_BASE_URL } from "@/app/utils/config";
 
@@ -55,7 +55,7 @@ export const QuoteService = {
     return TEST_BUDGETS;
   },
   addPurchaseData: async (
-    newPurchaseData: PurchaseData,
+    newPurchaseData: CreatePurchaseData,
     quotationId: number,
   ) => {
     console.log(
@@ -63,6 +63,24 @@ export const QuoteService = {
       newPurchaseData,
       quotationId,
     );
+    const response = await fetch(
+      `${API_BASE_URL}/quote/${quotationId}/budgets`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newPurchaseData),
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Error al agregar el item");
+    }
+
+    const data = await response.json();
+    console.log("Item agregado:", data);
+    return data;
   },
   updatePurchaseData: async (editedPurchaseData: PurchaseData) => {
     console.log(

@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/dialog";
 import type { Budget } from "@/types/Budget";
 import type { Item } from "@/types/Item";
-import type { PurchaseData } from "@/types/PurchaseData";
+import type { CreatePurchaseData } from "@/types/PurchaseData";
 import { X } from "react-feather";
 import "@/app/utils/formatNumber";
 import { PlusCircle } from "lucide-react";
@@ -59,18 +59,12 @@ export default function PurchaseList({
     fetchQuotationBudgets();
   }, [shouldFetch]);
 
-  const onPurchaseCreated = async (newPurchase: PurchaseData) => {
+  const onPurchaseCreated = async (newPurchase: CreatePurchaseData) => {
     try {
-      await QuoteService.addPurchaseData(newPurchase, quotationId);
-      const newBudget = {
-        numbering: `00000000${Math.floor(Math.random() * 100)
-          .toString()
-          .padStart(2, "0")}`,
-        purchaseData: newPurchase,
-        freight: null,
-        salesData: null,
-        stage: "COTI",
-      };
+      const newBudget = await QuoteService.addPurchaseData(
+        newPurchase,
+        quotationId,
+      );
       setBudgets([...budgets, newBudget]);
       setShowCreateModal(false);
       setShouldFetch(true);

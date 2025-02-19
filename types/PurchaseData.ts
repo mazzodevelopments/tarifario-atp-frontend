@@ -17,3 +17,21 @@ export interface PurchaseData {
   incoterm: string;
   additionalObservations: string;
 }
+
+export interface CreatePurchaseData {
+  date: string;
+  unitPrice: number;
+  margin: number;
+  appliedUnitPrice: number;
+  unitWeight: number;
+  totalWeight: number;
+  additionalObservations: string;
+  deliveryTime: number;
+  itemId: number | null;
+  originId: number | null;
+  destinationId: number | null;
+  supplierId: number | null;
+  currencyId: number | null;
+  weightUnitId: number | null;
+  incotermId: number | null;
+}

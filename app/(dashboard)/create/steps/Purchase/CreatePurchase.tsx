@@ -1,17 +1,44 @@
+"use client";
+
 import type React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Dropdown, { type DropdownItem } from "@/components/Dropdown";
 import type { Item } from "@/types/Item";
-import type { PurchaseData } from "@/types/PurchaseData";
+import type { CreatePurchaseData } from "@/types/PurchaseData";
 import { CatalogService } from "@/services/CatalogService";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 
 interface CreatePurchaseProps {
-  onPurchaseCreated: (purchaseData: PurchaseData) => void;
+  onPurchaseCreated: (purchaseData: CreatePurchaseData) => void;
   items: Item[];
   onCancel?: () => void;
+}
+
+interface CreatePurchaseDataForm {
+  date: string;
+  unitPrice: number;
+  margin: number;
+  appliedUnitPrice: number;
+  unitWeight: number;
+  totalWeight: number;
+  additionalObservations: string;
+  item: string;
+  itemId: number | null;
+  origin: string;
+  deliveryTime: number;
+  originId: number | null;
+  destination: string;
+  destinationId: number | null;
+  supplier: string;
+  supplierId: number | null;
+  currency: string;
+  currencyId: number | null;
+  weightUnit: string;
+  weightUnitId: number | null;
+  incoterm: string;
+  incotermId: number | null;
 }
 
 export default function CreatePurchase({
@@ -19,21 +46,28 @@ export default function CreatePurchase({
   items,
   onCancel,
 }: CreatePurchaseProps) {
-  const [formData, setFormData] = useState<PurchaseData>({
+  const [formData, setFormData] = useState<CreatePurchaseDataForm>({
     date: new Date().toISOString().split("T")[0],
-    item: null,
+    item: "",
+    itemId: null,
     origin: "",
+    originId: null,
     destination: "",
+    destinationId: null,
     supplier: "",
+    supplierId: null,
     currency: "",
+    currencyId: null,
     unitPrice: 0,
     margin: 0,
     appliedUnitPrice: 0,
     deliveryTime: 0,
     unitWeight: 0,
     totalWeight: 0,
-    unit: "",
+    weightUnit: "",
+    weightUnitId: null,
     incoterm: "",
+    incotermId: null,
     additionalObservations: "",
   });
 
@@ -42,10 +76,11 @@ export default function CreatePurchase({
 
   // CALCULO DEL PESO
   useEffect(() => {
-    if (formData.item && formData.unitWeight) {
+    if (formData.itemId && formData.unitWeight) {
+      const selectedItem = items.find((item) => item.id === formData.itemId);
       setFormData((prev) => ({
         ...prev,
-        totalWeight: prev.unitWeight * (formData.item?.quantity || 1),
+        totalWeight: prev.unitWeight * (selectedItem?.quantity || 1),
       }));
     } else {
       setFormData((prev) => ({
@@ -53,7 +88,7 @@ export default function CreatePurchase({
         totalWeight: 0,
       }));
     }
-  }, [formData.item, formData.unitWeight]);
+  }, [formData.itemId, formData.unitWeight, items]);
 
   // CALCULO TOTAL PRECIO UNITARIO
   useEffect(() => {
@@ -65,7 +100,24 @@ export default function CreatePurchase({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onPurchaseCreated(formData);
+    const purchaseData: CreatePurchaseData = {
+      date: formData.date,
+      unitPrice: formData.unitPrice,
+      margin: formData.margin,
+      appliedUnitPrice: formData.appliedUnitPrice,
+      unitWeight: formData.unitWeight,
+      totalWeight: formData.totalWeight,
+      additionalObservations: formData.additionalObservations,
+      deliveryTime: formData.deliveryTime,
+      itemId: formData.itemId,
+      originId: formData.originId,
+      destinationId: formData.destinationId,
+      supplierId: formData.supplierId,
+      currencyId: formData.currencyId,
+      weightUnitId: formData.weightUnitId,
+      incotermId: formData.incotermId,
+    };
+    onPurchaseCreated(purchaseData);
   };
 
   const handleChange = (
@@ -80,46 +132,43 @@ export default function CreatePurchase({
     }));
   };
 
-  const handleSelect = (field: keyof PurchaseData) => (item: DropdownItem) => {
-    if (field === "item") {
-      const selectedItem = items.find((i) => i.id === item.id);
+  const handleSelect =
+    (field: keyof CreatePurchaseDataForm) => (item: DropdownItem) => {
       setFormData((prev) => ({
         ...prev,
-        [field]: selectedItem || null,
+        [field]: item.name,
+        [`${field}Id`]: item.id,
       }));
-    } else {
-      setFormData((prev) => ({ ...prev, [field]: item.name }));
-    }
-  };
+    };
 
-  const fetchSuppliers = async () => {
+  const fetchSuppliers = useCallback(async () => {
     const suppliers = await CatalogService.listSuppliers();
     return adaptToDropdown(suppliers, "id", "name");
-  };
+  }, []);
 
-  const fetchCurrencies = async () => {
+  const fetchCurrencies = useCallback(async () => {
     const currencies = await CatalogService.listCurrencies();
     return adaptToDropdown(currencies, "id", "name");
-  };
+  }, []);
 
-  const fetchWeightUnits = async () => {
+  const fetchWeightUnits = useCallback(async () => {
     const weightUnits = await CatalogService.listWeightUnits();
     return adaptToDropdown(weightUnits, "id", "name");
-  };
+  }, []);
 
-  const fetchLocations = async () => {
+  const fetchLocations = useCallback(async () => {
     const locations = await CatalogService.listLocations();
     return adaptToDropdown(locations, "id", "name");
-  };
+  }, []);
 
-  const fetchIncoterms = async () => {
+  const fetchIncoterms = useCallback(async () => {
     const incoterms = await CatalogService.listIncoterms();
     return adaptToDropdown(incoterms, "id", "name");
-  };
+  }, []);
 
-  const fetchItems = async () => {
+  const fetchItems = useCallback(async () => {
     return adaptToDropdown(items, "id", "detail");
-  };
+  }, [items]);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -132,7 +181,7 @@ export default function CreatePurchase({
         required
       />
       <Dropdown
-        value={formData.item?.detail}
+        value={formData.item}
         fetchItems={fetchItems}
         onSelect={handleSelect("item")}
         label="Item"
@@ -165,7 +214,6 @@ export default function CreatePurchase({
       </div>
       <Dropdown
         value={formData.supplier}
-        addItem={CatalogService.addSupplier}
         fetchItems={fetchSuppliers}
         onSelect={handleSelect("supplier")}
         label="Proovedor"
@@ -224,9 +272,9 @@ export default function CreatePurchase({
           min="0"
         />
         <Dropdown
-          value={formData.unit}
+          value={formData.weightUnit}
           fetchItems={fetchWeightUnits}
-          onSelect={handleSelect("unit")}
+          onSelect={handleSelect("weightUnit")}
           label="Unidad"
           required
         />
