@@ -248,6 +248,42 @@ export default function Proveedores() {
                   ))}
                 </div>
               </div>
+
+              <div className="mt-2">
+                <label htmlFor="pais">Familias de Items</label>
+                <div className="flex space-x-2">
+                  <Input
+                    id="familia"
+                    value={currentFamilia}
+                    onChange={(e) => setCurrentFamilia(e.target.value)}
+                    placeholder="Agregar familia de items"
+                  />
+                  <Button
+                    className="flex px-3 justify-center items-center text-white"
+                    type="button"
+                    onClick={addFamilia}
+                  >
+                    Agregar
+                  </Button>
+                </div>
+                <div className="mt-2 space-y-2">
+                  {nuevoProveedor.familias.map((familia, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between bg-gray-100 p-2 rounded"
+                    >
+                      <span>{familia}</span>
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        onClick={() => removeFamilia(index)}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
               <Button type="submit" className="text-white">
                 Guardar
               </Button>

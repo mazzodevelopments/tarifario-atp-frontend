@@ -27,6 +27,7 @@ import type { DestinationExpenses } from "@/types/DestinationExpenses";
 import type { Freight } from "@/types/Freight";
 import "@/app/utils/formatNumber";
 import { QuoteService } from "@/services/QuoteService";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export default function LogisticList({ quotationId }: { quotationId: number }) {
   // BUDGETS
@@ -34,11 +35,11 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
   const [shouldFetch, setShouldFetch] = useState(true);
   const [freights, setFreights] = useState<Freight[]>([]);
   const [activeTab, setActiveTab] = useState<"logistics" | "freights">(
-    "logistics",
+    "logistics"
   );
   // SELECTED FREIGHTS
   const [selectedFreightId, setSelectedFreightId] = useState<string | null>(
-    null,
+    null
   );
   const [selectedFreights, setSelectedFreights] = useState<
     Record<string, string>
@@ -54,10 +55,21 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
     useState<OriginExpenses | null>(null);
   const [editingCustom, setEditingCustom] = useState<Custom | null>(null);
   const [editingTransport, setEditingTransport] = useState<Transport | null>(
-    null,
+    null
   );
   const [editingDestinationExpenses, setEditingDestinationExpenses] =
     useState<DestinationExpenses | null>(null);
+  const [applyToAllItems, setApplyToAllItems] = useState(false);
+  const [applyToCurrentItem, setApplyToCurrentItem] = useState(false);
+  const [checkboxStates, setCheckboxStates] = useState<
+    Record<
+      string,
+      {
+        applyToAll: boolean;
+        applyToCurrent: boolean;
+      }
+    >
+  >({});
 
   useEffect(() => {
     if (!shouldFetch) return;
@@ -66,7 +78,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
       try {
         const quotationBudgets = await QuoteService.getQuotationBudgets(
           quotationId,
-          "logistic",
+          "logistic"
         );
         setBudgets(quotationBudgets);
         setShouldFetch(false);
@@ -90,12 +102,12 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
   }, []);
 
   const handleFreightUpdate = <
-    T extends Transport | OriginExpenses | Custom | DestinationExpenses | null,
+    T extends Transport | OriginExpenses | Custom | DestinationExpenses | null
   >(
     field: "transport" | "originExpenses" | "custom" | "destinationExpenses",
     value: T,
     setShowModal: (value: boolean) => void,
-    setEditing: (value: T | null) => void,
+    setEditing: (value: T | null) => void
   ) => {
     if (selectedFreightId) {
       setFreights(
@@ -109,8 +121,8 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
                   [field]: value,
                 }),
               }
-            : freight,
-        ),
+            : freight
+        )
       );
 
       // ACTUALIZAR LOS BUDGETS QUE USEN ESE FLETE AL ACTUALIZARSE
@@ -128,8 +140,8 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
                   }),
                 },
               }
-            : budget,
-        ),
+            : budget
+        )
       );
 
       setShowModal(false);
@@ -169,18 +181,88 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
         [budgetId]: freightId,
       }));
 
-      setBudgets(
-        budgets.map((budget) =>
-          budget.numbering === budgetId
-            ? {
-                ...budget,
-                freight: freight,
-              }
-            : budget,
-        ),
+      setCheckboxStates((prev) => ({
+        ...prev,
+        [budgetId]: {
+          applyToAll: false,
+          applyToCurrent: false,
+        },
+      }));
+    }
+  };
+
+  const handleConfirmFreight = (budgetNumbering: string) => {
+    const currentState = checkboxStates[budgetNumbering];
+    const currentFreightId = selectedFreights[budgetNumbering];
+
+    if (!currentFreightId) return;
+
+    const freight = freights.find((f) => f.id === currentFreightId);
+    if (!freight) return;
+
+    if (currentState?.applyToAll) {
+      const currentIndex = budgets.findIndex(
+        (b) => b.numbering === budgetNumbering
       );
+
+      const newSelectedFreights = { ...selectedFreights };
+
+      const updatedBudgets = budgets.map((budget, index) => {
+        if (index >= currentIndex) {
+          newSelectedFreights[budget.numbering] = currentFreightId;
+
+          return {
+            ...budget,
+            freight: {
+              ...freight,
+              id: freight.id,
+              name: freight.name,
+              originExpenses: freight.originExpenses,
+              transport: freight.transport,
+              custom: freight.custom,
+              destinationExpenses: freight.destinationExpenses,
+              total: freight.total,
+            },
+          };
+        }
+        return budget;
+      });
+
+      setBudgets(updatedBudgets);
+      setSelectedFreights(newSelectedFreights);
+
+      setShouldFetch(true);
+    } else if (currentState?.applyToCurrent) {
+      const updatedBudgets = budgets.map((budget) => {
+        if (budget.numbering === budgetNumbering) {
+          return {
+            ...budget,
+            freight: {
+              ...freight,
+              id: freight.id,
+              name: freight.name,
+              originExpenses: freight.originExpenses,
+              transport: freight.transport,
+              custom: freight.custom,
+              destinationExpenses: freight.destinationExpenses,
+              total: freight.total,
+            },
+          };
+        }
+        return budget;
+      });
+
+      setBudgets(updatedBudgets);
       setShouldFetch(true);
     }
+
+    setCheckboxStates((prev) => ({
+      ...prev,
+      [budgetNumbering]: {
+        applyToAll: false,
+        applyToCurrent: false,
+      },
+    }));
   };
 
   const renderLogisticsTable = () => (
@@ -250,20 +332,80 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
               <TableCell>{budget.purchaseData?.deliveryTime} días</TableCell>
               <TableCell>{budget.purchaseData?.incoterm}</TableCell>
               <TableCell>
-                <select
-                  className="border rounded p-1"
-                  value={selectedFreights[budget.numbering] || ""}
-                  onChange={(e) =>
-                    handleAssignFreight(budget.numbering, e.target.value)
-                  }
-                >
-                  <option value="">Seleccionar Flete</option>
-                  {freights.map((freight) => (
-                    <option key={freight.id} value={freight.id}>
-                      {freight.name} (${freight.total.formatNumber()})
-                    </option>
-                  ))}
-                </select>
+                <div className="flex flex-col items-center">
+                  <select
+                    className="border rounded p-1 mb-2"
+                    value={selectedFreights[budget.numbering] || ""}
+                    onChange={(e) =>
+                      handleAssignFreight(budget.numbering, e.target.value)
+                    }
+                  >
+                    <option value="">Seleccionar Flete</option>
+                    {freights.map((freight) => (
+                      <option key={freight.id} value={freight.id}>
+                        {freight.name} (${freight.total.formatNumber()})
+                      </option>
+                    ))}
+                  </select>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id={`apply-all-${budget.numbering}`}
+                      checked={
+                        checkboxStates[budget.numbering]?.applyToAll || false
+                      }
+                      onCheckedChange={(checked) => {
+                        setCheckboxStates((prev) => ({
+                          ...prev,
+                          [budget.numbering]: {
+                            applyToAll: checked as boolean,
+                            applyToCurrent: false,
+                          },
+                        }));
+                      }}
+                    />
+                    <label
+                      htmlFor={`apply-all-${budget.numbering}`}
+                      className="text-sm"
+                    >
+                      Aplicar flete para todos los items inferiores
+                    </label>
+                  </div>
+                  <div className="flex items-center space-x-2 mt-1">
+                    <Checkbox
+                      id={`apply-current-${budget.numbering}`}
+                      checked={
+                        checkboxStates[budget.numbering]?.applyToCurrent ||
+                        false
+                      }
+                      onCheckedChange={(checked) => {
+                        setCheckboxStates((prev) => ({
+                          ...prev,
+                          [budget.numbering]: {
+                            applyToAll: false,
+                            applyToCurrent: checked as boolean,
+                          },
+                        }));
+                      }}
+                    />
+                    <label
+                      htmlFor={`apply-current-${budget.numbering}`}
+                      className="text-sm"
+                    >
+                      Aplicar flete solo para este item
+                    </label>
+                  </div>
+                  <Button
+                    onClick={() => handleConfirmFreight(budget.numbering)}
+                    className="mt-2 bg-primary text-white"
+                    disabled={
+                      !selectedFreights[budget.numbering] ||
+                      (!checkboxStates[budget.numbering]?.applyToAll &&
+                        !checkboxStates[budget.numbering]?.applyToCurrent)
+                    }
+                  >
+                    Confirmar
+                  </Button>
+                </div>
               </TableCell>
             </TableRow>
           ))
@@ -275,7 +417,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
   const renderFreightActionCell = (
     freight: Freight,
     type: "transport" | "custom" | "destinationExpenses" | "origin",
-    setShowModal: (show: boolean) => void,
+    setShowModal: (show: boolean) => void
   ) => {
     const data = type === "origin" ? freight.originExpenses : freight[type];
 
@@ -294,12 +436,12 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
                 setShowTransportModal(true);
               } else if (type === "origin") {
                 setEditingOriginExpenses(
-                  freight.originExpenses as OriginExpenses,
+                  freight.originExpenses as OriginExpenses
                 );
                 setShowOriginExpensesModal(true);
               } else if (type === "destinationExpenses") {
                 setEditingDestinationExpenses(
-                  freight.destinationExpenses as DestinationExpenses,
+                  freight.destinationExpenses as DestinationExpenses
                 );
                 setShowDestinationExpensesModal(true);
               }
@@ -368,28 +510,28 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
                   {renderFreightActionCell(
                     freight,
                     "origin",
-                    setShowOriginExpensesModal,
+                    setShowOriginExpensesModal
                   )}
                 </TableCell>
                 <TableCell>
                   {renderFreightActionCell(
                     freight,
                     "transport",
-                    setShowTransportModal,
+                    setShowTransportModal
                   )}
                 </TableCell>
                 <TableCell>
                   {renderFreightActionCell(
                     freight,
                     "custom",
-                    setShowCustomModal,
+                    setShowCustomModal
                   )}
                 </TableCell>
                 <TableCell>
                   {renderFreightActionCell(
                     freight,
                     "destinationExpenses",
-                    setShowDestinationExpensesModal,
+                    setShowDestinationExpensesModal
                   )}
                 </TableCell>
                 <TableCell>${freight.total.formatNumber()}</TableCell>
@@ -466,7 +608,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
                   "originExpenses",
                   expenses,
                   setShowOriginExpensesModal,
-                  setEditingOriginExpenses,
+                  setEditingOriginExpenses
                 );
               }}
               onCancel={() => {
@@ -494,7 +636,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
                   "transport",
                   transport,
                   setShowTransportModal,
-                  setEditingTransport,
+                  setEditingTransport
                 )
               }
               onCancel={() => {
@@ -524,7 +666,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
                   "custom",
                   custom,
                   setShowCustomModal,
-                  setEditingCustom,
+                  setEditingCustom
                 );
               }}
               onCancel={() => {
@@ -557,7 +699,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
                   "destinationExpenses",
                   expenses,
                   setShowDestinationExpensesModal,
-                  setEditingDestinationExpenses,
+                  setEditingDestinationExpenses
                 );
               }}
               onCancel={() => {
