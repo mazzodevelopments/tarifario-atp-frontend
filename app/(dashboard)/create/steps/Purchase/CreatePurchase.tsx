@@ -9,6 +9,14 @@ import type { Item } from "@/types/Item";
 import type { CreatePurchaseData } from "@/types/PurchaseData";
 import { CatalogService } from "@/services/CatalogService";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { PlusCircle } from "lucide-react";
 
 interface CreatePurchaseProps {
   onPurchaseCreated: (purchaseData: CreatePurchaseData) => void;
@@ -121,7 +129,7 @@ export default function CreatePurchase({
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value, type } = e.target;
 
@@ -188,20 +196,70 @@ export default function CreatePurchase({
         required
       />
       <div className="grid grid-cols-3 gap-4">
-        <Dropdown
-          value={formData.origin}
-          fetchItems={fetchLocations}
-          onSelect={handleSelect("origin")}
-          label="Origen"
-          required
-        />
-        <Dropdown
-          value={formData.destination}
-          fetchItems={fetchLocations}
-          onSelect={handleSelect("destination")}
-          label="L. Entrega"
-          required
-        />
+        <div className="flex flex-col">
+          <label className="block text-sm font-[600] text-gray-700">
+            Origen
+          </label>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button
+                variant="primary"
+                className="flex items-center gap-1 text-primary border border-primary/20 bg-primary/5 hover:text-primary-dark"
+              >
+                <PlusCircle size={16} />
+                <span className="mt-[1.5px]">
+                  {formData.origin || "Agregar"}
+                </span>
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Agregar Origen</DialogTitle>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <Input name="country" label="País" required />
+                <Input name="city" label="Ciudad" required />
+              </div>
+              <div className="w-full flex justify-end items-center">
+                <Button variant="primary" className="px-8 text-white">
+                  Guardar
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
+        <div className="flex flex-col">
+          <label className="block text-sm font-[600] text-gray-700">
+            L. Entrega
+          </label>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button
+                variant="primary"
+                className="flex items-center gap-1 text-primary border border-primary/20 bg-primary/5 hover:text-primary-dark"
+              >
+                <PlusCircle size={16} />
+                <span className="mt-[1.5px]">
+                  {formData.origin || "Agregar"}
+                </span>
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Agregar Origen</DialogTitle>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <Input name="country" label="País" required />
+                <Input name="city" label="Ciudad" required />
+              </div>
+              <div className="w-full flex justify-end items-center">
+                <Button variant="primary" className="px-8 text-white">
+                  Guardar
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
         <Input
           type="number"
           name="deliveryTime"
