@@ -148,7 +148,7 @@ export default function CreatePurchase({
 
   const fetchCurrencies = useCallback(async () => {
     const currencies = await CatalogService.listCurrencies();
-    return adaptToDropdown(currencies, "id", "name");
+    return adaptToDropdown(currencies, "id", "abbreviation");
   }, []);
 
   const fetchWeightUnits = useCallback(async () => {
@@ -163,7 +163,7 @@ export default function CreatePurchase({
 
   const fetchIncoterms = useCallback(async () => {
     const incoterms = await CatalogService.listIncoterms();
-    return adaptToDropdown(incoterms, "id", "name");
+    return adaptToDropdown(incoterms, "id", "abbreviation");
   }, []);
 
   const fetchItems = useCallback(async () => {
@@ -215,6 +215,7 @@ export default function CreatePurchase({
       <Dropdown
         value={formData.supplier}
         fetchItems={fetchSuppliers}
+        addItem={CatalogService.addSupplier}
         onSelect={handleSelect("supplier")}
         label="Proovedor"
         required
@@ -223,6 +224,7 @@ export default function CreatePurchase({
         <Dropdown
           value={formData.currency}
           fetchItems={fetchCurrencies}
+          addItem={CatalogService.addCurrency}
           onSelect={handleSelect("currency")}
           label="Moneda"
           required
@@ -291,6 +293,7 @@ export default function CreatePurchase({
       <Dropdown
         value={formData.incoterm}
         fetchItems={fetchIncoterms}
+        addItem={CatalogService.addIncoterm}
         onSelect={handleSelect("incoterm")}
         label="Incoterm"
         required
