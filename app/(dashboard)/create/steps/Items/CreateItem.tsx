@@ -1,26 +1,49 @@
-import { useState, useCallback } from "react"; // Importa useCallback
+"use client";
+
+import type React from "react";
+
+import { useState, useCallback } from "react";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
-import Dropdown, { DropdownItem } from "@/components/Dropdown";
+import Dropdown, { type DropdownItem } from "@/components/Dropdown";
 import { DialogClose } from "@/components/ui/dialog";
-import { Item } from "@/types/Item";
+import type { Item, CreateItem } from "@/types/Item";
 import { CatalogService } from "@/services/CatalogService";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 
 interface CreateItemProps {
-  onItemCreated: (item: Item) => void;
+  onItemCreated: (item: CreateItem) => void;
+}
+
+interface CreateItemForm {
+  numbering: string;
+  detail: string;
+  quantity: number;
+  partNumber: string;
+  productNumber: string;
+  subfamilyId: number | null;
+  modelId: number | null;
+  unitId: number | null;
+  model?: string;
+  brand?: string;
+  family?: string;
+  subfamily?: string;
+  unit?: string;
 }
 
 export default function CreateItem({ onItemCreated }: CreateItemProps) {
-  const [formData, setFormData] = useState<Omit<Item, "id">>({
+  const [formData, setFormData] = useState<CreateItemForm>({
     numbering: "",
     family: "",
     subfamily: "",
+    subfamilyId: null,
     detail: "",
-    model: "",
     brand: "",
+    model: "",
+    modelId: null,
     quantity: 0,
     unit: "",
+    unitId: null,
     partNumber: "",
     productNumber: "",
   });
@@ -30,13 +53,19 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const newItem = {
-      ...formData,
+    const newItem: CreateItem = {
       numbering: `P${Math.floor(Math.random() * 100)
         .toString()
         .padStart(9, "0")}`,
+      detail: formData.detail,
+      quantity: formData.quantity,
+      partNumber: formData.partNumber,
+      productNumber: formData.productNumber,
+      subfamilyId: formData.subfamilyId!,
+      modelId: formData.modelId!,
+      unitId: formData.unitId!,
     };
-    onItemCreated({ ...newItem, id: 1 });
+    onItemCreated(newItem);
   };
 
   const handleChange = (
@@ -51,16 +80,24 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
   };
 
   const handleSelect = (field: keyof Item) => (item: DropdownItem) => {
-    setFormData((prev) => ({ ...prev, [field]: item.name }));
+    if (field === "subfamily") {
+      setFormData((prev) => ({ ...prev, subfamilyId: item.id }));
+    } else if (field === "model") {
+      setFormData((prev) => ({ ...prev, modelId: item.id }));
+    } else if (field === "unit") {
+      setFormData((prev) => ({ ...prev, unitId: item.id }));
+    } else {
+      setFormData((prev) => ({ ...prev, [field]: item.name }));
+    }
 
     if (field === "brand") {
       setSelectedBrandId(item.id);
-      setFormData((prev) => ({ ...prev, model: "" }));
+      setFormData((prev) => ({ ...prev, modelId: null }));
     }
 
     if (field === "family") {
       setSelectedFamilyId(item.id);
-      setFormData((prev) => ({ ...prev, subfamily: "" }));
+      setFormData((prev) => ({ ...prev, subfamilyId: null }));
     }
   };
 

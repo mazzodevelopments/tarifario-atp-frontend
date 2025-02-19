@@ -1,6 +1,6 @@
 import { QuotationData } from "@/types/QuotationData";
 import { TEST_BUDGETS, TEST_ITEMS } from "@/app/(dashboard)/create/testData";
-import { Item } from "@/types/Item";
+import { CreateItem, Item } from "@/types/Item";
 import { PurchaseData } from "@/types/PurchaseData";
 import { SalesData } from "@/types/SalesData";
 import { API_BASE_URL } from "@/app/utils/config";
@@ -20,23 +20,23 @@ export const QuoteService = {
     console.log("LLAMADO A LA API PARA OBTENER TODOS LOS ITEMS", quotationId);
     return TEST_ITEMS;
   },
-  addItem: async (newItem: Item, quotationId: number) => {
+  addItem: async (newItem: CreateItem, quotationId: number) => {
     console.log("LLAMADO A LA API PARA AGREGAR ITEM", newItem, quotationId);
-    // const response = await fetch(`${API_BASE_URL}/quote/${quotationId}/item`, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(newItem),
-    // });
-    //
-    // if (!response.ok) {
-    //   throw new Error("Error al agregar el item");
-    // }
-    //
-    // const data = await response.json();
-    // console.log("Item agregado:", data);
-    // return data;
+    const response = await fetch(`${API_BASE_URL}/quote/${quotationId}/item`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newItem),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al agregar el item");
+    }
+
+    const data = await response.json();
+    console.log("Item agregado:", data);
+    return data;
   },
   updateItem: async (editedItem: Item) => {
     console.log("LLAMADO A LA API PARA EDITAR ITEM", editedItem);

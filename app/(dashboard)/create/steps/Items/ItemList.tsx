@@ -1,7 +1,7 @@
 "use client";
 import Button from "@/components/Button";
-import CreateItem from "./CreateItem";
 import { X } from "react-feather";
+import CreateItem from "@/app/(dashboard)/create/steps/Items/CreateItem";
 import {
   Table,
   TableBody,
@@ -17,7 +17,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import type { Item } from "@/types/Item";
+import type { Item, CreateItem as CreateItemType } from "@/types/Item";
 import { PlusCircle, Upload } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import * as XLSX from "xlsx";
@@ -56,10 +56,10 @@ export default function ItemsList({
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleItemCreated = async (newItem: Item) => {
+  const handleItemCreated = async (newItem: CreateItemType) => {
     try {
-      await QuoteService.addItem(newItem, quotationId);
-      setItems([...items, newItem]);
+      const item = await QuoteService.addItem(newItem, quotationId);
+      setItems([...items, item]);
       setShouldFetch(true);
     } catch (error) {
       console.error("Error adding item:", error);

@@ -11,3 +11,14 @@ export interface Item {
   partNumber: string;
   productNumber: string;
 }
+
+export interface CreateItem {
+  numbering: string;
+  detail: string;
+  quantity: number;
+  partNumber: string;
+  productNumber: string;
+  subfamilyId: number | null;
+  modelId: number | null;
+  unitId: number | null;
+}
