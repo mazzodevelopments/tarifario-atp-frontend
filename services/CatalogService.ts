@@ -1,4 +1,3 @@
-import { DropdownItem } from "@/components/Dropdown";
 import { API_BASE_URL } from "@/app/utils/config";
 
 export const CatalogService = {
@@ -198,16 +197,41 @@ export const CatalogService = {
   },
 
   // SUPPLIER
-  listSuppliers: async () => {
-    return [
-      { id: 1, name: "Proveedor A" },
-      { id: 2, name: "Proveedor B" },
-      { id: 3, name: "Proveedor C" },
-    ];
+  listSuppliers: async (): Promise<{ id: number; name: string }[]> => {
+    const response = await fetch(`${API_BASE_URL}/catalog/suppliers`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al traer provedores");
+    }
+
+    return await response.json();
   },
 
-  addSupplier: async (name: string) => {
-    return { id: Math.floor(Math.random() * 1000000), name };
+  addSupplier: async (name: string): Promise<number> => {
+    // TODO AGREGAR RESTO BODY
+    const response = await fetch(`${API_BASE_URL}/catalog/supplier`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        isNational: true,
+        isInternational: true,
+        email: "email@test.com",
+        phone: "+542944644448",
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al agregar provedor");
+    }
+
+    const data = await response.json();
+    console.log("Unidad agregado:", data);
+    return data;
   },
 
   // UNITS
@@ -274,19 +298,37 @@ export const CatalogService = {
   },
 
   // CURRENCIES
-  listCurrencies: async () => {
-    return [
-      { id: 1, name: "USD" },
-      { id: 2, name: "EUR" },
-      { id: 3, name: "MXN" },
-      { id: 4, name: "GBP" },
-      { id: 5, name: "JPY" },
-      { id: 6, name: "CAD" },
-      { id: 7, name: "AUD" },
-      { id: 8, name: "CHF" },
-      { id: 9, name: "CNY" },
-      { id: 10, name: "BRL" },
-    ];
+  listCurrencies: async (): Promise<
+    { id: number; name: string; abbreviation: string }[]
+  > => {
+    const response = await fetch(`${API_BASE_URL}/catalog/currencies`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al traer currencies");
+    }
+
+    return await response.json();
+  },
+
+  addCurrency: async (name: string) => {
+    // TODO AGREGAR VALOR DE DOLLAR
+    const response = await fetch(`${API_BASE_URL}/catalog/currency`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, abbreviation: "USD", dollarValue: 1 }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al agregar currency");
+    }
+
+    const data = await response.json();
+    console.log("Currency agregado:", data);
+    return data;
   },
 
   // LOCATIONS
@@ -396,50 +438,66 @@ export const CatalogService = {
   },
 
   // INCOTERMS
-  listIncoterms: async () => {
-    return [
-      { id: 1, name: "EXW" },
-      { id: 2, name: "FOB" },
-      { id: 3, name: "FCA" },
-      { id: 4, name: "CIF" },
-      { id: 5, name: "CFR" },
-      { id: 6, name: "DAT" },
-      { id: 7, name: "DAP" },
-      { id: 8, name: "DDP" },
-    ];
+  listIncoterms: async (): Promise<
+    { id: number; name: string; abbreviation: string }[]
+  > => {
+    const response = await fetch(`${API_BASE_URL}/catalog/incoterms`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al traer incoterms");
+    }
+
+    return await response.json();
+  },
+
+  addIncoterm: async (name: string) => {
+    // TODO AGREGAR ABBREVIATION
+    const response = await fetch(`${API_BASE_URL}/catalog/incoterm`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, abbreviation: "EXW" }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al agregar incoterm");
+    }
+
+    const data = await response.json();
+    console.log("Incoterm agregado:", data);
+    return data;
   },
 
   // PAYMENT CONDITIONS
-  listPaymentConditions: async () => {
-    return [
-      { id: 1, name: "A Convenir" },
-      { id: 2, name: "50% Ant. | 50% Deliv." },
-      { id: 3, name: "30% Ant. | 70% Deliv." },
-      { id: 4, name: "30% Ant. | 70% 15 días." },
-      { id: 5, name: "30% Ant. | 70% 30 días." },
-      { id: 6, name: "50% Ant. | 50% 30 días." },
-      { id: 7, name: "40% Ant. | 60% 30 días." },
-      { id: 8, name: "50% Ant. | 50% 15 días." },
-      { id: 9, name: "50% F/F | 50% 30 días." },
-      { id: 10, name: "50% Deliv. | 50% 30 días." },
-      { id: 11, name: "50% Ant. | 50% Previo despacho" },
-      { id: 12, name: "50% Ant. | 50% Previo embarque" },
-      { id: 13, name: "50% Aprob. SIRA | 50% Pre-embarque" },
-      { id: 14, name: "30% Aprov. SIRA | 70% Deliv." },
-      { id: 15, name: "100% Ant. Cheque 30 días" },
-      { id: 16, name: "100% Ant." },
-      { id: 17, name: "100% Deliv." },
-      { id: 18, name: "7 Días F/F" },
-      { id: 19, name: "15 días F/F" },
-      { id: 20, name: "20 días F/F" },
-      { id: 21, name: "30 días F/F" },
-      { id: 22, name: "60 días F/F" },
-      { id: 23, name: "90 días F/F" },
-      { id: 24, name: "Echeck 30 días" },
-      { id: 25, name: "Echeck 60 días" },
-    ];
+  listPaymentConditions: async (): Promise<{ id: number; name: string }[]> => {
+    const response = await fetch(`${API_BASE_URL}/catalog/payment-conditions`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al traer condiciones de pago");
+    }
+
+    return await response.json();
   },
-  addPaymentCondition: async (name: string): Promise<DropdownItem> => {
-    return { id: Math.floor(Math.random() * 1000000), name };
+  addPaymentCondition: async (name: string) => {
+    const response = await fetch(`${API_BASE_URL}/catalog/payment-condition`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al agregar incoterm");
+    }
+
+    const data = await response.json();
+    console.log("Incoterm agregado:", data);
+    return data;
   },
 };
