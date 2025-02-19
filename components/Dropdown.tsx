@@ -1,5 +1,4 @@
-import type React from "react";
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import {
@@ -17,7 +16,7 @@ export interface DropdownItem {
 
 interface DropdownProps {
   fetchItems: () => Promise<DropdownItem[]>;
-  addItem?: (name: string) => Promise<DropdownItem>;
+  addItem?: (name: string) => Promise<number>;
   onSelect: (item: DropdownItem) => void;
   value?: string;
   label?: string;
@@ -42,12 +41,29 @@ export default function Dropdown({
   const [isOpen, setIsOpen] = useState(false);
   const [newItemName, setNewItemName] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    fetchItems().then(setItems);
+  const loadItems = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const fetchedItems = await fetchItems();
+      setItems(fetchedItems);
+      setFilteredItems(fetchedItems);
+    } catch (error) {
+      console.error("Error fetching items:", error);
+    } finally {
+      setIsLoading(false);
+    }
   }, [fetchItems]);
+
+  // Load items when dropdown is opened
+  useEffect(() => {
+    if (isOpen) {
+      loadItems();
+    }
+  }, [isOpen, loadItems]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -86,12 +102,24 @@ export default function Dropdown({
 
   const handleAddItem = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (newItemName.trim() && addItem) {
-      const newItem = await addItem(newItemName.trim());
-      setItems([...items, newItem]);
+    if (!newItemName.trim() || !addItem) return;
+
+    try {
+      setIsLoading(true);
+      const itemId = await addItem(newItemName.trim());
+
+      const newItem = { name: newItemName, id: itemId };
+
+      setItems((prevItems) => [...prevItems, newItem]);
       handleSelect(newItem);
+
+      // RESET FORM
       setNewItemName("");
       setIsDialogOpen(false);
+    } catch (error) {
+      console.error("Error adding new item:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -107,18 +135,24 @@ export default function Dropdown({
             onChange={handleInputChange}
             onClick={() => setIsOpen(true)}
             className={`w-full px-2 py-2 text-sm border rounded-md focus:outline-none ${
-              error ? "border-red-500" : ""
-            }`}
+              error ? "border-red-500" : "border-gray-300"
+            } ${disabled ? "bg-gray-100" : ""}`}
             placeholder="Seleccionar o buscar..."
             required={required}
-            disabled={disabled}
+            disabled={disabled || isLoading}
           />
+          {isLoading && (
+            <div className="absolute right-10 top-1/2 transform -translate-y-1/2">
+              <div className="animate-spin h-4 w-4 border-2 border-gray-500 border-t-transparent rounded-full"></div>
+            </div>
+          )}
           {addItem && (
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <button
                   type="button"
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 rounded-full hover:bg-gray-200 focus:outline-none"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 rounded-full hover:bg-gray-200 focus:outline-none disabled:opacity-50"
+                  disabled={isLoading}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -138,7 +172,7 @@ export default function Dropdown({
                 <DialogHeader>
                   <DialogTitle>Agregar nuevo elemento</DialogTitle>
                 </DialogHeader>
-                <div className="mt-4">
+                <form onSubmit={handleAddItem} className="mt-4">
                   <Input
                     type="text"
                     value={newItemName}
@@ -146,6 +180,7 @@ export default function Dropdown({
                       setNewItemName(e.target.value)
                     }
                     placeholder="Nombre del nuevo elemento"
+                    disabled={isLoading}
                   />
                   <div className="flex justify-end gap-2 mt-4">
                     <Button
@@ -153,18 +188,20 @@ export default function Dropdown({
                       onClick={() => setIsDialogOpen(false)}
                       variant="secondary"
                       className="px-2"
+                      disabled={isLoading}
                     >
                       Cancelar
                     </Button>
                     <Button
-                      onClick={handleAddItem}
+                      type="submit"
                       variant="primary"
                       className="px-2 text-white"
+                      disabled={isLoading || !newItemName.trim()}
                     >
-                      Agregar
+                      {isLoading ? "Agregando..." : "Agregar"}
                     </Button>
                   </div>
-                </div>
+                </form>
               </DialogContent>
             </Dialog>
           )}
