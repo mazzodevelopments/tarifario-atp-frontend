@@ -3,29 +3,67 @@ import { API_BASE_URL } from "@/app/utils/config";
 
 export const CatalogService = {
   // CLIENT
-  listClients: async () => {
-    return [
-      { id: 1, name: "Client 1" },
-      { id: 2, name: "Client 2" },
-      { id: 3, name: "Client 3" },
-    ];
+  listClients: async (): Promise<{ id: number; name: string }[]> => {
+    const response = await fetch(`${API_BASE_URL}/catalog/clients`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al traer clientes");
+    }
+
+    return await response.json();
   },
-  addClient: async (name: string) => {
-    return { id: Math.floor(Math.random() * 1000000), name };
+  addClient: async (name: string): Promise<number> => {
+    const response = await fetch(`${API_BASE_URL}/catalog/client`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al agregar cliente");
+    }
+
+    const data = await response.json();
+    console.log("Cliente agregado:", data);
+    return data;
   },
 
   // BUYER
   listBuyers: async (clientId: number) => {
-    console.log(clientId);
-    return [
-      { id: 1, name: "Buyer 1" },
-      { id: 2, name: "Buyer 2" },
-      { id: 3, name: "Buyer 3" },
-    ];
+    const response = await fetch(
+      `${API_BASE_URL}/catalog/buyers?clientId=${clientId}`,
+      {
+        method: "GET",
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Error al traer clientes");
+    }
+
+    return await response.json();
   },
-  addBuyer: async (name: string, clientId: number) => {
-    console.log(clientId);
-    return { id: Math.floor(Math.random() * 1000000), name };
+  addBuyer: async (name: string, clientId: number): Promise<number> => {
+    const response = await fetch(`${API_BASE_URL}/catalog/buyer`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ personId: 1, clientId }),
+    });
+
+    console.log(name);
+    if (!response.ok) {
+      throw new Error("Error al agregar cliente");
+    }
+
+    const data = await response.json();
+    console.log("Cliente agregado:", data);
+    return data;
   },
 
   // BRAND
@@ -55,7 +93,7 @@ export const CatalogService = {
   },
 
   // FAMILY
-  addFamily: async (name: string): Promise<DropdownItem> => {
+  addFamily: async (name: string) => {
     const response = await fetch(`${API_BASE_URL}/catalog/family`, {
       method: "POST",
       headers: {
