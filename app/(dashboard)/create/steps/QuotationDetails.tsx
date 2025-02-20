@@ -114,14 +114,12 @@ export default function QuotationDetails({
 
       const newBuyer = { name: `${data.name} ${data.lastname}`, id: buyerId };
 
-      // Actualizar el estado del dropdown con el nuevo buyer
       setFormData((prevData) => ({
         ...prevData,
         buyer: newBuyer.name,
       }));
 
-      // Forzar la actualización del dropdown
-      setSelectedClientId(selectedClientId); // Esto forzará a que el dropdown se actualice
+      setSelectedClientId(selectedClientId);
 
       setIsLoading(false);
     } catch (error) {
