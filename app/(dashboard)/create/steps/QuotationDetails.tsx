@@ -35,10 +35,19 @@ export default function QuotationDetails({
   const [selectedClientId, setSelectedClientId] = useState<number | null>(null);
 
   useEffect(() => {
-    setFormData((prevData) => ({
-      ...prevData,
-      taskNumber: QuoteService.fetchQuotationTaskNumber(),
-    }));
+    const fetchTaskNumber = async () => {
+      try {
+        const taskNumber = await QuoteService.fetchQuotationTaskNumber();
+        setFormData((prevData) => ({
+          ...prevData,
+          taskNumber,
+        }));
+      } catch (error) {
+        console.error("Error al traer el task-number:", error);
+      }
+    };
+
+    fetchTaskNumber();
   }, []);
 
   useEffect(() => {

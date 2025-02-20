@@ -16,7 +16,7 @@ export const QuoteService = {
       throw new Error("Error al traer el task-number");
     }
 
-    return await response.json();
+    return await response.text();
   },
   createQuotation: async (quotationData: QuotationData) => {
     console.log("QuotationDataService: ", quotationData);
