@@ -1,4 +1,7 @@
-import React, { useEffect } from "react";
+"use client";
+
+import type React from "react";
+import { useEffect } from "react";
 import { useState } from "react";
 import Button from "@/components/Button";
 import { Pencil, PlusCircle } from "lucide-react";
@@ -37,12 +40,12 @@ export default function SalesList({
   const [showSalesDataModal, setShowSalesDataModal] = useState(false);
   const [showPaymentConditionModal, setShowPaymentConditionModal] =
     useState(false);
-  const [selectedBudgetId, setSelectedBudgetId] = useState<string | null>(null);
+  const [selectedBudgetId, setSelectedBudgetId] = useState<number | null>(null);
   const [editingMargin, setEditingMargin] = useState<number | null>(null);
 
   // ROW SELECTION (EN PROCESO)
-  const [selectedRows, setSelectedRows] = useState<string[]>([]);
-  const [lastSelectedRow, setLastSelectedRow] = useState<string | null>(null);
+  const [selectedRows, setSelectedRows] = useState<number[]>([]);
+  const [lastSelectedRow, setLastSelectedRow] = useState<number | null>(null);
 
   useEffect(() => {
     if (!shouldFetch) return;
@@ -58,7 +61,7 @@ export default function SalesList({
 
         // CHEQUEAR QUE LOS BUDGETS ESTEN COMPLETOS
         const completeBudgets = quotationBudgets.filter(
-          (budget) =>
+          (budget: Budget) =>
             budget.salesData?.margin && budget.salesData?.paymentCondition,
         );
 
@@ -74,41 +77,35 @@ export default function SalesList({
     };
 
     fetchQuotationBudgets();
-  }, [shouldFetch, setBudgetsToEnableButton]);
+  }, [shouldFetch, setBudgetsToEnableButton, quotationId]);
 
-  const handleRowClick = (budgetNumbering: string, event: React.MouseEvent) => {
+  const handleRowClick = (budgetId: number, event: React.MouseEvent) => {
     if (event.shiftKey && lastSelectedRow) {
-      const currentIndex = budgets.findIndex(
-        (b) => b.numbering === budgetNumbering,
-      );
-      const lastIndex = budgets.findIndex(
-        (b) => b.numbering === lastSelectedRow,
-      );
+      const currentIndex = budgets.findIndex((b) => b.id === budgetId);
+      const lastIndex = budgets.findIndex((b) => b.id === lastSelectedRow);
 
       const start = Math.min(currentIndex, lastIndex);
       const end = Math.max(currentIndex, lastIndex);
 
-      const newSelection = budgets
-        .slice(start, end + 1)
-        .map((b) => b.numbering);
+      const newSelection = budgets.slice(start, end + 1).map((b) => b.id);
 
       setSelectedRows(newSelection);
     } else {
-      if (selectedRows.includes(budgetNumbering)) {
-        setSelectedRows(selectedRows.filter((row) => row !== budgetNumbering));
+      if (selectedRows.includes(budgetId)) {
+        setSelectedRows(selectedRows.filter((id) => id !== budgetId));
       } else {
-        setSelectedRows([...selectedRows, budgetNumbering]);
+        setSelectedRows([...selectedRows, budgetId]);
       }
-      setLastSelectedRow(budgetNumbering);
+      setLastSelectedRow(budgetId);
     }
   };
 
   const handleSalesDataCreated = async (salesData: SalesData) => {
     try {
-      await QuoteService.addMargin(salesData.margin!, quotationId);
-      if (selectedBudgetId) {
+      if (selectedBudgetId !== null) {
+        await QuoteService.addMargin(salesData.margin!, selectedBudgetId);
         const updatedBudgets = budgets.map((budget) =>
-          budget.numbering === selectedBudgetId
+          budget.id === selectedBudgetId
             ? {
                 ...budget,
                 salesData: {
@@ -124,9 +121,7 @@ export default function SalesList({
         setBudgets(updatedBudgets);
         setShowSalesDataModal(false);
         setEditingMargin(null);
-        // setShouldFetch(true);
 
-        // CHEQUEAR QUE BUDGETS TENGAN EL SALESDATA COMPLETO (PROBAR SI ESTO SE PUEDE SACAR)
         const completeBudgets = updatedBudgets.filter(
           (budget) =>
             budget.salesData?.margin && budget.salesData?.paymentCondition,
@@ -145,10 +140,13 @@ export default function SalesList({
 
   const handlePaymentConditionCreated = async (paymentCondition: string) => {
     try {
-      await QuoteService.addPaymentCondition(paymentCondition, quotationId);
-      if (selectedBudgetId) {
+      if (selectedBudgetId !== null) {
+        await QuoteService.addPaymentCondition(
+          paymentCondition,
+          selectedBudgetId,
+        );
         const updatedBudgets = budgets.map((budget) => {
-          if (budget.numbering === selectedBudgetId) {
+          if (budget.id === selectedBudgetId) {
             const currentSalesData = budget.salesData || {
               unitSalePrice: 0,
               totalPrice: 0,
@@ -168,9 +166,7 @@ export default function SalesList({
 
         setBudgets(updatedBudgets);
         setShowPaymentConditionModal(false);
-        // setShouldFetch(true);
 
-        // CHEQUEAR QUE BUDGETS TENGAN EL SALESDATA COMPLETO (PROBAR SI ESTO SE PUEDE SACAR)
         const completeBudgets = updatedBudgets.filter(
           (budget) =>
             budget.salesData?.margin && budget.salesData?.paymentCondition,
@@ -190,7 +186,7 @@ export default function SalesList({
   const renderSalesDataCell = (budget: Budget) => {
     const handleClick = (e: React.MouseEvent) => {
       e.stopPropagation();
-      setSelectedBudgetId(budget.numbering);
+      setSelectedBudgetId(budget.id);
       setShowSalesDataModal(true);
     };
 
@@ -226,7 +222,7 @@ export default function SalesList({
   const renderPaymentConditionCell = (budget: Budget) => {
     const handleClick = (e: React.MouseEvent) => {
       e.stopPropagation();
-      setSelectedBudgetId(budget.numbering);
+      setSelectedBudgetId(budget.id);
       setShowPaymentConditionModal(true);
     };
 
@@ -343,11 +339,11 @@ export default function SalesList({
                   <TableRow
                     key={budget.numbering}
                     className={`h-12 select-none text-center cursor-pointer hover:bg-[#ff000000] ${
-                      selectedRows.includes(budget.numbering)
+                      selectedRows.includes(budget.id)
                         ? "bg-primary/10 hover:bg-primary/10 text-primary "
                         : ""
                     }`}
-                    onClick={(e) => handleRowClick(budget.numbering, e)}
+                    onClick={(e) => handleRowClick(budget.id, e)}
                   >
                     <TableCell>
                       {budget.stage + " " + budget.numbering}
