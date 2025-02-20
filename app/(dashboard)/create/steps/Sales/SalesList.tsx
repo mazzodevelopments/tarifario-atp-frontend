@@ -345,9 +345,7 @@ export default function SalesList({
                     }`}
                     onClick={(e) => handleRowClick(budget.id, e)}
                   >
-                    <TableCell>
-                      {budget.stage + " " + budget.numbering}
-                    </TableCell>
+                    <TableCell>{budget.numbering}</TableCell>
                     <TableCell>{budget.purchaseData?.item?.detail}</TableCell>
                     <TableCell>{budget.purchaseData?.supplier}</TableCell>
                     <TableCell>{budget.purchaseData?.origin}</TableCell>

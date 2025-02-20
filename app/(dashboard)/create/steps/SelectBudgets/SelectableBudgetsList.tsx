@@ -156,9 +156,7 @@ export default function SelectableBudgetsList({
                     key={budget.id}
                     className="h-12 hover:bg-gray-50 text-center"
                   >
-                    <TableCell>
-                      {budget.stage + " " + budget.numbering}
-                    </TableCell>
+                    <TableCell>{budget.numbering}</TableCell>
                     <TableCell>{budget.purchaseData?.item?.detail}</TableCell>
                     <TableCell>{budget.purchaseData?.supplier}</TableCell>
                     <TableCell>{budget.purchaseData?.origin}</TableCell>

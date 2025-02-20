@@ -140,9 +140,7 @@ export default function SelectedBudgetsList({
                 <>
                   {selectedBudgets.map((budget) => (
                     <TableRow key={budget.id} className="text-sm text-center">
-                      <TableCell>
-                        {budget.stage + " " + budget.numbering}
-                      </TableCell>
+                      <TableCell>{budget.numbering}</TableCell>
                       <TableCell>{budget.purchaseData?.item?.detail}</TableCell>
                       <TableCell>{budget.purchaseData?.supplier}</TableCell>
                       <TableCell>{budget.purchaseData?.origin}</TableCell>

@@ -303,7 +303,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
               }`}
               onClick={(e) => handleRowClick(budget.numbering, e)}
             >
-              <TableCell>{budget.stage + " " + budget.numbering}</TableCell>
+              <TableCell>{budget.numbering}</TableCell>
               <TableCell>{budget.purchaseData?.item?.detail}</TableCell>
               <TableCell>{budget.purchaseData?.supplier}</TableCell>
               <TableCell>
