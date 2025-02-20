@@ -1,5 +1,5 @@
 import type React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import type { SalesData } from "@/types/SalesData";
@@ -7,11 +7,13 @@ import type { SalesData } from "@/types/SalesData";
 interface AddMarginProps {
   onSalesDataCreated: (salesData: SalesData) => void;
   onCancel?: () => void;
+  initialMargin?: number | null;
 }
 
 export default function AddMargin({
   onSalesDataCreated,
   onCancel,
+  initialMargin,
 }: AddMarginProps) {
   const [formData, setFormData] = useState<SalesData>({
     unitSalePrice: 0,
@@ -19,6 +21,12 @@ export default function AddMargin({
     totalPrice: 0,
     paymentCondition: "",
   });
+
+  useEffect(() => {
+    if (initialMargin !== undefined && initialMargin !== null) {
+      setFormData((prev) => ({ ...prev, margin: initialMargin }));
+    }
+  }, [initialMargin]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,7 +67,7 @@ export default function AddMargin({
           Cancelar
         </Button>
         <Button type="submit" className="text-sm bg-primary text-white">
-          Guardar
+          {initialMargin !== null ? "Actualizar" : "Guardar"}
         </Button>
       </div>
     </form>

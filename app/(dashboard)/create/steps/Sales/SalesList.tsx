@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import Button from "@/components/Button";
-import { PlusCircle } from "lucide-react";
+import { Pencil, PlusCircle } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -38,6 +38,7 @@ export default function SalesList({
   const [showPaymentConditionModal, setShowPaymentConditionModal] =
     useState(false);
   const [selectedBudgetId, setSelectedBudgetId] = useState<string | null>(null);
+  const [editingMargin, setEditingMargin] = useState<number | null>(null);
 
   useEffect(() => {
     if (!shouldFetch) return;
@@ -91,6 +92,7 @@ export default function SalesList({
 
         setBudgets(updatedBudgets);
         setShowSalesDataModal(false);
+        setEditingMargin(null);
         // setShouldFetch(true);
 
         // CHEQUEAR QUE BUDGETS TENGAN EL SALESDATA COMPLETO (PROBAR SI ESTO SE PUEDE SACAR)
@@ -165,6 +167,13 @@ export default function SalesList({
       return (
         <div className="flex items-center justify-center gap-2">
           {budget.salesData.margin}%
+          <Button
+            onClick={handleClick}
+            variant="secondary"
+            className="p-1 h-auto hover:bg-gray-100"
+          >
+            <Pencil className="w-4 h-4 text-primary" />
+          </Button>
         </div>
       );
     }
@@ -342,12 +351,18 @@ export default function SalesList({
       <Dialog open={showSalesDataModal} onOpenChange={setShowSalesDataModal}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle className="text-2xl">Cargar Margen</DialogTitle>
+            <DialogTitle className="text-2xl">
+              {editingMargin !== null ? "Editar Margen" : "Cargar Margen"}
+            </DialogTitle>
           </DialogHeader>
           <div className="bg-white rounded-lg w-full">
             <AddMargin
               onSalesDataCreated={handleSalesDataCreated}
-              onCancel={() => setShowSalesDataModal(false)}
+              onCancel={() => {
+                setShowSalesDataModal(false);
+                setEditingMargin(null);
+              }}
+              initialMargin={editingMargin}
             />
           </div>
         </DialogContent>
