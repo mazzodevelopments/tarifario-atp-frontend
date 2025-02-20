@@ -7,8 +7,16 @@ import { API_BASE_URL } from "@/app/utils/config";
 
 export const QuoteService = {
   // ETAPA 1
-  fetchQuotationTaskNumber: () => {
-    return "A25R-0001";
+  fetchQuotationTaskNumber: async (): Promise<string> => {
+    const response = await fetch(`${API_BASE_URL}/quote/task-number`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al traer el task-number");
+    }
+
+    return await response.json();
   },
   createQuotation: async (quotationData: QuotationData) => {
     console.log("QuotationDataService: ", quotationData);
