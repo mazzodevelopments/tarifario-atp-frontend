@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react"; // Importa useCallback
+import React, { useState, useEffect, useCallback } from "react";
 import Dropdown, { type DropdownItem } from "@/components/Dropdown";
 import Input from "@/components/Input";
 import { QuotationData } from "@/types/QuotationData";
 import { QuoteService } from "@/services/QuoteService";
 import { CatalogService } from "@/services/CatalogService";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
+import { BuyerForm } from "@/app/(dashboard)/create/steps/BuyerForm";
 
 interface QuotationDetailsProps {
   onFormDataChange: (formData: QuotationData) => void;
@@ -33,6 +34,7 @@ export default function QuotationDetails({
   );
 
   const [selectedClientId, setSelectedClientId] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchTaskNumber = async () => {
@@ -86,6 +88,48 @@ export default function QuotationDetails({
     return adaptToDropdown(buyers, "id", "name");
   }, [selectedClientId]);
 
+  const handleAddBuyer = async (data: {
+    phone: string;
+    name: string;
+    lastname: string;
+    email: string;
+    birthDate: string;
+    address: string;
+  }) => {
+    if (!selectedClientId) return;
+
+    try {
+      setIsLoading(true);
+      const buyerId = await CatalogService.addBuyer(
+        {
+          name: data.name,
+          lastname: data.lastname,
+          email: data.email,
+          phone: data.phone,
+          birthDate: data.birthDate,
+          address: data.address,
+        },
+        selectedClientId,
+      );
+
+      const newBuyer = { name: `${data.name} ${data.lastname}`, id: buyerId };
+
+      // Actualizar el estado del dropdown con el nuevo buyer
+      setFormData((prevData) => ({
+        ...prevData,
+        buyer: newBuyer.name,
+      }));
+
+      // Forzar la actualización del dropdown
+      setSelectedClientId(selectedClientId); // Esto forzará a que el dropdown se actualice
+
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error adding new buyer:", error);
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="w-full max-w-2xl space-y-4">
       <Input
@@ -109,14 +153,14 @@ export default function QuotationDetails({
         />
         <Dropdown
           fetchItems={fetchBuyers}
-          addItem={(name: string) =>
-            CatalogService.addBuyer(name, selectedClientId!)
-          }
           onSelect={handleDropdownSelect("buyer")}
           value={formData.buyer}
           label="Comprador"
           required
           disabled={!selectedClientId}
+          customForm={
+            <BuyerForm onSubmit={handleAddBuyer} isLoading={isLoading} />
+          }
         />
         <Input
           id="receptionDate"

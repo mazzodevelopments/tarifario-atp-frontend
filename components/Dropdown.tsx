@@ -14,6 +14,12 @@ export interface DropdownItem {
   name: string;
 }
 
+interface CustomFormProps {
+  closeDialog: () => void;
+}
+
+type CustomFormType = React.ReactElement<CustomFormProps>;
+
 interface DropdownProps {
   fetchItems: () => Promise<DropdownItem[]>;
   addItem?: (name: string) => Promise<number>;
@@ -23,6 +29,7 @@ interface DropdownProps {
   required?: boolean;
   error?: string;
   disabled?: boolean;
+  customForm?: CustomFormType;
 }
 
 export default function Dropdown({
@@ -34,6 +41,7 @@ export default function Dropdown({
   required = false,
   error,
   disabled,
+  customForm,
 }: DropdownProps) {
   const [items, setItems] = useState<DropdownItem[]>([]);
   const [filteredItems, setFilteredItems] = useState<DropdownItem[]>([]);
@@ -63,6 +71,10 @@ export default function Dropdown({
       loadItems();
     }
   }, [isOpen, loadItems]);
+
+  useEffect(() => {
+    setInputValue(value || "");
+  }, [value]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -113,7 +125,6 @@ export default function Dropdown({
       setItems((prevItems) => [...prevItems, newItem]);
       handleSelect(newItem);
 
-      // RESET FORM
       setNewItemName("");
       setIsDialogOpen(false);
     } catch (error) {
@@ -121,6 +132,10 @@ export default function Dropdown({
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const closeDialog = () => {
+    setIsDialogOpen(false);
   };
 
   return (
@@ -146,7 +161,7 @@ export default function Dropdown({
               <div className="animate-spin h-4 w-4 border-2 border-gray-500 border-t-transparent rounded-full"></div>
             </div>
           )}
-          {addItem && (
+          {(addItem || customForm) && (
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <button
@@ -172,36 +187,40 @@ export default function Dropdown({
                 <DialogHeader>
                   <DialogTitle>Agregar nuevo elemento</DialogTitle>
                 </DialogHeader>
-                <form onSubmit={handleAddItem} className="mt-4">
-                  <Input
-                    type="text"
-                    value={newItemName}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setNewItemName(e.target.value)
-                    }
-                    placeholder="Nombre del nuevo elemento"
-                    disabled={isLoading}
-                  />
-                  <div className="flex justify-end gap-2 mt-4">
-                    <Button
-                      type="button"
-                      onClick={() => setIsDialogOpen(false)}
-                      variant="secondary"
-                      className="px-2"
+                {customForm ? (
+                  React.cloneElement(customForm, { closeDialog })
+                ) : (
+                  <form onSubmit={handleAddItem} className="mt-4">
+                    <Input
+                      type="text"
+                      value={newItemName}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setNewItemName(e.target.value)
+                      }
+                      placeholder="Nombre del nuevo elemento"
                       disabled={isLoading}
-                    >
-                      Cancelar
-                    </Button>
-                    <Button
-                      type="submit"
-                      variant="primary"
-                      className="px-2 text-white"
-                      disabled={isLoading || !newItemName.trim()}
-                    >
-                      {isLoading ? "Agregando..." : "Agregar"}
-                    </Button>
-                  </div>
-                </form>
+                    />
+                    <div className="flex justify-end gap-2 mt-4">
+                      <Button
+                        type="button"
+                        onClick={() => setIsDialogOpen(false)}
+                        variant="secondary"
+                        className="px-2"
+                        disabled={isLoading}
+                      >
+                        Cancelar
+                      </Button>
+                      <Button
+                        type="submit"
+                        variant="primary"
+                        className="px-2 text-white"
+                        disabled={isLoading || !newItemName.trim()}
+                      >
+                        {isLoading ? "Agregando..." : "Agregar"}
+                      </Button>
+                    </div>
+                  </form>
+                )}
               </DialogContent>
             </Dialog>
           )}
