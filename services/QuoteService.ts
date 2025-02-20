@@ -1,5 +1,5 @@
 import { QuotationData } from "@/types/QuotationData";
-import { TEST_BUDGETS, TEST_ITEMS } from "@/app/(dashboard)/create/testData";
+import { TEST_BUDGETS } from "@/app/(dashboard)/create/testData";
 import { CreateItem, Item } from "@/types/Item";
 import { CreatePurchaseData, PurchaseData } from "@/types/PurchaseData";
 import { SalesData } from "@/types/SalesData";
@@ -25,8 +25,15 @@ export const QuoteService = {
 
   // ETAPA 2
   getQuotationItems: async (quotationId: number) => {
-    console.log("LLAMADO A LA API PARA OBTENER TODOS LOS ITEMS", quotationId);
-    return TEST_ITEMS;
+    const response = await fetch(`${API_BASE_URL}/quote/${quotationId}/items`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al traer el task-number");
+    }
+
+    return await response.json();
   },
   addItem: async (newItem: CreateItem, quotationId: number) => {
     console.log("LLAMADO A LA API PARA AGREGAR ITEM", newItem, quotationId);
@@ -49,8 +56,16 @@ export const QuoteService = {
   updateItem: async (editedItem: Item) => {
     console.log("LLAMADO A LA API PARA EDITAR ITEM", editedItem);
   },
-  deleteItem: async (itemId: number) => {
-    console.log("LLAMADO A LA API PARA ELIMINAR ITEM", itemId);
+  deleteItem: async (itemId: number): Promise<{ message: string }> => {
+    const response = await fetch(`${API_BASE_URL}/quote/items/${itemId}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al eliminar el item");
+    }
+
+    return await response.json();
   },
 
   // ETAPA 3
