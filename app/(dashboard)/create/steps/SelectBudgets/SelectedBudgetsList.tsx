@@ -139,10 +139,7 @@ export default function SelectedBudgetsList({
               ) : (
                 <>
                   {selectedBudgets.map((budget) => (
-                    <TableRow
-                      key={budget.numbering}
-                      className="text-sm text-center"
-                    >
+                    <TableRow key={budget.id} className="text-sm text-center">
                       <TableCell>
                         {budget.stage + " " + budget.numbering}
                       </TableCell>

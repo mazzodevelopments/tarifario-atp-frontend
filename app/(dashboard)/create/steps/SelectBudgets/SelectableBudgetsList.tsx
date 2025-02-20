@@ -35,7 +35,7 @@ export default function SelectableBudgetsList({
       try {
         const quotationBudgets = await QuoteService.getQuotationBudgets(
           quotationId,
-          "complete",
+          "sales-data",
         );
         setBudgets(quotationBudgets);
         setShouldFetch(false);
@@ -54,10 +54,8 @@ export default function SelectableBudgetsList({
 
   const handleBudgetSelection = (e: React.MouseEvent, budget: Budget) => {
     e.stopPropagation();
-    if (selectedBudgets.some((b) => b.numbering === budget.numbering)) {
-      const updatedBudgets = selectedBudgets.filter(
-        (b) => b.numbering !== budget.numbering,
-      );
+    if (selectedBudgets.some((b) => b.id === budget.id)) {
+      const updatedBudgets = selectedBudgets.filter((b) => b.id !== budget.id);
       setSelectedBudgets(updatedBudgets);
     } else {
       const updatedBudgets = [...selectedBudgets, budget];
@@ -155,7 +153,7 @@ export default function SelectableBudgetsList({
               ) : (
                 budgets.map((budget) => (
                   <TableRow
-                    key={budget.numbering}
+                    key={budget.id}
                     className="h-12 hover:bg-gray-50 text-center"
                   >
                     <TableCell>
@@ -204,16 +202,14 @@ export default function SelectableBudgetsList({
                         <div
                           onClick={(e) => handleBudgetSelection(e, budget)}
                           className={`w-5 h-5 rounded border ${
-                            selectedBudgets.some(
-                              (b) => b.numbering === budget.numbering,
-                            )
+                            selectedBudgets.some((b) => b.id === budget.id)
                               ? "bg-primary border-primary"
                               : "border-gray-300"
                           } flex items-center justify-center cursor-pointer hover:border-primary transition-colors`}
                         >
-                          {selectedBudgets.some(
-                            (b) => b.numbering === budget.numbering,
-                          ) && <Check className="w-4 h-4 text-white" />}
+                          {selectedBudgets.some((b) => b.id === budget.id) && (
+                            <Check className="w-4 h-4 text-white" />
+                          )}
                         </div>
                       </div>
                     </TableCell>
