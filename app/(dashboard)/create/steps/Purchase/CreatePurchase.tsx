@@ -173,13 +173,29 @@ export default function CreatePurchase({
     return adaptToDropdown(weightUnits, "id", "name");
   }, []);
 
-  const fetchCountries = () => {
+  const fetchCountries = useCallback(async () => {
     const countriesRaw = Country.getAllCountries();
     const countries = countriesRaw.map((country, acc) => {
       return { id: acc, name: country.name };
     });
-    return adaptToDropdown(countries, "id", "name");
-  };
+    return Promise.resolve(adaptToDropdown(countries, "id", "name"));
+  }, []);
+
+  const fetchCities = useCallback(async (countryName: string) => {
+    const country = Country.getAllCountries().find(
+      (c) => c.name === countryName,
+    );
+    if (!country) return Promise.resolve([]);
+
+    const cities = City.getCitiesOfCountry(country.isoCode) || [];
+    return Promise.resolve(
+      adaptToDropdown(
+        cities.map((city, i) => ({ id: i, name: city.name })),
+        "id",
+        "name",
+      ),
+    );
+  }, []);
 
   const fetchIncoterms = useCallback(async () => {
     const incoterms = await CatalogService.listIncoterms();
@@ -248,19 +264,27 @@ export default function CreatePurchase({
                 <DialogTitle>Agregar Origen</DialogTitle>
               </DialogHeader>
               <div className="grid gap-4 py-4">
-                <Input
-                  name="originCountry"
+                <Dropdown
+                  value={formData.originCountry}
+                  fetchItems={fetchCountries}
+                  onSelect={(item) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      originCountry: item.name,
+                    }))
+                  }
                   label="País"
                   required
-                  value={formData.originCountry}
-                  onChange={handleChange}
                 />
-                <Input
-                  name="originCity"
+                <Dropdown
+                  value={formData.originCity}
+                  fetchItems={() => fetchCities(formData.originCountry)}
+                  onSelect={(item) =>
+                    setFormData((prev) => ({ ...prev, originCity: item.name }))
+                  }
                   label="Ciudad"
                   required
-                  value={formData.originCity}
-                  onChange={handleChange}
+                  disabled={!formData.originCountry}
                 />
               </div>
               <div className="w-full flex justify-end items-center">
@@ -299,19 +323,30 @@ export default function CreatePurchase({
                 <DialogTitle>Agregar Destino</DialogTitle>
               </DialogHeader>
               <div className="grid gap-4 py-4">
-                <Input
-                  name="destinationCountry"
+                <Dropdown
+                  value={formData.destinationCountry}
+                  fetchItems={fetchCountries}
+                  onSelect={(item) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      destinationCountry: item.name,
+                    }))
+                  }
                   label="País"
                   required
-                  value={formData.destinationCountry}
-                  onChange={handleChange}
                 />
-                <Input
-                  name="destinationCity"
+                <Dropdown
+                  value={formData.destinationCity}
+                  fetchItems={() => fetchCities(formData.destinationCountry)}
+                  onSelect={(item) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      destinationCity: item.name,
+                    }))
+                  }
                   label="Ciudad"
                   required
-                  value={formData.destinationCity}
-                  onChange={handleChange}
+                  disabled={!formData.destinationCountry}
                 />
               </div>
               <div className="w-full flex justify-end items-center">
