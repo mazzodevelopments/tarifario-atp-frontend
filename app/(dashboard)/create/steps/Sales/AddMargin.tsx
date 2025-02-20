@@ -26,14 +26,13 @@ export default function AddMargin({
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value, type } = e.target;
 
     setFormData((prev) => ({
       ...prev,
-      [name]:
-        type === "number" && value !== "" ? Math.max(0, Number(value)) : value,
+      [name]: type === "number" && value !== "" ? Number(value) : value,
     }));
   };
 
@@ -48,6 +47,7 @@ export default function AddMargin({
         required
         min="0"
         max="100"
+        step="0.01"
       />
       <div className="flex justify-end gap-2">
         <Button

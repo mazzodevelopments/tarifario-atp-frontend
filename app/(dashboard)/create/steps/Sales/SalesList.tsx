@@ -46,15 +46,15 @@ export default function SalesList({
       try {
         const quotationBudgets = await QuoteService.getQuotationBudgets(
           quotationId,
-          "sales-data",
+          "sales-data"
         );
         setBudgets(quotationBudgets);
-        setShouldFetch(false);
+        // setShouldFetch(false);
 
         // CHEQUEAR QUE LOS BUDGETS ESTEN COMPLETOS
         const completeBudgets = quotationBudgets.filter(
           (budget) =>
-            budget.salesData?.margin && budget.salesData?.paymentCondition,
+            budget.salesData?.margin && budget.salesData?.paymentCondition
         );
 
         // HABILITAR BOTÓN SI LOS BUDGETS ESTÁN COMPLETOS
@@ -86,17 +86,17 @@ export default function SalesList({
                   paymentCondition: budget.salesData?.paymentCondition || "",
                 },
               }
-            : budget,
+            : budget
         );
 
         setBudgets(updatedBudgets);
         setShowSalesDataModal(false);
-        setShouldFetch(true);
+        // setShouldFetch(true);
 
         // CHEQUEAR QUE BUDGETS TENGAN EL SALESDATA COMPLETO (PROBAR SI ESTO SE PUEDE SACAR)
         const completeBudgets = updatedBudgets.filter(
           (budget) =>
-            budget.salesData?.margin && budget.salesData?.paymentCondition,
+            budget.salesData?.margin && budget.salesData?.paymentCondition
         );
 
         if (completeBudgets.length === updatedBudgets.length) {
@@ -135,12 +135,12 @@ export default function SalesList({
 
         setBudgets(updatedBudgets);
         setShowPaymentConditionModal(false);
-        setShouldFetch(true);
+        // setShouldFetch(true);
 
         // CHEQUEAR QUE BUDGETS TENGAN EL SALESDATA COMPLETO (PROBAR SI ESTO SE PUEDE SACAR)
         const completeBudgets = updatedBudgets.filter(
           (budget) =>
-            budget.salesData?.margin && budget.salesData?.paymentCondition,
+            budget.salesData?.margin && budget.salesData?.paymentCondition
         );
 
         if (completeBudgets.length === updatedBudgets.length) {
@@ -161,7 +161,7 @@ export default function SalesList({
       setShowSalesDataModal(true);
     };
 
-    if (budget.salesData?.margin && budget.salesData.margin > 0) {
+    if (budget.salesData?.margin !== undefined) {
       return (
         <div className="flex items-center justify-center gap-2">
           {budget.salesData.margin}%
