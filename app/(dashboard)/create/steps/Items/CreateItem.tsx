@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import Dropdown, { type DropdownItem } from "@/components/Dropdown";
@@ -13,6 +13,9 @@ import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 
 interface CreateItemProps {
   onItemCreated: (item: CreateItem) => void;
+  onItemUpdated: (item: Item) => void;
+  editingItem: Item | null;
+  setEditingItem: (item: Item | null) => void;
 }
 
 interface CreateItemForm {
@@ -31,7 +34,12 @@ interface CreateItemForm {
   unit?: string;
 }
 
-export default function CreateItem({ onItemCreated }: CreateItemProps) {
+export default function CreateItem({
+  onItemCreated,
+  onItemUpdated,
+  editingItem,
+  setEditingItem,
+}: CreateItemProps) {
   const [formData, setFormData] = useState<CreateItemForm>({
     numbering: "",
     family: "",
@@ -51,25 +59,54 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
   const [selectedBrandId, setSelectedBrandId] = useState<number | null>(null);
   const [selectedFamilyId, setSelectedFamilyId] = useState<number | null>(null);
 
+  useEffect(() => {
+    if (editingItem) {
+      setFormData({
+        numbering: editingItem.numbering,
+        detail: editingItem.detail,
+        quantity: editingItem.quantity,
+        partNumber: editingItem.partNumber,
+        productNumber: editingItem.productNumber,
+        subfamilyId: formData.subfamilyId,
+        modelId: formData.modelId,
+        unitId: formData.unitId,
+        family: editingItem.family,
+        subfamily: editingItem.subfamily,
+        brand: editingItem.brand,
+        model: editingItem.model,
+        unit: editingItem.unit,
+      });
+    }
+  }, [editingItem]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const newItem: CreateItem = {
-      numbering: `P${Math.floor(Math.random() * 100)
-        .toString()
-        .padStart(9, "0")}`,
-      detail: formData.detail,
-      quantity: Number(formData.quantity),
-      partNumber: formData.partNumber,
-      productNumber: formData.productNumber,
-      subfamilyId: formData.subfamilyId!,
-      modelId: formData.modelId!,
-      unitId: formData.unitId!,
-    };
-    onItemCreated(newItem);
+    if (editingItem) {
+      const updatedItem: Item = {
+        ...editingItem,
+        ...formData,
+      };
+      onItemUpdated(updatedItem);
+      setEditingItem(null);
+    } else {
+      const newItem: CreateItem = {
+        numbering: `P${Math.floor(Math.random() * 100)
+          .toString()
+          .padStart(9, "0")}`,
+        detail: formData.detail,
+        quantity: Number(formData.quantity),
+        partNumber: formData.partNumber,
+        productNumber: formData.productNumber,
+        subfamilyId: formData.subfamilyId!,
+        modelId: formData.modelId!,
+        unitId: formData.unitId!,
+      };
+      onItemCreated(newItem);
+    }
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value, type } = e.target;
     setFormData((prev) => ({
@@ -228,7 +265,7 @@ export default function CreateItem({ onItemCreated }: CreateItemProps) {
         </DialogClose>
         <DialogClose asChild>
           <Button type="submit" className="bg-primary text-white">
-            Agregar Item
+            {editingItem ? "Actualizar Item" : "Agregar Item"}
           </Button>
         </DialogClose>
       </div>

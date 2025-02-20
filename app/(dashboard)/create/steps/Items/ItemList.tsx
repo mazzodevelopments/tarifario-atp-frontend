@@ -36,6 +36,8 @@ export default function ItemsList({
   quotationId,
 }: ItemsListProps) {
   const [shouldFetch, setShouldFetch] = useState(true);
+  const [editingItem, setEditingItem] = useState<Item | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
     if (!shouldFetch) return;
@@ -64,6 +66,18 @@ export default function ItemsList({
       setShouldFetch(true);
     } catch (error) {
       console.error("Error adding item:", error);
+    }
+  };
+
+  const handleItemUpdated = async (updatedItem: Item) => {
+    try {
+      await QuoteService.updateItem(updatedItem);
+      setItems(
+        items.map((item) => (item.id === updatedItem.id ? updatedItem : item))
+      );
+      setShouldFetch(true);
+    } catch (error) {
+      console.error("Error updating item:", error);
     }
   };
 
@@ -208,12 +222,16 @@ export default function ItemsList({
                       <Button
                         variant="secondary"
                         className="p-1 h-auto hover:bg-gray-100"
+                        onClick={() => {
+                          setEditingItem(item);
+                          setIsDialogOpen(true);
+                        }}
                       >
                         <Pencil className="w-4 text-primary" />
                       </Button>
                       <Button
                         onClick={() => handleDeleteItem(item.id)}
-                        className="bg-white border border-neutral-200 text-red-800 hover:text-red-500 hover:bg-red-50 mx-2"
+                        className="bg-white border border-neutral-200 text-red-800 hover:text-red-600 hover:bg-red-50 mx-2"
                       >
                         <X className="w-4" />
                       </Button>
@@ -225,7 +243,7 @@ export default function ItemsList({
           </Table>
         </div>
       </div>
-      <Dialog>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <div className="flex justify-center items-center w-full mt-6 gap-2">
           <input
             type="file"
@@ -251,10 +269,18 @@ export default function ItemsList({
 
         <DialogContent className="h-[]">
           <DialogHeader>
-            <DialogTitle className="text-2xl">Agregar nuevo item</DialogTitle>
+            <DialogTitle className="text-2xl">
+              {" "}
+              {editingItem ? "Editar Item" : "Agregar nuevo item"}
+            </DialogTitle>
           </DialogHeader>
           <div className="bg-white rounded-lg w-full">
-            <CreateItem onItemCreated={handleItemCreated} />
+            <CreateItem
+              onItemCreated={handleItemCreated}
+              onItemUpdated={handleItemUpdated}
+              editingItem={editingItem}
+              setEditingItem={setEditingItem}
+            />{" "}
           </div>
         </DialogContent>
       </Dialog>
