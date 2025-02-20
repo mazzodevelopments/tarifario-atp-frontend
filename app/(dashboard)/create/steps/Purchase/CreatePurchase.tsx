@@ -16,7 +16,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { PlusCircle } from "lucide-react";
+import { PlusCircle, Pencil } from "lucide-react";
 import { Country, City } from "country-state-city";
 
 interface CreatePurchaseProps {
@@ -150,12 +150,36 @@ export default function CreatePurchase({
   };
 
   const handleSelect =
-    (field: keyof CreatePurchaseDataForm) => (item: DropdownItem) => {
-      setFormData((prev) => ({
-        ...prev,
-        [field]: item.name,
-        [`${field}Id`]: item.id,
-      }));
+    (field: keyof CreatePurchaseDataForm) => (item: DropdownItem | null) => {
+      if (field === "originCountry") {
+        setFormData((prev) => ({
+          ...prev,
+          originCountry: item?.name || "",
+          originCity: "", // RESET CITY WHEN COUNTRY CHANGES
+        }));
+      } else if (field === "destinationCountry") {
+        setFormData((prev) => ({
+          ...prev,
+          destinationCountry: item?.name || "",
+          destinationCity: "", // RESET CITY WHEN COUNTRY CHANGES
+        }));
+      } else if (field === "originCity") {
+        setFormData((prev) => ({
+          ...prev,
+          originCity: item?.name || "",
+        }));
+      } else if (field === "destinationCity") {
+        setFormData((prev) => ({
+          ...prev,
+          destinationCity: item?.name || "",
+        }));
+      } else {
+        setFormData((prev) => ({
+          ...prev,
+          [field]: item?.name || "",
+          [`${field}Id`]: item?.id || null,
+        }));
+      }
     };
 
   const fetchSuppliers = useCallback(async () => {
@@ -207,7 +231,10 @@ export default function CreatePurchase({
   }, [items]);
 
   const handleOriginSave = () => {
-    const newOrigin = `${formData.originCity}, ${formData.originCountry}`;
+    const newOrigin = formData.originCity
+      ? `${formData.originCity}, ${formData.originCountry}`
+      : formData.originCountry;
+
     setFormData((prev) => ({
       ...prev,
       origin: newOrigin,
@@ -216,10 +243,33 @@ export default function CreatePurchase({
   };
 
   const handleDestinationSave = () => {
-    const newDestination = `${formData.destinationCity}, ${formData.destinationCountry}`;
+    const newDestination = formData.destinationCity
+      ? `${formData.destinationCity}, ${formData.destinationCountry}`
+      : formData.destinationCountry;
+
     setFormData((prev) => ({
       ...prev,
       destination: newDestination,
+    }));
+    setIsDestinationModalOpen(false);
+  };
+
+  const handleOriginCancel = () => {
+    setFormData((prev) => ({
+      ...prev,
+      originCountry: "",
+      originCity: "",
+      origin: "",
+    }));
+    setIsOriginModalOpen(false);
+  };
+
+  const handleDestinationCancel = () => {
+    setFormData((prev) => ({
+      ...prev,
+      destinationCountry: "",
+      destinationCity: "",
+      destination: "",
     }));
     setIsDestinationModalOpen(false);
   };
@@ -250,13 +300,22 @@ export default function CreatePurchase({
             <DialogTrigger asChild>
               <Button
                 variant="primary"
-                className="flex items-center gap-1 text-primary border border-primary/20 bg-primary/5 hover:text-primary-dark"
+                className={`flex items-center gap-1 border ${formData.origin ? "bg-white border-gray-300 rounded-md font-medium" : "text-primary  border-primary/20 bg-primary/5 hover:text-primary-dark"}`}
                 onClick={() => setIsOriginModalOpen(true)}
               >
-                <PlusCircle size={16} />
-                <span className="mt-[1.5px]">
-                  {formData.origin || "Agregar"}
-                </span>
+                {formData.origin ? (
+                  <span className="flex w-full justify-between mt-[1.5px]">
+                    {formData.origin}
+                    <Pencil size={16} />
+                  </span>
+                ) : (
+                  <div className="flex gap-1 items-center mx-auto">
+                    <PlusCircle size={16} />
+                    <span className="mt-[1.5px]">
+                      {formData.origin || "Agregar"}
+                    </span>
+                  </div>
+                )}
               </Button>
             </DialogTrigger>
             <DialogContent>
@@ -267,27 +326,23 @@ export default function CreatePurchase({
                 <Dropdown
                   value={formData.originCountry}
                   fetchItems={fetchCountries}
-                  onSelect={(item) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      originCountry: item.name,
-                    }))
-                  }
+                  onSelect={(item) => handleSelect("originCountry")(item)}
                   label="País"
                   required
                 />
                 <Dropdown
                   value={formData.originCity}
                   fetchItems={() => fetchCities(formData.originCountry)}
-                  onSelect={(item) =>
-                    setFormData((prev) => ({ ...prev, originCity: item.name }))
-                  }
+                  onSelect={(item) => handleSelect("originCity")(item)}
                   label="Ciudad"
                   required
                   disabled={!formData.originCountry}
                 />
               </div>
-              <div className="w-full flex justify-end items-center">
+              <div className="w-full flex justify-end items-center gap-2">
+                <Button variant="secondary" onClick={handleOriginCancel}>
+                  Cancelar
+                </Button>
                 <Button
                   variant="primary"
                   className="px-8 text-white"
@@ -310,12 +365,22 @@ export default function CreatePurchase({
             <DialogTrigger asChild>
               <Button
                 variant="primary"
-                className="flex items-center gap-1 text-primary border border-primary/20 bg-primary/5 hover:text-primary-dark"
+                className={`flex items-center gap-1 border ${formData.destination ? "bg-white border-gray-300 rounded-md font-medium" : "text-primary  border-primary/20 bg-primary/5 hover:text-primary-dark"}`}
+                onClick={() => setIsDestinationModalOpen(true)}
               >
-                <PlusCircle size={16} />
-                <span className="mt-[1.5px]">
-                  {formData.destination || "Agregar"}
-                </span>
+                {formData.destination ? (
+                  <span className="flex w-full justify-between mt-[1.5px]">
+                    {formData.destination}
+                    <Pencil size={16} />
+                  </span>
+                ) : (
+                  <div className="flex gap-1 items-center mx-auto">
+                    <PlusCircle size={16} />
+                    <span className="mt-[1.5px]">
+                      {formData.destination || "Agregar"}
+                    </span>
+                  </div>
+                )}
               </Button>
             </DialogTrigger>
             <DialogContent>
@@ -326,30 +391,23 @@ export default function CreatePurchase({
                 <Dropdown
                   value={formData.destinationCountry}
                   fetchItems={fetchCountries}
-                  onSelect={(item) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      destinationCountry: item.name,
-                    }))
-                  }
+                  onSelect={(item) => handleSelect("destinationCountry")(item)}
                   label="País"
                   required
                 />
                 <Dropdown
                   value={formData.destinationCity}
                   fetchItems={() => fetchCities(formData.destinationCountry)}
-                  onSelect={(item) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      destinationCity: item.name,
-                    }))
-                  }
+                  onSelect={(item) => handleSelect("destinationCity")(item)}
                   label="Ciudad"
                   required
                   disabled={!formData.destinationCountry}
                 />
               </div>
-              <div className="w-full flex justify-end items-center">
+              <div className="w-full flex justify-end items-center gap-2">
+                <Button variant="secondary" onClick={handleDestinationCancel}>
+                  Cancelar
+                </Button>
                 <Button
                   variant="primary"
                   className="px-8 text-white"
