@@ -10,7 +10,7 @@ export interface PurchaseData {
   unitPrice: number;
   margin: number;
   appliedUnitPrice: number;
-  deliveryTime: number;
+  productionTime: number;
   unitWeight: number;
   totalWeight: number;
   unit: string;
@@ -26,7 +26,7 @@ export interface CreatePurchaseData {
   unitWeight: number;
   totalWeight: number;
   additionalObservations: string;
-  deliveryTime: number;
+  productionTime: number;
   itemId: number | null;
   origin: string;
   destination: string;

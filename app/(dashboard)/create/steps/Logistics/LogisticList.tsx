@@ -35,11 +35,11 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
   const [shouldFetch, setShouldFetch] = useState(true);
   const [freights, setFreights] = useState<Freight[]>([]);
   const [activeTab, setActiveTab] = useState<"logistics" | "freights">(
-    "logistics"
+    "logistics",
   );
   // SELECTED FREIGHTS
   const [selectedFreightId, setSelectedFreightId] = useState<string | null>(
-    null
+    null,
   );
   const [selectedFreights, setSelectedFreights] = useState<
     Record<string, string>
@@ -60,7 +60,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
     useState<OriginExpenses | null>(null);
   const [editingCustom, setEditingCustom] = useState<Custom | null>(null);
   const [editingTransport, setEditingTransport] = useState<Transport | null>(
-    null
+    null,
   );
   const [editingDestinationExpenses, setEditingDestinationExpenses] =
     useState<DestinationExpenses | null>(null);
@@ -72,7 +72,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
       try {
         const quotationBudgets = await QuoteService.getQuotationBudgets(
           quotationId,
-          "logistic"
+          "logistic",
         );
         setBudgets(quotationBudgets);
         setShouldFetch(false);
@@ -98,10 +98,10 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
   const handleRowClick = (budgetNumbering: string, event: React.MouseEvent) => {
     if (event.shiftKey && lastSelectedRow) {
       const currentIndex = budgets.findIndex(
-        (b) => b.numbering === budgetNumbering
+        (b) => b.numbering === budgetNumbering,
       );
       const lastIndex = budgets.findIndex(
-        (b) => b.numbering === lastSelectedRow
+        (b) => b.numbering === lastSelectedRow,
       );
 
       const start = Math.min(currentIndex, lastIndex);
@@ -123,12 +123,12 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
   };
 
   const handleFreightUpdate = <
-    T extends Transport | OriginExpenses | Custom | DestinationExpenses | null
+    T extends Transport | OriginExpenses | Custom | DestinationExpenses | null,
   >(
     field: "transport" | "originExpenses" | "custom" | "destinationExpenses",
     value: T,
     setShowModal: (value: boolean) => void,
-    setEditing: (value: T | null) => void
+    setEditing: (value: T | null) => void,
   ) => {
     if (selectedFreightId) {
       setFreights(
@@ -142,8 +142,8 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
                   [field]: value,
                 }),
               }
-            : freight
-        )
+            : freight,
+        ),
       );
 
       setBudgets(
@@ -160,8 +160,8 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
                   }),
                 },
               }
-            : budget
-        )
+            : budget,
+        ),
       );
 
       setShowModal(false);
@@ -318,7 +318,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
               </TableCell>
               <TableCell>{budget.purchaseData?.origin}</TableCell>
               <TableCell>{budget.purchaseData?.destination}</TableCell>
-              <TableCell>{budget.purchaseData?.deliveryTime} días</TableCell>
+              <TableCell>{budget.purchaseData?.productionTime} días</TableCell>
               <TableCell>{budget.purchaseData?.incoterm}</TableCell>
               <TableCell>
                 <div className="flex flex-col items-center">
@@ -359,7 +359,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
   const renderFreightActionCell = (
     freight: Freight,
     type: "transport" | "custom" | "destinationExpenses" | "origin",
-    setShowModal: (show: boolean) => void
+    setShowModal: (show: boolean) => void,
   ) => {
     const data = type === "origin" ? freight.originExpenses : freight[type];
 
@@ -378,12 +378,12 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
                 setShowTransportModal(true);
               } else if (type === "origin") {
                 setEditingOriginExpenses(
-                  freight.originExpenses as OriginExpenses
+                  freight.originExpenses as OriginExpenses,
                 );
                 setShowOriginExpensesModal(true);
               } else if (type === "destinationExpenses") {
                 setEditingDestinationExpenses(
-                  freight.destinationExpenses as DestinationExpenses
+                  freight.destinationExpenses as DestinationExpenses,
                 );
                 setShowDestinationExpensesModal(true);
               }
@@ -452,28 +452,28 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
                   {renderFreightActionCell(
                     freight,
                     "origin",
-                    setShowOriginExpensesModal
+                    setShowOriginExpensesModal,
                   )}
                 </TableCell>
                 <TableCell>
                   {renderFreightActionCell(
                     freight,
                     "transport",
-                    setShowTransportModal
+                    setShowTransportModal,
                   )}
                 </TableCell>
                 <TableCell>
                   {renderFreightActionCell(
                     freight,
                     "custom",
-                    setShowCustomModal
+                    setShowCustomModal,
                   )}
                 </TableCell>
                 <TableCell>
                   {renderFreightActionCell(
                     freight,
                     "destinationExpenses",
-                    setShowDestinationExpensesModal
+                    setShowDestinationExpensesModal,
                   )}
                 </TableCell>
                 <TableCell>${freight.total.formatNumber()}</TableCell>
@@ -550,7 +550,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
                   "originExpenses",
                   expenses,
                   setShowOriginExpensesModal,
-                  setEditingOriginExpenses
+                  setEditingOriginExpenses,
                 );
               }}
               onCancel={() => {
@@ -578,7 +578,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
                   "transport",
                   transport,
                   setShowTransportModal,
-                  setEditingTransport
+                  setEditingTransport,
                 )
               }
               onCancel={() => {
@@ -608,7 +608,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
                   "custom",
                   custom,
                   setShowCustomModal,
-                  setEditingCustom
+                  setEditingCustom,
                 );
               }}
               onCancel={() => {
@@ -641,7 +641,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
                   "destinationExpenses",
                   expenses,
                   setShowDestinationExpensesModal,
-                  setEditingDestinationExpenses
+                  setEditingDestinationExpenses,
                 );
               }}
               onCancel={() => {

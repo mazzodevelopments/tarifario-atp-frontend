@@ -55,7 +55,7 @@ export interface Budget {
   origin: string;
   destination: string;
   supplier: string;
-  deliveryTime: number;
+  productionTime: number;
   unitPrice: number;
   currency: string;
   margin: number;
@@ -104,7 +104,7 @@ const QuoteComparison = () => {
           origin: "China",
           destination: "Argentina",
           supplier: "China Steel Corp",
-          deliveryTime: 20,
+          productionTime: 20,
           unitPrice: 1500,
           currency: "USD",
           margin: 0.1,
@@ -154,7 +154,7 @@ const QuoteComparison = () => {
           origin: "Alemania",
           destination: "Argentina",
           supplier: "EuroMetal GmbH",
-          deliveryTime: 15,
+          productionTime: 15,
           unitPrice: 250,
           currency: "USD",
           margin: 0.15,
@@ -191,7 +191,7 @@ const QuoteComparison = () => {
           origin: "China",
           destination: "Argentina",
           supplier: "China Steel Corp",
-          deliveryTime: 25,
+          productionTime: 25,
           unitPrice: 1500,
           currency: "USD",
           margin: 0.1,
@@ -241,7 +241,7 @@ const QuoteComparison = () => {
           origin: "Alemania",
           destination: "Argentina",
           supplier: "EuroMetal GmbH",
-          deliveryTime: 15,
+          productionTime: 15,
           unitPrice: 250,
           currency: "USD",
           margin: 0.15,
@@ -281,14 +281,14 @@ const QuoteComparison = () => {
   const calculateQuoteTotal = (quote: Quote): number => {
     return quote.budgets.reduce(
       (acc, budget) => acc + calculateBudgetTotal(budget),
-      0
+      0,
     );
   };
 
   const compareValues = (
     key: string,
     value1: string | number,
-    value2: string | number
+    value2: string | number,
   ) => {
     if (value1 === value2) return false;
     return true;
@@ -297,7 +297,7 @@ const QuoteComparison = () => {
   const renderComparisonRow = (
     label: string,
     value1: string | number,
-    value2: string | number
+    value2: string | number,
   ) => {
     const hasChanged = compareValues(label, value1, value2);
     return (
@@ -337,52 +337,52 @@ const QuoteComparison = () => {
             {renderComparisonRow(
               "Origen",
               leftBudget.origin,
-              rightBudget.origin
+              rightBudget.origin,
             )}
             {renderComparisonRow(
               "Destino",
               leftBudget.destination,
-              rightBudget.destination
+              rightBudget.destination,
             )}
             {renderComparisonRow(
               "Proveedor",
               leftBudget.supplier,
-              rightBudget.supplier
+              rightBudget.supplier,
             )}
             {renderComparisonRow(
               "Tiempo de entrega",
-              `${leftBudget.deliveryTime} días`,
-              `${rightBudget.deliveryTime} días`
+              `${leftBudget.productionTime} días`,
+              `${rightBudget.productionTime} días`,
             )}
             {renderComparisonRow(
               "Precio unitario",
               `${leftBudget.currency} ${leftBudget.unitPrice}`,
-              `${rightBudget.currency} ${rightBudget.unitPrice}`
+              `${rightBudget.currency} ${rightBudget.unitPrice}`,
             )}
             {renderComparisonRow(
               "Margen",
               `${leftBudget.margin * 100}%`,
-              `${rightBudget.margin * 100}%`
+              `${rightBudget.margin * 100}%`,
             )}
             {renderComparisonRow(
               "Precio total",
               `${leftBudget.currency} ${leftBudget.totalPrice}`,
-              `${rightBudget.currency} ${rightBudget.totalPrice}`
+              `${rightBudget.currency} ${rightBudget.totalPrice}`,
             )}
             {renderComparisonRow(
               "Peso unitario",
               `${leftBudget.unitWeight} ${leftBudget.unit}`,
-              `${rightBudget.unitWeight} ${leftBudget.unit}`
+              `${rightBudget.unitWeight} ${leftBudget.unit}`,
             )}
             {renderComparisonRow(
               "Peso total",
               `${leftBudget.totalWeight} ${leftBudget.unit}`,
-              `${rightBudget.totalWeight} ${leftBudget.unit}`
+              `${rightBudget.totalWeight} ${leftBudget.unit}`,
             )}
             {renderComparisonRow(
               "Incoterm",
               leftBudget.incoterm,
-              rightBudget.incoterm
+              rightBudget.incoterm,
             )}
           </TableBody>
         </Table>
@@ -396,27 +396,27 @@ const QuoteComparison = () => {
                 {renderComparisonRow(
                   "Costo estadía Edcadassa por día",
                   leftBudget.transport?.edcadassaStayCostPerDay || "N/A",
-                  rightBudget.transport?.edcadassaStayCostPerDay || "N/A"
+                  rightBudget.transport?.edcadassaStayCostPerDay || "N/A",
                 )}
                 {renderComparisonRow(
                   "Duración estadía Edcadassa",
                   leftBudget.transport?.edcadassaStayDuration || "N/A",
-                  rightBudget.transport?.edcadassaStayDuration || "N/A"
+                  rightBudget.transport?.edcadassaStayDuration || "N/A",
                 )}
                 {renderComparisonRow(
                   "Total Edcadassa",
                   leftBudget.transport?.edcadassaTotal || "N/A",
-                  rightBudget.transport?.edcadassaTotal || "N/A"
+                  rightBudget.transport?.edcadassaTotal || "N/A",
                 )}
                 {renderComparisonRow(
                   "Flete internacional",
                   leftBudget.transport?.internationalFreightCost || "N/A",
-                  rightBudget.transport?.internationalFreightCost || "N/A"
+                  rightBudget.transport?.internationalFreightCost || "N/A",
                 )}
                 {renderComparisonRow(
                   "Total transporte",
                   leftBudget.transport?.total || "N/A",
-                  rightBudget.transport?.total || "N/A"
+                  rightBudget.transport?.total || "N/A",
                 )}
               </TableBody>
             </Table>
@@ -432,22 +432,22 @@ const QuoteComparison = () => {
                 {renderComparisonRow(
                   "Base imponible",
                   leftBudget.custom?.taxableBase || "N/A",
-                  rightBudget.custom?.taxableBase || "N/A"
+                  rightBudget.custom?.taxableBase || "N/A",
                 )}
                 {renderComparisonRow(
                   "Tasa de importación",
                   leftBudget.custom?.importDutyRate || "N/A",
-                  rightBudget.custom?.importDutyRate || "N/A"
+                  rightBudget.custom?.importDutyRate || "N/A",
                 )}
                 {renderComparisonRow(
                   "Tasa estadística",
                   leftBudget.custom?.statisticsRate || "N/A",
-                  rightBudget.custom?.statisticsRate || "N/A"
+                  rightBudget.custom?.statisticsRate || "N/A",
                 )}
                 {renderComparisonRow(
                   "Total aduana",
                   leftBudget.custom?.total || "N/A",
-                  rightBudget.custom?.total || "N/A"
+                  rightBudget.custom?.total || "N/A",
                 )}
               </TableBody>
             </Table>
@@ -463,7 +463,7 @@ const QuoteComparison = () => {
                 {renderComparisonRow(
                   "Total entrega",
                   leftBudget.delivery?.total || "N/A",
-                  rightBudget.delivery?.total || "N/A"
+                  rightBudget.delivery?.total || "N/A",
                 )}
               </TableBody>
             </Table>
@@ -477,7 +477,7 @@ const QuoteComparison = () => {
               {renderComparisonRow(
                 "Total del Presupuesto",
                 `${leftBudget.currency} ${leftTotal.toFixed(2)}`,
-                `${rightBudget.currency} ${rightTotal.toFixed(2)}`
+                `${rightBudget.currency} ${rightTotal.toFixed(2)}`,
               )}
             </TableBody>
           </Table>
@@ -505,7 +505,7 @@ const QuoteComparison = () => {
                   onChange={(e) =>
                     setLeftQuote(
                       quotes.find((q) => q.taskNumber === e.target.value) ||
-                        null
+                        null,
                     )
                   }
                   value={leftQuote?.taskNumber || ""}
@@ -530,7 +530,7 @@ const QuoteComparison = () => {
                   onChange={(e) =>
                     setRightQuote(
                       quotes.find((q) => q.taskNumber === e.target.value) ||
-                        null
+                        null,
                     )
                   }
                   value={rightQuote?.taskNumber || ""}
@@ -566,47 +566,47 @@ const QuoteComparison = () => {
                       {renderComparisonRow(
                         "Número de tarea",
                         leftQuote.taskNumber,
-                        rightQuote.taskNumber
+                        rightQuote.taskNumber,
                       )}
                       {renderComparisonRow(
                         "Cliente",
                         leftQuote.client,
-                        rightQuote.client
+                        rightQuote.client,
                       )}
                       {renderComparisonRow(
                         "Comprador",
                         leftQuote.buyer,
-                        rightQuote.buyer
+                        rightQuote.buyer,
                       )}
                       {renderComparisonRow(
                         "Fecha de recepción",
                         leftQuote.receptionDate,
-                        rightQuote.receptionDate
+                        rightQuote.receptionDate,
                       )}
                       {renderComparisonRow(
                         "Fecha de carga",
                         leftQuote.uploadDate,
-                        rightQuote.uploadDate
+                        rightQuote.uploadDate,
                       )}
                       {renderComparisonRow(
                         "Fecha de vencimiento",
                         leftQuote.expirationDateTime,
-                        rightQuote.expirationDateTime
+                        rightQuote.expirationDateTime,
                       )}
                       {renderComparisonRow(
                         "Fecha necesaria de materiales",
                         leftQuote.materialsNeededDate,
-                        rightQuote.materialsNeededDate
+                        rightQuote.materialsNeededDate,
                       )}
                       {renderComparisonRow(
                         "Número de solicitud del cliente",
                         leftQuote.customerRequestNumber,
-                        rightQuote.customerRequestNumber
+                        rightQuote.customerRequestNumber,
                       )}
                       {renderComparisonRow(
                         "Número de solicitud ATP Intern",
                         leftQuote.atpInternRequestNumber,
-                        rightQuote.atpInternRequestNumber
+                        rightQuote.atpInternRequestNumber,
                       )}
                     </TableBody>
                   </Table>
@@ -618,7 +618,7 @@ const QuoteComparison = () => {
                         {renderComparisonRow(
                           "Total de la Cotización",
                           `USD ${calculateQuoteTotal(leftQuote).toFixed(2)}`,
-                          `USD ${calculateQuoteTotal(rightQuote).toFixed(2)}`
+                          `USD ${calculateQuoteTotal(rightQuote).toFixed(2)}`,
                         )}
                       </TableBody>
                     </Table>
@@ -628,7 +628,7 @@ const QuoteComparison = () => {
                 <h3 className="text-xl font-semibold mb-4">Presupuestos</h3>
                 {leftQuote.budgets.map((leftBudget) => {
                   const rightBudget = rightQuote.budgets.find(
-                    (b) => b.id === leftBudget.id
+                    (b) => b.id === leftBudget.id,
                   );
                   if (rightBudget) {
                     return renderBudgetComparison(leftBudget, rightBudget);

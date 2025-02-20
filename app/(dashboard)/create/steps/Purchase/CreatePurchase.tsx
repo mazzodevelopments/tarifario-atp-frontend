@@ -49,7 +49,7 @@ interface CreatePurchaseDataForm {
   weightUnitId: number | null;
   incoterm: string;
   incotermId: number | null;
-  deliveryTime: number;
+  productionTime: number;
 }
 
 export default function CreatePurchase({
@@ -74,7 +74,7 @@ export default function CreatePurchase({
     unitPrice: 0,
     margin: 0,
     appliedUnitPrice: 0,
-    deliveryTime: 0,
+    productionTime: 0,
     unitWeight: 0,
     totalWeight: 0,
     weightUnit: "",
@@ -125,7 +125,7 @@ export default function CreatePurchase({
       unitWeight: formData.unitWeight,
       totalWeight: formData.totalWeight,
       additionalObservations: formData.additionalObservations,
-      deliveryTime: formData.deliveryTime,
+      productionTime: formData.productionTime,
       itemId: formData.itemId,
       origin: formData.origin,
       destination: formData.destination,
@@ -421,8 +421,8 @@ export default function CreatePurchase({
         </div>
         <Input
           type="number"
-          name="deliveryTime"
-          value={formData.deliveryTime}
+          name="productionTime"
+          value={formData.productionTime}
           onChange={handleChange}
           label="Tiempo de Producción (Días)"
           required

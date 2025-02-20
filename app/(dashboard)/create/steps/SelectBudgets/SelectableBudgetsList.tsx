@@ -166,7 +166,7 @@ export default function SelectableBudgetsList({
                     <TableCell>{budget.purchaseData?.origin}</TableCell>
                     <TableCell>{budget.purchaseData?.destination}</TableCell>
                     <TableCell>
-                      {budget.purchaseData?.deliveryTime} días
+                      {budget.purchaseData?.productionTime} días
                     </TableCell>
                     <TableCell>{budget.purchaseData?.incoterm}</TableCell>
                     <TableCell>

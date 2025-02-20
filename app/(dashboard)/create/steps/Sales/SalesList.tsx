@@ -51,7 +51,7 @@ export default function SalesList({
       try {
         const quotationBudgets = await QuoteService.getQuotationBudgets(
           quotationId,
-          "sales-data"
+          "sales-data",
         );
         setBudgets(quotationBudgets);
         // setShouldFetch(false);
@@ -59,7 +59,7 @@ export default function SalesList({
         // CHEQUEAR QUE LOS BUDGETS ESTEN COMPLETOS
         const completeBudgets = quotationBudgets.filter(
           (budget) =>
-            budget.salesData?.margin && budget.salesData?.paymentCondition
+            budget.salesData?.margin && budget.salesData?.paymentCondition,
         );
 
         // HABILITAR BOTÓN SI LOS BUDGETS ESTÁN COMPLETOS
@@ -79,10 +79,10 @@ export default function SalesList({
   const handleRowClick = (budgetNumbering: string, event: React.MouseEvent) => {
     if (event.shiftKey && lastSelectedRow) {
       const currentIndex = budgets.findIndex(
-        (b) => b.numbering === budgetNumbering
+        (b) => b.numbering === budgetNumbering,
       );
       const lastIndex = budgets.findIndex(
-        (b) => b.numbering === lastSelectedRow
+        (b) => b.numbering === lastSelectedRow,
       );
 
       const start = Math.min(currentIndex, lastIndex);
@@ -118,7 +118,7 @@ export default function SalesList({
                   paymentCondition: budget.salesData?.paymentCondition || "",
                 },
               }
-            : budget
+            : budget,
         );
 
         setBudgets(updatedBudgets);
@@ -129,7 +129,7 @@ export default function SalesList({
         // CHEQUEAR QUE BUDGETS TENGAN EL SALESDATA COMPLETO (PROBAR SI ESTO SE PUEDE SACAR)
         const completeBudgets = updatedBudgets.filter(
           (budget) =>
-            budget.salesData?.margin && budget.salesData?.paymentCondition
+            budget.salesData?.margin && budget.salesData?.paymentCondition,
         );
 
         if (completeBudgets.length === updatedBudgets.length) {
@@ -173,7 +173,7 @@ export default function SalesList({
         // CHEQUEAR QUE BUDGETS TENGAN EL SALESDATA COMPLETO (PROBAR SI ESTO SE PUEDE SACAR)
         const completeBudgets = updatedBudgets.filter(
           (budget) =>
-            budget.salesData?.margin && budget.salesData?.paymentCondition
+            budget.salesData?.margin && budget.salesData?.paymentCondition,
         );
 
         if (completeBudgets.length === updatedBudgets.length) {
@@ -357,7 +357,7 @@ export default function SalesList({
                     <TableCell>{budget.purchaseData?.origin}</TableCell>
                     <TableCell>{budget.purchaseData?.destination}</TableCell>
                     <TableCell>
-                      {budget.purchaseData?.deliveryTime} días
+                      {budget.purchaseData?.productionTime} días
                     </TableCell>
                     <TableCell>{budget.purchaseData?.incoterm}</TableCell>
                     <TableCell>

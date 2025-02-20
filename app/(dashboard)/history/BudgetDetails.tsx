@@ -75,7 +75,7 @@ export function BudgetDetails({ budget, isOpen, onClose }: BudgetDetailsProps) {
                   <div>
                     <p className="text-sm text-gray-500">Tiempo de Entrega</p>
                     <p className="font-medium">
-                      {budget.purchaseData.deliveryTime} días
+                      {budget.purchaseData.productionTime} días
                     </p>
                   </div>
                   <div>
@@ -173,7 +173,7 @@ export function BudgetDetails({ budget, isOpen, onClose }: BudgetDetailsProps) {
                             <span>{expense.name}</span>
                             <span>{expense.value}</span>
                           </div>
-                        )
+                        ),
                       )}
                     </div>
                   )}
