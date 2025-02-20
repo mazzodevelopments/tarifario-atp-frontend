@@ -40,6 +40,10 @@ export default function SalesList({
   const [selectedBudgetId, setSelectedBudgetId] = useState<string | null>(null);
   const [editingMargin, setEditingMargin] = useState<number | null>(null);
 
+  // ROW SELECTION (EN PROCESO)
+  const [selectedRows, setSelectedRows] = useState<string[]>([]);
+  const [lastSelectedRow, setLastSelectedRow] = useState<string | null>(null);
+
   useEffect(() => {
     if (!shouldFetch) return;
 
@@ -71,6 +75,33 @@ export default function SalesList({
 
     fetchQuotationBudgets();
   }, [shouldFetch, setBudgetsToEnableButton]);
+
+  const handleRowClick = (budgetNumbering: string, event: React.MouseEvent) => {
+    if (event.shiftKey && lastSelectedRow) {
+      const currentIndex = budgets.findIndex(
+        (b) => b.numbering === budgetNumbering
+      );
+      const lastIndex = budgets.findIndex(
+        (b) => b.numbering === lastSelectedRow
+      );
+
+      const start = Math.min(currentIndex, lastIndex);
+      const end = Math.max(currentIndex, lastIndex);
+
+      const newSelection = budgets
+        .slice(start, end + 1)
+        .map((b) => b.numbering);
+
+      setSelectedRows(newSelection);
+    } else {
+      if (selectedRows.includes(budgetNumbering)) {
+        setSelectedRows(selectedRows.filter((row) => row !== budgetNumbering));
+      } else {
+        setSelectedRows([...selectedRows, budgetNumbering]);
+      }
+      setLastSelectedRow(budgetNumbering);
+    }
+  };
 
   const handleSalesDataCreated = async (salesData: SalesData) => {
     try {
@@ -309,7 +340,15 @@ export default function SalesList({
                 </TableRow>
               ) : (
                 budgets.map((budget) => (
-                  <TableRow key={budget.numbering} className="h-12 text-center">
+                  <TableRow
+                    key={budget.numbering}
+                    className={`h-12 select-none text-center cursor-pointer hover:bg-[#ff000000] ${
+                      selectedRows.includes(budget.numbering)
+                        ? "bg-primary/10 hover:bg-primary/10 text-primary "
+                        : ""
+                    }`}
+                    onClick={(e) => handleRowClick(budget.numbering, e)}
+                  >
                     <TableCell>
                       {budget.stage + " " + budget.numbering}
                     </TableCell>
