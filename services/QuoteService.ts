@@ -70,12 +70,18 @@ export const QuoteService = {
 
   // ETAPA 3
   getQuotationBudgets: async (quotationId: number, query: string) => {
-    console.log(
-      "LLAMADO A LA API PARA OBTENER TODOS LOS BUDGETS",
-      quotationId,
-      query,
+    const response = await fetch(
+      `${API_BASE_URL}/quote/${quotationId}/budgets?includes=${query}`,
+      {
+        method: "GET",
+      },
     );
-    return TEST_BUDGETS;
+
+    if (!response.ok) {
+      throw new Error("Error al traer budgets");
+    }
+
+    return await response.json();
   },
   addPurchaseData: async (
     newPurchaseData: CreatePurchaseData,

@@ -135,10 +135,8 @@ export default function PurchaseList({
                 </TableRow>
               ) : (
                 budgets.map((budget) => (
-                  <TableRow key={budget.numbering} className="h-12 text-center">
-                    <TableCell>
-                      {budget.stage + " " + budget.numbering}
-                    </TableCell>
+                  <TableRow key={budget.id} className="h-12 text-center">
+                    <TableCell>{budget.numbering}</TableCell>
                     <TableCell>{budget.purchaseData?.item?.detail}</TableCell>
                     <TableCell>{budget.purchaseData?.supplier}</TableCell>
                     <TableCell>
