@@ -298,7 +298,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
               key={budget.numbering}
               className={`h-12 select-none text-center cursor-pointer hover:bg-[#ff000000] ${
                 selectedRows.includes(budget.numbering)
-                  ? "bg-primary/15 hover:bg-primary/15"
+                  ? "bg-primary/10 hover:bg-primary/10 text-primary "
                   : ""
               }`}
               onClick={(e) => handleRowClick(budget.numbering, e)}
