@@ -18,7 +18,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import type { Item, CreateItem as CreateItemType } from "@/types/Item";
-import { PlusCircle, Upload } from "lucide-react";
+import { Pencil, PlusCircle, Upload } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import * as XLSX from "xlsx";
 import type React from "react";
@@ -42,8 +42,9 @@ export default function ItemsList({
 
     const fetchQuotationItems = async () => {
       try {
-        const quotationItems =
-          await QuoteService.getQuotationItems(quotationId);
+        const quotationItems = await QuoteService.getQuotationItems(
+          quotationId
+        );
         setItems(quotationItems);
         setShouldFetch(false);
       } catch (error) {
@@ -86,7 +87,7 @@ export default function ItemsList({
   };
 
   const handleItemsDocumentUpload = (
-    event: React.ChangeEvent<HTMLInputElement>,
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -116,12 +117,12 @@ export default function ItemsList({
           }));
 
           const validItems = processedItems.filter(
-            (item) => item.detail && item.quantity > 0,
+            (item) => item.detail && item.quantity > 0
           );
 
           if (validItems.length === 0) {
             console.error(
-              "No se encontraron items válidos en el archivo Excel",
+              "No se encontraron items válidos en el archivo Excel"
             );
             return;
           }
@@ -192,7 +193,7 @@ export default function ItemsList({
                 items.map((item) => (
                   <TableRow
                     key={item.numbering}
-                    className="text-sm text-center"
+                    className="text-sm text-center hover:bg-transparent"
                   >
                     <TableCell>{item.numbering}</TableCell>
                     <TableCell>{item.detail}</TableCell>
@@ -203,13 +204,19 @@ export default function ItemsList({
                     <TableCell>{item.quantity + " " + item.unit}</TableCell>
                     <TableCell>{item.partNumber}</TableCell>
                     <TableCell>{item.productNumber}</TableCell>
-                    <TableCell>
-                      <button
+                    <TableCell className="flex flex-row">
+                      <Button
+                        variant="secondary"
+                        className="p-1 h-auto hover:bg-gray-100"
+                      >
+                        <Pencil className="w-4 text-primary" />
+                      </Button>
+                      <Button
                         onClick={() => handleDeleteItem(item.id)}
-                        className="text-black hover:text-red-600 mx-2"
+                        className="bg-white border border-neutral-200 text-red-800 hover:text-red-500 hover:bg-red-50 mx-2"
                       >
                         <X className="w-4" />
-                      </button>
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))
