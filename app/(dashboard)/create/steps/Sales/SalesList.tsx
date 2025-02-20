@@ -54,7 +54,7 @@ export default function SalesList({
       try {
         const quotationBudgets = await QuoteService.getQuotationBudgets(
           quotationId,
-          "sales-data",
+          "sales-data"
         );
         setBudgets(quotationBudgets);
         // setShouldFetch(false);
@@ -62,7 +62,7 @@ export default function SalesList({
         // CHEQUEAR QUE LOS BUDGETS ESTEN COMPLETOS
         const completeBudgets = quotationBudgets.filter(
           (budget: Budget) =>
-            budget.salesData?.margin && budget.salesData?.paymentCondition,
+            budget.salesData?.margin && budget.salesData?.paymentCondition
         );
 
         // HABILITAR BOTÓN SI LOS BUDGETS ESTÁN COMPLETOS
@@ -115,7 +115,7 @@ export default function SalesList({
                   paymentCondition: budget.salesData?.paymentCondition || "",
                 },
               }
-            : budget,
+            : budget
         );
 
         setBudgets(updatedBudgets);
@@ -124,7 +124,7 @@ export default function SalesList({
 
         const completeBudgets = updatedBudgets.filter(
           (budget) =>
-            budget.salesData?.margin && budget.salesData?.paymentCondition,
+            budget.salesData?.margin && budget.salesData?.paymentCondition
         );
 
         if (completeBudgets.length === updatedBudgets.length) {
@@ -143,7 +143,7 @@ export default function SalesList({
       if (selectedBudgetId !== null) {
         await QuoteService.addPaymentCondition(
           paymentCondition,
-          selectedBudgetId,
+          selectedBudgetId
         );
         const updatedBudgets = budgets.map((budget) => {
           if (budget.id === selectedBudgetId) {
@@ -169,7 +169,7 @@ export default function SalesList({
 
         const completeBudgets = updatedBudgets.filter(
           (budget) =>
-            budget.salesData?.margin && budget.salesData?.paymentCondition,
+            budget.salesData?.margin && budget.salesData?.paymentCondition
         );
 
         if (completeBudgets.length === updatedBudgets.length) {
@@ -230,6 +230,13 @@ export default function SalesList({
       return (
         <div className="flex items-center justify-center gap-2">
           {budget.salesData.paymentCondition}
+          <Button
+            onClick={handleClick}
+            variant="secondary"
+            className="p-1 h-auto hover:bg-gray-100"
+          >
+            <Pencil className="w-4 h-4 text-primary" />
+          </Button>
         </div>
       );
     }
