@@ -108,7 +108,7 @@ export const QuoteService = {
     }
 
     const data = await response.json();
-    console.log("Item agregado:", data);
+    console.log("Purchase Data agregada:", data);
     return data;
   },
   updatePurchaseData: async (editedPurchaseData: PurchaseData) => {
@@ -126,20 +126,43 @@ export const QuoteService = {
   // TODO
 
   // ETAPA 5
-  addMargin: async (margin: number, quotationId: number) => {
-    console.log("LLAMADO A LA API PARA ADD MARGIN", margin, quotationId);
+  addMargin: async (
+    margin: number,
+    budgetId: number,
+  ): Promise<{ message: string; salesDataId: number }> => {
+    const response = await fetch(`${API_BASE_URL}/quote/${budgetId}/margin`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ margin }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al agregar el margen");
+    }
+
+    return await response.json();
   },
-  addPaymentCondition: async (
-    paymentCondition: string,
-    quotationId: number,
-  ) => {
-    console.log(
-      "LLAMADO A LA API PARA ADD PAYMENT CONDITION",
-      paymentCondition,
-      quotationId,
+  addPaymentCondition: async (paymentCondition: string, budgetId: number) => {
+    const response = await fetch(
+      `${API_BASE_URL}/quote/${budgetId}/payment-condition`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ paymentCondition }),
+      },
     );
+
+    if (!response.ok) {
+      throw new Error("Error al agregar la condición de pago");
+    }
+
+    return await response.json();
   },
-  updateSalesData: async (salesData: SalesData) => {
+  updateSalesData: async (budgetId: number, salesData: SalesData) => {
     console.log("LLAMADO A LA API PARA EDITAR SALESDATA", salesData);
   },
   deleteSalesData: async (salesDataId: number) => {
