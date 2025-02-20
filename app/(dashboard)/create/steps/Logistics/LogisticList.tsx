@@ -295,7 +295,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
         ) : (
           budgets.map((budget) => (
             <TableRow
-              key={budget.numbering}
+              key={budget.id}
               className={`h-12 select-none text-center cursor-pointer hover:bg-[#ff000000] ${
                 selectedRows.includes(budget.numbering)
                   ? "bg-primary/10 hover:bg-primary/10 text-primary "
