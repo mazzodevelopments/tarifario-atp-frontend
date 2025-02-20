@@ -1,5 +1,4 @@
 import { QuotationData } from "@/types/QuotationData";
-import { TEST_BUDGETS } from "@/app/(dashboard)/create/testData";
 import { CreateItem, Item } from "@/types/Item";
 import { CreatePurchaseData, PurchaseData } from "@/types/PurchaseData";
 import { SalesData } from "@/types/SalesData";
@@ -171,19 +170,36 @@ export const QuoteService = {
 
   // ETAPA 6
   getSelectedBudgets: async (quotationId: number) => {
-    console.log(
-      "LLAMADO A LA API PARA OBTENER TODOS LOS BUDGETS SELECCIONADOS",
-      quotationId,
+    const response = await fetch(
+      `${API_BASE_URL}/quote/${quotationId}/selected-budgets`,
+      {
+        method: "GET",
+      },
     );
-    return TEST_BUDGETS.slice(0, 2);
+
+    if (!response.ok) {
+      throw new Error("Error al traer budgets");
+    }
+
+    return await response.json();
   },
-  selectBudgets: async (budgetIds: string[], quotationId: number) => {
-    // IDS DEBEN SER NUMBERS
-    console.log(
-      "LLAMADO A LA API PARA SELECCIONAR BUDGETS",
-      budgetIds,
-      quotationId,
+  selectBudgets: async (budgetIds: number[], quotationId: number) => {
+    const response = await fetch(
+      `${API_BASE_URL}/quote/${quotationId}/select-budgets`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(budgetIds),
+      },
     );
+
+    if (!response.ok) {
+      throw new Error("Error al seleccionar budgets");
+    }
+
+    return await response.json();
   },
 
   // ETAPA 7

@@ -74,7 +74,7 @@ export default function Create() {
     if (currentStep === 5 && quotationData?.taskNumber) {
       try {
         await QuoteService.selectBudgets(
-          selectedBudgets.map((b) => b.numbering),
+          selectedBudgets.map((b) => b.id),
           quotationId!,
         );
       } catch (error) {
