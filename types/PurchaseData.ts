@@ -28,8 +28,8 @@ export interface CreatePurchaseData {
   additionalObservations: string;
   deliveryTime: number;
   itemId: number | null;
-  originId: number | null;
-  destinationId: number | null;
+  origin: string;
+  destination: string;
   supplierId: number | null;
   currencyId: number | null;
   weightUnitId: number | null;

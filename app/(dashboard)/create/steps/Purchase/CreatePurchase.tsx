@@ -17,6 +17,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { PlusCircle } from "lucide-react";
+import { Country, City } from "country-state-city";
 
 interface CreatePurchaseProps {
   onPurchaseCreated: (purchaseData: CreatePurchaseData) => void;
@@ -35,10 +36,11 @@ interface CreatePurchaseDataForm {
   item: string;
   itemId: number | null;
   origin: string;
-  deliveryTime: number;
-  originId: number | null;
+  originCity: string;
+  originCountry: string;
   destination: string;
-  destinationId: number | null;
+  destinationCity: string;
+  destinationCountry: string;
   supplier: string;
   supplierId: number | null;
   currency: string;
@@ -47,6 +49,7 @@ interface CreatePurchaseDataForm {
   weightUnitId: number | null;
   incoterm: string;
   incotermId: number | null;
+  deliveryTime: number;
 }
 
 export default function CreatePurchase({
@@ -59,9 +62,11 @@ export default function CreatePurchase({
     item: "",
     itemId: null,
     origin: "",
-    originId: null,
+    originCity: "",
+    originCountry: "",
     destination: "",
-    destinationId: null,
+    destinationCity: "",
+    destinationCountry: "",
     supplier: "",
     supplierId: null,
     currency: "",
@@ -79,8 +84,12 @@ export default function CreatePurchase({
     additionalObservations: "",
   });
 
+  const [isOriginModalOpen, setIsOriginModalOpen] = useState(false);
+  const [isDestinationModalOpen, setIsDestinationModalOpen] = useState(false);
+
   const isWithinArgentina =
-    formData.origin === "Argentina" && formData.destination === "Argentina";
+    formData.originCountry === "Argentina" &&
+    formData.destinationCountry === "Argentina";
 
   // CALCULO DEL PESO
   useEffect(() => {
@@ -118,8 +127,8 @@ export default function CreatePurchase({
       additionalObservations: formData.additionalObservations,
       deliveryTime: formData.deliveryTime,
       itemId: formData.itemId,
-      originId: formData.originId,
-      destinationId: formData.destinationId,
+      origin: formData.origin,
+      destination: formData.destination,
       supplierId: formData.supplierId,
       currencyId: formData.currencyId,
       weightUnitId: formData.weightUnitId,
@@ -129,7 +138,7 @@ export default function CreatePurchase({
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value, type } = e.target;
 
@@ -164,10 +173,13 @@ export default function CreatePurchase({
     return adaptToDropdown(weightUnits, "id", "name");
   }, []);
 
-  const fetchLocations = useCallback(async () => {
-    const locations = await CatalogService.listLocations();
-    return adaptToDropdown(locations, "id", "name");
-  }, []);
+  const fetchCountries = () => {
+    const countriesRaw = Country.getAllCountries();
+    const countries = countriesRaw.map((country, acc) => {
+      return { id: acc, name: country.name };
+    });
+    return adaptToDropdown(countries, "id", "name");
+  };
 
   const fetchIncoterms = useCallback(async () => {
     const incoterms = await CatalogService.listIncoterms();
@@ -177,6 +189,24 @@ export default function CreatePurchase({
   const fetchItems = useCallback(async () => {
     return adaptToDropdown(items, "id", "detail");
   }, [items]);
+
+  const handleOriginSave = () => {
+    const newOrigin = `${formData.originCity}, ${formData.originCountry}`;
+    setFormData((prev) => ({
+      ...prev,
+      origin: newOrigin,
+    }));
+    setIsOriginModalOpen(false);
+  };
+
+  const handleDestinationSave = () => {
+    const newDestination = `${formData.destinationCity}, ${formData.destinationCountry}`;
+    setFormData((prev) => ({
+      ...prev,
+      destination: newDestination,
+    }));
+    setIsDestinationModalOpen(false);
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -200,11 +230,12 @@ export default function CreatePurchase({
           <label className="block text-sm font-[600] text-gray-700">
             Origen
           </label>
-          <Dialog>
+          <Dialog open={isOriginModalOpen} onOpenChange={setIsOriginModalOpen}>
             <DialogTrigger asChild>
               <Button
                 variant="primary"
                 className="flex items-center gap-1 text-primary border border-primary/20 bg-primary/5 hover:text-primary-dark"
+                onClick={() => setIsOriginModalOpen(true)}
               >
                 <PlusCircle size={16} />
                 <span className="mt-[1.5px]">
@@ -217,11 +248,27 @@ export default function CreatePurchase({
                 <DialogTitle>Agregar Origen</DialogTitle>
               </DialogHeader>
               <div className="grid gap-4 py-4">
-                <Input name="country" label="País" required />
-                <Input name="city" label="Ciudad" required />
+                <Input
+                  name="originCountry"
+                  label="País"
+                  required
+                  value={formData.originCountry}
+                  onChange={handleChange}
+                />
+                <Input
+                  name="originCity"
+                  label="Ciudad"
+                  required
+                  value={formData.originCity}
+                  onChange={handleChange}
+                />
               </div>
               <div className="w-full flex justify-end items-center">
-                <Button variant="primary" className="px-8 text-white">
+                <Button
+                  variant="primary"
+                  className="px-8 text-white"
+                  onClick={handleOriginSave}
+                >
                   Guardar
                 </Button>
               </div>
@@ -232,7 +279,10 @@ export default function CreatePurchase({
           <label className="block text-sm font-[600] text-gray-700">
             L. Entrega
           </label>
-          <Dialog>
+          <Dialog
+            open={isDestinationModalOpen}
+            onOpenChange={setIsDestinationModalOpen}
+          >
             <DialogTrigger asChild>
               <Button
                 variant="primary"
@@ -240,20 +290,36 @@ export default function CreatePurchase({
               >
                 <PlusCircle size={16} />
                 <span className="mt-[1.5px]">
-                  {formData.origin || "Agregar"}
+                  {formData.destination || "Agregar"}
                 </span>
               </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Agregar Origen</DialogTitle>
+                <DialogTitle>Agregar Destino</DialogTitle>
               </DialogHeader>
               <div className="grid gap-4 py-4">
-                <Input name="country" label="País" required />
-                <Input name="city" label="Ciudad" required />
+                <Input
+                  name="destinationCountry"
+                  label="País"
+                  required
+                  value={formData.destinationCountry}
+                  onChange={handleChange}
+                />
+                <Input
+                  name="destinationCity"
+                  label="Ciudad"
+                  required
+                  value={formData.destinationCity}
+                  onChange={handleChange}
+                />
               </div>
               <div className="w-full flex justify-end items-center">
-                <Button variant="primary" className="px-8 text-white">
+                <Button
+                  variant="primary"
+                  className="px-8 text-white"
+                  onClick={handleDestinationSave}
+                >
                   Guardar
                 </Button>
               </div>
