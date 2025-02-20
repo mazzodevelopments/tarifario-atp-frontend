@@ -32,7 +32,9 @@ export const CatalogService = {
   },
 
   // BUYER
-  listBuyers: async (clientId: number) => {
+  listBuyers: async (
+    clientId: number,
+  ): Promise<{ id: number; name: string }[]> => {
     const response = await fetch(
       `${API_BASE_URL}/catalog/buyers?clientId=${clientId}`,
       {
