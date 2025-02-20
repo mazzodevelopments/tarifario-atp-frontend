@@ -72,7 +72,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
       try {
         const quotationBudgets = await QuoteService.getQuotationBudgets(
           quotationId,
-          "logistic",
+          "freight",
         );
         setBudgets(quotationBudgets);
         setShouldFetch(false);
