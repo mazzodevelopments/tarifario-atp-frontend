@@ -10,6 +10,18 @@ export interface QuotationData {
   expirationDateTime: string;
   materialsNeededDate: string;
   customerRequestNumber: string;
+  stageId: number;
   budgets: Budget[] | null;
   items: Item[] | null;
+}
+
+export interface CreateQuotationData {
+  taskNumber: string;
+  buyerId: string;
+  receptionDate: string;
+  uploadDate: string;
+  expirationDateTime: string;
+  materialsNeededDate: string;
+  customerRequestNumber: string;
+  stageId: number;
 }
