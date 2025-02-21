@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
+import Dropdown from "@/components/Dropdown";
+import { Country, City } from "country-state-city";
+import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 
 interface BuyerFormProps {
   onSubmit: (data: {
@@ -9,7 +12,10 @@ interface BuyerFormProps {
     email: string;
     phone: string;
     birthDate: string;
-    address: string;
+    street: string;
+    streetNumber: string;
+    country: string;
+    city: string;
   }) => void;
   isLoading: boolean;
   closeDialog?: () => void;
@@ -18,87 +24,147 @@ interface BuyerFormProps {
 export const BuyerForm: React.FC<BuyerFormProps> = ({
   onSubmit,
   isLoading,
-  closeDialog, // Nueva prop
+  closeDialog,
 }) => {
-  const [name, setName] = useState("");
-  const [lastname, setLastname] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [birthDate, setBirthDate] = useState(
-    new Date().toISOString().split("T")[0],
-  );
-  const [address, setAddress] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    lastname: "",
+    email: "",
+    phone: "",
+    birthDate: new Date().toISOString().split("T")[0],
+    street: "",
+    streetNumber: "",
+    country: "",
+    city: "",
+  });
+
+  const handleChange = (field: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await onSubmit({ name, lastname, email, phone, birthDate, address });
-    if (closeDialog) {
-      closeDialog();
-    } // Cierra el diálogo después de enviar el formulario
+    await onSubmit(formData);
+    closeDialog?.();
   };
+
+  const fetchCountries = useCallback(async () => {
+    const countriesRaw = Country.getAllCountries();
+    const countries = countriesRaw.map((country, acc) => {
+      return { id: acc, name: country.name };
+    });
+    return Promise.resolve(adaptToDropdown(countries, "id", "name"));
+  }, []);
+
+  const fetchCities = useCallback(async (countryName: string) => {
+    const country = Country.getAllCountries().find(
+      (c) => c.name === countryName,
+    );
+    if (!country) return Promise.resolve([]);
+
+    const cities = City.getCitiesOfCountry(country.isoCode) || [];
+    return Promise.resolve(
+      adaptToDropdown(
+        cities.map((city, i) => ({ id: i, name: city.name })),
+        "id",
+        "name",
+      ),
+    );
+  }, []);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-      <Input
-        type="text"
-        value={name}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setName(e.target.value)
-        }
-        placeholder="Nombre"
-        label="Nombre"
-        required
-      />
-      <Input
-        type="text"
-        value={lastname}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setLastname(e.target.value)
-        }
-        placeholder="Apellido"
-        label="Apellido"
-        required
-      />
+      <div className="grid grid-cols-2 gap-4">
+        <Input
+          type="text"
+          value={formData.name}
+          onChange={(
+            e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+          ) => handleChange("name", e.target.value)}
+          placeholder="Nombre"
+          label="Nombre"
+          required
+        />
+        <Input
+          type="text"
+          value={formData.lastname}
+          onChange={(
+            e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+          ) => handleChange("lastname", e.target.value)}
+          placeholder="Apellido"
+          label="Apellido"
+          required
+        />
+      </div>
       <Input
         type="email"
-        value={email}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setEmail(e.target.value)
-        }
+        value={formData.email}
+        onChange={(
+          e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+        ) => handleChange("email", e.target.value)}
         placeholder="Email"
         label="Email"
         required
       />
       <Input
         type="tel"
-        value={phone}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setPhone(e.target.value)
-        }
+        value={formData.phone}
+        onChange={(
+          e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+        ) => handleChange("phone", e.target.value)}
         placeholder="Teléfono"
         label="Teléfono"
         required
       />
       <Input
         type="date"
-        value={birthDate}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setBirthDate(e.target.value)
-        }
+        value={formData.birthDate}
+        onChange={(
+          e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+        ) => handleChange("birthDate", e.target.value)}
         placeholder="Fecha de Nacimiento"
         label="Fecha de Nacimiento"
         required
       />
-      <Input
-        type="text"
-        value={address}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setAddress(e.target.value)
-        }
-        placeholder="Dirección"
-        label="Dirección"
-        required
-      />
+      <div className="grid grid-cols-2 gap-4">
+        <Input
+          type="text"
+          value={formData.street}
+          onChange={(
+            e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+          ) => handleChange("street", e.target.value)}
+          placeholder="Calle"
+          label="Calle"
+          required
+        />
+        <Input
+          type="string"
+          value={formData.streetNumber}
+          onChange={(
+            e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+          ) => handleChange("streetNumber", e.target.value)}
+          placeholder="Número"
+          label="Número"
+          required
+        />
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        <Dropdown
+          value={formData.country}
+          fetchItems={fetchCountries}
+          onSelect={(item) => handleChange("country", item.name)}
+          label="País"
+          required
+        />
+        <Dropdown
+          value={formData.city}
+          fetchItems={() => fetchCities(formData.country)}
+          onSelect={(item) => handleChange("city", item.name)}
+          label="Ciudad"
+          required
+          disabled={!formData.country}
+        />
+      </div>
       <div className="flex justify-end gap-2 mt-4">
         <Button
           type="submit"

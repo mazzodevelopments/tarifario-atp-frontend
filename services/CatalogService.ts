@@ -48,24 +48,38 @@ export const CatalogService = {
 
     return await response.json();
   },
-  addBuyer: async (name: string, clientId: number): Promise<number> => {
-    // TODO
-    const response = await fetch(`${API_BASE_URL}/catalog/buyer`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ personId: 1, clientId }),
-    });
-
-    console.log(name);
-    if (!response.ok) {
-      throw new Error("Error al agregar cliente");
-    }
-
-    const data = await response.json();
-    console.log("Cliente agregado:", data);
-    return data;
+  addBuyer: async (
+    buyer: {
+      name: string;
+      lastname: string;
+      email: string;
+      phone: string;
+      birthDate: string;
+      street: string;
+      streetNumber: string;
+      country: string;
+      city: string;
+    },
+    clientId: number,
+  ) => {
+    console.log(JSON.stringify(buyer), clientId);
+    // // TODO
+    // const response = await fetch(`${API_BASE_URL}/catalog/buyer`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({ personId: 1, clientId }),
+    // });
+    //
+    // console.log(name);
+    // if (!response.ok) {
+    //   throw new Error("Error al agregar cliente");
+    // }
+    //
+    // const data = await response.json();
+    // console.log("Cliente agregado:", data);
+    // return data;
   },
 
   // BRAND
