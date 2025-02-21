@@ -13,7 +13,6 @@ export interface Item {
 }
 
 export interface CreateItem {
-  numbering: string;
   detail: string;
   quantity: number;
   partNumber: string;

@@ -208,7 +208,7 @@ export default function ItemsList({
               ) : (
                 items.map((item) => (
                   <TableRow
-                    key={item.numbering}
+                    key={item.id}
                     className="text-sm text-center hover:bg-transparent"
                   >
                     <TableCell>{item.numbering}</TableCell>

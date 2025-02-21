@@ -19,7 +19,6 @@ interface CreateItemProps {
 }
 
 interface CreateItemForm {
-  numbering: string;
   detail: string;
   quantity: number;
   partNumber: string;
@@ -41,7 +40,6 @@ export default function CreateItem({
   setEditingItem,
 }: CreateItemProps) {
   const [formData, setFormData] = useState<CreateItemForm>({
-    numbering: "",
     family: "",
     subfamily: "",
     subfamilyId: null,
@@ -62,7 +60,6 @@ export default function CreateItem({
   useEffect(() => {
     if (editingItem) {
       setFormData({
-        numbering: editingItem.numbering,
         detail: editingItem.detail,
         quantity: editingItem.quantity,
         partNumber: editingItem.partNumber,
@@ -83,7 +80,6 @@ export default function CreateItem({
     e.preventDefault();
     if (editingItem) {
       const updatedItem: CreateItem = {
-        numbering: editingItem.numbering, // NUMBERING ORIGINAL
         detail: formData.detail,
         quantity: Number(formData.quantity),
         partNumber: formData.partNumber,
@@ -97,9 +93,6 @@ export default function CreateItem({
       setEditingItem(null);
     } else {
       const newItem: CreateItem = {
-        numbering: `P${Math.floor(Math.random() * 100)
-          .toString()
-          .padStart(9, "0")}`,
         detail: formData.detail,
         quantity: Number(formData.quantity),
         partNumber: formData.partNumber,
