@@ -17,7 +17,7 @@ export interface QuotationData {
 
 export interface CreateQuotationData {
   taskNumber: string;
-  buyerId: string;
+  buyerId: number;
   receptionDate: string;
   uploadDate: string;
   expirationDateTime: string;

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import SuccessAnimation from "./SuccesAnimation";
 import Button from "@/components/Button";
 import Header from "@/app/(dashboard)/components/Header";
@@ -14,7 +14,7 @@ import type { QuotationData } from "@/types/QuotationData";
 import type { Budget } from "@/types/Budget";
 import { QuoteService } from "@/services/QuoteService";
 import SelectableBudgetsList from "@/app/(dashboard)/create/steps/SelectBudgets/SelectableBudgetsList";
-import { Item } from "@/types/Item";
+import type { Item } from "@/types/Item";
 
 const steps = [
   { title: "Cargar Datos" },
@@ -36,7 +36,7 @@ export default function Create() {
   const [quotationData, setQuotationData] = useState<QuotationData | null>(
     null,
   );
-  const [quotationId, setQuotationId] = useState<number | null>();
+  const [quotationId, setQuotationId] = useState<number | null>(null);
   const [items, setItems] = useState<Item[]>([]);
   const [selectedBudgets, setSelectedBudgets] = useState<Budget[]>([]);
   // ESTADO BUDGETS PARA HABILITAR BOTON DE NEXT
@@ -48,29 +48,32 @@ export default function Create() {
     if (budgetsToEnableButton.length > 0) {
       setBudgetsToEnableButton(budgetsToEnableButton);
     }
-  }, [budgetsToEnableButton, setBudgetsToEnableButton]);
+  }, [budgetsToEnableButton]);
+
+  const handleQuotationSubmitSuccess = (id: number) => {
+    setQuotationId(id);
+    setQuotationData((prevData) => {
+      if (prevData) {
+        return {
+          ...prevData,
+          items: [],
+        };
+      }
+      return prevData;
+    });
+    setCurrentStep(currentStep + 1);
+  };
 
   const handleNext = async () => {
-    if (currentStep === 0 && quotationData) {
-      try {
-        console.log(quotationData);
-        const id = await QuoteService.createQuotation(quotationData);
-        setQuotationId(id);
-        setQuotationData((prevData) => {
-          if (prevData) {
-            return {
-              ...prevData,
-              items: [],
-            };
-          }
-          return prevData;
-        });
-      } catch (error) {
-        console.error("Error cargando data inicial:", error);
-        return;
+    // SUBMIT FORM DE QUOTATION DATA
+    if (currentStep === 0) {
+      const quotationDetailsElement = document.querySelector("form");
+      if (quotationDetailsElement) {
+        quotationDetailsElement.requestSubmit();
       }
+      return;
     }
-
+    // SELECCIONAR BUDGETS
     if (currentStep === 5 && quotationData?.taskNumber) {
       try {
         await QuoteService.selectBudgets(
@@ -154,6 +157,7 @@ export default function Create() {
         return (
           <QuotationDetails
             onFormDataChange={handleQuotationDataChange}
+            onSubmitSuccess={handleQuotationSubmitSuccess}
             initialData={quotationData}
           />
         );
@@ -167,13 +171,11 @@ export default function Create() {
         );
       case 2:
         return (
-          items && (
-            <PurchaseList
-              quotationId={quotationId!}
-              items={items}
-              setBudgetsToEnableButton={setBudgetsToEnableButton}
-            />
-          )
+          <PurchaseList
+            quotationId={quotationId!}
+            items={items}
+            setBudgetsToEnableButton={setBudgetsToEnableButton}
+          />
         );
       case 3:
         return <LogisticList quotationId={quotationId!} />;
@@ -222,9 +224,7 @@ export default function Create() {
             <div className="flex w-full flex-col h-full">
               <div className="flex w-full justify-center items-center h-full">
                 <div className="w-full h-full relative flex flex-col">
-                  <h3 className="text-xl font-[800]">
-                    {`Etapa ${currentStep + 1} - ${renderStepTitle()}`}
-                  </h3>
+                  <h3 className="text-xl font-[800]">{`Etapa ${currentStep + 1} - ${renderStepTitle()}`}</h3>
                   <div className="flex justify-center relative h-full items-center">
                     {renderStepContent()}
                   </div>

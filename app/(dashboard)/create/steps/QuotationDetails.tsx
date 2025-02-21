@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import type React from "react";
+import { useState, useEffect, useCallback } from "react";
 import Dropdown, { type DropdownItem } from "@/components/Dropdown";
 import Input from "@/components/Input";
-import { QuotationData } from "@/types/QuotationData";
+import type { QuotationData, CreateQuotationData } from "@/types/QuotationData";
 import { QuoteService } from "@/services/QuoteService";
 import { CatalogService } from "@/services/CatalogService";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
@@ -11,11 +12,13 @@ import { BuyerForm } from "@/app/(dashboard)/create/steps/BuyerForm";
 
 interface QuotationDetailsProps {
   onFormDataChange: (formData: QuotationData) => void;
+  onSubmitSuccess: (quotationId: number) => void;
   initialData: QuotationData | null;
 }
 
 export default function QuotationDetails({
   onFormDataChange,
+  onSubmitSuccess,
   initialData,
 }: QuotationDetailsProps) {
   const [formData, setFormData] = useState<Omit<QuotationData, "id">>(
@@ -35,6 +38,7 @@ export default function QuotationDetails({
   );
 
   const [selectedClientId, setSelectedClientId] = useState<number | null>(null);
+  const [selectedBuyerId, setSelectedBuyerId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -76,7 +80,32 @@ export default function QuotationDetails({
         setSelectedClientId(item.id);
         setFormData((prevData) => ({ ...prevData, buyer: "" }));
       }
+
+      if (field === "buyer") {
+        setSelectedBuyerId(item.id);
+      }
     };
+
+  const handleSubmit = async () => {
+    try {
+      const createQuotationData: CreateQuotationData = {
+        taskNumber: formData.taskNumber,
+        buyerId: selectedBuyerId!,
+        receptionDate: formData.receptionDate,
+        uploadDate: formData.uploadDate,
+        expirationDateTime: formData.expirationDateTime,
+        materialsNeededDate: formData.materialsNeededDate,
+        customerRequestNumber: formData.customerRequestNumber,
+        stageId: formData.stageId,
+      };
+
+      const quotationId =
+        await QuoteService.createQuotation(createQuotationData);
+      onSubmitSuccess(quotationId);
+    } catch (error) {
+      console.error("Error creating quotation:", error);
+    }
+  };
 
   const fetchClients = useCallback(async () => {
     const clients = await CatalogService.listClients();
@@ -125,7 +154,7 @@ export default function QuotationDetails({
         ...prevData,
         buyer: newBuyer.name,
       }));
-
+      setSelectedBuyerId(buyerId);
       setSelectedClientId(selectedClientId);
 
       setIsLoading(false);
@@ -136,7 +165,13 @@ export default function QuotationDetails({
   };
 
   return (
-    <div className="w-full max-w-2xl space-y-4">
+    <form
+      onSubmit={async (e) => {
+        e.preventDefault();
+        await handleSubmit();
+      }}
+      className="w-full max-w-2xl space-y-4"
+    >
       <Input
         id="taskNumber"
         name="taskNumber"
@@ -213,6 +248,6 @@ export default function QuotationDetails({
         label="Número de Solicitud del Cliente"
         required
       />
-    </div>
+    </form>
   );
 }

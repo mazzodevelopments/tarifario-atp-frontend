@@ -1,4 +1,4 @@
-import { QuotationData } from "@/types/QuotationData";
+import { CreateQuotationData, QuotationData } from "@/types/QuotationData";
 import { CreateItem, Item } from "@/types/Item";
 import { CreatePurchaseData, PurchaseData } from "@/types/PurchaseData";
 import { SalesData } from "@/types/SalesData";
@@ -17,8 +17,22 @@ export const QuoteService = {
 
     return await response.text();
   },
-  createQuotation: async (quotationData: QuotationData) => {
-    console.log("QuotationDataService: ", quotationData);
+  createQuotation: async (quotationData: CreateQuotationData) => {
+    // TODO: NO ES TODO... TODO ESTO ANDA PERO PARA DESARROLLO DEVUELVO ID 1 Y LISTO
+    // const response = await fetch(`${API_BASE_URL}/quote`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(quotationData),
+    // });
+    //
+    // if (!response.ok) {
+    //   throw new Error("Error al agregar el item");
+    // }
+    //
+    // return await response.json();
+    console.log(quotationData);
     return 1;
   },
 
