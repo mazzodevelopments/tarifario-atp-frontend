@@ -16,6 +16,7 @@ interface BuyerFormProps {
     streetNumber: string;
     country: string;
     city: string;
+    zipCode: string;
   }) => void;
   isLoading: boolean;
   closeDialog?: () => void;
@@ -36,6 +37,7 @@ export const BuyerForm: React.FC<BuyerFormProps> = ({
     streetNumber: "",
     country: "",
     city: "",
+    zipCode: "",
   });
 
   const handleChange = (field: string, value: string) => {
@@ -148,14 +150,14 @@ export const BuyerForm: React.FC<BuyerFormProps> = ({
           required
         />
       </div>
+      <Dropdown
+        value={formData.country}
+        fetchItems={fetchCountries}
+        onSelect={(item) => handleChange("country", item.name)}
+        label="País"
+        required
+      />
       <div className="grid grid-cols-2 gap-4">
-        <Dropdown
-          value={formData.country}
-          fetchItems={fetchCountries}
-          onSelect={(item) => handleChange("country", item.name)}
-          label="País"
-          required
-        />
         <Dropdown
           value={formData.city}
           fetchItems={() => fetchCities(formData.country)}
@@ -164,7 +166,18 @@ export const BuyerForm: React.FC<BuyerFormProps> = ({
           required
           disabled={!formData.country}
         />
+        <Input
+          type="text"
+          value={formData.zipCode}
+          onChange={(
+            e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+          ) => handleChange("zipCode", e.target.value)}
+          placeholder="Código Postal"
+          label="Código Postal"
+          required
+        />
       </div>
+
       <div className="flex justify-end gap-2 mt-4">
         <Button
           type="submit"

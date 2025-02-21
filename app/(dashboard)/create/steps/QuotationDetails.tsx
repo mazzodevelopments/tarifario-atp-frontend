@@ -94,23 +94,29 @@ export default function QuotationDetails({
     lastname: string;
     email: string;
     birthDate: string;
-    address: string;
+    street: string;
+    streetNumber: string;
+    country: string;
+    city: string;
+    zipCode: string;
   }) => {
     if (!selectedClientId) return;
 
     try {
       setIsLoading(true);
-      const buyerId = await CatalogService.addBuyer(
-        {
-          name: data.name,
-          lastname: data.lastname,
-          email: data.email,
-          phone: data.phone,
-          birthDate: data.birthDate,
-          address: data.address,
-        },
-        selectedClientId,
-      );
+      const buyerId = await CatalogService.addBuyer({
+        name: data.name,
+        lastname: data.lastname,
+        email: data.email,
+        phone: data.phone,
+        birthDate: data.birthDate,
+        street: data.street,
+        streetNumber: data.streetNumber,
+        country: data.country,
+        city: data.city,
+        zipCode: data.zipCode,
+        clientId: selectedClientId,
+      });
 
       const newBuyer = { name: `${data.name} ${data.lastname}`, id: buyerId };
 
