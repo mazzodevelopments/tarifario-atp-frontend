@@ -61,11 +61,7 @@ export default function PurchaseList({
 
   const onPurchaseCreated = async (newPurchase: CreatePurchaseData) => {
     try {
-      const newBudget = await QuoteService.addPurchaseData(
-        newPurchase,
-        quotationId,
-      );
-      setBudgets([...budgets, newBudget]);
+      await QuoteService.addPurchaseData(newPurchase, quotationId);
       setShowCreateModal(false);
       setShouldFetch(true);
     } catch (error) {
