@@ -13,7 +13,7 @@ import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 
 interface CreateItemProps {
   onItemCreated: (item: CreateItem) => void;
-  onItemUpdated: (item: Item) => void;
+  onItemUpdated: (item: CreateItem) => void;
   editingItem: Item | null;
   setEditingItem: (item: Item | null) => void;
 }
@@ -82,10 +82,17 @@ export default function CreateItem({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (editingItem) {
-      const updatedItem: Item = {
-        ...editingItem,
-        ...formData,
+      const updatedItem: CreateItem = {
+        numbering: editingItem.numbering, // NUMBERING ORIGINAL
+        detail: formData.detail,
+        quantity: Number(formData.quantity),
+        partNumber: formData.partNumber,
+        productNumber: formData.productNumber,
+        subfamilyId: formData.subfamilyId!,
+        modelId: formData.modelId!,
+        unitId: formData.unitId!,
       };
+
       onItemUpdated(updatedItem);
       setEditingItem(null);
     } else {
@@ -106,7 +113,7 @@ export default function CreateItem({
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value, type } = e.target;
     setFormData((prev) => ({

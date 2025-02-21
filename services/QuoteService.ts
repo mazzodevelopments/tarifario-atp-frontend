@@ -1,5 +1,5 @@
 import { CreateQuotationData, QuotationData } from "@/types/QuotationData";
-import { CreateItem, Item } from "@/types/Item";
+import { CreateItem } from "@/types/Item";
 import { CreatePurchaseData, PurchaseData } from "@/types/PurchaseData";
 import { SalesData } from "@/types/SalesData";
 import { API_BASE_URL } from "@/app/utils/config";
@@ -66,8 +66,22 @@ export const QuoteService = {
     console.log("Item agregado:", data);
     return data;
   },
-  updateItem: async (editedItem: Item) => {
-    console.log("LLAMADO A LA API PARA EDITAR ITEM", editedItem);
+  updateItem: async (editedItem: CreateItem, itemToEditId: number) => {
+    const response = await fetch(`${API_BASE_URL}/quote/item`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...editedItem, id: itemToEditId }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al editar el item");
+    }
+
+    const data = await response.json();
+    console.log("Item editado:", data);
+    return data;
   },
   deleteItem: async (itemId: number): Promise<{ message: string }> => {
     const response = await fetch(`${API_BASE_URL}/quote/items/${itemId}`, {

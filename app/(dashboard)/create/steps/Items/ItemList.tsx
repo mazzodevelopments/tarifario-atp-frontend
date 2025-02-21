@@ -44,9 +44,8 @@ export default function ItemsList({
 
     const fetchQuotationItems = async () => {
       try {
-        const quotationItems = await QuoteService.getQuotationItems(
-          quotationId
-        );
+        const quotationItems =
+          await QuoteService.getQuotationItems(quotationId);
         setItems(quotationItems);
         setShouldFetch(false);
       } catch (error) {
@@ -69,11 +68,14 @@ export default function ItemsList({
     }
   };
 
-  const handleItemUpdated = async (updatedItem: Item) => {
+  const handleItemUpdated = async (newUpdatedItem: CreateItemType) => {
     try {
-      await QuoteService.updateItem(updatedItem);
+      const updatedItem = await QuoteService.updateItem(
+        newUpdatedItem,
+        editingItem!.id,
+      );
       setItems(
-        items.map((item) => (item.id === updatedItem.id ? updatedItem : item))
+        items.map((item) => (item.id === updatedItem.id ? updatedItem : item)),
       );
       setShouldFetch(true);
     } catch (error) {
@@ -101,7 +103,7 @@ export default function ItemsList({
   };
 
   const handleItemsDocumentUpload = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -131,12 +133,12 @@ export default function ItemsList({
           }));
 
           const validItems = processedItems.filter(
-            (item) => item.detail && item.quantity > 0
+            (item) => item.detail && item.quantity > 0,
           );
 
           if (validItems.length === 0) {
             console.error(
-              "No se encontraron items válidos en el archivo Excel"
+              "No se encontraron items válidos en el archivo Excel",
             );
             return;
           }
