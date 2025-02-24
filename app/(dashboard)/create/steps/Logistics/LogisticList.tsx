@@ -35,19 +35,19 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
   const [shouldFetch, setShouldFetch] = useState(true);
   const [freights, setFreights] = useState<Freight[]>([]);
   const [activeTab, setActiveTab] = useState<"logistics" | "freights">(
-    "logistics",
+    "logistics"
   );
   // SELECTED FREIGHTS
   const [selectedFreightId, setSelectedFreightId] = useState<string | null>(
-    null,
+    null
   );
   const [selectedFreights, setSelectedFreights] = useState<
-    Record<string, string>
+    Record<number, string>
   >({});
 
   // ROW SELECTION
-  const [selectedRows, setSelectedRows] = useState<string[]>([]);
-  const [lastSelectedRow, setLastSelectedRow] = useState<string | null>(null);
+  const [selectedRows, setSelectedRows] = useState<number[]>([]);
+  const [lastSelectedRow, setLastSelectedRow] = useState<number | null>(null);
 
   // MODALS
   const [showOriginExpensesModal, setShowOriginExpensesModal] = useState(false);
@@ -60,7 +60,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
     useState<OriginExpenses | null>(null);
   const [editingCustom, setEditingCustom] = useState<Custom | null>(null);
   const [editingTransport, setEditingTransport] = useState<Transport | null>(
-    null,
+    null
   );
   const [editingDestinationExpenses, setEditingDestinationExpenses] =
     useState<DestinationExpenses | null>(null);
@@ -72,7 +72,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
       try {
         const quotationBudgets = await QuoteService.getQuotationBudgets(
           quotationId,
-          "freight",
+          "freight"
         );
         setBudgets(quotationBudgets);
         setShouldFetch(false);
@@ -86,49 +86,43 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
 
   // INICIALIZAR SELECTEDFREIGHTS DE UN BUDGET EXISTENTE
   useEffect(() => {
-    const initialSelections: Record<string, string> = {};
+    const initialSelections: Record<number, string> = {};
     budgets.forEach((budget) => {
       if (budget.freight?.id) {
-        initialSelections[budget.numbering] = budget.freight.id;
+        initialSelections[budget.id] = budget.freight.id;
       }
     });
     setSelectedFreights(initialSelections);
-  }, []);
+  }, [budgets]);
 
-  const handleRowClick = (budgetNumbering: string, event: React.MouseEvent) => {
+  const handleRowClick = (budgetId: number, event: React.MouseEvent) => {
     if (event.shiftKey && lastSelectedRow) {
-      const currentIndex = budgets.findIndex(
-        (b) => b.numbering === budgetNumbering,
-      );
-      const lastIndex = budgets.findIndex(
-        (b) => b.numbering === lastSelectedRow,
-      );
+      const currentIndex = budgets.findIndex((b) => b.id === budgetId);
+      const lastIndex = budgets.findIndex((b) => b.id === lastSelectedRow);
 
       const start = Math.min(currentIndex, lastIndex);
       const end = Math.max(currentIndex, lastIndex);
 
-      const newSelection = budgets
-        .slice(start, end + 1)
-        .map((b) => b.numbering);
+      const newSelection = budgets.slice(start, end + 1).map((b) => b.id);
 
       setSelectedRows(newSelection);
     } else {
-      if (selectedRows.includes(budgetNumbering)) {
-        setSelectedRows(selectedRows.filter((row) => row !== budgetNumbering));
+      if (selectedRows.includes(budgetId)) {
+        setSelectedRows(selectedRows.filter((row) => row !== budgetId));
       } else {
-        setSelectedRows([...selectedRows, budgetNumbering]);
+        setSelectedRows([...selectedRows, budgetId]);
       }
-      setLastSelectedRow(budgetNumbering);
+      setLastSelectedRow(budgetId);
     }
   };
 
   const handleFreightUpdate = <
-    T extends Transport | OriginExpenses | Custom | DestinationExpenses | null,
+    T extends Transport | OriginExpenses | Custom | DestinationExpenses | null
   >(
     field: "transport" | "originExpenses" | "custom" | "destinationExpenses",
     value: T,
     setShowModal: (value: boolean) => void,
-    setEditing: (value: T | null) => void,
+    setEditing: (value: T | null) => void
   ) => {
     if (selectedFreightId) {
       setFreights(
@@ -142,8 +136,8 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
                   [field]: value,
                 }),
               }
-            : freight,
-        ),
+            : freight
+        )
       );
 
       setBudgets(
@@ -160,8 +154,8 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
                   }),
                 },
               }
-            : budget,
-        ),
+            : budget
+        )
       );
 
       setShowModal(false);
@@ -212,19 +206,17 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
     }
   };
 
-  const handleConfirmFreight = (budgetNumbering: string) => {
-    const currentFreightId = selectedFreights[budgetNumbering];
+  const handleConfirmFreight = (budgetId: number) => {
+    const currentFreightId = selectedFreights[budgetId];
     if (!currentFreightId) return;
 
     const freight = freights.find((f) => f.id === currentFreightId);
     if (!freight) return;
 
-    // Apply freight to all selected rows or current row
-    const rowsToUpdate =
-      selectedRows.length > 0 ? selectedRows : [budgetNumbering];
+    const rowsToUpdate = selectedRows.length > 0 ? selectedRows : [budgetId];
 
     const updatedBudgets = budgets.map((budget) => {
-      if (rowsToUpdate.includes(budget.numbering)) {
+      if (rowsToUpdate.includes(budget.id)) {
         return {
           ...budget,
           freight: {
@@ -297,11 +289,11 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
             <TableRow
               key={budget.id}
               className={`h-12 select-none text-center cursor-pointer hover:bg-[#ff000000] ${
-                selectedRows.includes(budget.numbering)
+                selectedRows.includes(budget.id)
                   ? "bg-primary/10 hover:bg-primary/10 text-primary "
                   : ""
               }`}
-              onClick={(e) => handleRowClick(budget.numbering, e)}
+              onClick={(e) => handleRowClick(budget.id, e)}
             >
               <TableCell>{budget.numbering}</TableCell>
               <TableCell>{budget.purchaseData?.item?.detail}</TableCell>
@@ -324,7 +316,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
                 <div className="flex flex-col items-center">
                   <select
                     className="border rounded p-1 mb-2"
-                    value={selectedFreights[budget.numbering] || ""}
+                    value={selectedFreights[budget.id] || ""}
                     onChange={(e) =>
                       handleAssignFreight(budget.numbering, e.target.value)
                     }
@@ -359,7 +351,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
   const renderFreightActionCell = (
     freight: Freight,
     type: "transport" | "custom" | "destinationExpenses" | "origin",
-    setShowModal: (show: boolean) => void,
+    setShowModal: (show: boolean) => void
   ) => {
     const data = type === "origin" ? freight.originExpenses : freight[type];
 
@@ -378,12 +370,12 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
                 setShowTransportModal(true);
               } else if (type === "origin") {
                 setEditingOriginExpenses(
-                  freight.originExpenses as OriginExpenses,
+                  freight.originExpenses as OriginExpenses
                 );
                 setShowOriginExpensesModal(true);
               } else if (type === "destinationExpenses") {
                 setEditingDestinationExpenses(
-                  freight.destinationExpenses as DestinationExpenses,
+                  freight.destinationExpenses as DestinationExpenses
                 );
                 setShowDestinationExpensesModal(true);
               }
@@ -452,28 +444,28 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
                   {renderFreightActionCell(
                     freight,
                     "origin",
-                    setShowOriginExpensesModal,
+                    setShowOriginExpensesModal
                   )}
                 </TableCell>
                 <TableCell>
                   {renderFreightActionCell(
                     freight,
                     "transport",
-                    setShowTransportModal,
+                    setShowTransportModal
                   )}
                 </TableCell>
                 <TableCell>
                   {renderFreightActionCell(
                     freight,
                     "custom",
-                    setShowCustomModal,
+                    setShowCustomModal
                   )}
                 </TableCell>
                 <TableCell>
                   {renderFreightActionCell(
                     freight,
                     "destinationExpenses",
-                    setShowDestinationExpensesModal,
+                    setShowDestinationExpensesModal
                   )}
                 </TableCell>
                 <TableCell>${freight.total.formatNumber()}</TableCell>
@@ -550,7 +542,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
                   "originExpenses",
                   expenses,
                   setShowOriginExpensesModal,
-                  setEditingOriginExpenses,
+                  setEditingOriginExpenses
                 );
               }}
               onCancel={() => {
@@ -578,7 +570,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
                   "transport",
                   transport,
                   setShowTransportModal,
-                  setEditingTransport,
+                  setEditingTransport
                 )
               }
               onCancel={() => {
@@ -608,7 +600,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
                   "custom",
                   custom,
                   setShowCustomModal,
-                  setEditingCustom,
+                  setEditingCustom
                 );
               }}
               onCancel={() => {
@@ -641,7 +633,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
                   "destinationExpenses",
                   expenses,
                   setShowDestinationExpensesModal,
-                  setEditingDestinationExpenses,
+                  setEditingDestinationExpenses
                 );
               }}
               onCancel={() => {
