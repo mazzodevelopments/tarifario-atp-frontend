@@ -115,9 +115,9 @@ export default function ItemsList({
           const processedItems: CreateMassiveLoadItems[] = rawData
             .slice(2)
             .map((row) => ({
-              detail: row[0]?.toString() || "",
-              family: row[1]?.toString() || "",
-              subfamily: row[2]?.toString() || "",
+              family: row[0]?.toString() || "",
+              subfamily: row[1]?.toString() || "",
+              detail: row[2]?.toString() || "",
               brand: row[3]?.toString() || "",
               model: row[4]?.toString() || "",
               quantity: Number(row[5]) || 0,
