@@ -1,5 +1,5 @@
 import { CreateQuotationData, QuotationData } from "@/types/QuotationData";
-import { CreateItem } from "@/types/Item";
+import { CreateItem, CreateMassiveLoadItems } from "@/types/Item";
 import { CreatePurchaseData, PurchaseData } from "@/types/PurchaseData";
 import { SalesData } from "@/types/SalesData";
 import { API_BASE_URL } from "@/app/utils/config";
@@ -60,6 +60,23 @@ export const QuoteService = {
 
     if (!response.ok) {
       throw new Error("Error al agregar el item");
+    }
+
+    const data = await response.json();
+    console.log("Item agregado:", data);
+    return data;
+  },
+  addItems: async (newItems: CreateMassiveLoadItems[], quotationId: number) => {
+    const response = await fetch(`${API_BASE_URL}/quote/${quotationId}/items`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newItems),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al agregar los items");
     }
 
     const data = await response.json();

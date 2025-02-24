@@ -17,7 +17,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import type { Item, CreateItem as CreateItemType } from "@/types/Item";
+import type {
+  Item,
+  CreateItem as CreateItemType,
+  CreateMassiveLoadItems,
+} from "@/types/Item";
 import { Pencil, PlusCircle, Upload } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import * as XLSX from "xlsx";
@@ -92,23 +96,13 @@ export default function ItemsList({
     }
   };
 
-  const generateItemId = () => {
-    return Math.floor(Math.random() * 100);
-  };
-
-  const generateItemNumber = () => {
-    return `P${Math.floor(Math.random() * 100)
-      .toString()
-      .padStart(9, "0")}`;
-  };
-
-  const handleItemsDocumentUpload = (
+  const handleItemsDocumentUpload = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (e: ProgressEvent<FileReader>) => {
+      reader.onload = async (e: ProgressEvent<FileReader>) => {
         try {
           const data = new Uint8Array(e.target?.result as ArrayBuffer);
           const workbook = XLSX.read(data, { type: "array" });
@@ -118,19 +112,19 @@ export default function ItemsList({
             header: 1,
           }) as (string | number)[][];
 
-          const processedItems: Item[] = rawData.slice(2).map((row) => ({
-            id: generateItemId(),
-            numbering: generateItemNumber(),
-            detail: row[0]?.toString() || "",
-            family: row[1]?.toString() || "",
-            subfamily: row[2]?.toString() || "",
-            brand: row[3]?.toString() || "",
-            model: row[4]?.toString() || "",
-            quantity: Number(row[5]) || 0,
-            unit: row[6]?.toString() || "",
-            partNumber: row[7]?.toString() || "",
-            productNumber: row[8]?.toString() || "",
-          }));
+          const processedItems: CreateMassiveLoadItems[] = rawData
+            .slice(2)
+            .map((row) => ({
+              detail: row[0]?.toString() || "",
+              family: row[1]?.toString() || "",
+              subfamily: row[2]?.toString() || "",
+              brand: row[3]?.toString() || "",
+              model: row[4]?.toString() || "",
+              quantity: Number(row[5]) || 0,
+              unit: row[6]?.toString() || "",
+              partNumber: row[7]?.toString() || "",
+              productNumber: row[8]?.toString() || "",
+            }));
 
           const validItems = processedItems.filter(
             (item) => item.detail && item.quantity > 0,
@@ -143,8 +137,15 @@ export default function ItemsList({
             return;
           }
 
-          setItems([...items, ...validItems]);
-          console.log(`Se agregaron ${validItems.length} items correctamente`);
+          try {
+            await QuoteService.addItems(validItems, quotationId);
+            setShouldFetch(true);
+            console.log(
+              `Se agregaron ${validItems.length} items correctamente`,
+            );
+          } catch (error) {
+            console.error("Error adding items:", error);
+          }
 
           if (fileInputRef.current) {
             fileInputRef.current.value = "";
