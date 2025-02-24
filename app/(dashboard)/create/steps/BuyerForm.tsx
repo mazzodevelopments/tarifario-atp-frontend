@@ -46,6 +46,7 @@ export const BuyerForm: React.FC<BuyerFormProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     await onSubmit(formData);
     closeDialog?.();
   };
