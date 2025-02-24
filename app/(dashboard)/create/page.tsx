@@ -4,7 +4,7 @@ import SuccessAnimation from "./SuccesAnimation";
 import Button from "@/components/Button";
 import Header from "@/app/(dashboard)/components/Header";
 import ProgressBar from "@/app/(dashboard)/create/ProgressBar";
-import QuotationDetails from "@/app/(dashboard)/create/steps/QuotationDetails";
+import QuotationDetails from "@/app/(dashboard)/create/steps/QuotationDetails/QuotationDetails";
 import ItemsList from "@/app/(dashboard)/create/steps/Items/ItemList";
 import PurchaseList from "@/app/(dashboard)/create/steps/Purchase/PurchaseList";
 import LogisticList from "@/app/(dashboard)/create/steps/Logistics/LogisticList";

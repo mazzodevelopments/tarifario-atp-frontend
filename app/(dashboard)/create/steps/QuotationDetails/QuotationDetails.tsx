@@ -8,7 +8,7 @@ import type { QuotationData, CreateQuotationData } from "@/types/QuotationData";
 import { QuoteService } from "@/services/QuoteService";
 import { CatalogService } from "@/services/CatalogService";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
-import { BuyerForm } from "@/app/(dashboard)/create/steps/BuyerForm";
+import { BuyerForm } from "@/app/(dashboard)/create/steps/QuotationDetails/BuyerForm";
 
 interface QuotationDetailsProps {
   onFormDataChange: (formData: QuotationData) => void;
