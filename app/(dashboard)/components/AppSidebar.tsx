@@ -100,7 +100,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <SidebarMenuItem key={item.id}>
                   <SidebarMenuButton
                     asChild
-                    isActive={pathname === `/${item.id}`}
+                    isActive={
+                      item.id === ""
+                        ? pathname === "/"
+                        : pathname.startsWith(`/${item.id}`)
+                    }
                     className="text-gray-500 text-[1.05em] font-[500]"
                   >
                     <Link href={`/${item.id}`}>
