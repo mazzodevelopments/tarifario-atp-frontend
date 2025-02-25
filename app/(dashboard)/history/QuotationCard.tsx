@@ -3,26 +3,11 @@ import type React from "react";
 import { Briefcase, User, Calendar, Hash, Ellipsis } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Budget } from "@/types/Budget";
-import { Item } from "@/types/Item";
+import { HistoryQuotationCard } from "@/types/Quotation";
 
-interface Quotation {
-  id: number;
-  taskNumber: string;
-  client: string;
-  buyer: string;
-  receptionDate: string;
-  uploadDate: string;
-  expirationDateTime: string;
-  materialsNeededDate: string;
-  customerRequestNumber: string;
-  step: number;
-  stageId: number;
-  budgets: Budget[] | null;
-  items: Item[] | null;
-}
+type StepKeys = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
-const stepTexts = {
+const stepTexts: Record<StepKeys, string> = {
   1: "Items",
   2: "Compras",
   3: "Logística",
@@ -32,8 +17,8 @@ const stepTexts = {
   7: "Completada",
 };
 
-export default function QuotationCard(quotation: Quotation) {
-  const stepLinks = {
+export default function QuotationCard(quotation: HistoryQuotationCard) {
+  const stepLinks: Record<StepKeys, string> = {
     1: `/create/${quotation.id}/items`,
     2: `/create/${quotation.id}/purchase-data`,
     3: `/create/${quotation.id}/logistic`,
@@ -43,8 +28,7 @@ export default function QuotationCard(quotation: Quotation) {
     7: `/history/${quotation.taskNumber}`,
   };
 
-  // const actualStep = quotation.step;
-  const actualStep = 7;
+  const actualStep = quotation.step as StepKeys;
 
   const stepText = stepTexts[actualStep] || "Estado desconocido";
 

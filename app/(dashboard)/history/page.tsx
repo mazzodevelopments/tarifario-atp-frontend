@@ -3,13 +3,52 @@
 import { Search } from "react-feather";
 import Header from "@/app/(dashboard)/components/Header";
 import QuotationCard from "./QuotationCard";
-import { useState } from "react";
-import { quotations } from "@/app/(dashboard)/history/testData";
+import { useEffect, useState } from "react";
+import { QuotationsService } from "@/services/QuotationsService";
+import { HistoryQuotationCard } from "@/types/Quotation";
 
 export default function History() {
+  const [unfinishedQuoations, setUnfinishedQuoations] = useState<
+    HistoryQuotationCard[]
+  >([]);
+  const [finishedQuoations, setFinishedQuoations] = useState<
+    HistoryQuotationCard[]
+  >([]);
+
+  useEffect(() => {
+    const fetchUnfinishedQuotations = async () => {
+      try {
+        const unfinishedQuotations =
+          await QuotationsService.getUnfinishedQuotations();
+        setUnfinishedQuoations(unfinishedQuotations);
+        console.log("unfinishedQuotations", unfinishedQuotations);
+      } catch (error) {
+        console.error("Error fetching quotation items:", error);
+      }
+    };
+
+    const fetchFinishedQuotations = async () => {
+      try {
+        const unfinishedQuotations =
+          await QuotationsService.getFinishedQuotations();
+        setFinishedQuoations(unfinishedQuotations);
+        console.log("unfinishedQuotations", unfinishedQuotations);
+      } catch (error) {
+        console.error("Error fetching quotation items:", error);
+      }
+    };
+
+    fetchUnfinishedQuotations();
+    fetchFinishedQuotations();
+  }, []);
+
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredQuotations = quotations.filter((quotation) =>
+  const filteredUnfinishedQuotations = unfinishedQuoations.filter((quotation) =>
+    quotation.taskNumber.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
+
+  const filteredFinishedQuotations = finishedQuoations.filter((quotation) =>
     quotation.taskNumber.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
@@ -38,13 +77,22 @@ export default function History() {
             </div>
           </div>
         </div>
+
+        {unfinishedQuoations.length > 0 && (
+          <div className="w-full mb-4">
+            <h3 className="text-lg font-[600]">Pendientes</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-start mt-2">
+              {filteredUnfinishedQuotations.map((quotation) => (
+                <QuotationCard key={quotation.id} {...quotation} />
+              ))}
+            </div>
+          </div>
+        )}
         <div className="w-full">
+          <h3 className="text-lg font-[600]">Completadas</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-start mt-2">
-            {filteredQuotations.map((quotation) => (
-              <QuotationCard
-                key={quotation.customerRequestNumber}
-                {...quotation}
-              />
+            {filteredFinishedQuotations.map((quotation) => (
+              <QuotationCard key={quotation.id} {...quotation} />
             ))}
           </div>
         </div>
