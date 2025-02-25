@@ -27,6 +27,7 @@ export default function QuotationDetails({
     expirationDateTime: `${new Date().toISOString().split("T")[0]}T00:00`,
     materialsNeededDate: new Date().toISOString().split("T")[0],
     customerRequestNumber: "",
+    step: 1,
     stageId: 1,
     items: null,
     budgets: null,

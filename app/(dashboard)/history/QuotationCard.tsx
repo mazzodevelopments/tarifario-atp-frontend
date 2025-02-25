@@ -2,10 +2,56 @@
 import type React from "react";
 import { Briefcase, User, Calendar, Hash, Ellipsis } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { QuotationData } from "@/types/QuotationData";
 import Link from "next/link";
+import { Budget } from "@/types/Budget";
+import { Item } from "@/types/Item";
 
-export default function QuotationCard(quotation: QuotationData) {
+interface Quotation {
+  id: number;
+  taskNumber: string;
+  client: string;
+  buyer: string;
+  receptionDate: string;
+  uploadDate: string;
+  expirationDateTime: string;
+  materialsNeededDate: string;
+  customerRequestNumber: string;
+  step: number;
+  stageId: number;
+  budgets: Budget[] | null;
+  items: Item[] | null;
+}
+
+const stepTexts = {
+  1: "Items",
+  2: "Compras",
+  3: "Logística",
+  4: "Ventas",
+  5: "Presupuestos",
+  6: "Selección",
+  7: "Completada",
+};
+
+export default function QuotationCard(quotation: Quotation) {
+  const stepLinks = {
+    1: `/create/${quotation.id}/items`,
+    2: `/create/${quotation.id}/purchase-data`,
+    3: `/create/${quotation.id}/logistic`,
+    4: `/create/${quotation.id}/sales-data`,
+    5: `/create/${quotation.id}/select-budgets`,
+    6: `/create/${quotation.id}/review`,
+    7: `/history/${quotation.taskNumber}`,
+  };
+
+  // const actualStep = quotation.step;
+  const actualStep = 7;
+
+  const stepText = stepTexts[actualStep] || "Estado desconocido";
+
+  const isCompleted = stepText === "Completada";
+  const bgColor = isCompleted ? "bg-green-100" : "bg-orange-100";
+  const textColor = isCompleted ? "text-green-600" : "text-orange-600";
+
   return (
     <>
       <div className="bg-white shadow-sm border border-neutral-200 rounded-[18px] overflow-hidden w-full">
@@ -14,9 +60,9 @@ export default function QuotationCard(quotation: QuotationData) {
             {quotation.taskNumber}
           </h2>
           <div className="flex items-center gap-1">
-            <div className="py-1 px-3 bg-green-100 rounded-3xl">
-              <span className="text-sm text-green-600 font-[600]">
-                Completada
+            <div className={`py-1 px-3 ${bgColor} rounded-3xl`}>
+              <span className={`text-sm ${textColor} font-[600]`}>
+                {stepText}
               </span>
             </div>
             <button className="w-8 h-8 flex justify-center items-center p-1 rounded-full border border-neutral-200">
@@ -98,12 +144,12 @@ export default function QuotationCard(quotation: QuotationData) {
           </div>
         </div>
         <div className="p-[20px] w-full items-center flex justify-end">
-          <Link href={`/history/${quotation.taskNumber}`} passHref>
+          <Link href={stepLinks[actualStep] || ""} passHref>
             <Button
               variant="outline"
               className="justify-center items-center py-2 px-4 rounded-xl"
             >
-              Ver Detalles
+              {isCompleted ? "Ver Detalles" : "Ir a cotizar"}
             </Button>
           </Link>
         </div>
