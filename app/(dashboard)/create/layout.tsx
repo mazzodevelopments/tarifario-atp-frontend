@@ -27,11 +27,18 @@ export default function CreateLayout({
   const { quotationId } = useParams();
 
   useEffect(() => {
-    const stepIndex = steps.findIndex((step) =>
-      pathname.includes(
-        step.path.replace("[quotationId]", quotationId?.toString() || ""),
-      ),
-    );
+    const findCurrentStepIndex = () => {
+      return steps.findIndex((step) => {
+        const dynamicPath = step.path.replace(
+          "[quotationId]",
+          quotationId?.toString() || "",
+        );
+        return pathname === dynamicPath;
+      });
+    };
+
+    const stepIndex = findCurrentStepIndex();
+
     if (stepIndex !== -1) {
       setCurrentStep(stepIndex);
     }
