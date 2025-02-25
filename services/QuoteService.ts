@@ -258,4 +258,18 @@ export const QuoteService = {
   saveQuotation: async (quotationData: QuotationData) => {
     console.log("Cotización completa: ", quotationData);
   },
+  getTaskNumberByQuotationId: async (quotationId: number) => {
+    const response = await fetch(
+      `${API_BASE_URL}/quote/${quotationId}/task-number`,
+      {
+        method: "GET",
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Error al traer el task-number");
+    }
+
+    return await response.text();
+  },
 };

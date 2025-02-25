@@ -9,7 +9,7 @@ export default function ReviewStep() {
   const { quotationId } = useParams();
 
   const handleCreate = () => {
-    console.log("CREANDO COTIZACIÓN");
+    router.push(`/create/${quotationId}/confirm`);
   };
 
   const handleBack = () => {
