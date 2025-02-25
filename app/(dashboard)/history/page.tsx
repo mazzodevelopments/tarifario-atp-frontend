@@ -21,7 +21,6 @@ export default function History() {
         const unfinishedQuotations =
           await QuotationsService.getUnfinishedQuotations();
         setUnfinishedQuoations(unfinishedQuotations);
-        console.log("unfinishedQuotations", unfinishedQuotations);
       } catch (error) {
         console.error("Error fetching quotation items:", error);
       }
@@ -32,7 +31,6 @@ export default function History() {
         const unfinishedQuotations =
           await QuotationsService.getFinishedQuotations();
         setFinishedQuoations(unfinishedQuotations);
-        console.log("unfinishedQuotations", unfinishedQuotations);
       } catch (error) {
         console.error("Error fetching quotation items:", error);
       }
