@@ -1,18 +1,67 @@
-import type React from "react";
-import type { QuotationData } from "@/types/QuotationData";
+import React, { useEffect, useState } from "react";
 import { Calendar, FileText, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useState } from "react";
-import { Budget } from "@/types/Budget";
 import BudgetDetails from "./BudgetDetails";
+import { QuotationsService } from "@/services/QuotationsService";
 
-interface QuotationDetailsProps {
-  quotation: QuotationData;
+interface QuotationDetail {
+  id: number;
+  buyer: {
+    person: {
+      name: string;
+      lastname: string;
+    };
+    client: {
+      name: string;
+    };
+  };
+  receptionDate: string;
+  uploadDate: string;
+  expirationDateTime: string;
+  materialsNeededDate: string;
+  customerRequestNumber: string;
+  budgets: {
+    id: number;
+    purchaseData: {
+      item: {
+        detail: string;
+      };
+      origin: string;
+      destination: string;
+      currency: {
+        abbreviation: string;
+      };
+    };
+    salesData: { totalSalePrice: number };
+  }[];
 }
 
-const QuotationDetails: React.FC<QuotationDetailsProps> = ({ quotation }) => {
-  const [selectedBudget, setSelectedBudget] = useState<Budget | null>(null);
+export default function QuotationDetails({
+  quotationId,
+}: {
+  quotationId: number;
+}) {
+  const [quotation, setQuotation] = useState<QuotationDetail | null>(null);
+  const [selectedBudgetId, setSelectedBudgetId] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchQuotation = async () => {
+      try {
+        const completeFinishedQuotation =
+          await QuotationsService.getCompleteFinishedQuotation(1);
+        setQuotation(completeFinishedQuotation);
+      } catch (error) {
+        console.error("Error fetching quotation items:", error);
+      }
+    };
+
+    fetchQuotation();
+  }, [quotationId]);
+
+  if (!quotation) {
+    return <p className="text-center text-gray-500">Cargando...</p>;
+  }
 
   return (
     <ScrollArea className="h-[calc(100vh-120px)] pr-4">
@@ -25,11 +74,15 @@ const QuotationDetails: React.FC<QuotationDetailsProps> = ({ quotation }) => {
             </div>
             <div className="space-y-1">
               <p className="text-sm text-gray-500">Cliente</p>
-              <p className="font-medium">{quotation.client}</p>
+              <p className="font-medium">{quotation.buyer.client.name}</p>
             </div>
             <div className="space-y-1">
               <p className="text-sm text-gray-500">Comprador</p>
-              <p className="font-medium">{quotation.buyer}</p>
+              <p className="font-medium">
+                {quotation.buyer.person.name +
+                  " " +
+                  quotation.buyer.person.lastname}
+              </p>
             </div>
           </div>
 
@@ -90,7 +143,7 @@ const QuotationDetails: React.FC<QuotationDetailsProps> = ({ quotation }) => {
           <div className="grid grid-cols-1 gap-4">
             {quotation.budgets?.map((budget) => (
               <div
-                key={budget.numbering}
+                key={budget.id}
                 className="p-4 rounded-lg border border-gray-200"
               >
                 <div className="flex justify-between items-start">
@@ -103,23 +156,23 @@ const QuotationDetails: React.FC<QuotationDetailsProps> = ({ quotation }) => {
                       {budget.purchaseData?.destination}
                     </p>
                     <p className="text-sm font-medium">
-                      {budget.salesData?.totalPrice}{" "}
-                      {budget.purchaseData?.currency}
+                      {budget.salesData?.totalSalePrice}{" "}
+                      {budget.purchaseData?.currency.abbreviation}
                     </p>
                   </div>
                   <Button
                     variant="outline"
                     className="justify-center items-center py-2 px-4 rounded-xl"
-                    onClick={() => setSelectedBudget(budget)}
+                    onClick={() => setSelectedBudgetId(budget.id)}
                   >
                     Ver Detalles
                   </Button>
                 </div>
-                {selectedBudget && (
+                {selectedBudgetId && (
                   <BudgetDetails
-                    budget={selectedBudget}
-                    isOpen={!!selectedBudget}
-                    onClose={() => setSelectedBudget(null)}
+                    budgetId={budget.id}
+                    isOpen={!!selectedBudgetId}
+                    onClose={() => setSelectedBudgetId(null)}
                   />
                 )}
               </div>
@@ -129,6 +182,4 @@ const QuotationDetails: React.FC<QuotationDetailsProps> = ({ quotation }) => {
       </div>
     </ScrollArea>
   );
-};
-
-export default QuotationDetails;
+}

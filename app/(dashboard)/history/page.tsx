@@ -5,7 +5,7 @@ import Header from "@/app/(dashboard)/components/Header";
 import QuotationCard from "./QuotationCard";
 import { useEffect, useState } from "react";
 import { QuotationsService } from "@/services/QuotationsService";
-import { HistoryQuotationCard } from "@/types/Quotation";
+import { HistoryQuotationCard } from "@/types/Quotations";
 
 export default function History() {
   const [unfinishedQuoations, setUnfinishedQuoations] = useState<

@@ -3,7 +3,7 @@ import type React from "react";
 import { Briefcase, User, Calendar, Hash, Ellipsis } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { HistoryQuotationCard } from "@/types/Quotation";
+import { HistoryQuotationCard } from "@/types/Quotations";
 
 type StepKeys = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 

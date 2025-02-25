@@ -2,13 +2,10 @@
 
 import { useParams } from "next/navigation";
 import Header from "@/app/(dashboard)/components/Header";
-import QuotationDetails from "../QuotationDetails";
-import { quotations } from "@/app/(dashboard)/history/testData";
+import QuotationDetails from "./QuotationDetails";
 
 export default function QuotationView() {
   const { id } = useParams();
-
-  const quotation = quotations.find((q) => q.taskNumber === id);
 
   return (
     <div className="flex justify-start w-full h-full flex-col bg-transparent">
@@ -17,8 +14,8 @@ export default function QuotationView() {
         description="Detalles de la cotización"
       />
       <div className="p-6">
-        {quotation ? (
-          <QuotationDetails quotation={quotation} />
+        {id ? (
+          <QuotationDetails quotationId={Number(id)} />
         ) : (
           <p>No se encontró la cotización</p>
         )}
