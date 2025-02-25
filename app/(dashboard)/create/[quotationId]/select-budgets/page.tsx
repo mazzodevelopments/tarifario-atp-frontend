@@ -4,16 +4,23 @@ import SelectableBudgetsList from "@/app/(dashboard)/create/[quotationId]/select
 import Button from "@/components/Button";
 import { useState } from "react";
 import { Budget } from "@/types/Budget";
+import { QuoteService } from "@/services/QuoteService";
 
 export default function SelectBudgetsStep() {
   const router = useRouter();
   const { quotationId } = useParams();
-  const [budgetsToEnableButton, setBudgetsToEnableButton] = useState<Budget[]>(
-    [],
-  );
+  const [budgets, setBudgets] = useState<Budget[]>([]);
 
-  const handleNext = () => {
-    router.push(`/create/${quotationId}/review`);
+  const handleNext = async () => {
+    try {
+      const budgetIds = budgets.map((budget) => budget.id);
+
+      await QuoteService.selectBudgets(budgetIds, Number(quotationId));
+
+      router.push(`/create/${quotationId}/review`);
+    } catch (error) {
+      console.error("Error al seleccionar presupuestos:", error);
+    }
   };
 
   const handleBack = () => {
@@ -24,7 +31,7 @@ export default function SelectBudgetsStep() {
     <div>
       <SelectableBudgetsList
         quotationId={Number(quotationId)}
-        setBudgetsToEnableButton={setBudgetsToEnableButton}
+        setBudgetsToEnableButton={setBudgets}
       />
       <div className="absolute bottom-0 left-0 w-full">
         <div className="flex w-full justify-between">
@@ -39,7 +46,7 @@ export default function SelectBudgetsStep() {
             onClick={handleNext}
             variant="primary"
             className="text-white"
-            disabled={budgetsToEnableButton.length <= 0}
+            disabled={budgets.length <= 0}
           >
             Siguiente
           </Button>
