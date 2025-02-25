@@ -2,12 +2,14 @@
 import { useParams, useRouter } from "next/navigation";
 import SalesList from "@/app/(dashboard)/create/[quotationId]/sales-data/SalesList";
 import Button from "@/components/Button";
+import { QuoteService } from "@/services/QuoteService";
 
 export default function SalesDataStep() {
   const router = useRouter();
   const { quotationId } = useParams();
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    await QuoteService.updateQuotationStep(Number(quotationId), 5);
     router.push(`/create/${quotationId}/select-budgets`);
   };
 

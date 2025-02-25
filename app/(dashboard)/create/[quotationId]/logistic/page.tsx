@@ -2,12 +2,14 @@
 import { useParams, useRouter } from "next/navigation";
 import LogisticList from "@/app/(dashboard)/create/[quotationId]/logistic/LogisticList";
 import Button from "@/components/Button";
+import { QuoteService } from "@/services/QuoteService";
 
 export default function LogisticStep() {
   const router = useRouter();
   const { quotationId } = useParams();
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    await QuoteService.updateQuotationStep(Number(quotationId), 4);
     router.push(`/create/${quotationId}/sales-data`);
   };
 

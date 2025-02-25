@@ -16,7 +16,7 @@ export default function SelectBudgetsStep() {
       const budgetIds = budgets.map((budget) => budget.id);
 
       await QuoteService.selectBudgets(budgetIds, Number(quotationId));
-
+      await QuoteService.updateQuotationStep(Number(quotationId), 6);
       router.push(`/create/${quotationId}/review`);
     } catch (error) {
       console.error("Error al seleccionar presupuestos:", error);

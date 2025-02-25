@@ -2,12 +2,14 @@
 import { useParams, useRouter } from "next/navigation";
 import PurchaseList from "@/app/(dashboard)/create/[quotationId]/purchase-data/PurchaseList";
 import Button from "@/components/Button";
+import { QuoteService } from "@/services/QuoteService";
 
 export default function PurchaseDataStep() {
   const router = useRouter();
   const { quotationId } = useParams();
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    await QuoteService.updateQuotationStep(Number(quotationId), 3);
     router.push(`/create/${quotationId}/logistic`);
   };
 

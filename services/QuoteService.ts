@@ -272,4 +272,25 @@ export const QuoteService = {
 
     return await response.text();
   },
+
+  // TODAS LAS ETAPAS
+  updateQuotationStep: async (quotationId: number, step: number) => {
+    const response = await fetch(
+      `${API_BASE_URL}/quote/${quotationId}/update-step`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ step }),
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Error al cambiar el step");
+    }
+
+    const data = await response.json();
+    return data;
+  },
 };

@@ -2,13 +2,15 @@
 import { useParams, useRouter } from "next/navigation";
 import SelectedBudgetsList from "@/app/(dashboard)/create/[quotationId]/review/SelectedBudgetsList";
 import Button from "@/components/Button";
+import { QuoteService } from "@/services/QuoteService";
 
 export default function ReviewStep() {
   const router = useRouter();
 
   const { quotationId } = useParams();
 
-  const handleCreate = () => {
+  const handleCreate = async () => {
+    await QuoteService.updateQuotationStep(Number(quotationId), 7);
     router.push(`/create/${quotationId}/confirm`);
   };
 
