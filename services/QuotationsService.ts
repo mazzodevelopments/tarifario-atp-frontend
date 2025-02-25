@@ -24,4 +24,19 @@ export const QuotationsService = {
 
     return await response.json();
   },
+
+  getCompleteFinishedQuotation: async (quotationId: number) => {
+    const response = await fetch(
+      `${API_BASE_URL}/quotations/${quotationId}/finished-complete`,
+      {
+        method: "GET",
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Error al traer cotizacion");
+    }
+
+    return await response.json();
+  },
 };
