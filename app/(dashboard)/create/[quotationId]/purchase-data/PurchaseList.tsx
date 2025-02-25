@@ -24,17 +24,8 @@ import "@/app/utils/formatNumber";
 import { PlusCircle } from "lucide-react";
 import { QuoteService } from "@/services/QuoteService";
 
-interface PurchaseListProps {
-  items: Item[];
-  quotationId: number;
-  setBudgetsToEnableButton: (budgetsToEnableButton: Budget[]) => void;
-}
-
-export default function PurchaseList({
-  items,
-  quotationId,
-  setBudgetsToEnableButton,
-}: PurchaseListProps) {
+export default function PurchaseList({ quotationId }: { quotationId: number }) {
+  const [items, setItems] = useState<Item[]>([]);
   const [budgets, setBudgets] = useState<Budget[]>([]);
   const [shouldFetch, setShouldFetch] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -49,14 +40,25 @@ export default function PurchaseList({
           "purchase-data",
         );
         setBudgets(quotationBudgets);
-        setBudgetsToEnableButton(quotationBudgets);
         setShouldFetch(false);
       } catch (error) {
         console.error("Error fetching quotation budgets:", error);
       }
     };
 
+    const fetchQuotationItems = async () => {
+      try {
+        const quotationItems =
+          await QuoteService.getQuotationItems(quotationId);
+        setItems(quotationItems);
+        setShouldFetch(false);
+      } catch (error) {
+        console.error("Error fetching quotation items:", error);
+      }
+    };
+
     fetchQuotationBudgets();
+    fetchQuotationItems();
   }, [shouldFetch]);
 
   const onPurchaseCreated = async (newPurchase: CreatePurchaseData) => {

@@ -9,7 +9,7 @@ interface AddPaymentConditionProps {
   onCancel: () => void;
 }
 
-export default function AddPaymentCondition({
+export default function AddPaymentConditionForm({
   onPaymentConditionCreated,
   onCancel,
 }: AddPaymentConditionProps) {

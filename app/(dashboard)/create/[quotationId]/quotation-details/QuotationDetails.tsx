@@ -8,34 +8,29 @@ import type { QuotationData, CreateQuotationData } from "@/types/QuotationData";
 import { QuoteService } from "@/services/QuoteService";
 import { CatalogService } from "@/services/CatalogService";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
-import { BuyerForm } from "@/app/(dashboard)/create/steps/QuotationDetails/BuyerForm";
+import { BuyerForm } from "@/app/(dashboard)/create/[quotationId]/quotation-details/BuyerForm";
+import Button from "@/components/Button";
 
 interface QuotationDetailsProps {
-  onFormDataChange: (formData: QuotationData) => void;
   onSubmitSuccess: (quotationId: number) => void;
-  initialData: QuotationData | null;
 }
 
 export default function QuotationDetails({
-  onFormDataChange,
   onSubmitSuccess,
-  initialData,
 }: QuotationDetailsProps) {
-  const [formData, setFormData] = useState<Omit<QuotationData, "id">>(
-    initialData || {
-      taskNumber: "",
-      client: "",
-      buyer: "",
-      receptionDate: new Date().toISOString().split("T")[0],
-      uploadDate: new Date().toISOString().split("T")[0],
-      expirationDateTime: `${new Date().toISOString().split("T")[0]}T00:00`,
-      materialsNeededDate: new Date().toISOString().split("T")[0],
-      customerRequestNumber: "",
-      stageId: 1,
-      items: null,
-      budgets: null,
-    },
-  );
+  const [formData, setFormData] = useState<Omit<QuotationData, "id">>({
+    taskNumber: "",
+    client: "",
+    buyer: "",
+    receptionDate: new Date().toISOString().split("T")[0],
+    uploadDate: new Date().toISOString().split("T")[0],
+    expirationDateTime: `${new Date().toISOString().split("T")[0]}T00:00`,
+    materialsNeededDate: new Date().toISOString().split("T")[0],
+    customerRequestNumber: "",
+    stageId: 1,
+    items: null,
+    budgets: null,
+  });
 
   const [selectedClientId, setSelectedClientId] = useState<number | null>(null);
   const [selectedBuyerId, setSelectedBuyerId] = useState<number | null>(null);
@@ -56,10 +51,6 @@ export default function QuotationDetails({
 
     fetchTaskNumber();
   }, []);
-
-  useEffect(() => {
-    onFormDataChange(formData);
-  }, [formData, onFormDataChange]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -86,11 +77,20 @@ export default function QuotationDetails({
       }
     };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e?: React.FormEvent) => {
+    if (e) {
+      e.preventDefault();
+    }
+
+    if (!selectedBuyerId) {
+      console.error("Buyer ID is required");
+      return;
+    }
+
     try {
       const createQuotationData: CreateQuotationData = {
         taskNumber: formData.taskNumber,
-        buyerId: selectedBuyerId!,
+        buyerId: selectedBuyerId,
         receptionDate: formData.receptionDate,
         uploadDate: formData.uploadDate,
         expirationDateTime: formData.expirationDateTime,
@@ -165,13 +165,7 @@ export default function QuotationDetails({
   };
 
   return (
-    <form
-      onSubmit={async (e) => {
-        e.preventDefault();
-        await handleSubmit();
-      }}
-      className="w-full max-w-2xl space-y-4"
-    >
+    <form onSubmit={handleSubmit} className="w-full max-w-2xl space-y-4">
       <Input
         id="taskNumber"
         name="taskNumber"
@@ -248,6 +242,14 @@ export default function QuotationDetails({
         label="Número de Solicitud del Cliente"
         required
       />
+
+      <Button
+        type="submit"
+        variant="primary"
+        className="flex w-full mt-4 text-white items-center justify-center"
+      >
+        Iniciar Cotización
+      </Button>
     </form>
   );
 }

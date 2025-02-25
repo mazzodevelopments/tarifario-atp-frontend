@@ -1,7 +1,7 @@
 "use client";
 import Button from "@/components/Button";
 import { X } from "react-feather";
-import CreateItem from "@/app/(dashboard)/create/steps/Items/CreateItem";
+import CreateItem from "@/app/(dashboard)/create/[quotationId]/items/CreateItem";
 import {
   Table,
   TableBody,
@@ -28,17 +28,8 @@ import * as XLSX from "xlsx";
 import type React from "react";
 import { QuoteService } from "@/services/QuoteService";
 
-interface ItemsListProps {
-  items: Item[];
-  setItems: (items: Item[]) => void;
-  quotationId: number;
-}
-
-export default function ItemsList({
-  items,
-  setItems,
-  quotationId,
-}: ItemsListProps) {
+export default function ItemsList({ quotationId }: { quotationId: number }) {
+  const [items, setItems] = useState<Item[]>([]);
   const [shouldFetch, setShouldFetch] = useState(true);
   const [editingItem, setEditingItem] = useState<Item | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);

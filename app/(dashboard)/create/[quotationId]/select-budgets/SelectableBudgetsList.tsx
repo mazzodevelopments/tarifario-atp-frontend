@@ -14,18 +14,15 @@ import { QuoteService } from "@/services/QuoteService";
 
 interface SelectableSalesListProps {
   quotationId: number;
-  selectedBudgets: Budget[];
-  setSelectedBudgets: (budgets: Budget[]) => void;
   setBudgetsToEnableButton: (budgets: Budget[]) => void;
 }
 
 export default function SelectableBudgetsList({
   quotationId,
-  selectedBudgets,
-  setSelectedBudgets,
   setBudgetsToEnableButton,
 }: SelectableSalesListProps) {
   const [budgets, setBudgets] = useState<Budget[]>([]);
+  const [selectedBudgets, setSelectedBudgets] = useState<Budget[]>([]);
   const [shouldFetch, setShouldFetch] = useState(true);
 
   useEffect(() => {

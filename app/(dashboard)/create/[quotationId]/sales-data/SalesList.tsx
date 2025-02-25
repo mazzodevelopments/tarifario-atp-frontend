@@ -21,20 +21,12 @@ import {
 } from "@/components/ui/dialog";
 import type { Budget } from "@/types/Budget";
 import type { SalesData } from "@/types/SalesData";
-import AddMargin from "./AddMargin";
-import AddPaymentCondition from "./AddPaymentCondition";
+import AddMarginForm from "./forms/AddMarginForm";
+import AddPaymentConditionForm from "./forms/AddPaymentConditionForm";
 import "@/app/utils/formatNumber";
 import { QuoteService } from "@/services/QuoteService";
 
-interface SalesListProps {
-  quotationId: number;
-  setBudgetsToEnableButton: (budgets: Budget[]) => void;
-}
-
-export default function SalesList({
-  quotationId,
-  setBudgetsToEnableButton,
-}: SalesListProps) {
+export default function SalesList({ quotationId }: { quotationId: number }) {
   const [budgets, setBudgets] = useState<Budget[]>([]);
   const [shouldFetch, setShouldFetch] = useState(true);
   const [showSalesDataModal, setShowSalesDataModal] = useState(false);
@@ -54,30 +46,17 @@ export default function SalesList({
       try {
         const quotationBudgets = await QuoteService.getQuotationBudgets(
           quotationId,
-          "sales-data"
+          "sales-data",
         );
         setBudgets(quotationBudgets);
         // setShouldFetch(false);
-
-        // CHEQUEAR QUE LOS BUDGETS ESTEN COMPLETOS
-        const completeBudgets = quotationBudgets.filter(
-          (budget: Budget) =>
-            budget.salesData?.margin && budget.salesData?.paymentCondition
-        );
-
-        // HABILITAR BOTÓN SI LOS BUDGETS ESTÁN COMPLETOS
-        if (completeBudgets.length === quotationBudgets.length) {
-          setBudgetsToEnableButton(completeBudgets);
-        } else {
-          setBudgetsToEnableButton([]);
-        }
       } catch (error) {
         console.error("Error fetching quotation budgets:", error);
       }
     };
 
     fetchQuotationBudgets();
-  }, [shouldFetch, setBudgetsToEnableButton, quotationId]);
+  }, [shouldFetch, quotationId]);
 
   const handleRowClick = (budgetId: number, event: React.MouseEvent) => {
     if (event.shiftKey && lastSelectedRow) {
@@ -115,23 +94,12 @@ export default function SalesList({
                   paymentCondition: budget.salesData?.paymentCondition || "",
                 },
               }
-            : budget
+            : budget,
         );
 
         setBudgets(updatedBudgets);
         setShowSalesDataModal(false);
         setEditingMargin(null);
-
-        const completeBudgets = updatedBudgets.filter(
-          (budget) =>
-            budget.salesData?.margin && budget.salesData?.paymentCondition
-        );
-
-        if (completeBudgets.length === updatedBudgets.length) {
-          setBudgetsToEnableButton(completeBudgets);
-        } else {
-          setBudgetsToEnableButton([]);
-        }
       }
     } catch (error) {
       console.log(error);
@@ -143,7 +111,7 @@ export default function SalesList({
       if (selectedBudgetId !== null) {
         await QuoteService.addPaymentCondition(
           paymentCondition,
-          selectedBudgetId
+          selectedBudgetId,
         );
         const updatedBudgets = budgets.map((budget) => {
           if (budget.id === selectedBudgetId) {
@@ -166,17 +134,6 @@ export default function SalesList({
 
         setBudgets(updatedBudgets);
         setShowPaymentConditionModal(false);
-
-        const completeBudgets = updatedBudgets.filter(
-          (budget) =>
-            budget.salesData?.margin && budget.salesData?.paymentCondition
-        );
-
-        if (completeBudgets.length === updatedBudgets.length) {
-          setBudgetsToEnableButton(completeBudgets);
-        } else {
-          setBudgetsToEnableButton([]);
-        }
       }
     } catch (error) {
       console.log(error);
@@ -396,7 +353,7 @@ export default function SalesList({
             </DialogTitle>
           </DialogHeader>
           <div className="bg-white rounded-lg w-full">
-            <AddMargin
+            <AddMarginForm
               onSalesDataCreated={handleSalesDataCreated}
               onCancel={() => {
                 setShowSalesDataModal(false);
@@ -417,7 +374,7 @@ export default function SalesList({
             <DialogTitle className="text-2xl">Condición de Pago</DialogTitle>
           </DialogHeader>
           <div className="bg-white rounded-lg w-full">
-            <AddPaymentCondition
+            <AddPaymentConditionForm
               onPaymentConditionCreated={handlePaymentConditionCreated}
               onCancel={() => setShowPaymentConditionModal(false)}
             />

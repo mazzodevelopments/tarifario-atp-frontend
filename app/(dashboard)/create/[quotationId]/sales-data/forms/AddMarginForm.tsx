@@ -10,7 +10,7 @@ interface AddMarginProps {
   initialMargin?: number | null;
 }
 
-export default function AddMargin({
+export default function AddMarginForm({
   onSalesDataCreated,
   onCancel,
   initialMargin,
@@ -34,7 +34,7 @@ export default function AddMargin({
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value, type } = e.target;
 
