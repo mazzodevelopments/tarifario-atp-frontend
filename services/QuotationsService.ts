@@ -54,4 +54,19 @@ export const QuotationsService = {
 
     return await response.json();
   },
+
+  getLastFiveFinishedQuotations: async () => {
+    const response = await fetch(
+      `${API_BASE_URL}/quotations/last-five-finished`,
+      {
+        method: "GET",
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Error al traer las ultimas cotizaciones");
+    }
+
+    return await response.json();
+  },
 };
