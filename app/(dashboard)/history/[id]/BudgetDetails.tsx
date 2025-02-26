@@ -147,9 +147,9 @@ export default function BudgetDetails({
                     <div>
                       <p className="text-sm text-gray-500">Fecha</p>
                       <p className="font-medium">
-                        {new Date(
-                          budget.purchaseData.date,
-                        ).toLocaleDateString()}
+                        {new Date(budget.purchaseData.date).toLocaleDateString(
+                          "es-ES",
+                        )}
                       </p>
                     </div>
                     <div>

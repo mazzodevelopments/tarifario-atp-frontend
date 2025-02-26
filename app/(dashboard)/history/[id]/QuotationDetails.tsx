@@ -94,20 +94,30 @@ export default function QuotationDetails({
             <div className="space-y-1">
               <p className="text-sm text-gray-500">Fecha de Recepción</p>
               <p className="font-medium">
-                {new Date(quotation.receptionDate).toLocaleDateString()}
+                {new Date(quotation.receptionDate).toLocaleDateString("es-ES")}
               </p>
             </div>
             <div className="space-y-1">
               <p className="text-sm text-gray-500">Fecha de Carga</p>
               <p className="font-medium">
-                {new Date(quotation.uploadDate).toLocaleDateString()}
+                {new Date(quotation.uploadDate).toLocaleDateString("es-ES")}
               </p>
             </div>
             <div className="space-y-1">
               <p className="text-sm text-gray-500">Fecha de Expiración</p>
               <p className="font-medium">
-                {new Date(quotation.expirationDateTime).toLocaleDateString()}{" "}
-                12:00hs
+                {new Date(quotation.expirationDateTime).toLocaleString(
+                  "es-ES",
+                  {
+                    day: "numeric",
+                    month: "numeric",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false,
+                  },
+                )}
+                hs
               </p>
             </div>
             <div className="space-y-1">
@@ -115,7 +125,9 @@ export default function QuotationDetails({
                 Fecha Necesaria de Materiales
               </p>
               <p className="font-medium">
-                {new Date(quotation.materialsNeededDate).toLocaleDateString()}
+                {new Date(quotation.materialsNeededDate).toLocaleDateString(
+                  "es-ES",
+                )}
               </p>
             </div>
           </div>
