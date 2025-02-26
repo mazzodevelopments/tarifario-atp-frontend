@@ -39,4 +39,19 @@ export const QuotationsService = {
 
     return await response.json();
   },
+
+  getCompleteBudget: async (budgetId: number) => {
+    const response = await fetch(
+      `${API_BASE_URL}/quotations/${budgetId}/complete-budget`,
+      {
+        method: "GET",
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Error al traer budget");
+    }
+
+    return await response.json();
+  },
 };
