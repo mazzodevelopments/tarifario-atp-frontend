@@ -6,17 +6,50 @@ import Image from "next/image";
 import logo from "@/public/logo.png";
 import { CircleUserRound, KeyRound } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { API_BASE_URL } from "@/app/utils/config";
 
 export default function Register() {
   const router = useRouter();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Intentando iniciar sesión...");
-    // Aquí normalmente iría la lógica de autenticación
-    // Por ahora, solo navegaremos a la ruta raíz
-    router.push("/");
+    setError("");
+
+    try {
+      const response = await fetch(
+        "https://apitarifario.mazzodevelopments.com/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username, password }),
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem("token", data.access_token);
+
+        if (data.firstLogin) {
+          router.push("/change-password");
+        } else {
+          router.push("/");
+        }
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message || "Login failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setError("An error occurred. Please try again.");
+    }
   };
+
   return (
     <div className="min-h-screen w-full flex">
       {/* Logo Side */}
@@ -69,11 +102,13 @@ export default function Register() {
                 <div className="relative">
                   <CircleUserRound className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground h-5 w-5" />
                   <Input
-                    id="email"
-                    type="email"
-                    placeholder="Correo electrónico"
+                    id="username"
+                    type="text"
+                    placeholder="Nombre de usuario"
                     className="pl-10 w-full h-12 bg-muted/50"
                     required
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                   />
                 </div>
 
@@ -85,9 +120,15 @@ export default function Register() {
                     placeholder="Contraseña"
                     className="pl-10 w-full h-12 bg-muted/50"
                     required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
               </div>
+
+              {error && (
+                <p className="text-red-500 text-sm text-center">{error}</p>
+              )}
 
               <Button
                 type="submit"
