@@ -8,7 +8,8 @@ import type { QuotationData, CreateQuotationData } from "@/types/QuotationData";
 import { QuoteService } from "@/services/QuoteService";
 import { CatalogService } from "@/services/CatalogService";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
-import { BuyerForm } from "@/app/(dashboard)/create/[quotationId]/quotation-details/BuyerForm";
+import { BuyerForm } from "@/app/(dashboard)/create/[quotationId]/quotation-details/forms/BuyerForm";
+import ClientForm from "@/app/(dashboard)/create/[quotationId]/quotation-details/forms/ClientForm";
 import Button from "@/components/Button";
 
 interface QuotationDetailsProps {
@@ -35,6 +36,7 @@ export default function QuotationDetails({
   const [selectedClientId, setSelectedClientId] = useState<number | null>(null);
   const [selectedBuyerId, setSelectedBuyerId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isClientLoading, setIsClientLoading] = useState(false);
 
   useEffect(() => {
     const fetchTaskNumber = async () => {
@@ -164,6 +166,25 @@ export default function QuotationDetails({
     }
   };
 
+  const handleAddClient = async (data: { name: string }) => {
+    try {
+      setIsClientLoading(true);
+      const clientId = await CatalogService.addClient(data);
+      const newClient = { name: data.name, id: clientId };
+
+      setFormData((prevData) => ({
+        ...prevData,
+        client: newClient.name,
+      }));
+      setSelectedClientId(clientId);
+
+      setIsClientLoading(false);
+    } catch (error) {
+      console.error("Error adding new client:", error);
+      setIsClientLoading(false);
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-2xl space-y-4">
       <Input
@@ -179,11 +200,16 @@ export default function QuotationDetails({
       <div className="grid grid-cols-2 gap-4">
         <Dropdown
           fetchItems={fetchClients}
-          addItem={CatalogService.addClient}
           onSelect={handleDropdownSelect("client")}
           value={formData.client}
           label="Cliente"
           required
+          customForm={
+            <ClientForm
+              onSubmit={handleAddClient}
+              isLoading={isClientLoading}
+            />
+          }
         />
         <Dropdown
           fetchItems={fetchBuyers}

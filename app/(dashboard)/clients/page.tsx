@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import Button from "@/components/Button";
 import { Client } from "@/types/Client";
-import ClientForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/forms/ClientForm";
+import ClientForm from "@/app/(dashboard)/create/[quotationId]/quotation-details/forms/ClientForm";
 import { CatalogService } from "@/services/CatalogService";
 
 export default function Clients() {

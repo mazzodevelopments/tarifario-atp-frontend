@@ -20,7 +20,9 @@ export default function ClientForm({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     onSubmit({ name });
+    closeDialog?.();
   };
 
   return (
