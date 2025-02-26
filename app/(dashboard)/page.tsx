@@ -31,10 +31,13 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { NewUserDialog } from "./components/NewUserDialog";
 import { QuotationData } from "@/types/QuotationData";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import { useEffect, useState } from "react";
+import { API_BASE_URL } from "../utils/config";
 
 export default function Dashboard() {
   const quotations: QuotationData[] = [
     {
+      stageId: 1,
       taskNumber: "A25R-0003",
       client: "ElectroRedes Global",
       buyer: "Carlos Ramírez",
@@ -47,6 +50,7 @@ export default function Dashboard() {
       budgets: null,
     },
     {
+      stageId: 2,
       taskNumber: "A25R-0004",
       client: "AgroSolutions SAC",
       buyer: "Laura Rodríguez",
@@ -59,6 +63,7 @@ export default function Dashboard() {
       budgets: null,
     },
     {
+      stageId: 3,
       taskNumber: "A25R-0005",
       client: "MicroTech Solutions",
       buyer: "Andrea Gómez",
@@ -74,98 +79,14 @@ export default function Dashboard() {
 
   type User = {
     id: number;
-    name: string;
-    email: string;
-    avatar: string;
-    rol: string;
+    username: string;
+    profilePic: string;
+    firstLogin: boolean;
+    role: {
+      id: number;
+      name: string;
+    };
   };
-
-  const users: User[] = [
-    {
-      id: 1,
-      name: "Alice Johnson",
-      email: "alice@example.com",
-      avatar: "defaultProfilePic",
-      rol: "Super Admin",
-    },
-    {
-      id: 2,
-      name: "Bob Smith",
-      email: "bob@example.com",
-      avatar: "defaultProfilePic",
-      rol: "Admin",
-    },
-    {
-      id: 3,
-      name: "Charlie Brown",
-      email: "charlie@example.com",
-      avatar: "defaultProfilePic",
-      rol: "User",
-    },
-    {
-      id: 4,
-      name: "Diana Ross",
-      email: "diana@example.com",
-      avatar: "defaultProfilePic",
-      rol: "User",
-    },
-    {
-      id: 5,
-      name: "Edward Norton",
-      email: "edward@example.com",
-      avatar: "defaultProfilePic",
-      rol: "User",
-    },
-    {
-      id: 6,
-      name: "Fiona Apple",
-      email: "fiona@example.com",
-      avatar: "defaultProfilePic",
-      rol: "User",
-    },
-    {
-      id: 7,
-      name: "George Clooney",
-      email: "george@example.com",
-      avatar: "defaultProfilePic",
-      rol: "User",
-    },
-    {
-      id: 8,
-      name: "Helen Mirren",
-      email: "helen@example.com",
-      avatar: "defaultProfilePic",
-      rol: "User",
-    },
-    {
-      id: 9,
-      name: "Edward Norton",
-      email: "edward@example.com",
-      avatar: "defaultProfilePic",
-      rol: "User",
-    },
-    {
-      id: 10,
-      name: "Fiona Apple",
-      email: "fiona@example.com",
-      avatar: "defaultProfilePic",
-      rol: "User",
-    },
-    {
-      id: 11,
-      name: "George Clooney",
-      email: "george@example.com",
-      avatar: "defaultProfilePic",
-      rol: "User",
-    },
-    {
-      id: 12,
-      name: "Helen Mirren",
-      email: "helen@example.com",
-      avatar: "defaultProfilePic",
-      rol: "User",
-    },
-  ];
 
   const salesData = [
     { month: "Ene", sales: 4000 },
@@ -175,6 +96,35 @@ export default function Dashboard() {
     { month: "May", sales: 6000 },
     { month: "Jun", sales: 5500 },
   ];
+
+  const [users, setUsers] = useState<User[]>([]);
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch(
+          `https://apitarifario.mazzodevelopments.com/admin/users`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Error fetching users");
+        }
+
+        const data = await response.json();
+        setUsers(data);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   return (
     <div className="flex justify-start w-full h-screen flex-col bg-neutral-50">
@@ -372,30 +322,32 @@ export default function Dashboard() {
                       >
                         <div className="flex items-center space-x-4">
                           <Image
-                            src={defaultProfilePic || "/placeholder.svg"}
+                            src={user.profilePic || defaultProfilePic}
                             width={700}
                             height={700}
                             alt="Picture of the author"
                             className="w-8 h-8 rounded-full"
                           />
                           <div>
-                            <p className="text-sm font-medium">{user.name}</p>
+                            <p className="text-sm font-medium">
+                              {user.username}
+                            </p>
                             <p className="text-xs text-gray-500">
-                              {user.email}
+                              {user.role.name}
                             </p>
                           </div>
                         </div>
                         <div
                           className={`px-2 rounded-md ${
-                            user.rol === "Super Admin"
-                              ? "bg-red-100 text-red-500  "
-                              : user.rol === "Admin"
+                            user.role.name === "superadmin"
+                              ? "bg-red-100 text-red-500"
+                              : user.role.name === "admin"
                               ? "bg-blue-100 text-blue-500"
                               : "bg-neutral-100 text-black"
                           }`}
                         >
                           <span className="text-[0.65vw] font-semibold">
-                            {user.rol}
+                            {user.role.name}
                           </span>
                         </div>
                       </div>
