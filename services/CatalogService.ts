@@ -1,4 +1,5 @@
 import { API_BASE_URL } from "@/app/utils/config";
+import { Supplier } from "@/types/Supplier";
 
 export const CatalogService = {
   // CLIENT
@@ -209,7 +210,16 @@ export const CatalogService = {
   },
 
   // SUPPLIER
-  listSuppliers: async (): Promise<{ id: number; name: string }[]> => {
+  listSuppliers: async (): Promise<
+    {
+      id: number;
+      name: string;
+      isNational: boolean;
+      isInternational: boolean;
+      email: string;
+      phone: string;
+    }[]
+  > => {
     const response = await fetch(`${API_BASE_URL}/catalog/suppliers`, {
       method: "GET",
     });
@@ -221,20 +231,13 @@ export const CatalogService = {
     return await response.json();
   },
 
-  addSupplier: async (name: string): Promise<number> => {
-    // TODO AGREGAR RESTO BODY
+  addSupplier: async (supplier: Supplier): Promise<number> => {
     const response = await fetch(`${API_BASE_URL}/catalog/supplier`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        name,
-        isNational: true,
-        isInternational: true,
-        email: "email@test.com",
-        phone: "+542944644448",
-      }),
+      body: JSON.stringify({ supplier }),
     });
 
     if (!response.ok) {
@@ -242,7 +245,7 @@ export const CatalogService = {
     }
 
     const data = await response.json();
-    console.log("Unidad agregado:", data);
+    console.log("Proovedor agregado:", data);
     return data;
   },
 
