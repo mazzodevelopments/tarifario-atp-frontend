@@ -86,14 +86,16 @@ export default function History() {
             </div>
           </div>
         )}
-        <div className="w-full">
-          <h3 className="text-lg font-[600]">Completadas</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-start mt-2">
-            {filteredFinishedQuotations.map((quotation) => (
-              <QuotationCard key={quotation.id} {...quotation} />
-            ))}
+        {finishedQuoations.length > 0 && (
+          <div className="w-full">
+            <h3 className="text-lg font-[600]">Completadas</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-start mt-2">
+              {filteredFinishedQuotations.map((quotation) => (
+                <QuotationCard key={quotation.id} {...quotation} />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
