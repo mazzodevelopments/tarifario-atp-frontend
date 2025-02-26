@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 
@@ -12,12 +12,20 @@ interface SupplierFormProps {
   }) => void;
   isLoading: boolean;
   closeDialog?: () => void;
+  initialData?: {
+    name: string;
+    email: string;
+    phone: string;
+    isNational: boolean;
+    isInternational: boolean;
+  };
 }
 
 export default function SupplierForm({
   onSubmit,
   isLoading,
   closeDialog,
+  initialData,
 }: SupplierFormProps) {
   const [formData, setFormData] = useState({
     name: "",
@@ -26,6 +34,12 @@ export default function SupplierForm({
     isNational: false,
     isInternational: false,
   });
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData(initialData);
+    }
+  }, [initialData]);
 
   const handleChange = (field: string, value: string | boolean) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -99,7 +113,7 @@ export default function SupplierForm({
           className="px-2 text-white"
           disabled={isLoading}
         >
-          {isLoading ? "Agregando..." : "Agregar"}
+          {isLoading ? "Guardando..." : "Guardar"}
         </Button>
       </div>
     </form>

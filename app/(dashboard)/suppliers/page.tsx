@@ -10,25 +10,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import Input from "@/components/Input";
-import { Checkbox } from "@/components/ui/checkbox";
 import Button from "@/components/Button";
 import { CatalogService } from "@/services/CatalogService";
 import { Supplier } from "@/types/Supplier";
+import SupplierForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/SupplierForm";
 
 export default function Proveedores() {
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
-  const [newSupplier, setNewSupplier] = useState<Supplier>({
-    name: "",
-    isNational: false,
-    isInternational: false,
-    email: "",
-    phone: "",
-  });
   const [editedSupplier, setEditedSupplier] = useState<Supplier | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [shouldFetch, setShouldFetch] = useState(true); // Nuevo estado
+  const [shouldFetch, setShouldFetch] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchSuppliers = async () => {
@@ -37,7 +30,7 @@ export default function Proveedores() {
         setSuppliers(fetchedSuppliers);
         setShouldFetch(false);
       } catch (error) {
-        console.error("Error fetching quotation items:", error);
+        console.error("Error fetching suppliers:", error);
       }
     };
 
@@ -46,34 +39,28 @@ export default function Proveedores() {
     }
   }, [shouldFetch]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (editedSupplier) {
-      try {
-        await CatalogService.editSupplier(editedSupplier);
-        setShouldFetch(true);
-        setEditedSupplier(null);
-        setEditDialogOpen(false);
-      } catch (error) {
-        console.error("Error editing supplier:", error);
-        // MOSTRAR ERROR AL USUARIO
+  const handleSubmit = async (data: {
+    name: string;
+    email: string;
+    phone: string;
+    isNational: boolean;
+    isInternational: boolean;
+  }) => {
+    setIsLoading(true);
+    try {
+      if (editedSupplier) {
+        await CatalogService.editSupplier({ ...editedSupplier, ...data });
+      } else {
+        await CatalogService.addSupplier(data);
       }
-    } else {
-      try {
-        await CatalogService.addSupplier(newSupplier);
-        setShouldFetch(true);
-        setNewSupplier({
-          name: "",
-          isNational: false,
-          isInternational: false,
-          email: "",
-          phone: "",
-        });
-        setDialogOpen(false);
-      } catch (error) {
-        console.error("Error adding supplier:", error);
-        // MOSTRAR ERROR AL USUARIO
-      }
+      setEditedSupplier(null);
+      setEditDialogOpen(false);
+      setDialogOpen(false);
+    } catch (error) {
+      console.error("Error saving supplier:", error);
+    } finally {
+      setIsLoading(false);
+      setShouldFetch(true);
     }
   };
 
@@ -94,82 +81,11 @@ export default function Proveedores() {
             <DialogHeader>
               <DialogTitle>Agregar Nuevo Proveedor</DialogTitle>
             </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <Input
-                label="Nombre"
-                id="name"
-                value={newSupplier.name}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setNewSupplier({
-                    ...newSupplier,
-                    name: e.target.value,
-                  })
-                }
-                required
-              />
-              <Input
-                label="Email"
-                id="email"
-                type="email"
-                value={newSupplier.email}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setNewSupplier({
-                    ...newSupplier,
-                    email: e.target.value,
-                  })
-                }
-                required
-              />
-              <Input
-                label="Teléfono"
-                id="phone"
-                type="phone"
-                value={newSupplier.phone}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setNewSupplier({
-                    ...newSupplier,
-                    phone: e.target.value,
-                  })
-                }
-                required
-              />
-              <div>
-                <label className="block text-sm font-[600] text-gray-700">
-                  Tipo
-                </label>
-                <div className="flex flex-col space-y-2 mt-2">
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="nacional"
-                      checked={newSupplier.isNational}
-                      onCheckedChange={(checked) =>
-                        setNewSupplier({
-                          ...newSupplier,
-                          isNational: checked as boolean,
-                        })
-                      }
-                    />
-                    <label htmlFor="nacional">Nacional</label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="internacional"
-                      checked={newSupplier.isInternational}
-                      onCheckedChange={(checked) =>
-                        setNewSupplier({
-                          ...newSupplier,
-                          isInternational: checked as boolean,
-                        })
-                      }
-                    />
-                    <label htmlFor="internacional">Internacional</label>
-                  </div>
-                </div>
-              </div>
-              <Button type="submit" className="text-white">
-                Guardar
-              </Button>
-            </form>
+            <SupplierForm
+              onSubmit={handleSubmit}
+              isLoading={isLoading}
+              closeDialog={() => setDialogOpen(false)}
+            />
           </DialogContent>
         </Dialog>
       </div>
@@ -205,84 +121,12 @@ export default function Proveedores() {
           <DialogHeader>
             <DialogTitle>Editar Supplier</DialogTitle>
           </DialogHeader>
-          {editedSupplier && (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <Input
-                label="Nombre"
-                id="edit-name"
-                value={editedSupplier.name}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setEditedSupplier({
-                    ...editedSupplier,
-                    name: e.target.value,
-                  })
-                }
-                required
-              />
-              <Input
-                label="Email"
-                id="edit-email"
-                type="email"
-                value={editedSupplier.email}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setEditedSupplier({
-                    ...editedSupplier,
-                    email: e.target.value,
-                  })
-                }
-                required
-              />
-              <Input
-                label="Teléfono"
-                id="edit-phone"
-                type="phone"
-                value={editedSupplier.phone}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setEditedSupplier({
-                    ...editedSupplier,
-                    phone: e.target.value,
-                  })
-                }
-                required
-              />
-              <div>
-                <label className="block text-sm font-[600] text-gray-700">
-                  Tipo
-                </label>
-                <div className="flex flex-col space-y-2 mt-2">
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="edit-nacional"
-                      checked={editedSupplier.isNational}
-                      onCheckedChange={(checked) =>
-                        setEditedSupplier({
-                          ...editedSupplier,
-                          isNational: checked as boolean,
-                        })
-                      }
-                    />
-                    <label htmlFor="edit-nacional">Nacional</label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="edit-internacional"
-                      checked={editedSupplier.isInternational}
-                      onCheckedChange={(checked) =>
-                        setEditedSupplier({
-                          ...editedSupplier,
-                          isInternational: checked as boolean,
-                        })
-                      }
-                    />
-                    <label htmlFor="edit-internacional">Internacional</label>
-                  </div>
-                </div>
-              </div>
-              <Button type="submit" className="text-white">
-                Guardar Cambios
-              </Button>
-            </form>
-          )}
+          <SupplierForm
+            onSubmit={handleSubmit}
+            isLoading={isLoading}
+            initialData={editedSupplier || undefined}
+            closeDialog={() => setEditDialogOpen(false)}
+          />
         </DialogContent>
       </Dialog>
     </div>
