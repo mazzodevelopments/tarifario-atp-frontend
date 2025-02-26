@@ -13,7 +13,7 @@ import {
 import Button from "@/components/Button";
 import { CatalogService } from "@/services/CatalogService";
 import { Supplier } from "@/types/Supplier";
-import SupplierForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/SupplierForm";
+import SupplierForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/forms/SupplierForm";
 
 export default function Proveedores() {
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);

@@ -1,5 +1,6 @@
 import { API_BASE_URL } from "@/app/utils/config";
 import { Supplier } from "@/types/Supplier";
+import { Client } from "@/types/Client";
 
 export const CatalogService = {
   // CLIENT
@@ -14,13 +15,13 @@ export const CatalogService = {
 
     return await response.json();
   },
-  addClient: async (name: string): Promise<number> => {
+  addClient: async (newClient: Client): Promise<number> => {
     const response = await fetch(`${API_BASE_URL}/catalog/client`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name }),
+      body: JSON.stringify(newClient),
     });
 
     if (!response.ok) {
@@ -31,7 +32,23 @@ export const CatalogService = {
     console.log("Cliente agregado:", data);
     return data;
   },
+  editClient: async (editedClient: Client): Promise<number> => {
+    const response = await fetch(`${API_BASE_URL}/catalog/client`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(editedClient),
+    });
 
+    if (!response.ok) {
+      throw new Error("Error al editar cliente");
+    }
+
+    const data = await response.json();
+    console.log("Cliente editado:", data);
+    return data;
+  },
   // BUYER
   listBuyers: async (
     clientId: number,
