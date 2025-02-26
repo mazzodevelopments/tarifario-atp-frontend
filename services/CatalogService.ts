@@ -237,7 +237,7 @@ export const CatalogService = {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ supplier }),
+      body: JSON.stringify(supplier),
     });
 
     if (!response.ok) {
