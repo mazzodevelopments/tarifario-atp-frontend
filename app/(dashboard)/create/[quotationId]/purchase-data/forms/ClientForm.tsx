@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Input } from "@/components/ui/input";
+import Input from "@/components/Input";
 import Button from "@/components/Button";
 import { Client } from "@/types/Client";
 
@@ -26,13 +26,13 @@ export default function ClientForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label htmlFor="name" className="block text-sm font-medium mb-1">
-          Nombre
-        </label>
         <Input
+          label="Nombre"
           id="name"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setName(e.target.value)
+          }
           required
         />
       </div>

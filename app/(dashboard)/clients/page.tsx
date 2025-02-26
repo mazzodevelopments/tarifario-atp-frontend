@@ -89,6 +89,9 @@ export default function Clients() {
             className="bg-white p-4 rounded-[16px] border border-neutral-200 shadow-sm"
           >
             <h3 className="font-semibold">{client.name}</h3>
+            <p className="text-sm text-gray-600">
+              Cantidad de cotizaciones: 12
+            </p>
             <div className="flex justify-end w-full gap-2 mt-2">
               <Button variant="secondary" onClick={() => handleEdit(client)}>
                 Editar
