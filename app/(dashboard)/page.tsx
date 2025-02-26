@@ -29,65 +29,22 @@ import { QuotationSlider } from "./components/QuotationCarousel";
 import CurrentQuotationCard from "./components/CurrentQuotation";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { NewUserDialog } from "./components/NewUserDialog";
-import { QuotationData } from "@/types/QuotationData";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import { useEffect, useState } from "react";
-import { API_BASE_URL } from "../utils/config";
+import { QuotationsService } from "@/services/QuotationsService";
+
+type User = {
+  id: number;
+  username: string;
+  profilePic: string;
+  firstLogin: boolean;
+  role: {
+    id: number;
+    name: string;
+  };
+};
 
 export default function Dashboard() {
-  const quotations: QuotationData[] = [
-    {
-      stageId: 1,
-      taskNumber: "A25R-0003",
-      client: "ElectroRedes Global",
-      buyer: "Carlos Ramírez",
-      receptionDate: "2025-01-12",
-      uploadDate: "2025-01-13",
-      expirationDateTime: "2025-02-01T18:00:00",
-      materialsNeededDate: "2025-01-25",
-      customerRequestNumber: "REQ-2025-003",
-      items: null,
-      budgets: null,
-    },
-    {
-      stageId: 2,
-      taskNumber: "A25R-0004",
-      client: "AgroSolutions SAC",
-      buyer: "Laura Rodríguez",
-      receptionDate: "2025-01-09",
-      uploadDate: "2025-01-10",
-      expirationDateTime: "2025-02-09T15:30:00",
-      materialsNeededDate: "2025-01-28",
-      customerRequestNumber: "REQ-2025-004",
-      items: null,
-      budgets: null,
-    },
-    {
-      stageId: 3,
-      taskNumber: "A25R-0005",
-      client: "MicroTech Solutions",
-      buyer: "Andrea Gómez",
-      receptionDate: "2025-01-18",
-      uploadDate: "2025-01-19",
-      expirationDateTime: "2025-02-05T20:00:00",
-      materialsNeededDate: "2025-02-01",
-      customerRequestNumber: "REQ-2025-005",
-      items: null,
-      budgets: null,
-    },
-  ];
-
-  type User = {
-    id: number;
-    username: string;
-    profilePic: string;
-    firstLogin: boolean;
-    role: {
-      id: number;
-      name: string;
-    };
-  };
-
   const salesData = [
     { month: "Ene", sales: 4000 },
     { month: "Feb", sales: 3000 },
@@ -98,6 +55,15 @@ export default function Dashboard() {
   ];
 
   const [users, setUsers] = useState<User[]>([]);
+  const [lastQuotations, setLastQuotations] = useState<
+    {
+      taskNumber: string;
+      expirationDateTime: string;
+      buyerName: string;
+      clientName: string;
+    }[]
+  >([]);
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -109,7 +75,7 @@ export default function Dashboard() {
               "Content-Type": "application/json",
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
-          }
+          },
         );
 
         if (!response.ok) {
@@ -123,7 +89,17 @@ export default function Dashboard() {
       }
     };
 
+    const fetchLastFiveQuotations = async () => {
+      try {
+        const data = await QuotationsService.getLastFiveFinishedQuotations();
+        setLastQuotations(data);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
     fetchUsers();
+    fetchLastFiveQuotations();
   }, []);
 
   return (
@@ -206,7 +182,7 @@ export default function Dashboard() {
           </div>
           <div className="h-full gap-3 flex flex-col">
             <CurrentQuotationCard />
-            <QuotationSlider quotations={quotations} />
+            <QuotationSlider quotations={lastQuotations} />
           </div>
         </div>
 
@@ -342,8 +318,8 @@ export default function Dashboard() {
                             user.role.name === "superadmin"
                               ? "bg-red-100 text-red-500"
                               : user.role.name === "admin"
-                              ? "bg-blue-100 text-blue-500"
-                              : "bg-neutral-100 text-black"
+                                ? "bg-blue-100 text-blue-500"
+                                : "bg-neutral-100 text-black"
                           }`}
                         >
                           <span className="text-[0.65vw] font-semibold">
