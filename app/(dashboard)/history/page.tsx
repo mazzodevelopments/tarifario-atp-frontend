@@ -1,7 +1,6 @@
 "use client";
 
 import { Search } from "react-feather";
-import Header from "@/app/(dashboard)/components/Header";
 import QuotationCard from "./QuotationCard";
 import { useEffect, useState } from "react";
 import { QuotationsService } from "@/services/QuotationsService";
@@ -52,22 +51,21 @@ export default function History() {
 
   return (
     <div className="flex justify-start w-full h-full flex-col bg-neutral-50">
-      <div className="w-full h-auto  rounded-[18px] mb-2 flex-shrink-0">
-        <Header
-          title="Cotizaciones"
-          description="Historial de cotizaciones realizadas"
-        />
-      </div>
-      <div className="w-full px-6 pb-6">
-        <div className="flex mb-2 items-center ">
+      <div className="w-full h-20 flex-shrink-0 border-b border-neutral-200">
+        <div className="flex justify-between items-center h-full px-6 mb-4">
+          <div className="flex flex-col justify-center items-start w-[12vw]">
+            <h2 className="flex items-center text-xl leading-[1] p-0 font-[800] text-black">
+              Cotizaciones
+            </h2>
+          </div>
           <div className="flex items-center gap-2 h-14 hover:cursor-pointer">
-            <div className="relative w-[12vw]">
+            <div className="relative w-[22vw]">
               <Search
                 size={20}
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black"
               />
               <input
-                className="w-full h-10 rounded-[18px] pl-10 pr-4 bg-white shadow-sm border border-neutral-200  text-md focus:outline-none"
+                className="w-full h-[2.25vw] rounded-full pl-10 pr-4 bg-white shadow-sm border border-neutral-200 text-sm focus:outline-none placeholder-secondary"
                 placeholder="Buscar cotización"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -75,7 +73,8 @@ export default function History() {
             </div>
           </div>
         </div>
-
+      </div>
+      <div className="w-full px-6 pb-6 pt-4">
         {unfinishedQuoations.length > 0 &&
           filteredUnfinishedQuotations.length > 0 && (
             <div className="w-full mb-4">
