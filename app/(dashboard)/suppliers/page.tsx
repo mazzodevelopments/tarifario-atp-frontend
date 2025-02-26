@@ -123,7 +123,7 @@ export default function Proveedores() {
               <Input
                 label="Teléfono"
                 id="phone"
-                type="tel"
+                type="phone"
                 value={newSupplier.phone}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setNewSupplier({
@@ -235,7 +235,7 @@ export default function Proveedores() {
               <Input
                 label="Teléfono"
                 id="edit-phone"
-                type="tel"
+                type="phone"
                 value={editedSupplier.phone}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setEditedSupplier({
