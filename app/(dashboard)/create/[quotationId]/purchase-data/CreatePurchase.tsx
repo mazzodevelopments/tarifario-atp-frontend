@@ -18,6 +18,8 @@ import {
 } from "@/components/ui/dialog";
 import { PlusCircle, Pencil } from "lucide-react";
 import { Country, City } from "country-state-city";
+import SupplierForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/SupplierForm";
+import { Supplier } from "@/types/Supplier";
 
 interface CreatePurchaseProps {
   onPurchaseCreated: (purchaseData: CreatePurchaseData) => void;
@@ -86,6 +88,7 @@ export default function CreatePurchase({
 
   const [isOriginModalOpen, setIsOriginModalOpen] = useState(false);
   const [isDestinationModalOpen, setIsDestinationModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const isWithinArgentina =
     formData.originCountry === "Argentina" &&
@@ -274,6 +277,22 @@ export default function CreatePurchase({
     setIsDestinationModalOpen(false);
   };
 
+  const handleAddSupplier = async (newSupplier: Supplier) => {
+    if (!newSupplier) return;
+    try {
+      setIsLoading(true);
+      await CatalogService.addSupplier(newSupplier);
+      setFormData((prevData) => ({
+        ...prevData,
+        supplier: newSupplier.name,
+      }));
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error adding new supplier:", error);
+      setIsLoading(false);
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <Input
@@ -432,7 +451,9 @@ export default function CreatePurchase({
       <Dropdown
         value={formData.supplier}
         fetchItems={fetchSuppliers}
-        addItem={CatalogService.addSupplier}
+        customForm={
+          <SupplierForm isLoading={isLoading} onSubmit={handleAddSupplier} />
+        }
         onSelect={handleSelect("supplier")}
         label="Proovedor"
         required
