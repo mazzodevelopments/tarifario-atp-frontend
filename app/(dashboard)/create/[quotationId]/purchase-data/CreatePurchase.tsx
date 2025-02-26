@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/dialog";
 import { PlusCircle, Pencil } from "lucide-react";
 import { Country, City } from "country-state-city";
-import SupplierForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/SupplierForm";
+import SupplierForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/forms/SupplierForm";
 import { Supplier } from "@/types/Supplier";
 
 interface CreatePurchaseProps {
