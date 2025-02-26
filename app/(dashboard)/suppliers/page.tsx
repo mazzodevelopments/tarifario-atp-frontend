@@ -28,37 +28,41 @@ export default function Proveedores() {
   const [editedSupplier, setEditedSupplier] = useState<Supplier | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [shouldFetch, setShouldFetch] = useState(true); // Nuevo estado
 
   useEffect(() => {
     const fetchSuppliers = async () => {
       try {
         const fetchedSuppliers = await CatalogService.listSuppliers();
         setSuppliers(fetchedSuppliers);
+        setShouldFetch(false);
       } catch (error) {
         console.error("Error fetching quotation items:", error);
       }
     };
 
-    fetchSuppliers();
-  }, []);
+    if (shouldFetch) {
+      fetchSuppliers();
+    }
+  }, [shouldFetch]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (editedSupplier) {
-      setSuppliers(
-        suppliers.map((p) =>
-          p.id === editedSupplier.id ? { ...editedSupplier } : p,
-        ),
-      );
-      setEditedSupplier(null);
-      setEditDialogOpen(false);
+      try {
+        await CatalogService.editSupplier(editedSupplier);
+        setShouldFetch(true);
+        setEditedSupplier(null);
+        setEditDialogOpen(false);
+      } catch (error) {
+        console.error("Error editing supplier:", error);
+        // MOSTRAR ERROR AL USUARIO
+      }
     } else {
       try {
-        const addedSupplierId = await CatalogService.addSupplier(newSupplier);
-        const addedSupplier = { ...newSupplier, id: addedSupplierId };
-        setSuppliers([...suppliers, addedSupplier]);
+        await CatalogService.addSupplier(newSupplier);
+        setShouldFetch(true);
         setNewSupplier({
-          id: 0,
           name: "",
           isNational: false,
           isInternational: false,

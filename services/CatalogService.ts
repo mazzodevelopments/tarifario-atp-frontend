@@ -231,13 +231,31 @@ export const CatalogService = {
     return await response.json();
   },
 
-  addSupplier: async (supplier: Supplier): Promise<number> => {
+  addSupplier: async (newSupplier: Supplier): Promise<number> => {
     const response = await fetch(`${API_BASE_URL}/catalog/supplier`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(supplier),
+      body: JSON.stringify(newSupplier),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al agregar provedor");
+    }
+
+    const data = await response.json();
+    console.log("Proovedor agregado:", data);
+    return data;
+  },
+
+  editSupplier: async (editedSupplier: Supplier): Promise<number> => {
+    const response = await fetch(`${API_BASE_URL}/catalog/supplier`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(editedSupplier),
     });
 
     if (!response.ok) {
