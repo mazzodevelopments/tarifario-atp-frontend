@@ -36,7 +36,8 @@ export default function Register() {
         localStorage.setItem("token", data.access_token);
 
         if (data.firstLogin) {
-          router.push("/change-password");
+          // router.push("/change-password");
+          router.push("/");
         } else {
           router.push("/");
         }
