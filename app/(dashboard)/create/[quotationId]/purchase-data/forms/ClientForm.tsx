@@ -7,7 +7,7 @@ interface ClientFormProps {
   onSubmit: (data: { name: string }) => void;
   isLoading: boolean;
   initialData?: Client;
-  closeDialog: () => void;
+  closeDialog?: () => void;
 }
 
 export default function ClientForm({
