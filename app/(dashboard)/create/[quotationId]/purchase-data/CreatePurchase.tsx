@@ -281,11 +281,17 @@ export default function CreatePurchase({
     if (!newSupplier) return;
     try {
       setIsLoading(true);
-      await CatalogService.addSupplier(newSupplier);
+      const addedSupplier = await CatalogService.addSupplier(newSupplier);
+
+      const supplierId =
+        addedSupplier.id !== undefined ? addedSupplier.id : null;
+
       setFormData((prevData) => ({
         ...prevData,
-        supplier: newSupplier.name,
+        supplier: addedSupplier.name,
+        supplierId: supplierId,
       }));
+
       setIsLoading(false);
     } catch (error) {
       console.error("Error adding new supplier:", error);

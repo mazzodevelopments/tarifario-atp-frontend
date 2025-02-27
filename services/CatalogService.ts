@@ -248,7 +248,7 @@ export const CatalogService = {
     return await response.json();
   },
 
-  addSupplier: async (newSupplier: Supplier): Promise<number> => {
+  addSupplier: async (newSupplier: Supplier): Promise<Supplier> => {
     const response = await fetch(`${API_BASE_URL}/catalog/supplier`, {
       method: "POST",
       headers: {
