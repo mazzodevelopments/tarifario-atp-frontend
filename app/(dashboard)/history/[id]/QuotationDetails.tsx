@@ -38,9 +38,9 @@ interface QuotationDetail {
 }
 
 export default function QuotationDetails({
-  quotationId,
+  taskNumber,
 }: {
-  quotationId: number;
+  taskNumber: string;
 }) {
   const [quotation, setQuotation] = useState<QuotationDetail | null>(null);
   const [selectedBudgetId, setSelectedBudgetId] = useState<number | null>(null);
@@ -49,7 +49,7 @@ export default function QuotationDetails({
     const fetchQuotation = async () => {
       try {
         const completeFinishedQuotation =
-          await QuotationsService.getCompleteFinishedQuotation(1);
+          await QuotationsService.getCompleteFinishedQuotation(taskNumber);
         setQuotation(completeFinishedQuotation);
       } catch (error) {
         console.error("Error fetching quotation items:", error);
@@ -57,7 +57,7 @@ export default function QuotationDetails({
     };
 
     fetchQuotation();
-  }, [quotationId]);
+  }, [taskNumber]);
 
   if (!quotation) {
     return <p className="text-center text-gray-500">Cargando...</p>;

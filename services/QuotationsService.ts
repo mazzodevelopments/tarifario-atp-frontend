@@ -25,9 +25,9 @@ export const QuotationsService = {
     return await response.json();
   },
 
-  getCompleteFinishedQuotation: async (quotationId: number) => {
+  getCompleteFinishedQuotation: async (taskNumber: string) => {
     const response = await fetch(
-      `${API_BASE_URL}/quotations/${quotationId}/finished-complete`,
+      `${API_BASE_URL}/quotations/${taskNumber}/finished-complete`,
       {
         method: "GET",
       },

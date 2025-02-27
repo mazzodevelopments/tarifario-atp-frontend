@@ -7,15 +7,17 @@ import QuotationDetails from "./QuotationDetails";
 export default function QuotationView() {
   const { id } = useParams();
 
+  const taskNumber = Array.isArray(id) ? id[0] : id;
+
   return (
     <div className="flex justify-start w-full h-full flex-col bg-transparent">
       <Header
-        title={`Cotización ${id}`}
+        title={`Cotización ${taskNumber}`}
         description="Detalles de la cotización"
       />
       <div className="p-6">
-        {id ? (
-          <QuotationDetails quotationId={Number(id)} />
+        {taskNumber ? (
+          <QuotationDetails taskNumber={taskNumber} />
         ) : (
           <p>No se encontró la cotización</p>
         )}
