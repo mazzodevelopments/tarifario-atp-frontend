@@ -6,12 +6,16 @@ import { UploadCloud } from "react-feather";
 import defaultProfilePic from "@/public/default-profile-pic.png";
 import Button from "@/components/Button";
 import Header from "@/app/(dashboard)/components/Header";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Settings() {
   const [editingField, setEditingField] = useState<string | null>(null);
-
+  const { user } = useAuth();
+  const username = user?.username;
+  const role = user?.role;
   const [userData, setUserData] = useState({
-    Nombre: "Matias Monzalvo",
+    Nombre: username || "Matias Monzalvo",
+    Rol: role || "Administrador",
     Email: "matiasmonzalvo@mazzodevelopments.com",
     Telefono: "+542944723412",
     Direccion: "Soldado de la Independencia 1468",

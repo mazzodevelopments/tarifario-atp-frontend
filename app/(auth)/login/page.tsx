@@ -6,7 +6,7 @@ import Image from "next/image";
 import logo from "@/public/logo.png";
 import { CircleUserRound, KeyRound } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 export default function Register() {
   const router = useRouter();
@@ -108,7 +108,9 @@ export default function Register() {
                     className="pl-10 w-full h-12 bg-muted/50"
                     required
                     value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      setUsername(e.target.value)
+                    }
                   />
                 </div>
 
@@ -121,7 +123,9 @@ export default function Register() {
                     className="pl-10 w-full h-12 bg-muted/50"
                     required
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      setUsername(e.target.value)
+                    }
                   />
                 </div>
               </div>
