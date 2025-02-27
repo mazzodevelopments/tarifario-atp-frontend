@@ -7,7 +7,6 @@ import logo from "@/public/logo.png";
 import { CircleUserRound, KeyRound } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { API_BASE_URL } from "@/app/utils/config";
 
 export default function Register() {
   const router = useRouter();
