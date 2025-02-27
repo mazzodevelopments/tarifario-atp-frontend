@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "@/app/utils/config";
-import { Supplier } from "@/types/Supplier";
+import { EditSupplier, Supplier } from "@/types/Supplier";
 import { Client } from "@/types/Client";
 
 export const CatalogService = {
@@ -266,7 +266,7 @@ export const CatalogService = {
     return data;
   },
 
-  editSupplier: async (editedSupplier: Supplier): Promise<number> => {
+  editSupplier: async (editedSupplier: EditSupplier): Promise<number> => {
     const response = await fetch(`${API_BASE_URL}/catalog/supplier`, {
       method: "PUT",
       headers: {

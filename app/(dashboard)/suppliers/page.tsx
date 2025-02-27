@@ -14,12 +14,17 @@ import Button from "@/components/Button";
 import { CatalogService } from "@/services/CatalogService";
 import { Supplier } from "@/types/Supplier";
 import SupplierForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/forms/SupplierForm";
+import SupplierDetails from "@/app/(dashboard)/suppliers/SupplierDetails";
 
 export default function Proveedores() {
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [editedSupplier, setEditedSupplier] = useState<Supplier | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [detailDialogOpen, setDetailDialogOpen] = useState(false);
+  const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(
+    null,
+  );
   const [shouldFetch, setShouldFetch] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -49,7 +54,9 @@ export default function Proveedores() {
     setIsLoading(true);
     try {
       if (editedSupplier) {
-        await CatalogService.editSupplier({ ...editedSupplier, ...data });
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { families, ...supplierData } = editedSupplier;
+        await CatalogService.editSupplier({ ...supplierData, ...data });
       } else {
         await CatalogService.addSupplier(data);
       }
@@ -65,8 +72,19 @@ export default function Proveedores() {
   };
 
   const handleEdit = (supplier: Supplier) => {
-    setEditedSupplier(supplier);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { families, ...supplierData } = supplier;
+    setEditedSupplier(supplierData as Supplier);
     setEditDialogOpen(true);
+  };
+
+  const handleViewDetails = (supplier: Supplier) => {
+    setSelectedSupplier(supplier);
+    setDetailDialogOpen(true);
+  };
+
+  const handleFamilyAdded = () => {
+    setShouldFetch(true);
   };
 
   return (
@@ -109,7 +127,11 @@ export default function Proveedores() {
               <Button variant="secondary" onClick={() => handleEdit(supplier)}>
                 Editar
               </Button>
-              <Button variant="primary" className="text-white">
+              <Button
+                variant="primary"
+                className="text-white"
+                onClick={() => handleViewDetails(supplier)}
+              >
                 Detalles
               </Button>
             </div>
@@ -129,6 +151,13 @@ export default function Proveedores() {
           />
         </DialogContent>
       </Dialog>
+      {selectedSupplier && (
+        <SupplierDetails
+          supplier={selectedSupplier}
+          onClose={() => setDetailDialogOpen(detailDialogOpen)}
+          onFamilyAdded={handleFamilyAdded}
+        />
+      )}
     </div>
   );
 }
