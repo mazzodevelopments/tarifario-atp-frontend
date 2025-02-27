@@ -1,3 +1,5 @@
+"use client";
+
 import React, {
   createContext,
   useContext,
@@ -7,14 +9,12 @@ import React, {
 } from "react";
 import { useRouter } from "next/navigation";
 
-// Define the user type based on your backend response
 type User = {
   id: number;
   username: string;
   role: string;
 };
 
-// Define the context type
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
@@ -27,7 +27,6 @@ interface AuthContextType {
   getToken: () => string | null;
 }
 
-// Create the context with a default value
 const AuthContext = createContext<AuthContextType>({
   user: null,
   isAuthenticated: false,
@@ -37,7 +36,6 @@ const AuthContext = createContext<AuthContextType>({
   getToken: () => null,
 });
 
-// Custom hook to use the auth context
 export const useAuth = () => useContext(AuthContext);
 
 interface AuthProviderProps {
@@ -49,7 +47,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  // Function to parse JWT token
   const parseJwt = (token: string) => {
     try {
       return JSON.parse(atob(token.split(".")[1]));
@@ -58,7 +55,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  // Check if the token is expired
   const isTokenExpired = (token: string) => {
     const decodedToken = parseJwt(token);
     if (!decodedToken) return true;
@@ -67,14 +63,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return decodedToken.exp < currentTime;
   };
 
-  // Get token from localStorage
   const getToken = (): string | null => {
     if (typeof window === "undefined") return null;
 
     const token = localStorage.getItem("token");
     if (!token) return null;
 
-    // Check if token is expired
     if (isTokenExpired(token)) {
       localStorage.removeItem("token");
       return null;
@@ -83,7 +77,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return token;
   };
 
-  // Login function
   const login = async (username: string, password: string) => {
     try {
       const response = await fetch(
@@ -132,14 +125,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  // Logout function
   const logout = () => {
     localStorage.removeItem("token");
     setUser(null);
     router.push("/login");
   };
 
-  // Check authentication status on initial load
   useEffect(() => {
     const checkAuth = () => {
       const token = getToken();
@@ -162,7 +153,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     checkAuth();
   }, []);
 
-  // Provide the auth context to children components
   return (
     <AuthContext.Provider
       value={{
