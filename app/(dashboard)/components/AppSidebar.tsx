@@ -135,10 +135,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     className="w-8 h-8 rounded-full"
                   />
                   <div className="flex flex-col gap-0.5 leading-none">
-                    <span className="font-semibold">Usuario</span>
-                    <span className="text-xs text-muted-foreground">
-                      usuario@ejemplo.com
-                    </span>
+                    <span className="font-semibold">username</span>
+                    <span className="text-xs text-muted-foreground">role</span>
                   </div>
                   <ChevronDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
                 </SidebarMenuButton>

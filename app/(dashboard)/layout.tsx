@@ -11,17 +11,17 @@ export default function AuthLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <AuthProvider>
-      <SidebarProvider>
-        <AppSidebar />
-        <SidebarInset>
-          <div className="flex flex-1 flex-col gap-4 overflow-hidden bg-neutral-50">
-            <AnimatePresence mode="wait">
-              <PageTransition>{children}</PageTransition>
-            </AnimatePresence>
-          </div>
-        </SidebarInset>
-      </SidebarProvider>
-    </AuthProvider>
+    // <AuthProvider>
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
+        <div className="flex flex-1 flex-col gap-4 overflow-hidden bg-neutral-50">
+          <AnimatePresence mode="wait">
+            <PageTransition>{children}</PageTransition>
+          </AnimatePresence>
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
+    // </AuthProvider>
   );
 }

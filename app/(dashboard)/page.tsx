@@ -64,43 +64,43 @@ export default function Dashboard() {
     }[]
   >([]);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await fetch(
-          `https://apitarifario.mazzodevelopments.com/admin/users`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          },
-        );
+  // useEffect(() => {
+  //   const fetchUsers = async () => {
+  //     try {
+  //       const response = await fetch(
+  //         `https://apitarifario.mazzodevelopments.com/admin/users`,
+  //         {
+  //           method: "GET",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //             Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //           },
+  //         },
+  //       );
 
-        if (!response.ok) {
-          throw new Error("Error fetching users");
-        }
+  //       if (!response.ok) {
+  //         throw new Error("Error fetching users");
+  //       }
 
-        const data = await response.json();
-        setUsers(data);
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
+  //       const data = await response.json();
+  //       setUsers(data);
+  //     } catch (error) {
+  //       console.error("Error:", error);
+  //     }
+  //   };
 
-    const fetchLastFiveQuotations = async () => {
-      try {
-        const data = await QuotationsService.getLastFiveFinishedQuotations();
-        setLastQuotations(data);
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
+  //   const fetchLastFiveQuotations = async () => {
+  //     try {
+  //       const data = await QuotationsService.getLastFiveFinishedQuotations();
+  //       setLastQuotations(data);
+  //     } catch (error) {
+  //       console.error("Error:", error);
+  //     }
+  //   };
 
-    fetchUsers();
-    fetchLastFiveQuotations();
-  }, []);
+  //   fetchUsers();
+  //   fetchLastFiveQuotations();
+  // }, []);
 
   return (
     <div className="flex justify-start w-full h-screen flex-col bg-neutral-50">
@@ -318,8 +318,8 @@ export default function Dashboard() {
                             user.role.name === "superadmin"
                               ? "bg-red-100 text-red-500"
                               : user.role.name === "admin"
-                                ? "bg-blue-100 text-blue-500"
-                                : "bg-neutral-100 text-black"
+                              ? "bg-blue-100 text-blue-500"
+                              : "bg-neutral-100 text-black"
                           }`}
                         >
                           <span className="text-[0.65vw] font-semibold">
