@@ -18,22 +18,19 @@ export const QuoteService = {
     return await response.text();
   },
   createQuotation: async (quotationData: CreateQuotationData) => {
-    // TODO: NO ES TODO... TODO ESTO ANDA PERO PARA DESARROLLO DEVUELVO ID 1 Y LISTO
-    // const response = await fetch(`${API_BASE_URL}/quote`, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(quotationData),
-    // });
-    //
-    // if (!response.ok) {
-    //   throw new Error("Error al agregar el item");
-    // }
-    //
-    // return await response.json();
-    console.log(quotationData);
-    return 1;
+    const response = await fetch(`${API_BASE_URL}/quote`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(quotationData),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al agregar el item");
+    }
+
+    return await response.json();
   },
 
   // ETAPA 2
