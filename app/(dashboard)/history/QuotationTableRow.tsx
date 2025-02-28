@@ -62,7 +62,7 @@ export function QuotationTableRow({
         <div className="flex items-center gap-2 justify-center">
           <Calendar className="text-gray-400 flex-shrink-0" size={16} />
           <span>
-            {new Date(quotation.expirationDateTime).toLocaleDateString("es-ES")}
+            {new Date(quotation.receptionDate).toLocaleDateString("es-ES")}
           </span>
         </div>
       </TableCell>

@@ -10,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Button from "@/components/Button";
 import { QuotationTableRow } from "@/app/(dashboard)/history/QuotationTableRow";
 import { QuotationsService } from "@/services/QuotationsService";
 import type { HistoryQuotationCard } from "@/types/Quotations";
@@ -87,26 +88,26 @@ export default function History() {
       </div>
       <div className="w-full px-6 pb-6 pt-4">
         <div className="flex space-x-4 mb-4">
-          <button
+          <Button
             onClick={() => setActiveTab("pending")}
             className={`py-2 px-4 rounded-lg font-semibold text-sm border ${
               activeTab === "pending"
                 ? "bg-primary/5 text-primary"
-                : "bg-white text-gray-500  border-neutral-200"
+                : "bg-white text-gray-500 border-neutral-200"
             }`}
           >
             Pendientes
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => setActiveTab("completed")}
             className={`py-2 px-4 rounded-lg font-semibold text-sm border ${
               activeTab === "completed"
-                ? "bg-green-100 text-green-600"
+                ? "bg-primary/5 text-primary"
                 : "bg-white text-gray-500 border-neutral-200"
             }`}
           >
             Completadas
-          </button>
+          </Button>
         </div>
 
         <div className="w-auto h-auto overflow-hidden rounded-[12px] shadow-sm shadow-cyan-500/20">
