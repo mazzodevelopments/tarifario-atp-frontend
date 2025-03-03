@@ -22,6 +22,7 @@ import { Supplier } from "@/types/Supplier";
 import SupplierForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/forms/SupplierForm";
 import IncotermForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/forms/IncotermForm";
 import CurrencyForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/forms/CurrencyForm";
+import WeightUnitForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/forms/WeightUnitForm";
 
 interface CreatePurchaseProps {
   onPurchaseCreated: (purchaseData: CreatePurchaseData) => void;
@@ -352,6 +353,31 @@ export default function CreatePurchase({
     }
   };
 
+  const handleAddWeightUnit = async (newWeightUnit: {
+    name: string;
+    kgValue: number;
+  }) => {
+    if (!newWeightUnit) return;
+    try {
+      setIsLoading(true);
+      const addedWeightUnit = await CatalogService.addWeightUnit(newWeightUnit);
+
+      const weightUnitId =
+        addedWeightUnit.id !== undefined ? addedWeightUnit.id : null;
+
+      setFormData((prevData) => ({
+        ...prevData,
+        weightUnit: addedWeightUnit.name,
+        weightUnitId: weightUnitId,
+      }));
+
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error adding new weight unit:", error);
+      setIsLoading(false);
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <Input
@@ -575,7 +601,12 @@ export default function CreatePurchase({
         <Dropdown
           value={formData.weightUnit}
           fetchItems={fetchWeightUnits}
-          addItem={CatalogService.addWeightUnit}
+          customForm={
+            <WeightUnitForm
+              isLoading={isLoading}
+              onSubmit={handleAddWeightUnit}
+            />
+          }
           onSelect={handleSelect("weightUnit")}
           label="Unidad"
           required

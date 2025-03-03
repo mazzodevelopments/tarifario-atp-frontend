@@ -328,14 +328,13 @@ export const CatalogService = {
     return await response.json();
   },
 
-  addWeightUnit: async (name: string) => {
-    // TODO AGREGAR VALOR DE KG
+  addWeightUnit: async (newWeightUnit: { name: string; kgValue: number }) => {
     const response = await fetch(`${API_BASE_URL}/catalog/weight-unit`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name, kgValue: 1 }),
+      body: JSON.stringify(newWeightUnit),
     });
 
     if (!response.ok) {

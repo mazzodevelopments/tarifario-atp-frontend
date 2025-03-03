@@ -2,31 +2,25 @@ import React, { useState, useEffect } from "react";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 
-interface CurrencyFormProps {
-  onSubmit: (data: {
-    name: string;
-    abbreviation: string;
-    dollarValue: number;
-  }) => void;
+interface WeightUnitFormProps {
+  onSubmit: (data: { name: string; kgValue: number }) => void;
   isLoading: boolean;
   closeDialog?: () => void;
   initialData?: {
     name: string;
-    abbreviation: string;
-    dollarValue: number;
+    kgValue: number;
   };
 }
 
-export default function CurrencyForm({
+export default function WeightUnitForm({
   onSubmit,
   isLoading,
   closeDialog,
   initialData,
-}: CurrencyFormProps) {
+}: WeightUnitFormProps) {
   const [formData, setFormData] = useState({
     name: "",
-    abbreviation: "",
-    dollarValue: 0,
+    kgValue: 0,
   });
 
   useEffect(() => {
@@ -38,7 +32,7 @@ export default function CurrencyForm({
   const handleChange = (field: string, value: string | boolean) => {
     setFormData((prev) => ({
       ...prev,
-      [field]: field === "dollarValue" ? parseFloat(value as string) : value,
+      [field]: field === "kgValue" ? parseFloat(value as string) : value,
     }));
   };
 
@@ -57,28 +51,18 @@ export default function CurrencyForm({
         onChange={(
           e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
         ) => handleChange("name", e.target.value)}
-        placeholder="Nombre de la Moneda"
+        placeholder="Nombre de la Unidad de Peso"
         label="Nombre"
         required
       />
       <Input
-        type="text"
-        value={formData.abbreviation}
-        onChange={(
-          e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-        ) => handleChange("abbreviation", e.target.value)}
-        placeholder="Abreviación"
-        label="Abreviación"
-        required
-      />
-      <Input
         type="number"
-        value={formData.dollarValue}
+        value={formData.kgValue}
         onChange={(
           e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-        ) => handleChange("dollarValue", e.target.value)}
-        placeholder="Valor Dolar"
-        label="Valor Dolar"
+        ) => handleChange("kgValue", e.target.value)}
+        placeholder="Valor Kilogramo"
+        label="Valor Kilogramo"
         step={0.1}
         min={0}
         required
