@@ -18,9 +18,10 @@ import {
 } from "@/components/ui/dialog";
 import { PlusCircle, Pencil } from "lucide-react";
 import { Country, City } from "country-state-city";
-import SupplierForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/forms/SupplierForm";
 import { Supplier } from "@/types/Supplier";
+import SupplierForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/forms/SupplierForm";
 import IncotermForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/forms/IncotermForm";
+import CurrencyForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/forms/CurrencyForm";
 
 interface CreatePurchaseProps {
   onPurchaseCreated: (purchaseData: CreatePurchaseData) => void;
@@ -325,6 +326,32 @@ export default function CreatePurchase({
     }
   };
 
+  const handleAddCurrency = async (newCurrency: {
+    name: string;
+    abbreviation: string;
+    dollarValue: number;
+  }) => {
+    if (!newCurrency) return;
+    try {
+      setIsLoading(true);
+      const addedCurrency = await CatalogService.addCurrency(newCurrency);
+
+      const currencyId =
+        addedCurrency.id !== undefined ? addedCurrency.id : null;
+
+      setFormData((prevData) => ({
+        ...prevData,
+        currency: addedCurrency.abbreviation,
+        currencyId: currencyId,
+      }));
+
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error adding new currency:", error);
+      setIsLoading(false);
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <Input
@@ -494,7 +521,9 @@ export default function CreatePurchase({
         <Dropdown
           value={formData.currency}
           fetchItems={fetchCurrencies}
-          addItem={CatalogService.addCurrency}
+          customForm={
+            <CurrencyForm isLoading={isLoading} onSubmit={handleAddCurrency} />
+          }
           onSelect={handleSelect("currency")}
           label="Moneda"
           required
