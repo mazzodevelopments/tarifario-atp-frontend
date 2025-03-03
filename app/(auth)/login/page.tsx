@@ -124,7 +124,7 @@ export default function Register() {
                     required
                     value={password}
                     onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                      setUsername(e.target.value)
+                      setPassword(e.target.value)
                     }
                   />
                 </div>
