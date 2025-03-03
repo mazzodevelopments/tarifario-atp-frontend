@@ -20,6 +20,7 @@ import { PlusCircle, Pencil } from "lucide-react";
 import { Country, City } from "country-state-city";
 import SupplierForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/forms/SupplierForm";
 import { Supplier } from "@/types/Supplier";
+import IncotermForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/forms/IncotermForm";
 
 interface CreatePurchaseProps {
   onPurchaseCreated: (purchaseData: CreatePurchaseData) => void;
@@ -299,6 +300,31 @@ export default function CreatePurchase({
     }
   };
 
+  const handleAddIncoterm = async (newIncoterm: {
+    name: string;
+    abbreviation: string;
+  }) => {
+    if (!newIncoterm) return;
+    try {
+      setIsLoading(true);
+      const addedIncoterm = await CatalogService.addIncoterm(newIncoterm);
+
+      const incotermId =
+        addedIncoterm.id !== undefined ? addedIncoterm.id : null;
+
+      setFormData((prevData) => ({
+        ...prevData,
+        incoterm: addedIncoterm.abbreviation,
+        incotermId: incotermId,
+      }));
+
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error adding new incoterm:", error);
+      setIsLoading(false);
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <Input
@@ -537,7 +563,9 @@ export default function CreatePurchase({
       <Dropdown
         value={formData.incoterm}
         fetchItems={fetchIncoterms}
-        addItem={CatalogService.addIncoterm}
+        customForm={
+          <IncotermForm isLoading={isLoading} onSubmit={handleAddIncoterm} />
+        }
         onSelect={handleSelect("incoterm")}
         label="Incoterm"
         required

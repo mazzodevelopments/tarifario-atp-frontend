@@ -502,14 +502,13 @@ export const CatalogService = {
     return await response.json();
   },
 
-  addIncoterm: async (name: string) => {
-    // TODO AGREGAR ABBREVIATION
+  addIncoterm: async (newIncoterm: { name: string; abbreviation: string }) => {
     const response = await fetch(`${API_BASE_URL}/catalog/incoterm`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name, abbreviation: "EXW" }),
+      body: JSON.stringify(newIncoterm),
     });
 
     if (!response.ok) {
