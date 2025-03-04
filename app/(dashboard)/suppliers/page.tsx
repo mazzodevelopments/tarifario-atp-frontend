@@ -15,6 +15,15 @@ import { CatalogService } from "@/services/CatalogService";
 import { Supplier } from "@/types/Supplier";
 import SupplierForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/forms/SupplierForm";
 import SupplierDetails from "@/app/(dashboard)/suppliers/SupplierDetails";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Pencil } from "lucide-react";
 
 export default function Proveedores() {
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
@@ -23,7 +32,7 @@ export default function Proveedores() {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
   const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(
-    null
+    null,
   );
   const [shouldFetch, setShouldFetch] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -91,13 +100,29 @@ export default function Proveedores() {
     setDetailDialogOpen(false);
   };
 
+  const getTypeStyles = (isNational: boolean, isInternational: boolean) => {
+    if (isNational && isInternational) {
+      return "bg-green-100 text-green-600";
+    } else if (isNational) {
+      return "bg-blue-100 text-blue-600";
+    } else if (isInternational) {
+      return "bg-purple-100 text-purple-600";
+    }
+    return "bg-gray-100 text-gray-600";
+  };
+
   return (
     <div className="flex justify-start w-full h-full flex-col bg-transparent">
       <Header title="Proveedores" description="Lista de suppliers oficiales" />
       <div className="mt-6 px-6">
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="text-white">Agregar Proveedor</Button>
+            <Button
+              variant="primary"
+              className="py-2 px-4 rounded-lg font-semibold text-sm border bg-primary/5 text-primary"
+            >
+              Agregar Proveedor
+            </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
@@ -111,37 +136,88 @@ export default function Proveedores() {
           </DialogContent>
         </Dialog>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6 px-6">
-        {suppliers.map((supplier) => (
-          <div
-            key={supplier.id}
-            className="bg-white p-4 rounded-[16px] border border-neutral-200 shadow-sm"
-          >
-            <h3 className="font-semibold">{supplier.name}</h3>
-            <p className="text-sm text-gray-600">
-              {supplier.isNational && supplier.isInternational
-                ? "Nacional e Internacional"
-                : supplier.isNational
-                ? "Nacional"
-                : "Internacional"}
-            </p>
-            <p className="text-sm text-gray-600">{supplier.email}</p>
-            <p className="text-sm text-gray-600">{supplier.phone}</p>
-            <div className="flex justify-end w-full gap-2 mt-2">
-              <Button variant="secondary" onClick={() => handleEdit(supplier)}>
-                Editar
-              </Button>
-              <Button
-                variant="primary"
-                className="text-white"
-                onClick={() => handleViewDetails(supplier)}
-              >
-                Detalles
-              </Button>
-            </div>
+
+      <div className="w-full px-6 pb-6 pt-4">
+        <div className="w-auto h-auto overflow-hidden rounded-[12px] shadow-sm shadow-cyan-500/20">
+          <div className="border rounded-[12px] overflow-auto max-h-[70vh] relative w-full">
+            <Table className="w-full">
+              <TableHeader>
+                <TableRow className="bg-primary/5">
+                  <TableHead className="text-primary font-[600] text-center">
+                    Nombre
+                  </TableHead>
+                  <TableHead className="text-primary font-[600] text-center">
+                    Email
+                  </TableHead>
+                  <TableHead className="text-primary font-[600] text-center">
+                    Teléfono
+                  </TableHead>
+                  <TableHead className="text-primary font-[600] text-center">
+                    Tipo
+                  </TableHead>
+                  <TableHead className="text-primary font-[600] text-center">
+                    Acciones
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {suppliers.length > 0 ? (
+                  suppliers.map((supplier) => (
+                    <TableRow key={supplier.id} className="text-sm text-center">
+                      <TableCell className="font-[600] text-black">
+                        {supplier.name}
+                      </TableCell>
+                      <TableCell>{supplier.email}</TableCell>
+                      <TableCell>{supplier.phone}</TableCell>
+                      <TableCell>
+                        <div
+                          className={`py-1 px-3 rounded-3xl inline-block ${getTypeStyles(
+                            supplier.isNational,
+                            supplier.isInternational,
+                          )}`}
+                        >
+                          {supplier.isNational && supplier.isInternational
+                            ? "Ambas"
+                            : supplier.isNational
+                              ? "Nacional"
+                              : "Internacional"}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex justify-center gap-2">
+                          <Button
+                            variant="secondary"
+                            onClick={() => handleEdit(supplier)}
+                          >
+                            <Pencil className="w-4 h-4 text-primary" />
+                          </Button>
+                          <Button
+                            variant="secondary"
+                            className="p-1 h-auto hover:bg-gray-100"
+                            onClick={() => handleViewDetails(supplier)}
+                          >
+                            Detalles
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow className="h-36">
+                    <TableCell
+                      colSpan={5}
+                      className="text-sm m-auto h-full text-center text-gray-500"
+                    >
+                      No hay proveedores registrados
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
           </div>
-        ))}
+        </div>
       </div>
+
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
         <DialogContent>
           <DialogHeader>
@@ -155,6 +231,7 @@ export default function Proveedores() {
           />
         </DialogContent>
       </Dialog>
+
       {selectedSupplier && (
         <SupplierDetails
           supplier={selectedSupplier}
