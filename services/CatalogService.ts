@@ -348,7 +348,7 @@ export const CatalogService = {
 
   // CURRENCIES
   listCurrencies: async (): Promise<
-    { id: number; name: string; abbreviation: string }[]
+    { id: number; name: string; abbreviation: string; dollarValue: number }[]
   > => {
     const response = await fetch(`${API_BASE_URL}/catalog/currencies`, {
       method: "GET",

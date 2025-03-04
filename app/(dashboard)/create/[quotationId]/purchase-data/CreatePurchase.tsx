@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/dialog";
 import { PlusCircle, Pencil } from "lucide-react";
 import { Country, City } from "country-state-city";
-import { Supplier } from "@/types/Supplier";
+import type { Supplier } from "@/types/Supplier";
 import SupplierForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/forms/SupplierForm";
 import IncotermForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/forms/IncotermForm";
 import CurrencyForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/forms/CurrencyForm";
@@ -55,6 +55,7 @@ interface CreatePurchaseDataForm {
   incoterm: string;
   incotermId: number | null;
   productionTime: number;
+  dollarValue: number;
 }
 
 export default function CreatePurchase({
@@ -75,6 +76,7 @@ export default function CreatePurchase({
     supplier: "",
     supplierId: null,
     currency: "",
+    dollarValue: 1,
     currencyId: null,
     unitPrice: 0,
     margin: 0,
@@ -117,9 +119,10 @@ export default function CreatePurchase({
   useEffect(() => {
     setFormData((prev) => ({
       ...prev,
-      appliedUnitPrice: prev.unitPrice * (1 + prev.margin / 100),
+      appliedUnitPrice:
+        prev.unitPrice * (1 + prev.margin / 100) * prev.dollarValue,
     }));
-  }, [formData.unitPrice, formData.margin]);
+  }, [formData.unitPrice, formData.margin, formData.dollarValue]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -179,6 +182,15 @@ export default function CreatePurchase({
           ...prev,
           destinationCity: item?.name || "",
         }));
+      } else if (field === "currency") {
+        setFormData((prev) => ({
+          ...prev,
+          currency: item?.name || "",
+          currencyId: item?.id || null,
+          dollarValue:
+            (item as { name: string; id: number; dollarValue: number })
+              ?.dollarValue || 1,
+        }));
       } else {
         setFormData((prev) => ({
           ...prev,
@@ -195,7 +207,11 @@ export default function CreatePurchase({
 
   const fetchCurrencies = useCallback(async () => {
     const currencies = await CatalogService.listCurrencies();
-    return adaptToDropdown(currencies, "id", "abbreviation");
+    return currencies.map((currency) => ({
+      id: currency.id,
+      name: currency.abbreviation,
+      dollarValue: currency.dollarValue,
+    }));
   }, []);
 
   const fetchWeightUnits = useCallback(async () => {
@@ -344,6 +360,7 @@ export default function CreatePurchase({
         ...prevData,
         currency: addedCurrency.abbreviation,
         currencyId: currencyId,
+        dollarValue: addedCurrency.dollarValue || 1,
       }));
 
       setIsLoading(false);
@@ -580,7 +597,7 @@ export default function CreatePurchase({
               name="appliedUnitPrice"
               value={formData.appliedUnitPrice.toFixed(2)}
               onChange={handleChange}
-              label="Precio Unitario Aplicado"
+              label="Precio Unitario Aplicado (USD)"
               min="0"
               required
               disabled
