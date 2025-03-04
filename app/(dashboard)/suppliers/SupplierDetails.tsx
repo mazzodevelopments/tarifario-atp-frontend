@@ -62,20 +62,42 @@ export default function SupplierDetails({
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Detalles del Proveedor</DialogTitle>
+        <DialogHeader className="flex flex-col gap-2">
+          <div
+            className={`inline-flex w-fit px-2 py-1 rounded-full ${
+              supplier.isNational && supplier.isInternational
+                ? "bg-green-600/10"
+                : supplier.isNational
+                ? "bg-primary/10"
+                : "bg-purple-600/10"
+            }`}
+          >
+            <p
+              className={`text-sm font-[600] ${
+                supplier.isNational && supplier.isInternational
+                  ? "text-green-600"
+                  : supplier.isNational
+                  ? "text-primary"
+                  : "text-purple-600"
+              }`}
+            >
+              {supplier.isNational && supplier.isInternational
+                ? "Nacional e Internacional"
+                : supplier.isNational
+                ? "Nacional"
+                : "Internacional"}
+            </p>
+          </div>
+          <DialogTitle className="text-3xl font-[800]">
+            {supplier.name}
+          </DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
-          <h3 className="font-semibold">{supplier.name}</h3>
-          <p className="text-sm text-gray-600">
-            {supplier.isNational && supplier.isInternational
-              ? "Nacional e Internacional"
-              : supplier.isNational
-              ? "Nacional"
-              : "Internacional"}
-          </p>
-          <p className="text-sm text-gray-600">{supplier.email}</p>
-          <p className="text-sm text-gray-600">{supplier.phone}</p>
+          <div className="flex gap-1">
+            <span className="text-black font-[600]">Email:</span>
+            <p className="text-md text-gray-600">{supplier.email}</p>
+          </div>
+          <p className="text-md text-gray-600">{supplier.phone}</p>
           <div className="mt-4">
             <h4 className="font-semibold">Familias que provee:</h4>
             <ul className="list-disc list-inside">
