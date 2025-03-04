@@ -1,5 +1,7 @@
-import React, { useCallback, useState } from "react";
-import { Supplier } from "@/types/Supplier";
+"use client";
+
+import { useCallback, useState } from "react";
+import type { Supplier } from "@/types/Supplier";
 import {
   Dialog,
   DialogContent,
@@ -15,12 +17,14 @@ interface SupplierDetailsProps {
   supplier: Supplier;
   onClose: () => void;
   onFamilyAdded: () => void;
+  open: boolean; // Add this prop to control dialog state
 }
 
 export default function SupplierDetails({
   supplier,
   onClose,
   onFamilyAdded,
+  open, // Accept the open state from parent
 }: SupplierDetailsProps) {
   const [selectedFamily, setSelectedFamily] = useState<{
     id: number;
@@ -39,7 +43,7 @@ export default function SupplierDetails({
   const handleAddFamily = async () => {
     if (selectedFamily) {
       const existingFamilyIds = supplier.families!.map((family) =>
-        Number(family.id),
+        Number(family.id)
       );
       const updatedFamilyIds = [...existingFamilyIds, selectedFamily.id];
 
@@ -56,7 +60,7 @@ export default function SupplierDetails({
   };
 
   return (
-    <Dialog open={true} onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Detalles del Proveedor</DialogTitle>
@@ -67,8 +71,8 @@ export default function SupplierDetails({
             {supplier.isNational && supplier.isInternational
               ? "Nacional e Internacional"
               : supplier.isNational
-                ? "Nacional"
-                : "Internacional"}
+              ? "Nacional"
+              : "Internacional"}
           </p>
           <p className="text-sm text-gray-600">{supplier.email}</p>
           <p className="text-sm text-gray-600">{supplier.phone}</p>

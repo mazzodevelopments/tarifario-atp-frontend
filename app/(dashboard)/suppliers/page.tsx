@@ -23,7 +23,7 @@ export default function Proveedores() {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
   const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(
-    null,
+    null
   );
   const [shouldFetch, setShouldFetch] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -87,6 +87,10 @@ export default function Proveedores() {
     setShouldFetch(true);
   };
 
+  const handleCloseDetails = () => {
+    setDetailDialogOpen(false);
+  };
+
   return (
     <div className="flex justify-start w-full h-full flex-col bg-transparent">
       <Header title="Proveedores" description="Lista de suppliers oficiales" />
@@ -118,8 +122,8 @@ export default function Proveedores() {
               {supplier.isNational && supplier.isInternational
                 ? "Nacional e Internacional"
                 : supplier.isNational
-                  ? "Nacional"
-                  : "Internacional"}
+                ? "Nacional"
+                : "Internacional"}
             </p>
             <p className="text-sm text-gray-600">{supplier.email}</p>
             <p className="text-sm text-gray-600">{supplier.phone}</p>
@@ -154,8 +158,9 @@ export default function Proveedores() {
       {selectedSupplier && (
         <SupplierDetails
           supplier={selectedSupplier}
-          onClose={() => setDetailDialogOpen(detailDialogOpen)}
+          onClose={handleCloseDetails}
           onFamilyAdded={handleFamilyAdded}
+          open={detailDialogOpen}
         />
       )}
     </div>
