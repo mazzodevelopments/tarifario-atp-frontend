@@ -23,6 +23,11 @@ export default function WeightUnitForm({
     kgValue: 0,
   });
 
+  const [errors, setErrors] = useState({
+    name: "",
+    kgValue: "",
+  });
+
   useEffect(() => {
     if (initialData) {
       setFormData(initialData);
@@ -34,11 +39,41 @@ export default function WeightUnitForm({
       ...prev,
       [field]: field === "kgValue" ? parseFloat(value as string) : value,
     }));
+    setErrors((prev) => ({ ...prev, [field]: "" }));
+  };
+
+  const validateForm = () => {
+    const newErrors = { name: "", kgValue: "" };
+    let isValid = true;
+
+    if (!formData.name) {
+      newErrors.name = "El nombre es requerido";
+      isValid = false;
+    } else if (formData.name.length < 2) {
+      newErrors.name = "El nombre debe tener al menos 2 caracteres";
+      isValid = false;
+    }
+
+    if (!formData.kgValue) {
+      newErrors.kgValue = "El valor en kilogramos es requerido";
+      isValid = false;
+    } else if (formData.kgValue <= 0) {
+      newErrors.kgValue = "El valor en kilogramos debe ser mayor que 0";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (!validateForm()) {
+      return;
+    }
+
     await onSubmit(formData);
     closeDialog?.();
   };
@@ -53,7 +88,7 @@ export default function WeightUnitForm({
         ) => handleChange("name", e.target.value)}
         placeholder="Nombre de la Unidad de Peso"
         label="Nombre"
-        required
+        error={errors.name}
       />
       <Input
         type="number"
@@ -65,7 +100,7 @@ export default function WeightUnitForm({
         label="Valor Kilogramo"
         step={0.1}
         min={0}
-        required
+        error={errors.kgValue}
       />
 
       <div className="flex justify-end gap-2 mt-4">

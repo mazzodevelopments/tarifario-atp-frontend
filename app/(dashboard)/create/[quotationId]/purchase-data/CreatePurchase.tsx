@@ -608,7 +608,7 @@ export default function CreatePurchase({
             />
           }
           onSelect={handleSelect("weightUnit")}
-          label="Unidad"
+          label="Unidad de Peso"
           required
         />
         <Input

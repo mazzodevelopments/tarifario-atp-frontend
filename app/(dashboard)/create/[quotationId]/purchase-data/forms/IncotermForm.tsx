@@ -23,6 +23,11 @@ export default function IncotermForm({
     abbreviation: "",
   });
 
+  const [errors, setErrors] = useState({
+    name: "",
+    abbreviation: "",
+  });
+
   useEffect(() => {
     if (initialData) {
       setFormData(initialData);
@@ -31,11 +36,42 @@ export default function IncotermForm({
 
   const handleChange = (field: string, value: string | boolean) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+    setErrors((prev) => ({ ...prev, [field]: "" }));
+  };
+
+  const validateForm = () => {
+    const newErrors = { name: "", abbreviation: "" };
+    let isValid = true;
+
+    if (!formData.name) {
+      newErrors.name = "El nombre es requerido";
+      isValid = false;
+    } else if (formData.name.length < 2) {
+      newErrors.name = "El nombre debe tener al menos 2 caracteres";
+      isValid = false;
+    }
+
+    if (!formData.abbreviation) {
+      newErrors.abbreviation = "La abreviación es requerida";
+      isValid = false;
+    } else if (formData.abbreviation.length !== 3) {
+      newErrors.abbreviation =
+        "La abreviación debe tener exactamente 3 caracteres";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (!validateForm()) {
+      return;
+    }
+
     await onSubmit(formData);
     closeDialog?.();
   };
@@ -50,7 +86,7 @@ export default function IncotermForm({
         ) => handleChange("name", e.target.value)}
         placeholder="Nombre del incoterm"
         label="Nombre"
-        required
+        error={errors.name}
       />
       <Input
         type="text"
@@ -60,7 +96,7 @@ export default function IncotermForm({
         ) => handleChange("abbreviation", e.target.value)}
         placeholder="Abreviación"
         label="Abreviación"
-        required
+        error={errors.abbreviation}
       />
 
       <div className="flex justify-end gap-2 mt-4">

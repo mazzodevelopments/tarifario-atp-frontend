@@ -29,6 +29,12 @@ export default function CurrencyForm({
     dollarValue: 0,
   });
 
+  const [errors, setErrors] = useState({
+    name: "",
+    abbreviation: "",
+    dollarValue: "",
+  });
+
   useEffect(() => {
     if (initialData) {
       setFormData(initialData);
@@ -40,11 +46,51 @@ export default function CurrencyForm({
       ...prev,
       [field]: field === "dollarValue" ? parseFloat(value as string) : value,
     }));
+    // Limpiar el error cuando el usuario comienza a escribir
+    setErrors((prev) => ({ ...prev, [field]: "" }));
+  };
+
+  const validateForm = () => {
+    const newErrors = { name: "", abbreviation: "", dollarValue: "" };
+    let isValid = true;
+
+    if (!formData.name) {
+      newErrors.name = "El nombre es requerido";
+      isValid = false;
+    } else if (formData.name.length < 2) {
+      newErrors.name = "El nombre debe tener al menos 2 caracteres";
+      isValid = false;
+    }
+
+    if (!formData.abbreviation) {
+      newErrors.abbreviation = "La abreviación es requerida";
+      isValid = false;
+    } else if (formData.abbreviation.length !== 3) {
+      newErrors.abbreviation =
+        "La abreviación debe tener exactamente 3 caracteres";
+      isValid = false;
+    }
+
+    if (!formData.dollarValue) {
+      newErrors.dollarValue = "El valor en dólares es requerido";
+      isValid = false;
+    } else if (formData.dollarValue <= 0) {
+      newErrors.dollarValue = "El valor en dólares debe ser mayor que 0";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (!validateForm()) {
+      return;
+    }
+
     await onSubmit(formData);
     closeDialog?.();
   };
@@ -59,7 +105,7 @@ export default function CurrencyForm({
         ) => handleChange("name", e.target.value)}
         placeholder="Nombre de la Moneda"
         label="Nombre"
-        required
+        error={errors.name}
       />
       <Input
         type="text"
@@ -69,7 +115,7 @@ export default function CurrencyForm({
         ) => handleChange("abbreviation", e.target.value)}
         placeholder="Abreviación"
         label="Abreviación"
-        required
+        error={errors.abbreviation}
       />
       <Input
         type="number"
@@ -81,7 +127,7 @@ export default function CurrencyForm({
         label="Valor Dolar"
         step={0.1}
         min={0}
-        required
+        error={errors.dollarValue}
       />
 
       <div className="flex justify-end gap-2 mt-4">
