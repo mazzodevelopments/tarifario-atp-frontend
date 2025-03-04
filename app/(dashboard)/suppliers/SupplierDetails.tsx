@@ -93,34 +93,40 @@ export default function SupplierDetails({
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
-          <div className="flex gap-1">
-            <span className="text-black font-[600]">Email:</span>
+          <div className="flex flex-col gap-1">
+            <span className="text-black font-[600]">Email</span>
             <p className="text-md text-gray-600">{supplier.email}</p>
           </div>
-          <div className="flex gap-1">
-            <span className="text-black font-[600]">Teléfono:</span>
+          <div className="flex flex-col gap-1">
+            <span className="text-black font-[600]">Teléfono</span>
             <p className="text-md text-gray-600">{supplier.phone}</p>
           </div>{" "}
           <div className="mt-4">
             <h4 className="font-semibold">Familias que provee:</h4>
-            <ul className="list-disc list-inside">
-              {supplier.families!.map((family) => (
-                <div className="flex items-center gap-1" key={family.id}>
-                  <div
-                    className={`w-[6px] h-[6px] rounded-full ${
-                      supplier.isNational && supplier.isInternational
-                        ? "bg-green-600"
-                        : supplier.isNational
-                        ? "bg-primary"
-                        : "bg-purple-600"
-                    }`}
-                  ></div>
-                  <li className="text-sm text-gray-600 list-none">
-                    {family.name}
-                  </li>
-                </div>
-              ))}
-            </ul>
+            {supplier.families && supplier.families.length > 0 ? (
+              <ul className="list-disc list-inside">
+                {supplier.families.map((family) => (
+                  <div className="flex items-center gap-1" key={family.id}>
+                    <div
+                      className={`w-[6px] h-[6px] rounded-full ${
+                        supplier.isNational && supplier.isInternational
+                          ? "bg-green-600"
+                          : supplier.isNational
+                          ? "bg-primary"
+                          : "bg-purple-600"
+                      }`}
+                    ></div>
+                    <li className="text-sm text-gray-600 list-none">
+                      {family.name}
+                    </li>
+                  </div>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-sm text-gray-600 mt-1">
+                No hay familias asociadas a este proveedor.
+              </p>
+            )}
           </div>
           <div className="w-full mt-4">
             <h4 className="font-semibold">Agregar Familia:</h4>
