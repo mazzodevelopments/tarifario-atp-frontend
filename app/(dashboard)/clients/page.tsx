@@ -13,6 +13,15 @@ import Button from "@/components/Button";
 import { Client } from "@/types/Client";
 import ClientForm from "@/app/(dashboard)/create/[quotationId]/quotation-details/forms/ClientForm";
 import { CatalogService } from "@/services/CatalogService";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Pencil } from "lucide-react";
 
 export default function Clients() {
   const [clients, setClients] = useState<Client[]>([]);
@@ -68,7 +77,12 @@ export default function Clients() {
       <div className="mt-6 px-6">
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="text-white">Agregar Cliente</Button>
+            <Button
+              variant="primary"
+              className="py-2 px-4 rounded-lg font-semibold text-sm border bg-primary/5 text-primary"
+            >
+              Agregar Cliente
+            </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
@@ -82,27 +96,68 @@ export default function Clients() {
           </DialogContent>
         </Dialog>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6 px-6">
-        {clients.map((client) => (
-          <div
-            key={client.id}
-            className="bg-white p-4 rounded-[16px] border border-neutral-200 shadow-sm"
-          >
-            <h3 className="font-semibold">{client.name}</h3>
-            <p className="text-sm text-gray-600">
-              Cantidad de cotizaciones: 12
-            </p>
-            <div className="flex justify-end w-full gap-2 mt-2">
-              <Button variant="secondary" onClick={() => handleEdit(client)}>
-                Editar
-              </Button>
-              <Button variant="primary" className="text-white">
-                Detalles
-              </Button>
-            </div>
+
+      <div className="w-full px-6 pb-6 pt-4">
+        <div className="w-auto h-auto overflow-hidden rounded-[12px] shadow-sm shadow-cyan-500/20">
+          <div className="border rounded-[12px] overflow-auto max-h-[70vh] relative w-full">
+            <Table className="w-full">
+              <TableHeader>
+                <TableRow className="bg-primary/5">
+                  <TableHead className="text-primary font-[600] text-center">
+                    Nombre
+                  </TableHead>
+                  <TableHead className="text-primary font-[600] text-center">
+                    Cant. de Compradores
+                  </TableHead>
+                  <TableHead className="text-primary font-[600] text-center">
+                    Acciones
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {clients.length > 0 ? (
+                  clients.map((client) => (
+                    <TableRow key={client.id} className="text-sm text-center">
+                      <TableCell className="font-[600] text-black">
+                        {client.name}
+                      </TableCell>
+                      <TableCell className="font-[600] text-black">
+                        {Math.floor(Math.random() * 20) + 1}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex justify-center gap-2">
+                          <Button
+                            variant="secondary"
+                            onClick={() => handleEdit(client)}
+                          >
+                            <Pencil className="w-4 h-4 text-primary" />
+                          </Button>
+                          <Button
+                            variant="secondary"
+                            className="p-1 h-auto hover:bg-gray-100"
+                          >
+                            Detalles
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow className="h-36">
+                    <TableCell
+                      colSpan={2}
+                      className="text-sm m-auto h-full text-center text-gray-500"
+                    >
+                      No hay clientes registrados
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
           </div>
-        ))}
+        </div>
       </div>
+
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
         <DialogContent>
           <DialogHeader>

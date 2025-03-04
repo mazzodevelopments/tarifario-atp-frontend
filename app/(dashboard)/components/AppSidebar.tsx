@@ -43,9 +43,9 @@ const menuItems = [
   { icon: Home, label: "Home", id: "" },
   { icon: PlusSquare, label: "Crear", id: "create" },
   { icon: Clock, label: "Cotizaciones", id: "history" },
-  { icon: BarChart2, label: "Comparar", id: "compare" },
   { icon: Users, label: "Clientes", id: "clients" },
   { icon: Truck, label: "Proveedores", id: "suppliers" },
+  { icon: BarChart2, label: "Comparar", id: "compare" },
 ];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
