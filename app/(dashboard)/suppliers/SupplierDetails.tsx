@@ -17,14 +17,14 @@ interface SupplierDetailsProps {
   supplier: Supplier;
   onClose: () => void;
   onFamilyAdded: () => void;
-  open: boolean; // Add this prop to control dialog state
+  open: boolean;
 }
 
 export default function SupplierDetails({
   supplier,
   onClose,
   onFamilyAdded,
-  open, // Accept the open state from parent
+  open,
 }: SupplierDetailsProps) {
   const [selectedFamily, setSelectedFamily] = useState<{
     id: number;
@@ -97,14 +97,28 @@ export default function SupplierDetails({
             <span className="text-black font-[600]">Email:</span>
             <p className="text-md text-gray-600">{supplier.email}</p>
           </div>
-          <p className="text-md text-gray-600">{supplier.phone}</p>
+          <div className="flex gap-1">
+            <span className="text-black font-[600]">Teléfono:</span>
+            <p className="text-md text-gray-600">{supplier.phone}</p>
+          </div>{" "}
           <div className="mt-4">
             <h4 className="font-semibold">Familias que provee:</h4>
             <ul className="list-disc list-inside">
               {supplier.families!.map((family) => (
-                <li key={family.id} className="text-sm text-gray-600">
-                  {family.name}
-                </li>
+                <div className="flex items-center gap-1" key={family.id}>
+                  <div
+                    className={`w-[6px] h-[6px] rounded-full ${
+                      supplier.isNational && supplier.isInternational
+                        ? "bg-green-600"
+                        : supplier.isNational
+                        ? "bg-primary"
+                        : "bg-purple-600"
+                    }`}
+                  ></div>
+                  <li className="text-sm text-gray-600 list-none">
+                    {family.name}
+                  </li>
+                </div>
               ))}
             </ul>
           </div>
