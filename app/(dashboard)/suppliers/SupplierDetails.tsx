@@ -191,7 +191,7 @@ export default function SupplierDetails({
                 {supplierType}
               </p>
             </div>
-            <DialogTitle className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+            <DialogTitle className="text-2xl font-extrabold tracking-tight">
               {supplier.name}
             </DialogTitle>
           </DialogHeader>
@@ -199,29 +199,31 @@ export default function SupplierDetails({
           <div className="space-y-6 py-2">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="flex flex-col">
-                <span className="text-sm text-gray-500 mb-1">Email</span>
-                <p className="text-md font-medium">{supplier.email}</p>
+                <span className="text-xs text-gray-500 mb-1">Email</span>
+                <p className="text-sm font-medium">{supplier.email}</p>
               </div>
               <div className="flex flex-col">
-                <span className="text-sm text-gray-500 mb-1">Teléfono</span>
-                <p className="text-md font-medium">{supplier.phone}</p>
+                <span className="text-xs text-gray-500 mb-1">Teléfono</span>
+                <p className="text-sm font-medium">{supplier.phone}</p>
               </div>
             </div>
 
             <div className="bg-gray-50 p-4 rounded-lg">
-              <h4 className="font-semibold text-gray-800 mb-3">
+              <h4 className="font-semibold text-gray-800 mb-3 text-sm">
                 Familias que provee
               </h4>
               {supplier.families && supplier.families.length > 0 ? (
                 <div className="space-y-2">
                   {supplier.families.map((family) => (
                     <div
-                      className="flex items-center justify-between h-8"
+                      className="flex items-center justify-between h-6"
                       key={family.id}
                     >
                       <div className="flex items-center gap-2">
                         <div className="w-2 h-2 rounded-full bg-gray-700 mr-1"></div>
-                        <span className="text-gray-700">{family.name}</span>
+                        <span className="text-gray-700 text-sm">
+                          {family.name}
+                        </span>
                       </div>
                       <button
                         onClick={() => openDeleteDialog(family)}
@@ -229,7 +231,7 @@ export default function SupplierDetails({
                         disabled={isLoading}
                         type="button"
                       >
-                        <Trash size={18} />
+                        <Trash size={16} />
                       </button>
                     </div>
                   ))}
@@ -242,7 +244,7 @@ export default function SupplierDetails({
             </div>
 
             <div className="border-t pt-4">
-              <h4 className="font-semibold text-gray-800 mb-3">
+              <h4 className="font-semibold text-gray-800 mb-2 text-sm">
                 Agregar Familia
               </h4>
               <div className="flex gap-3 items-end">
@@ -259,7 +261,7 @@ export default function SupplierDetails({
                 <Button
                   variant="primary"
                   onClick={handleAddFamily}
-                  className="text-white px-4 h-10 items-center"
+                  className="text-white px-4 items-center h-10"
                   disabled={!selectedFamily || isLoading}
                 >
                   {isLoading ? "Agregando..." : "Agregar"}
