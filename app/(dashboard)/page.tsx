@@ -63,6 +63,8 @@ export default function Dashboard() {
       clientName: string;
     }[]
   >([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState("all");
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -101,6 +103,17 @@ export default function Dashboard() {
     fetchUsers();
     fetchLastFiveQuotations();
   }, []);
+
+  const filteredUsers = users
+    .filter((user) =>
+      user.username.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .sort((a, b) => {
+      if (sortBy === "all") return 0;
+      if (sortBy === a.role.name) return -1;
+      if (sortBy === b.role.name) return 1;
+      return 0;
+    });
 
   return (
     <div className="flex justify-start w-full h-screen flex-col bg-neutral-50">
@@ -193,9 +206,8 @@ export default function Dashboard() {
               Panel de acciones de administrador
             </p>
           </div>
-          <div className="flex flex-row gap-3 h-[60%]">
-            <div className="flex flex-col w-[65%]">
-              <div className="flex flex-col p-4 relative bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full">
+          <div className="flex flex-row gap-3 h-full">
+            {/* <div className="flex flex-col p-4 relative bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center">
                     <div className="w-7 h-7 mr-2 bg-red-700 rounded-full flex justify-center items-center">
@@ -282,21 +294,46 @@ export default function Dashboard() {
                     Exportar datos
                   </Button>
                 </div>
-              </div>
-            </div>
-            <div className="flex flex-col w-[35%]">
+              </div> */}
+            <div className="flex flex-col w-full h-full">
               <div className="flex flex-col relative py-4 bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full">
-                <h2 className="text-lg font-[800] mb-2 mx-4">
-                  Lista de Usuarios
-                </h2>
+                <div className="mb-4 mx-4 relative flex items-center justify-between">
+                  <input
+                    className="w-60 h-10 rounded-3xl bg-gray-50 border border-neutral-200 px-8"
+                    placeholder="Buscar usuario"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                  <Search
+                    size={20}
+                    className="absolute left-2 top-1/2 transform -translate-y-1/2 text-neutral-400 z-10"
+                  />
+
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-neutral-500">
+                      Ordenar por:
+                    </span>
+                    <select
+                      className="h-10 rounded-lg bg-gray-50 border border-neutral-200 px-3 text-sm"
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value)}
+                    >
+                      <option value="all">Todos</option>
+                      <option value="superadmin">Superadmin</option>
+                      <option value="admin">Admin</option>
+                      <option value="user">Usuario</option>
+                    </select>
+                  </div>
+                </div>
+
                 <ScrollArea className="flex-grow border-neutral-100 border-t px-4 h-[31vw]">
-                  <div className="space-y-4 mt-2">
-                    {users.map((user) => (
+                  <div className="space-y-4 mt-4">
+                    {filteredUsers.map((user) => (
                       <div
                         key={user.id}
-                        className="w-full flex items-center justify-between"
+                        className="w-full flex items-center justify-start"
                       >
-                        <div className="flex items-center space-x-4">
+                        <div className="flex items-center space-x-2">
                           <Image
                             src={user.profilePic || defaultProfilePic}
                             width={700}
@@ -304,17 +341,14 @@ export default function Dashboard() {
                             alt="Picture of the author"
                             className="w-8 h-8 rounded-full"
                           />
-                          <div>
-                            <p className="text-sm font-medium">
+                          <div className="min-w-40">
+                            <p className="text-md font-semibold">
                               {user.username}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {user.role.name}
                             </p>
                           </div>
                         </div>
                         <div
-                          className={`px-2 rounded-md ${
+                          className={`px-2 rounded-3xl ${
                             user.role.name === "superadmin"
                               ? "bg-red-100 text-red-500"
                               : user.role.name === "admin"
@@ -322,7 +356,7 @@ export default function Dashboard() {
                               : "bg-neutral-100 text-black"
                           }`}
                         >
-                          <span className="text-[0.65vw] font-semibold">
+                          <span className="text-sm font-semibold">
                             {user.role.name}
                           </span>
                         </div>
@@ -336,7 +370,6 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-          <div className="h-[40%] bg-white shadow-sm border border-neutral-200 w-full rounded-[16px]"></div>
         </div>
       </div>
     </div>
