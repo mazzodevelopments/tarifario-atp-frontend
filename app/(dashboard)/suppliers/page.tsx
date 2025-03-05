@@ -32,7 +32,7 @@ export default function Proveedores() {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
   const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(
-    null,
+    null
   );
   const [shouldFetch, setShouldFetch] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -163,7 +163,10 @@ export default function Proveedores() {
               <TableBody>
                 {suppliers.length > 0 ? (
                   suppliers.map((supplier) => (
-                    <TableRow key={supplier.id} className="text-sm text-center">
+                    <TableRow
+                      key={supplier.id}
+                      className="text-sm text-center bg-white/50"
+                    >
                       <TableCell className="font-[600] text-black">
                         {supplier.name}
                       </TableCell>
@@ -173,14 +176,14 @@ export default function Proveedores() {
                         <div
                           className={`py-1 px-3 rounded-3xl inline-block ${getTypeStyles(
                             supplier.isNational,
-                            supplier.isInternational,
+                            supplier.isInternational
                           )}`}
                         >
                           {supplier.isNational && supplier.isInternational
                             ? "Ambas"
                             : supplier.isNational
-                              ? "Nacional"
-                              : "Internacional"}
+                            ? "Nacional"
+                            : "Internacional"}
                         </div>
                       </TableCell>
                       <TableCell>
