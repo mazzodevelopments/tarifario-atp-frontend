@@ -178,7 +178,9 @@ export default function Dropdown({
             error ? "border-red-500" : "border-gray-300"
           } ${disabled ? "bg-gray-100 cursor-not-allowed" : "cursor-pointer"}`}
         >
-          <span>{selectedValue || "Seleccionar..."}</span>
+          <span className={`${selectedValue || "text-gray-400"}`}>
+            {selectedValue || "Seleccionar..."}
+          </span>
           <div className="flex items-center">
             {selectedValue && !disabled && (
               <button
