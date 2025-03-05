@@ -96,6 +96,13 @@ export default function Dropdown({
     };
   }, []);
 
+  // DROPDOWN DISABLED NO SE DEBE PODER ABRIR
+  useEffect(() => {
+    if (disabled && isOpen) {
+      setIsOpen(false);
+    }
+  }, [disabled, isOpen]);
+
   useEffect(() => {
     // FILTRAR ITEMS SEGUN TERM
     setFilteredItems(
@@ -115,6 +122,18 @@ export default function Dropdown({
     setSearchValue("");
     setIsOpen(false);
     onSelect(item);
+  };
+
+  const handleClear = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelectedValue("");
+    onSelect({ id: 0, name: "" });
+  };
+
+  const toggleDropdown = () => {
+    if (!disabled) {
+      setIsOpen(!isOpen);
+    }
   };
 
   const handleAddItem = async (e: React.FormEvent) => {
@@ -153,26 +172,51 @@ export default function Dropdown({
       )}
       <div className="relative w-full" ref={dropdownRef}>
         <div
-          onClick={() => setIsOpen(!isOpen)}
-          className={`w-full px-2 py-2 text-sm border rounded-md flex justify-between items-center cursor-pointer ${
+          onClick={toggleDropdown}
+          className={`w-full px-2 py-2 text-sm border rounded-md flex justify-between items-center ${
             error ? "border-red-500" : "border-gray-300"
-          } ${disabled ? "bg-gray-100" : ""}`}
+          } ${disabled ? "bg-gray-100 cursor-not-allowed" : "cursor-pointer"}`}
         >
           <span>{selectedValue || "Seleccionar..."}</span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className={`h-4 w-4 transition-transform ${isOpen ? "" : "transform rotate-180"}`}
-          >
-            <polyline points="18 15 12 9 6 15"></polyline>
-          </svg>
+          <div className="flex items-center">
+            {selectedValue && !disabled && (
+              <button
+                type="button"
+                onClick={handleClear}
+                className="mr-1 rounded-full hover:bg-gray-200 focus:outline-none"
+                disabled={disabled}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-3 w-3"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
+            )}
+            {!disabled && (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className={`h-4 w-4 transition-transform ${isOpen ? "" : "transform rotate-180"}`}
+              >
+                <polyline points="18 15 12 9 6 15"></polyline>
+              </svg>
+            )}
+          </div>
         </div>
 
         {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
@@ -180,7 +224,7 @@ export default function Dropdown({
         {/* DROPDOWN ABIERTO */}
         <div
           className={`absolute z-10 w-full mt-1 bg-white border rounded-md overflow-hidden transform transition-all duration-200 ease-in-out ${
-            isOpen
+            isOpen && !disabled
               ? "opacity-100 translate-y-0"
               : "opacity-0 -translate-y-2 pointer-events-none"
           }`}
