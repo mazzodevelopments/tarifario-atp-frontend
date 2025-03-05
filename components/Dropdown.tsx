@@ -161,7 +161,7 @@ export default function Dropdown({
               <div className="animate-spin h-4 w-4 border-2 border-gray-500 border-t-transparent rounded-full"></div>
             </div>
           )}
-          {(addItem || customForm) && (
+          {!disabled && (addItem || customForm) && (
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <button
