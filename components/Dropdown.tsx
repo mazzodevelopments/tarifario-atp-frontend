@@ -216,7 +216,7 @@ export default function Dropdown({
                 type="text"
                 value={searchValue}
                 onChange={handleSearchChange}
-                className="w-full px-2 py-1 text-sm focus:outline-none border rounded-md"
+                className="w-[85%] px-2 py-1 text-sm focus:outline-none border rounded-md"
                 placeholder="Buscar..."
                 disabled={disabled || isLoading}
               />
