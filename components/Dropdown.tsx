@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
@@ -101,8 +103,14 @@ export default function Dropdown({
   }, [items, inputValue]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
+    const newValue = e.target.value;
+    setInputValue(newValue);
     setIsOpen(true);
+
+    // SI SE VACÍA EL INPUT, ENTONCES ELIMINAR SELECCIÓN
+    if (newValue === "") {
+      onSelect({ id: 0, name: "" });
+    }
   };
 
   const handleSelect = (item: DropdownItem) => {
