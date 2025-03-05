@@ -10,6 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Plus, ChevronUp, X } from "lucide-react";
 
 export interface DropdownItem {
   id: number;
@@ -186,35 +187,14 @@ export default function Dropdown({
                 className="mr-1 rounded-full hover:bg-gray-200 focus:outline-none"
                 disabled={disabled}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-3 w-3"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+                <X size={14} />
               </button>
             )}
             {!disabled && (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className={`h-4 w-4 transition-transform ${isOpen ? "" : "transform rotate-180"}`}
-              >
-                <polyline points="18 15 12 9 6 15"></polyline>
-              </svg>
+              <ChevronUp
+                size={16}
+                className={`transition-transform ${isOpen ? "" : "transform rotate-180"}`}
+              />
             )}
           </div>
         </div>
@@ -230,15 +210,17 @@ export default function Dropdown({
           }`}
         >
           <div className="relative border-b">
-            <input
-              ref={inputRef}
-              type="text"
-              value={searchValue}
-              onChange={handleSearchChange}
-              className="w-full px-2 py-2 text-sm focus:outline-none"
-              placeholder="Buscar..."
-              disabled={disabled || isLoading}
-            />
+            <div className="p-2">
+              <input
+                ref={inputRef}
+                type="text"
+                value={searchValue}
+                onChange={handleSearchChange}
+                className="w-full px-2 py-1 text-sm focus:outline-none border rounded-md"
+                placeholder="Buscar..."
+                disabled={disabled || isLoading}
+              />
+            </div>
 
             {isLoading && (
               <div className="absolute right-10 top-1/2 transform -translate-y-1/2">
@@ -254,18 +236,7 @@ export default function Dropdown({
                     className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 rounded-full hover:bg-gray-200 focus:outline-none disabled:opacity-50"
                     disabled={isLoading}
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <Plus size={16} />
                   </button>
                 </DialogTrigger>
                 <DialogContent>
