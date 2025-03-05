@@ -29,19 +29,23 @@ export default function PurchaseList({ quotationId }: { quotationId: number }) {
   const [budgets, setBudgets] = useState<Budget[]>([]);
   const [shouldFetch, setShouldFetch] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!shouldFetch) return;
 
     const fetchQuotationBudgets = async () => {
       try {
+        setIsLoading(true);
         const quotationBudgets = await QuoteService.getQuotationBudgets(
           quotationId,
           "purchase-data",
         );
         setBudgets(quotationBudgets);
+        setIsLoading(false);
         setShouldFetch(false);
       } catch (error) {
+        setIsLoading(false);
         console.error("Error fetching quotation budgets:", error);
       }
     };
@@ -128,7 +132,9 @@ export default function PurchaseList({ quotationId }: { quotationId: number }) {
                     colSpan={12}
                     className="text-sm m-auto h-full text-center text-gray-500"
                   >
-                    No hay presupuestos agregados
+                    {isLoading
+                      ? "Cargando..."
+                      : "No hay presupuestos agregados"}
                   </TableCell>
                 </TableRow>
               ) : (

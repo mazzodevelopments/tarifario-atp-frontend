@@ -34,6 +34,7 @@ export default function SalesList({ quotationId }: { quotationId: number }) {
     useState(false);
   const [selectedBudgetId, setSelectedBudgetId] = useState<number | null>(null);
   const [editingMargin, setEditingMargin] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   // ROW SELECTION (EN PROCESO)
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
@@ -44,13 +45,16 @@ export default function SalesList({ quotationId }: { quotationId: number }) {
 
     const fetchQuotationBudgets = async () => {
       try {
+        setIsLoading(true);
         const quotationBudgets = await QuoteService.getQuotationBudgets(
           quotationId,
           "sales-data",
         );
         setBudgets(quotationBudgets);
+        setIsLoading(false);
         // setShouldFetch(false);
       } catch (error) {
+        setIsLoading(false);
         console.error("Error fetching quotation budgets:", error);
       }
     };
@@ -295,7 +299,9 @@ export default function SalesList({ quotationId }: { quotationId: number }) {
                     colSpan={15}
                     className="text-sm m-auto h-full text-center text-gray-500"
                   >
-                    No hay presupuestos agregados
+                    {isLoading
+                      ? "Cargando..."
+                      : "No hay presupuestos agregados"}
                   </TableCell>
                 </TableRow>
               ) : (

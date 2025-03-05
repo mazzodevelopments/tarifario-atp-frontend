@@ -20,17 +20,21 @@ export default function SelectedBudgetsList({
 }) {
   const [selectedBudgets, setSelectedBudgets] = useState<Budget[]>([]);
   const [shouldFetch, setShouldFetch] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!shouldFetch) return;
 
     const fetchQuotationSelectedBudgets = async () => {
       try {
+        setIsLoading(true);
         const selectedQuotationBudgets =
           await QuoteService.getSelectedBudgets(quotationId);
         setSelectedBudgets(selectedQuotationBudgets);
+        setIsLoading(false);
         setShouldFetch(false);
       } catch (error) {
+        setIsLoading(false);
         console.error("Error fetching quotation budgets:", error);
       }
     };
@@ -133,7 +137,9 @@ export default function SelectedBudgetsList({
                     colSpan={14}
                     className="text-sm m-auto h-full text-center text-gray-500"
                   >
-                    No hay presupuestos seleccionados
+                    {isLoading
+                      ? "Cargando..."
+                      : "No hay presupuestos seleccionados"}
                   </TableCell>
                 </TableRow>
               ) : (

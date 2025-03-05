@@ -24,19 +24,23 @@ export default function SelectableBudgetsList({
   const [budgets, setBudgets] = useState<Budget[]>([]);
   const [selectedBudgets, setSelectedBudgets] = useState<Budget[]>([]);
   const [shouldFetch, setShouldFetch] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!shouldFetch) return;
 
     const fetchQuotationBudgets = async () => {
       try {
+        setIsLoading(true);
         const quotationBudgets = await QuoteService.getQuotationBudgets(
           quotationId,
           "sales-data",
         );
         setBudgets(quotationBudgets);
+        setIsLoading(false);
         setShouldFetch(false);
       } catch (error) {
+        setIsLoading(false);
         console.error("Error fetching quotation budgets:", error);
       }
     };
@@ -144,7 +148,9 @@ export default function SelectableBudgetsList({
                     colSpan={15}
                     className="text-sm m-auto h-full text-center text-gray-500"
                   >
-                    No hay presupuestos agregados
+                    {isLoading
+                      ? "Cargando..."
+                      : "No hay presupuestos agregados"}
                   </TableCell>
                 </TableRow>
               ) : (

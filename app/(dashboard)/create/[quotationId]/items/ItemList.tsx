@@ -33,17 +33,21 @@ export default function ItemsList({ quotationId }: { quotationId: number }) {
   const [shouldFetch, setShouldFetch] = useState(true);
   const [editingItem, setEditingItem] = useState<Item | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!shouldFetch) return;
 
     const fetchQuotationItems = async () => {
       try {
+        setIsLoading(true);
         const quotationItems =
           await QuoteService.getQuotationItems(quotationId);
         setItems(quotationItems);
+        setIsLoading(false);
         setShouldFetch(false);
       } catch (error) {
+        setIsLoading(false);
         console.error("Error fetching quotation items:", error);
       }
     };
@@ -191,10 +195,10 @@ export default function ItemsList({ quotationId }: { quotationId: number }) {
               {items.length === 0 ? (
                 <TableRow className="h-36">
                   <TableCell
-                    colSpan={8}
+                    colSpan={10}
                     className="text-sm m-auto h-full  text-center text-gray-500"
                   >
-                    No hay items agregados
+                    {isLoading ? "Cargando..." : "No hay items agregados"}
                   </TableCell>
                 </TableRow>
               ) : (
