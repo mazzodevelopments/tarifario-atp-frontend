@@ -18,9 +18,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import type {
-  Item,
   CreateItem as CreateItemType,
   CreateMassiveLoadItems,
+  ListedItem,
 } from "@/types/Item";
 import { Pencil, PlusCircle, Upload } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -29,9 +29,9 @@ import type React from "react";
 import { QuoteService } from "@/services/QuoteService";
 
 export default function ItemsList({ quotationId }: { quotationId: number }) {
-  const [items, setItems] = useState<Item[]>([]);
+  const [items, setItems] = useState<ListedItem[]>([]);
   const [shouldFetch, setShouldFetch] = useState(true);
-  const [editingItem, setEditingItem] = useState<Item | null>(null);
+  const [editingItem, setEditingItem] = useState<ListedItem | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -210,10 +210,12 @@ export default function ItemsList({ quotationId }: { quotationId: number }) {
                     <TableCell>{item.numbering}</TableCell>
                     <TableCell>{item.detail}</TableCell>
                     <TableCell>{item.family}</TableCell>
-                    <TableCell>{item.subfamily}</TableCell>
+                    <TableCell>{item.subfamily.name}</TableCell>
                     <TableCell>{item.brand}</TableCell>
-                    <TableCell>{item.model}</TableCell>
-                    <TableCell>{item.quantity + " " + item.unit}</TableCell>
+                    <TableCell>{item.model.name}</TableCell>
+                    <TableCell>
+                      {item.quantity + " " + item.unit.name}
+                    </TableCell>
                     <TableCell>{item.partNumber}</TableCell>
                     <TableCell>{item.productNumber}</TableCell>
                     <TableCell className="flex flex-row">

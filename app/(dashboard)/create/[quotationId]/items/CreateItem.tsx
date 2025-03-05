@@ -7,15 +7,15 @@ import Input from "@/components/Input";
 import Button from "@/components/Button";
 import Dropdown, { type DropdownItem } from "@/components/Dropdown";
 import { DialogClose } from "@/components/ui/dialog";
-import type { Item, CreateItem } from "@/types/Item";
+import type { Item, CreateItem, ListedItem } from "@/types/Item";
 import { CatalogService } from "@/services/CatalogService";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 
 interface CreateItemProps {
   onItemCreated: (item: CreateItem) => void;
   onItemUpdated: (item: CreateItem) => void;
-  editingItem: Item | null;
-  setEditingItem: (item: Item | null) => void;
+  editingItem: ListedItem | null;
+  setEditingItem: (item: ListedItem | null) => void;
 }
 
 interface CreateItemForm {
@@ -64,14 +64,14 @@ export default function CreateItem({
         quantity: editingItem.quantity,
         partNumber: editingItem.partNumber,
         productNumber: editingItem.productNumber,
-        subfamilyId: formData.subfamilyId,
-        modelId: formData.modelId,
-        unitId: formData.unitId,
+        subfamilyId: editingItem.subfamily.id,
+        modelId: editingItem.model.id,
+        unitId: editingItem.unit.id,
         family: editingItem.family,
-        subfamily: editingItem.subfamily,
+        subfamily: editingItem.subfamily.name,
         brand: editingItem.brand,
-        model: editingItem.model,
-        unit: editingItem.unit,
+        model: editingItem.model.name,
+        unit: editingItem.unit.name,
       });
     }
   }, [editingItem]);

@@ -12,6 +12,20 @@ export interface Item {
   productNumber: string;
 }
 
+export interface ListedItem {
+  id: number;
+  numbering: string;
+  family: string;
+  subfamily: { id: number; name: string };
+  detail: string;
+  brand: string;
+  model: { id: number; name: string };
+  quantity: number;
+  unit: { id: number; name: string };
+  partNumber: string;
+  productNumber: string;
+}
+
 export interface CreateItem {
   detail: string;
   quantity: number;
