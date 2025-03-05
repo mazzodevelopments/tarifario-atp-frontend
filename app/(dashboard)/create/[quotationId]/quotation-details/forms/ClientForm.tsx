@@ -17,10 +17,25 @@ export default function ClientForm({
   closeDialog,
 }: ClientFormProps) {
   const [name, setName] = useState(initialData?.name || "");
+  const [error, setError] = useState("");
+
+  const validateForm = () => {
+    if (!name.trim()) {
+      setError("El nombre es requerido");
+      return false;
+    }
+    setError("");
+    return true;
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (!validateForm()) {
+      return;
+    }
+
     onSubmit({ name });
     closeDialog?.();
   };
@@ -32,10 +47,11 @@ export default function ClientForm({
           label="Nombre"
           id="name"
           value={name}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setName(e.target.value)
-          }
-          required
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            setName(e.target.value);
+            setError("");
+          }}
+          error={error}
         />
       </div>
       <div className="flex justify-end gap-2">

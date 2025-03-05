@@ -37,6 +37,15 @@ export default function QuotationDetails({
   const [selectedBuyerId, setSelectedBuyerId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isClientLoading, setIsClientLoading] = useState(false);
+  const [errors, setErrors] = useState({
+    client: "",
+    buyer: "",
+    receptionDate: "",
+    uploadDate: "",
+    expirationDateTime: "",
+    materialsNeededDate: "",
+    customerRequestNumber: "",
+  });
 
   useEffect(() => {
     const fetchTaskNumber = async () => {
@@ -60,6 +69,7 @@ export default function QuotationDetails({
       ...prevData,
       [name]: value,
     }));
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
 
   const handleDropdownSelect =
@@ -68,6 +78,7 @@ export default function QuotationDetails({
         ...prevData,
         [field]: item.name,
       }));
+      setErrors((prevErrors) => ({ ...prevErrors, [field]: "" }));
 
       if (field === "client") {
         setSelectedClientId(item.id);
@@ -79,13 +90,71 @@ export default function QuotationDetails({
       }
     };
 
+  const validateForm = () => {
+    const newErrors = {
+      client: "",
+      buyer: "",
+      receptionDate: "",
+      uploadDate: "",
+      expirationDateTime: "",
+      materialsNeededDate: "",
+      customerRequestNumber: "",
+    };
+    let isValid = true;
+
+    if (!formData.client) {
+      newErrors.client = "El cliente es requerido";
+      isValid = false;
+    }
+
+    if (!formData.buyer) {
+      newErrors.buyer = "El comprador es requerido";
+      isValid = false;
+    }
+
+    if (!formData.receptionDate) {
+      newErrors.receptionDate = "La fecha de recepción es requerida";
+      isValid = false;
+    }
+
+    if (!formData.uploadDate) {
+      newErrors.uploadDate = "La fecha de carga es requerida";
+      isValid = false;
+    }
+
+    if (!formData.expirationDateTime) {
+      newErrors.expirationDateTime =
+        "La fecha y hora de expiración es requerida";
+      isValid = false;
+    }
+
+    if (!formData.materialsNeededDate) {
+      newErrors.materialsNeededDate =
+        "La fecha de necesidad de materiales es requerida";
+      isValid = false;
+    }
+
+    if (!formData.customerRequestNumber) {
+      newErrors.customerRequestNumber =
+        "El número de solicitud del cliente es requerido";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) {
       e.preventDefault();
     }
 
+    if (!validateForm()) {
+      return;
+    }
+
     if (!selectedBuyerId) {
-      console.error("Buyer ID is required");
+      console.error("El id del comprador es requerido");
       return;
     }
 
@@ -203,7 +272,7 @@ export default function QuotationDetails({
           onSelect={handleDropdownSelect("client")}
           value={formData.client}
           label="Cliente"
-          required
+          error={errors.client}
           customForm={
             <ClientForm
               onSubmit={handleAddClient}
@@ -216,7 +285,7 @@ export default function QuotationDetails({
           onSelect={handleDropdownSelect("buyer")}
           value={formData.buyer}
           label="Comprador"
-          required
+          error={errors.buyer}
           disabled={!selectedClientId}
           customForm={
             <BuyerForm onSubmit={handleAddBuyer} isLoading={isLoading} />
@@ -229,7 +298,7 @@ export default function QuotationDetails({
           value={formData.receptionDate}
           onChange={handleInputChange}
           label="Fecha de Recepción"
-          required
+          error={errors.receptionDate}
         />
         <Input
           id="uploadDate"
@@ -238,7 +307,7 @@ export default function QuotationDetails({
           value={formData.uploadDate}
           onChange={handleInputChange}
           label="Fecha de Carga"
-          required
+          error={errors.uploadDate}
         />
         <Input
           id="expirationDateTime"
@@ -247,7 +316,7 @@ export default function QuotationDetails({
           value={formData.expirationDateTime}
           onChange={handleInputChange}
           label="Fecha y Hora de Expiración"
-          required
+          error={errors.expirationDateTime}
         />
         <Input
           id="materialsNeededDate"
@@ -256,7 +325,7 @@ export default function QuotationDetails({
           value={formData.materialsNeededDate}
           onChange={handleInputChange}
           label="Fecha de Necesidad de Materiales"
-          required
+          error={errors.materialsNeededDate}
         />
       </div>
       <Input
@@ -266,7 +335,7 @@ export default function QuotationDetails({
         onChange={handleInputChange}
         placeholder="Número de Solicitud del Cliente"
         label="Número de Solicitud del Cliente"
-        required
+        error={errors.customerRequestNumber}
       />
 
       <Button
