@@ -513,7 +513,10 @@ export default function CreatePurchase({
                 <DialogTitle>Agregar Origen</DialogTitle>
               </DialogHeader>
               <CityForm
-                onSubmit={handleOriginSave}
+                onSubmit={(data) => {
+                  setErrors((prevErrors) => ({ ...prevErrors, origin: "" }));
+                  handleOriginSave(data);
+                }}
                 isLoading={isLoading}
                 closeDialog={() => setIsOriginModalOpen(false)}
                 initialData={{
@@ -562,7 +565,13 @@ export default function CreatePurchase({
                 <DialogTitle>Agregar Destino</DialogTitle>
               </DialogHeader>
               <CityForm
-                onSubmit={handleDestinationSave}
+                onSubmit={(data) => {
+                  setErrors((prevErrors) => ({
+                    ...prevErrors,
+                    destination: "",
+                  }));
+                  handleDestinationSave(data);
+                }}
                 isLoading={isLoading}
                 closeDialog={() => setIsDestinationModalOpen(false)}
                 initialData={{
