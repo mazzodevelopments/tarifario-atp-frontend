@@ -154,6 +154,10 @@ export default function ItemsList({ quotationId }: { quotationId: number }) {
     }
   };
 
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+  };
+
   return (
     <div className="w-full flex justify-center items-center max-w-4xl flex-col">
       <div className="w-auto h-auto overflow-hidden rounded-[12px] shadow-sm shadow-cyan-500/20">
@@ -280,6 +284,7 @@ export default function ItemsList({ quotationId }: { quotationId: number }) {
               onItemUpdated={handleItemUpdated}
               editingItem={editingItem}
               setEditingItem={setEditingItem}
+              onDialogClose={handleDialogClose}
             />{" "}
           </div>
         </DialogContent>

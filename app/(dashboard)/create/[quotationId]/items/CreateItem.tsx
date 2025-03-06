@@ -6,7 +6,6 @@ import { useState, useCallback, useEffect } from "react";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import Dropdown, { type DropdownItem } from "@/components/Dropdown";
-import { DialogClose } from "@/components/ui/dialog";
 import type { Item, CreateItem, ListedItem } from "@/types/Item";
 import { CatalogService } from "@/services/CatalogService";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
@@ -16,6 +15,7 @@ interface CreateItemProps {
   onItemUpdated: (item: CreateItem) => void;
   editingItem: ListedItem | null;
   setEditingItem: (item: ListedItem | null) => void;
+  onDialogClose: () => void;
 }
 
 interface CreateItemForm {
@@ -38,6 +38,7 @@ export default function CreateItem({
   onItemUpdated,
   editingItem,
   setEditingItem,
+  onDialogClose,
 }: CreateItemProps) {
   const [formData, setFormData] = useState<CreateItemForm>({
     family: "",
@@ -52,6 +53,17 @@ export default function CreateItem({
     unitId: null,
     partNumber: "",
     productNumber: "",
+  });
+  const [errors, setErrors] = useState({
+    family: "",
+    subfamily: "",
+    detail: "",
+    brand: "",
+    model: "",
+    quantity: "",
+    unit: "",
+    productNumber: "",
+    partNumber: "",
   });
 
   const [selectedBrandId, setSelectedBrandId] = useState<number | null>(null);
@@ -76,35 +88,95 @@ export default function CreateItem({
     }
   }, [editingItem]);
 
+  const validateForm = () => {
+    const newErrors = {
+      family: "",
+      subfamily: "",
+      detail: "",
+      brand: "",
+      model: "",
+      quantity: "",
+      unit: "",
+      productNumber: "",
+      partNumber: "",
+    };
+    let isValid = true;
+
+    if (!formData.family) {
+      newErrors.family = "La familia es requerida";
+      isValid = false;
+    }
+
+    if (!formData.subfamilyId) {
+      newErrors.subfamily = "La subfamilia es requerida";
+      isValid = false;
+    }
+
+    if (!formData.detail) {
+      newErrors.detail = "El detalle es requerido";
+      isValid = false;
+    }
+
+    if (!formData.brand) {
+      newErrors.brand = "La marca es requerida";
+      isValid = false;
+    }
+
+    if (!formData.modelId) {
+      newErrors.model = "El modelo es requerido";
+      isValid = false;
+    }
+
+    if (formData.quantity <= 0) {
+      newErrors.quantity = "La cantidad debe ser mayor a 0";
+      isValid = false;
+    }
+
+    if (!formData.unitId) {
+      newErrors.unit = "La unidad de medida es requerida";
+      isValid = false;
+    }
+
+    if (!formData.productNumber) {
+      newErrors.productNumber = "El número de producto es requerido";
+      isValid = false;
+    }
+
+    if (!formData.partNumber) {
+      newErrors.partNumber = "El part number es requerido";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
-    if (editingItem) {
-      const updatedItem: CreateItem = {
-        detail: formData.detail,
-        quantity: Number(formData.quantity),
-        partNumber: formData.partNumber,
-        productNumber: formData.productNumber,
-        subfamilyId: formData.subfamilyId!,
-        modelId: formData.modelId!,
-        unitId: formData.unitId!,
-      };
-
-      onItemUpdated(updatedItem);
-      setEditingItem(null);
-    } else {
-      const newItem: CreateItem = {
-        detail: formData.detail,
-        quantity: Number(formData.quantity),
-        partNumber: formData.partNumber,
-        productNumber: formData.productNumber,
-        subfamilyId: formData.subfamilyId!,
-        modelId: formData.modelId!,
-        unitId: formData.unitId!,
-      };
-      onItemCreated(newItem);
+    if (!validateForm()) {
+      return;
     }
+
+    const itemData: CreateItem = {
+      detail: formData.detail,
+      quantity: Number(formData.quantity),
+      partNumber: formData.partNumber,
+      productNumber: formData.productNumber,
+      subfamilyId: formData.subfamilyId!,
+      modelId: formData.modelId!,
+      unitId: formData.unitId!,
+    };
+
+    if (editingItem) {
+      onItemUpdated(itemData);
+    } else {
+      onItemCreated(itemData);
+    }
+
+    setEditingItem(null);
+    onDialogClose();
   };
 
   const handleChange = (
@@ -115,6 +187,7 @@ export default function CreateItem({
       ...prev,
       [name]: type === "number" ? Number(value) : value,
     }));
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
 
   const handleSelect = (field: keyof Item) => (item: DropdownItem) => {
@@ -137,6 +210,8 @@ export default function CreateItem({
       setSelectedFamilyId(item.id);
       setFormData((prev) => ({ ...prev, subfamilyId: null }));
     }
+
+    setErrors((prevErrors) => ({ ...prevErrors, [field]: "" }));
   };
 
   const fetchFamilies = useCallback(async () => {
@@ -175,7 +250,7 @@ export default function CreateItem({
           addItem={CatalogService.addFamily}
           onSelect={handleSelect("family")}
           label="Familia"
-          required
+          error={errors.family}
         />
         <Dropdown
           value={formData.subfamily}
@@ -185,7 +260,7 @@ export default function CreateItem({
           }
           onSelect={handleSelect("subfamily")}
           label="Subfamilia"
-          required
+          error={errors.subfamily}
           disabled={!selectedFamilyId}
         />
       </div>
@@ -197,7 +272,7 @@ export default function CreateItem({
         onChange={handleChange}
         placeholder="Detalle"
         label="Detalle"
-        required
+        error={errors.detail}
       />
       <Dropdown
         value={formData.brand}
@@ -205,7 +280,7 @@ export default function CreateItem({
         addItem={CatalogService.addBrand}
         onSelect={handleSelect("brand")}
         label="Marca"
-        required
+        error={errors.brand}
       />
       <Dropdown
         value={formData.model}
@@ -215,7 +290,7 @@ export default function CreateItem({
         }
         onSelect={handleSelect("model")}
         label="Modelo"
-        required
+        error={errors.model}
         disabled={!selectedBrandId}
       />
       <div className="grid grid-cols-2 gap-4">
@@ -223,11 +298,10 @@ export default function CreateItem({
           type="number"
           id="quantity"
           name="quantity"
-          min="1"
           value={formData.quantity}
           onChange={handleChange}
           label="Cantidad"
-          required
+          error={errors.quantity}
         />
         <Dropdown
           value={formData.unit}
@@ -235,7 +309,7 @@ export default function CreateItem({
           addItem={CatalogService.addUnit}
           onSelect={handleSelect("unit")}
           label="Unidad de Medida"
-          required
+          error={errors.unit}
         />
       </div>
       <Input
@@ -246,7 +320,7 @@ export default function CreateItem({
         onChange={handleChange}
         placeholder="Numero Producto Cliente"
         label="Numero Producto Cliente"
-        required
+        error={errors.productNumber}
       />
       <Input
         type="text"
@@ -256,20 +330,23 @@ export default function CreateItem({
         onChange={handleChange}
         placeholder="Part Number"
         label="Part Number (PN)"
-        required
+        error={errors.partNumber}
       />
 
       <div className="flex justify-end gap-3 mt-6">
-        <DialogClose asChild>
-          <Button type="button" variant="secondary">
-            Cancelar
-          </Button>
-        </DialogClose>
-        <DialogClose asChild>
-          <Button type="submit" className="bg-primary text-white">
-            {editingItem ? "Actualizar Item" : "Agregar Item"}
-          </Button>
-        </DialogClose>
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={() => {
+            setEditingItem(null);
+            onDialogClose();
+          }}
+        >
+          Cancelar
+        </Button>
+        <Button type="submit" variant="primary" className="text-white">
+          {editingItem ? "Actualizar Item" : "Agregar Item"}
+        </Button>
       </div>
     </form>
   );
