@@ -696,7 +696,9 @@ export default function CreatePurchase({
 
       {isWithinArgentina && (
         <div className="flex items-center justify-center">
-          <span className="text-sm font-[600] text-orange-500">Nacional</span>
+          <div className="py-1 px-3 rounded-3xl bg-orange-100 inline-block">
+            <span className="text-sm font-[600] text-orange-600">Nacional</span>
+          </div>
         </div>
       )}
 
