@@ -90,6 +90,20 @@ export default function CreatePurchase({
     incotermId: null,
     additionalObservations: "",
   });
+  const [errors, setErrors] = useState({
+    date: "",
+    item: "",
+    origin: "",
+    destination: "",
+    supplier: "",
+    currency: "",
+    unitPrice: "",
+    margin: "",
+    productionTime: "",
+    unitWeight: "",
+    weightUnit: "",
+    incoterm: "",
+  });
 
   const [isOriginModalOpen, setIsOriginModalOpen] = useState(false);
   const [isDestinationModalOpen, setIsDestinationModalOpen] = useState(false);
@@ -124,8 +138,101 @@ export default function CreatePurchase({
     }));
   }, [formData.unitPrice, formData.margin, formData.dollarValue]);
 
+  const validateForm = () => {
+    const newErrors = {
+      date: "",
+      item: "",
+      origin: "",
+      destination: "",
+      supplier: "",
+      currency: "",
+      unitPrice: "",
+      margin: "",
+      appliedUnitPrice: "",
+      productionTime: "",
+      unitWeight: "",
+      weightUnit: "",
+      incoterm: "",
+    };
+    let isValid = true;
+
+    if (!formData.date) {
+      newErrors.date = "La fecha es requerida";
+      isValid = false;
+    }
+
+    if (!formData.itemId) {
+      newErrors.item = "El item es requerido";
+      isValid = false;
+    }
+
+    if (!formData.origin) {
+      newErrors.origin = "El origen es requerido";
+      isValid = false;
+    }
+
+    if (!formData.destination) {
+      newErrors.destination = "El destino es requerido";
+      isValid = false;
+    }
+
+    if (!formData.supplierId) {
+      newErrors.supplier = "El proveedor es requerido";
+      isValid = false;
+    }
+
+    if (!formData.currencyId) {
+      newErrors.currency = "La moneda es requerida";
+      isValid = false;
+    }
+
+    if (formData.unitPrice <= 0) {
+      newErrors.unitPrice = "El precio unitario debe ser mayor a 0";
+      isValid = false;
+    }
+
+    if (formData.margin < 0 || formData.margin > 100) {
+      newErrors.margin = "El margen debe estar entre 0 y 100";
+      isValid = false;
+    }
+
+    if (formData.appliedUnitPrice <= 0) {
+      newErrors.appliedUnitPrice =
+        "El precio unitario aplicado debe ser mayor a 0";
+      isValid = false;
+    }
+
+    if (formData.productionTime <= 0) {
+      newErrors.productionTime = "El tiempo de producción debe ser mayor a 0";
+      isValid = false;
+    }
+
+    if (formData.unitWeight <= 0) {
+      newErrors.unitWeight = "El peso unitario debe ser mayor a 0";
+      isValid = false;
+    }
+
+    if (!formData.weightUnitId) {
+      newErrors.weightUnit = "La unidad de peso es requerida";
+      isValid = false;
+    }
+
+    if (!isWithinArgentina && !formData.incotermId) {
+      newErrors.incoterm = "El incoterm es requerido";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
     const purchaseData: CreatePurchaseData = {
       date: formData.date,
       unitPrice: formData.unitPrice,
@@ -156,6 +263,7 @@ export default function CreatePurchase({
       [name]:
         type === "number" && value !== "" ? Math.max(0, Number(value)) : value,
     }));
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
 
   const handleSelect =
@@ -198,6 +306,7 @@ export default function CreatePurchase({
           [`${field}Id`]: item?.id || null,
         }));
       }
+      setErrors((prevErrors) => ({ ...prevErrors, [field]: "" }));
     };
 
   const fetchSuppliers = useCallback(async () => {
@@ -363,14 +472,14 @@ export default function CreatePurchase({
         value={formData.date}
         onChange={handleChange}
         label="Fecha"
-        required
+        error={errors.date}
       />
       <Dropdown
         value={formData.item}
         fetchItems={fetchItems}
         onSelect={handleSelect("item")}
         label="Item"
-        required
+        error={errors.item}
       />
       <div className="grid grid-cols-3 gap-4">
         <div className="flex flex-col">
@@ -414,6 +523,9 @@ export default function CreatePurchase({
               />
             </DialogContent>
           </Dialog>
+          {errors.origin && (
+            <span className="text-xs mt-1 text-red-500">{errors.origin}</span>
+          )}
         </div>
 
         <div className="flex flex-col">
@@ -460,6 +572,11 @@ export default function CreatePurchase({
               />
             </DialogContent>
           </Dialog>
+          {errors.destination && (
+            <span className="text-xs mt-1 text-red-500">
+              {errors.destination}
+            </span>
+          )}
         </div>
         <Input
           type="number"
@@ -467,7 +584,7 @@ export default function CreatePurchase({
           value={formData.productionTime}
           onChange={handleChange}
           label="Tiempo de Producción (Días)"
-          required
+          error={errors.productionTime}
           min="0"
         />
       </div>
@@ -479,7 +596,7 @@ export default function CreatePurchase({
         }
         onSelect={handleSelect("supplier")}
         label="Proovedor"
-        required
+        error={errors.supplier}
       />
       <div className="grid grid-cols-2 gap-4">
         <Dropdown
@@ -490,7 +607,7 @@ export default function CreatePurchase({
           }
           onSelect={handleSelect("currency")}
           label="Moneda"
-          required
+          error={errors.currency}
         />
         <Input
           type="number"
@@ -499,7 +616,7 @@ export default function CreatePurchase({
           onChange={handleChange}
           label="Precio Unitario Proovedor"
           min="0"
-          required
+          error={errors.unitPrice}
         />
         {!isWithinArgentina && (
           <>
@@ -511,7 +628,7 @@ export default function CreatePurchase({
               label="Margen (%)"
               min="0"
               max="100"
-              required
+              error={errors.margin}
             />
             <Input
               type="number"
@@ -520,7 +637,6 @@ export default function CreatePurchase({
               onChange={handleChange}
               label="Precio Unitario Aplicado (USD)"
               min="0"
-              required
               disabled
             />
           </>
@@ -533,8 +649,7 @@ export default function CreatePurchase({
           value={formData.unitWeight}
           onChange={handleChange}
           label="Peso Unitario"
-          required
-          min="0"
+          error={errors.unitWeight}
         />
         <Dropdown
           value={formData.weightUnit}
@@ -547,7 +662,7 @@ export default function CreatePurchase({
           }
           onSelect={handleSelect("weightUnit")}
           label="Unidad de Peso"
-          required
+          error={errors.weightUnit}
         />
         <Input
           type="number"
@@ -566,7 +681,7 @@ export default function CreatePurchase({
         }
         onSelect={handleSelect("incoterm")}
         label="Incoterm"
-        required
+        error={errors.incoterm}
         disabled={isWithinArgentina}
       />
       <Input
@@ -594,7 +709,7 @@ export default function CreatePurchase({
         >
           Cancelar
         </Button>
-        <Button type="submit" className="text-sm bg-primary text-white">
+        <Button type="submit" variant="primary" className="text-white">
           Cargar Datos De Compra
         </Button>
       </div>
