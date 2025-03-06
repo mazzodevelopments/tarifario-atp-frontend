@@ -1,6 +1,6 @@
 "use client";
 
-import type React from "react";
+import React, { ChangeEvent } from "react";
 import { useState, useEffect, useCallback } from "react";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
@@ -664,14 +664,25 @@ export default function CreatePurchase({
           label="Unidad de Peso"
           error={errors.weightUnit}
         />
-        <Input
-          type="number"
-          name="totalWeight"
-          value={formData.totalWeight}
-          onChange={handleChange}
-          label="Peso Total"
-          disabled
-        />
+        <div className="flex flex-col">
+          <label className="block text-sm font-[600] text-gray-700">
+            Peso Total
+          </label>
+          <Input
+            type="text"
+            name="totalWeight"
+            value={`${formData.totalWeight} ${formData.weightUnit || ""}`.trim()}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              // EXTRAE SOLAMENTE EL VALOR NUMERICO
+              const numericValue = e.target.value.replace(/[^0-9.]/g, "");
+              setFormData((prev) => ({
+                ...prev,
+                totalWeight: numericValue ? parseFloat(numericValue) : 0,
+              }));
+            }}
+            disabled
+          />
+        </div>
       </div>
       <Dropdown
         value={formData.incoterm}
