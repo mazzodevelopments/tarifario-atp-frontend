@@ -17,12 +17,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { PlusCircle, Pencil } from "lucide-react";
-import { Country, City } from "country-state-city";
 import type { Supplier } from "@/types/Supplier";
 import SupplierForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/forms/SupplierForm";
 import IncotermForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/forms/IncotermForm";
 import CurrencyForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/forms/CurrencyForm";
 import WeightUnitForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/forms/WeightUnitForm";
+import CityForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/forms/CityForm";
 
 interface CreatePurchaseProps {
   onPurchaseCreated: (purchaseData: CreatePurchaseData) => void;
@@ -219,30 +219,6 @@ export default function CreatePurchase({
     return adaptToDropdown(weightUnits, "id", "name");
   }, []);
 
-  const fetchCountries = useCallback(async () => {
-    const countriesRaw = Country.getAllCountries();
-    const countries = countriesRaw.map((country, acc) => {
-      return { id: acc, name: country.name };
-    });
-    return Promise.resolve(adaptToDropdown(countries, "id", "name"));
-  }, []);
-
-  const fetchCities = useCallback(async (countryName: string) => {
-    const country = Country.getAllCountries().find(
-      (c) => c.name === countryName,
-    );
-    if (!country) return Promise.resolve([]);
-
-    const cities = City.getCitiesOfCountry(country.isoCode) || [];
-    return Promise.resolve(
-      adaptToDropdown(
-        cities.map((city, i) => ({ id: i, name: city.name })),
-        "id",
-        "name",
-      ),
-    );
-  }, []);
-
   const fetchIncoterms = useCallback(async () => {
     const incoterms = await CatalogService.listIncoterms();
     return adaptToDropdown(incoterms, "id", "abbreviation");
@@ -252,46 +228,30 @@ export default function CreatePurchase({
     return adaptToDropdown(items, "id", "detail");
   }, [items]);
 
-  const handleOriginSave = () => {
-    const newOrigin = formData.originCity
-      ? `${formData.originCity}, ${formData.originCountry}`
-      : formData.originCountry;
+  const handleOriginSave = (data: { city: string; country: string }) => {
+    const newOrigin = data.city
+      ? `${data.city}, ${data.country}`
+      : data.country;
 
     setFormData((prev) => ({
       ...prev,
       origin: newOrigin,
+      originCity: data.city,
+      originCountry: data.country,
     }));
     setIsOriginModalOpen(false);
   };
 
-  const handleDestinationSave = () => {
-    const newDestination = formData.destinationCity
-      ? `${formData.destinationCity}, ${formData.destinationCountry}`
-      : formData.destinationCountry;
+  const handleDestinationSave = (data: { city: string; country: string }) => {
+    const newDestination = data.city
+      ? `${data.city}, ${data.country}`
+      : data.country;
 
     setFormData((prev) => ({
       ...prev,
       destination: newDestination,
-    }));
-    setIsDestinationModalOpen(false);
-  };
-
-  const handleOriginCancel = () => {
-    setFormData((prev) => ({
-      ...prev,
-      originCountry: "",
-      originCity: "",
-      origin: "",
-    }));
-    setIsOriginModalOpen(false);
-  };
-
-  const handleDestinationCancel = () => {
-    setFormData((prev) => ({
-      ...prev,
-      destinationCountry: "",
-      destinationCity: "",
-      destination: "",
+      destinationCity: data.city,
+      destinationCountry: data.country,
     }));
     setIsDestinationModalOpen(false);
   };
@@ -443,38 +403,19 @@ export default function CreatePurchase({
               <DialogHeader>
                 <DialogTitle>Agregar Origen</DialogTitle>
               </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <Dropdown
-                  value={formData.originCountry}
-                  fetchItems={fetchCountries}
-                  onSelect={(item) => handleSelect("originCountry")(item)}
-                  label="País"
-                  required
-                />
-                <Dropdown
-                  value={formData.originCity}
-                  fetchItems={() => fetchCities(formData.originCountry)}
-                  onSelect={(item) => handleSelect("originCity")(item)}
-                  label="Ciudad"
-                  required
-                  disabled={!formData.originCountry}
-                />
-              </div>
-              <div className="w-full flex justify-end items-center gap-2">
-                <Button variant="secondary" onClick={handleOriginCancel}>
-                  Cancelar
-                </Button>
-                <Button
-                  variant="primary"
-                  className="px-8 text-white"
-                  onClick={handleOriginSave}
-                >
-                  Guardar
-                </Button>
-              </div>
+              <CityForm
+                onSubmit={handleOriginSave}
+                isLoading={isLoading}
+                closeDialog={() => setIsOriginModalOpen(false)}
+                initialData={{
+                  city: formData.originCity,
+                  country: formData.originCountry,
+                }}
+              />
             </DialogContent>
           </Dialog>
         </div>
+
         <div className="flex flex-col">
           <label className="block text-sm font-[600] text-gray-700">
             L. Entrega
@@ -508,35 +449,15 @@ export default function CreatePurchase({
               <DialogHeader>
                 <DialogTitle>Agregar Destino</DialogTitle>
               </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <Dropdown
-                  value={formData.destinationCountry}
-                  fetchItems={fetchCountries}
-                  onSelect={(item) => handleSelect("destinationCountry")(item)}
-                  label="País"
-                  required
-                />
-                <Dropdown
-                  value={formData.destinationCity}
-                  fetchItems={() => fetchCities(formData.destinationCountry)}
-                  onSelect={(item) => handleSelect("destinationCity")(item)}
-                  label="Ciudad"
-                  required
-                  disabled={!formData.destinationCountry}
-                />
-              </div>
-              <div className="w-full flex justify-end items-center gap-2">
-                <Button variant="secondary" onClick={handleDestinationCancel}>
-                  Cancelar
-                </Button>
-                <Button
-                  variant="primary"
-                  className="px-8 text-white"
-                  onClick={handleDestinationSave}
-                >
-                  Guardar
-                </Button>
-              </div>
+              <CityForm
+                onSubmit={handleDestinationSave}
+                isLoading={isLoading}
+                closeDialog={() => setIsDestinationModalOpen(false)}
+                initialData={{
+                  city: formData.destinationCity,
+                  country: formData.destinationCountry,
+                }}
+              />
             </DialogContent>
           </Dialog>
         </div>
