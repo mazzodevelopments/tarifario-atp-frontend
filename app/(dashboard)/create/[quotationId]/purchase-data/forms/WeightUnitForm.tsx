@@ -98,8 +98,6 @@ export default function WeightUnitForm({
         ) => handleChange("kgValue", e.target.value)}
         placeholder="Valor Kilogramo"
         label="Valor Kilogramo"
-        step={0.1}
-        min={0}
         error={errors.kgValue}
       />
 
