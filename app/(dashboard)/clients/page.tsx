@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import Header from "@/app/(dashboard)/components/Header";
 import {
@@ -22,19 +21,22 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Pencil } from "lucide-react";
+import ClientDetails from "@/app/(dashboard)/clients/ClientDetails"; // Asegúrate de importar el componente
 
 export default function Clients() {
   const [clients, setClients] = useState<Client[]>([]);
   const [editedClient, setEditedClient] = useState<Client | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [detailDialogOpen, setDetailDialogOpen] = useState(false);
+  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
   const [shouldFetch, setShouldFetch] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchClients = async () => {
       try {
-        const fetchedClients = await CatalogService.listClients();
+        const fetchedClients = await CatalogService.listClientsWithBuyers();
         setClients(fetchedClients);
         setShouldFetch(false);
       } catch (error) {
@@ -51,7 +53,9 @@ export default function Clients() {
     setIsLoading(true);
     try {
       if (editedClient) {
-        await CatalogService.editClient({ ...editedClient, ...data });
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { buyers, ...clientData } = editedClient;
+        await CatalogService.editClient({ ...clientData, ...data });
       } else {
         await CatalogService.addClient(data);
       }
@@ -69,6 +73,19 @@ export default function Clients() {
   const handleEdit = (client: Client) => {
     setEditedClient(client);
     setEditDialogOpen(true);
+  };
+
+  const handleViewDetails = (client: Client) => {
+    setSelectedClient(client);
+    setDetailDialogOpen(true);
+  };
+
+  const handleBuyerAdded = () => {
+    setShouldFetch(true);
+  };
+
+  const handleCloseDetails = () => {
+    setDetailDialogOpen(false);
   };
 
   return (
@@ -122,7 +139,7 @@ export default function Clients() {
                         {client.name}
                       </TableCell>
                       <TableCell className="font-[600] text-black">
-                        {Math.floor(Math.random() * 20) + 1}
+                        {client.buyers?.length || 0}
                       </TableCell>
                       <TableCell>
                         <div className="flex justify-center gap-2">
@@ -135,6 +152,7 @@ export default function Clients() {
                           <Button
                             variant="secondary"
                             className="p-1 h-auto hover:bg-gray-100"
+                            onClick={() => handleViewDetails(client)}
                           >
                             Detalles
                           </Button>
@@ -171,6 +189,15 @@ export default function Clients() {
           />
         </DialogContent>
       </Dialog>
+
+      {selectedClient && (
+        <ClientDetails
+          client={selectedClient}
+          onClose={handleCloseDetails}
+          onBuyerAdded={handleBuyerAdded}
+          open={detailDialogOpen}
+        />
+      )}
     </div>
   );
 }

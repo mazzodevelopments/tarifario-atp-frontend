@@ -1,11 +1,22 @@
 import { API_BASE_URL } from "@/app/utils/config";
 import { EditSupplier, Supplier } from "@/types/Supplier";
-import { Client } from "@/types/Client";
+import { Client, EditClient } from "@/types/Client";
 
 export const CatalogService = {
   // CLIENT
   listClients: async (): Promise<{ id: number; name: string }[]> => {
     const response = await fetch(`${API_BASE_URL}/catalog/clients`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al traer clientes");
+    }
+
+    return await response.json();
+  },
+  listClientsWithBuyers: async (): Promise<{ id: number; name: string }[]> => {
+    const response = await fetch(`${API_BASE_URL}/catalog/clients-buyers`, {
       method: "GET",
     });
 
@@ -32,7 +43,7 @@ export const CatalogService = {
     console.log("Cliente agregado:", data);
     return data;
   },
-  editClient: async (editedClient: Client): Promise<number> => {
+  editClient: async (editedClient: EditClient): Promise<number> => {
     const response = await fetch(`${API_BASE_URL}/catalog/client`, {
       method: "PUT",
       headers: {
