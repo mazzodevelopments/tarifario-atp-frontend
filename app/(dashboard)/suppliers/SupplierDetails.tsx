@@ -261,7 +261,7 @@ export default function SupplierDetails({
                 <Button
                   variant="primary"
                   onClick={handleAddFamily}
-                  className="text-white px-4 items-center h-10"
+                  className="px-4 items-center h-10 border bg-primary/5 text-primary"
                   disabled={!selectedFamily || isLoading}
                 >
                   {isLoading ? "Agregando..." : "Agregar"}
