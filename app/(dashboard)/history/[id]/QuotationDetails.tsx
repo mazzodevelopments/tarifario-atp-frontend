@@ -8,10 +8,8 @@ import { QuotationsService } from "@/services/QuotationsService";
 interface QuotationDetail {
   id: number;
   buyer: {
-    person: {
-      name: string;
-      lastname: string;
-    };
+    name: string;
+    lastname: string;
     client: {
       name: string;
     };
@@ -79,9 +77,7 @@ export default function QuotationDetails({
             <div className="space-y-1">
               <p className="text-sm text-gray-500">Comprador</p>
               <p className="font-medium">
-                {quotation.buyer.person.name +
-                  " " +
-                  quotation.buyer.person.lastname}
+                {quotation.buyer.name + " " + quotation.buyer.lastname}
               </p>
             </div>
           </div>
