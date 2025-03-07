@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useMemo } from "react";
 import type { Supplier } from "@/types/Supplier";
 import {
   Dialog,
@@ -40,10 +40,19 @@ export default function SupplierDetails({
     id: number;
     name: string;
   } | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     setSupplier(initialSupplier);
   }, [initialSupplier]);
+
+  // FILTRAR S/ TERM
+  const filteredFamilies = useMemo(() => {
+    if (!supplier.families) return [];
+    return supplier.families.filter((family) =>
+      family.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+  }, [supplier.families, searchTerm]);
 
   const fetchFamilies = useCallback(async () => {
     const families = await CatalogService.listFamilies();
@@ -212,35 +221,46 @@ export default function SupplierDetails({
               <h4 className="font-semibold text-gray-800 mb-3 text-sm">
                 Familias que provee
               </h4>
-              {supplier.families && supplier.families.length > 0 ? (
-                <div className="space-y-2">
-                  {supplier.families.map((family) => (
-                    <div
-                      className="flex items-center justify-between h-6"
-                      key={family.id}
-                    >
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-gray-700 mr-1"></div>
-                        <span className="text-gray-700 text-sm">
-                          {family.name}
-                        </span>
-                      </div>
-                      <button
-                        onClick={() => openDeleteDialog(family)}
-                        className="text-red-500 hover:text-red-700 text-sm px-2 py-1 rounded hover:bg-red-50 transition-colors"
-                        disabled={isLoading}
-                        type="button"
+              {/* INPUT */}
+              <input
+                type="text"
+                placeholder="Buscar familia..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full px-3 py-1 mb-3 border border-gray-300 rounded-md focus:outline-none text-sm"
+              />
+              {/* CONTENEDOR CON SCROLL */}
+              <div className="max-h-48 overflow-y-auto">
+                {filteredFamilies.length > 0 ? (
+                  <div className="space-y-2">
+                    {filteredFamilies.map((family) => (
+                      <div
+                        className="flex items-center justify-between h-6"
+                        key={family.id}
                       >
-                        <Trash size={16} />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-sm text-gray-500">
-                  No hay familias asociadas a este proveedor.
-                </p>
-              )}
+                        <div className="flex items-center gap-2 ml-1">
+                          <div className="w-1.5 h-1.5 rounded-full bg-gray-700"></div>
+                          <span className="text-gray-700 text-sm">
+                            {family.name}
+                          </span>
+                        </div>
+                        <button
+                          onClick={() => openDeleteDialog(family)}
+                          className="text-red-500 hover:text-red-700 text-sm px-2 py-1 rounded hover:bg-red-50 transition-colors"
+                          disabled={isLoading}
+                          type="button"
+                        >
+                          <Trash size={16} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-gray-500">
+                    No hay familias asociadas a este proveedor.
+                  </p>
+                )}
+              </div>
             </div>
 
             <div className="border-t pt-4">

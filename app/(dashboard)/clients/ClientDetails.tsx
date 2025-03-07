@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   Dialog,
   DialogContent,
@@ -36,10 +36,19 @@ export default function ClientDetails({
     name: string;
   } | null>(null);
   const [isBuyerFormOpen, setIsBuyerFormOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     setClient(initialClient);
   }, [initialClient]);
+
+  // FILTRAR S/ TERM
+  const filteredBuyers = useMemo(() => {
+    if (!client.buyers) return [];
+    return client.buyers.filter((buyer) =>
+      buyer.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+  }, [client.buyers, searchTerm]);
 
   const handleAddBuyer = async (data: {
     phone: string;
@@ -135,35 +144,46 @@ export default function ClientDetails({
             <h4 className="font-semibold text-gray-800 mb-3 text-sm">
               Compradores
             </h4>
-            {client.buyers && client.buyers.length > 0 ? (
-              <div className="space-y-2">
-                {client.buyers.map((buyer) => (
-                  <div
-                    className="flex items-center justify-between h-6"
-                    key={buyer.id}
-                  >
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-gray-700 mr-1"></div>
-                      <span className="text-gray-700 text-sm">
-                        {buyer.name} {buyer.lastname}
-                      </span>
-                    </div>
-                    <button
-                      onClick={() => openDeleteDialog(buyer)}
-                      className="text-red-500 hover:text-red-700 text-sm px-2 py-1 rounded hover:bg-red-50 transition-colors"
-                      disabled={isLoading}
-                      type="button"
+            {/* INPUT DE BÚSQUEDA */}
+            <input
+              type="text"
+              placeholder="Buscar comprador..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full px-3 py-1 mb-3 border border-gray-300 rounded-md focus:outline-none text-sm"
+            />
+            {/* CONTENEDOR CON SCROLL */}
+            <div className="max-h-48 overflow-y-auto">
+              {filteredBuyers.length > 0 ? (
+                <div className="space-y-2">
+                  {filteredBuyers.map((buyer) => (
+                    <div
+                      className="flex items-center justify-between h-6"
+                      key={buyer.id}
                     >
-                      <Trash size={16} />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-sm text-gray-500">
-                No hay compradores asociados a este cliente.
-              </p>
-            )}
+                      <div className="flex items-center gap-2 ml-1">
+                        <div className="w-1.5 h-1.5 rounded-full bg-gray-700"></div>
+                        <span className="text-gray-700 text-sm">
+                          {buyer.name} {buyer.lastname}
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => openDeleteDialog(buyer)}
+                        className="text-red-500 hover:text-red-700 text-sm px-2 py-1 rounded hover:bg-red-50 transition-colors"
+                        disabled={isLoading}
+                        type="button"
+                      >
+                        <Trash size={16} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-gray-500">
+                  No hay compradores asociados a este cliente.
+                </p>
+              )}
+            </div>
           </div>
 
           <div className="border-t pt-4">
