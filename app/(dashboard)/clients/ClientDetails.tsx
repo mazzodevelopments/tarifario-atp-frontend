@@ -13,7 +13,7 @@ import Button from "@/components/Button";
 import { CatalogService } from "@/services/CatalogService";
 import { AlertTriangle, Trash } from "lucide-react";
 import { Client } from "@/types/Client";
-import { BuyerForm } from "@/app/(dashboard)/create/[quotationId]/quotation-details/forms/BuyerForm";
+import BuyerForm from "@/app/(dashboard)/create/[quotationId]/quotation-details/forms/BuyerForm";
 
 interface ClientDetailsProps {
   client: Client;

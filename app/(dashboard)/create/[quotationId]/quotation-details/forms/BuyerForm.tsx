@@ -4,6 +4,7 @@ import Button from "@/components/Button";
 import Dropdown from "@/components/Dropdown";
 import { Country, City } from "country-state-city";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
+import parsePhoneNumberFromString from "libphonenumber-js";
 
 interface BuyerFormProps {
   onSubmit: (data: {
@@ -22,11 +23,11 @@ interface BuyerFormProps {
   closeDialog?: () => void;
 }
 
-export const BuyerForm: React.FC<BuyerFormProps> = ({
+export default function BuyerForm({
   onSubmit,
   isLoading,
   closeDialog,
-}) => {
+}: BuyerFormProps) {
   const [formData, setFormData] = useState({
     name: "",
     lastname: "",
@@ -40,13 +41,111 @@ export const BuyerForm: React.FC<BuyerFormProps> = ({
     zipCode: "",
   });
 
+  const [errors, setErrors] = useState({
+    name: "",
+    lastname: "",
+    email: "",
+    phone: "",
+    birthDate: "",
+    street: "",
+    streetNumber: "",
+    country: "",
+    city: "",
+    zipCode: "",
+  });
+
   const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+    setErrors((prev) => ({ ...prev, [field]: "" }));
+  };
+
+  const validateForm = () => {
+    const newErrors = {
+      name: "",
+      lastname: "",
+      email: "",
+      phone: "",
+      birthDate: "",
+      street: "",
+      streetNumber: "",
+      country: "",
+      city: "",
+      zipCode: "",
+    };
+    let isValid = true;
+
+    if (!formData.name) {
+      newErrors.name = "El nombre es requerido";
+      isValid = false;
+    }
+
+    if (!formData.lastname) {
+      newErrors.lastname = "El apellido es requerido";
+      isValid = false;
+    }
+
+    if (!formData.email) {
+      newErrors.email = "El email es requerido";
+      isValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "El email no es válido";
+      isValid = false;
+    }
+
+    if (!formData.phone) {
+      newErrors.phone = "El teléfono es requerido";
+      isValid = false;
+    } else {
+      const phoneNumber = parsePhoneNumberFromString(formData.phone);
+      if (!phoneNumber || !phoneNumber.isValid()) {
+        newErrors.phone =
+          "El teléfono debe ser válido e incluir un código de región (ej: +52)";
+        isValid = false;
+      }
+    }
+
+    if (!formData.birthDate) {
+      newErrors.birthDate = "La fecha de nacimiento es requerida";
+      isValid = false;
+    }
+
+    if (!formData.street) {
+      newErrors.street = "La calle es requerida";
+      isValid = false;
+    }
+
+    if (!formData.streetNumber) {
+      newErrors.streetNumber = "El número de calle es requerido";
+      isValid = false;
+    }
+
+    if (!formData.country) {
+      newErrors.country = "El país es requerido";
+      isValid = false;
+    }
+
+    if (!formData.city) {
+      newErrors.city = "La ciudad es requerida";
+      isValid = false;
+    }
+
+    if (!formData.zipCode) {
+      newErrors.zipCode = "El código postal es requerido";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (!validateForm()) {
+      return;
+    }
+
     await onSubmit(formData);
     closeDialog?.();
   };
@@ -86,7 +185,7 @@ export const BuyerForm: React.FC<BuyerFormProps> = ({
           ) => handleChange("name", e.target.value)}
           placeholder="Nombre"
           label="Nombre"
-          required
+          error={errors.name}
         />
         <Input
           type="text"
@@ -96,7 +195,7 @@ export const BuyerForm: React.FC<BuyerFormProps> = ({
           ) => handleChange("lastname", e.target.value)}
           placeholder="Apellido"
           label="Apellido"
-          required
+          error={errors.lastname}
         />
       </div>
       <Input
@@ -107,7 +206,7 @@ export const BuyerForm: React.FC<BuyerFormProps> = ({
         ) => handleChange("email", e.target.value)}
         placeholder="Email"
         label="Email"
-        required
+        error={errors.email}
       />
       <Input
         type="tel"
@@ -117,7 +216,7 @@ export const BuyerForm: React.FC<BuyerFormProps> = ({
         ) => handleChange("phone", e.target.value)}
         placeholder="Teléfono"
         label="Teléfono"
-        required
+        error={errors.phone}
       />
       <Input
         type="date"
@@ -127,7 +226,7 @@ export const BuyerForm: React.FC<BuyerFormProps> = ({
         ) => handleChange("birthDate", e.target.value)}
         placeholder="Fecha de Nacimiento"
         label="Fecha de Nacimiento"
-        required
+        error={errors.birthDate}
       />
       <div className="grid grid-cols-2 gap-4">
         <Input
@@ -138,7 +237,7 @@ export const BuyerForm: React.FC<BuyerFormProps> = ({
           ) => handleChange("street", e.target.value)}
           placeholder="Calle"
           label="Calle"
-          required
+          error={errors.street}
         />
         <Input
           type="string"
@@ -148,7 +247,7 @@ export const BuyerForm: React.FC<BuyerFormProps> = ({
           ) => handleChange("streetNumber", e.target.value)}
           placeholder="Número"
           label="Número"
-          required
+          error={errors.streetNumber}
         />
       </div>
       <Dropdown
@@ -156,7 +255,7 @@ export const BuyerForm: React.FC<BuyerFormProps> = ({
         fetchItems={fetchCountries}
         onSelect={(item) => handleChange("country", item.name)}
         label="País"
-        required
+        error={errors.country}
       />
       <div className="grid grid-cols-2 gap-4">
         <Dropdown
@@ -164,7 +263,7 @@ export const BuyerForm: React.FC<BuyerFormProps> = ({
           fetchItems={() => fetchCities(formData.country)}
           onSelect={(item) => handleChange("city", item.name)}
           label="Ciudad"
-          required
+          error={errors.city}
           disabled={!formData.country}
         />
         <Input
@@ -175,7 +274,7 @@ export const BuyerForm: React.FC<BuyerFormProps> = ({
           ) => handleChange("zipCode", e.target.value)}
           placeholder="Código Postal"
           label="Código Postal"
-          required
+          error={errors.zipCode}
         />
       </div>
 
@@ -191,4 +290,4 @@ export const BuyerForm: React.FC<BuyerFormProps> = ({
       </div>
     </form>
   );
-};
+}

@@ -8,7 +8,7 @@ import type { QuotationData, CreateQuotationData } from "@/types/QuotationData";
 import { QuoteService } from "@/services/QuoteService";
 import { CatalogService } from "@/services/CatalogService";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
-import { BuyerForm } from "@/app/(dashboard)/create/[quotationId]/quotation-details/forms/BuyerForm";
+import BuyerForm from "@/app/(dashboard)/create/[quotationId]/quotation-details/forms/BuyerForm";
 import ClientForm from "@/app/(dashboard)/create/[quotationId]/quotation-details/forms/ClientForm";
 import Button from "@/components/Button";
 
