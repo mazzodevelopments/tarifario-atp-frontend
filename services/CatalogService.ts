@@ -106,6 +106,18 @@ export const CatalogService = {
     console.log("Cliente agregado:", data);
     return data;
   },
+  deleteBuyer: async (buyerId: number): Promise<{ message: string }> => {
+    const response = await fetch(`${API_BASE_URL}/catalog/buyer/${buyerId}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al agregar cliente");
+    }
+
+    const data = await response.json();
+    return data;
+  },
 
   // BRAND
   listBrands: async (): Promise<{ id: number; name: string }[]> => {

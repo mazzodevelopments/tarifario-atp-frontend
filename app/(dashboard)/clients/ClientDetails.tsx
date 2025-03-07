@@ -66,7 +66,7 @@ export default function ClientDetails({
           ...(client.buyers || []),
           {
             id: buyerId,
-            name: data.name + data.lastname,
+            name: data.name + " " + data.lastname,
           },
         ],
       };
@@ -95,25 +95,13 @@ export default function ClientDetails({
     setBuyerToDelete(null);
   };
 
-  // TODO
   const handleDeleteBuyer = async () => {
     if (!buyerToDelete) return;
 
     setIsLoading(true);
     try {
-      const existingBuyerIds = client.buyers!.map((buyer) => Number(buyer.id));
-      const updatedBuyerIds = existingBuyerIds.filter(
-        (id) => id !== buyerToDelete.id,
-      );
+      await CatalogService.deleteBuyer(buyerToDelete.id);
 
-      const editedClient = {
-        id: client.id,
-        buyerIds: updatedBuyerIds,
-      };
-
-      await CatalogService.editClient(editedClient);
-
-      // Update local state by removing the buyer
       const updatedClient = {
         ...client,
         buyers: client.buyers!.filter(
@@ -183,8 +171,8 @@ export default function ClientDetails({
               Agregar Comprador
             </h4>
             <Button
-              variant="secondary"
-              className="flex px-4 items-center h-10 w-full justify-center"
+              variant="primary"
+              className="flex px-4 items-center h-10 w-full justify-center border bg-primary/5 text-primary"
               onClick={() => setIsBuyerFormOpen(true)}
               disabled={isLoading}
             >
@@ -194,7 +182,7 @@ export default function ClientDetails({
         </DialogContent>
       </Dialog>
 
-      {/* Buyer Form Dialog */}
+      {/* BUYER FORM */}
       <Dialog open={isBuyerFormOpen} onOpenChange={setIsBuyerFormOpen}>
         <DialogContent className="max-w-md sm:max-w-lg">
           <DialogHeader>
