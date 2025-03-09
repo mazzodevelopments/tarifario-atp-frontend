@@ -469,9 +469,9 @@ export default function Dashboard() {
                     {usersTest.map((user) => (
                       <div
                         key={user.id}
-                        className="w-full flex items-center justify-start"
+                        className="w-full flex items-center justify-between"
                       >
-                        <div className="">
+                        <div className="flex items-center justify-start">
                           <div className="flex items-center space-x-2">
                             <Image
                               src={user.profilePic || defaultProfilePic}
@@ -513,6 +513,10 @@ export default function Dashboard() {
                           <div className="">
                             <p className="text-sm">{user.email}</p>
                           </div>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Button variant="secondary">Ver cotizaciones</Button>
+                          <Button variant="secondary">Gestionar usuario</Button>
                         </div>
                       </div>
                     ))}
