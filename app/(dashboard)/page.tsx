@@ -257,7 +257,7 @@ export default function Dashboard() {
         </div>
 
         <div className="w-2/3 h-full flex flex-col relative p-6 gap-3">
-          <div className="w-full flex flex-col pb-1">
+          <div className="w-full flex flex-col pb-1 h-20">
             <h2 className="text-3xl font-[800]">Panel Administrador</h2>
             <p className="text-gray-500 ml-1">
               Panel de acciones de administrador
@@ -383,7 +383,7 @@ export default function Dashboard() {
                   </div>
                 </div>
 
-                <ScrollArea className="flex-grow border-neutral-100 border-t px-4 h-[31vw]">
+                <ScrollArea className="flex-grow border-neutral-100 border-t px-4 h-full">
                   <div className="space-y-4 mt-4">
                     {usersTest.map((user) => (
                       <div
