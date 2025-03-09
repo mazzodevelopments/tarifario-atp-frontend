@@ -471,41 +471,48 @@ export default function Dashboard() {
                         key={user.id}
                         className="w-full flex items-center justify-start"
                       >
-                        <div className="flex items-center space-x-2">
-                          <Image
-                            src={user.profilePic || defaultProfilePic}
-                            width={700}
-                            height={700}
-                            alt="Picture of the author"
-                            className="w-8 h-8 rounded-full"
-                          />
-                          <div className="min-w-64 flex items-center">
-                            <p className="text-md font-semibold mr-1">
-                              {user.name}
-                            </p>
-                            <p className="text-md font-semibold mr-4">
-                              {user.surname}
-                            </p>
-                            <p className="text-sm font-semibold opacity-60">
-                              @{user.username}
-                            </p>
+                        <div className="">
+                          <div className="flex items-center space-x-2">
+                            <Image
+                              src={user.profilePic || defaultProfilePic}
+                              width={700}
+                              height={700}
+                              alt="Picture of the author"
+                              className="w-8 h-8 rounded-full"
+                            />
+                            <div className="min-w-64 flex items-center">
+                              <p className="text-md font-semibold mr-1">
+                                {user.name}
+                              </p>
+                              <p className="text-md font-semibold mr-4">
+                                {user.surname}
+                              </p>
+                              <p className="text-sm font-semibold opacity-60">
+                                @{user.username}
+                              </p>
+                            </div>
                           </div>
-                        </div>
-                        <div
-                          className={`px-2 rounded-3xl ${
-                            user.role === "superadmin"
-                              ? // Recordar poner user.role.name cuando funcione con db
-                                "bg-red-100 text-red-500"
-                              : user.role === "admin"
-                              ? // Recordar poner user.role.name cuando funcione con db
-                                "bg-blue-100 text-blue-500"
-                              : "bg-neutral-100 text-black"
-                          }`}
-                        >
-                          <span className="text-sm font-semibold">
-                            {user.role}
-                            {/* Recordar poner user.role.name cuando funcione con db */}
-                          </span>
+                          <div className="w-28">
+                            <div
+                              className={`px-2 rounded-3xl inline-block ${
+                                user.role === "superadmin"
+                                  ? // Recordar poner user.role.name cuando funcione con db
+                                    "bg-red-100 text-red-500"
+                                  : user.role === "admin"
+                                  ? // Recordar poner user.role.name cuando funcione con db
+                                    "bg-blue-100 text-blue-500"
+                                  : "bg-neutral-100 text-black"
+                              }`}
+                            >
+                              <span className="text-sm font-semibold">
+                                {user.role}
+                                {/* Recordar poner user.role.name cuando funcione con db */}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="">
+                            <p className="text-sm">{user.email}</p>
+                          </div>
                         </div>
                       </div>
                     ))}
