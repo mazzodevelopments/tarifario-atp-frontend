@@ -47,57 +47,138 @@ type User = {
 const usersTest = [
   {
     id: "1",
-    username: "hola123",
+    username: "mmonzalvo",
     profilePic: "",
-    role: "admin",
-    email: "hola@gmail.com",
-    Nombre: "Matias",
-    Apellido: "Monzalvo",
+    role: "superadmin",
+    email: "matias.monzalvo@example.com",
+    name: "Matias",
+    surname: "Monzalvo",
   },
   {
     id: "2",
-    username: "hola123",
+    username: "lrodriguez",
     profilePic: "",
     role: "admin",
-    email: "hola@gmail.com",
-    Nombre: "Matias",
-    Apellido: "Monzalvo",
+    email: "laura.rodriguez@example.com",
+    name: "Laura",
+    surname: "Rodriguez",
   },
   {
     id: "3",
-    username: "hola123",
+    username: "cgomez",
     profilePic: "",
-    role: "admin",
-    email: "hola@gmail.com",
-    Nombre: "Matias",
-    Apellido: "Monzalvo",
+    role: "user",
+    email: "carlos.gomez@example.com",
+    name: "Carlos",
+    surname: "Gomez",
   },
   {
     id: "4",
-    username: "hola123",
+    username: "aperez",
     profilePic: "",
-    role: "admin",
-    email: "hola@gmail.com",
-    Nombre: "Matias",
-    Apellido: "Monzalvo",
+    role: "user",
+    email: "ana.perez@example.com",
+    name: "Ana",
+    surname: "Perez",
   },
   {
     id: "5",
-    username: "hola123",
+    username: "jhernandez",
     profilePic: "",
     role: "admin",
-    email: "hola@gmail.com",
-    Nombre: "Matias",
-    Apellido: "Monzalvo",
+    email: "juan.hernandez@example.com",
+    name: "Juan",
+    surname: "Hernandez",
   },
   {
     id: "6",
-    username: "hola123",
+    username: "mlopez",
+    profilePic: "",
+    role: "user",
+    email: "maria.lopez@example.com",
+    name: "Maria",
+    surname: "Lopez",
+  },
+  {
+    id: "7",
+    username: "dcastro",
+    profilePic: "",
+    role: "user",
+    email: "diego.castro@example.com",
+    name: "Diego",
+    surname: "Castro",
+  },
+  {
+    id: "8",
+    username: "sgonzalez",
     profilePic: "",
     role: "admin",
-    email: "hola@gmail.com",
-    Nombre: "Matias",
-    Apellido: "Monzalvo",
+    email: "sofia.gonzalez@example.com",
+    name: "Sofia",
+    surname: "Gonzalez",
+  },
+  {
+    id: "9",
+    username: "pmartinez",
+    profilePic: "",
+    role: "user",
+    email: "pedro.martinez@example.com",
+    name: "Pedro",
+    surname: "Martinez",
+  },
+  {
+    id: "10",
+    username: "rfernandez",
+    profilePic: "",
+    role: "admin",
+    email: "roberto.fernandez@example.com",
+    name: "Roberto",
+    surname: "Fernandez",
+  },
+  {
+    id: "11",
+    username: "aflores",
+    profilePic: "",
+    role: "user",
+    email: "andrea.flores@example.com",
+    name: "Andrea",
+    surname: "Flores",
+  },
+  {
+    id: "12",
+    username: "jtorres",
+    profilePic: "",
+    role: "admin",
+    email: "javier.torres@example.com",
+    name: "Javier",
+    surname: "Torres",
+  },
+  {
+    id: "13",
+    username: "mruiz",
+    profilePic: "",
+    role: "user",
+    email: "marta.ruiz@example.com",
+    name: "Marta",
+    surname: "Ruiz",
+  },
+  {
+    id: "14",
+    username: "osantos",
+    profilePic: "",
+    role: "user",
+    email: "oscar.santos@example.com",
+    name: "Oscar",
+    surname: "Santos",
+  },
+  {
+    id: "15",
+    username: "lmoreno",
+    profilePic: "",
+    role: "admin",
+    email: "lucia.moreno@example.com",
+    name: "Lucia",
+    surname: "Moreno",
   },
 ];
 
@@ -383,7 +464,7 @@ export default function Dashboard() {
                   </div>
                 </div>
 
-                <ScrollArea className="flex-grow border-neutral-100 border-t px-4 h-full">
+                <ScrollArea className="border-neutral-100 border-t px-4 h-[28vw]">
                   <div className="space-y-4 mt-4">
                     {usersTest.map((user) => (
                       <div
@@ -398,9 +479,15 @@ export default function Dashboard() {
                             alt="Picture of the author"
                             className="w-8 h-8 rounded-full"
                           />
-                          <div className="min-w-40">
-                            <p className="text-md font-semibold">
-                              {user.username}
+                          <div className="min-w-64 flex items-center">
+                            <p className="text-md font-semibold mr-1">
+                              {user.name}
+                            </p>
+                            <p className="text-md font-semibold mr-4">
+                              {user.surname}
+                            </p>
+                            <p className="text-sm font-semibold opacity-60">
+                              @{user.username}
                             </p>
                           </div>
                         </div>
