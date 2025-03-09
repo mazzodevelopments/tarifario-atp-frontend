@@ -44,6 +44,63 @@ type User = {
   };
 };
 
+const usersTest = [
+  {
+    id: "1",
+    username: "hola123",
+    profilePic: "",
+    role: "admin",
+    email: "hola@gmail.com",
+    Nombre: "Matias",
+    Apellido: "Monzalvo",
+  },
+  {
+    id: "2",
+    username: "hola123",
+    profilePic: "",
+    role: "admin",
+    email: "hola@gmail.com",
+    Nombre: "Matias",
+    Apellido: "Monzalvo",
+  },
+  {
+    id: "3",
+    username: "hola123",
+    profilePic: "",
+    role: "admin",
+    email: "hola@gmail.com",
+    Nombre: "Matias",
+    Apellido: "Monzalvo",
+  },
+  {
+    id: "4",
+    username: "hola123",
+    profilePic: "",
+    role: "admin",
+    email: "hola@gmail.com",
+    Nombre: "Matias",
+    Apellido: "Monzalvo",
+  },
+  {
+    id: "5",
+    username: "hola123",
+    profilePic: "",
+    role: "admin",
+    email: "hola@gmail.com",
+    Nombre: "Matias",
+    Apellido: "Monzalvo",
+  },
+  {
+    id: "6",
+    username: "hola123",
+    profilePic: "",
+    role: "admin",
+    email: "hola@gmail.com",
+    Nombre: "Matias",
+    Apellido: "Monzalvo",
+  },
+];
+
 export default function Dashboard() {
   const salesData = [
     { month: "Ene", sales: 4000 },
@@ -66,54 +123,54 @@ export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("all");
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await fetch(
-          `https://apitarifario.mazzodevelopments.com/admin/users`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
+  // useEffect(() => {
+  //   const fetchUsers = async () => {
+  //     try {
+  //       const response = await fetch(
+  //         `https://apitarifario.mazzodevelopments.com/admin/users`,
+  //         {
+  //           method: "GET",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //             Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //           },
+  //         }
+  //       );
 
-        if (!response.ok) {
-          throw new Error("Error fetching users");
-        }
+  //       if (!response.ok) {
+  //         throw new Error("Error fetching users");
+  //       }
 
-        const data = await response.json();
-        setUsers(data);
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
+  //       const data = await response.json();
+  //       setUsers(data);
+  //     } catch (error) {
+  //       console.error("Error:", error);
+  //     }
+  //   };
 
-    const fetchLastFiveQuotations = async () => {
-      try {
-        const data = await QuotationsService.getLastFiveFinishedQuotations();
-        setLastQuotations(data);
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
+  //   const fetchLastFiveQuotations = async () => {
+  //     try {
+  //       const data = await QuotationsService.getLastFiveFinishedQuotations();
+  //       setLastQuotations(data);
+  //     } catch (error) {
+  //       console.error("Error:", error);
+  //     }
+  //   };
 
-    fetchUsers();
-    fetchLastFiveQuotations();
-  }, []);
+  //   fetchUsers();
+  //   fetchLastFiveQuotations();
+  // }, []);
 
-  const filteredUsers = users
-    .filter((user) =>
-      user.username.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-    .sort((a, b) => {
-      if (sortBy === "all") return 0;
-      if (sortBy === a.role.name) return -1;
-      if (sortBy === b.role.name) return 1;
-      return 0;
-    });
+  // const filteredUsers = users
+  //   .filter((user) =>
+  //     user.username.toLowerCase().includes(searchQuery.toLowerCase())
+  //   )
+  //   .sort((a, b) => {
+  //     if (sortBy === "all") return 0;
+  //     if (sortBy === a.role.name) return -1;
+  //     if (sortBy === b.role.name) return 1;
+  //     return 0;
+  //   });
 
   return (
     <div className="flex justify-start w-full h-screen flex-col bg-neutral-50">
@@ -328,7 +385,7 @@ export default function Dashboard() {
 
                 <ScrollArea className="flex-grow border-neutral-100 border-t px-4 h-[31vw]">
                   <div className="space-y-4 mt-4">
-                    {filteredUsers.map((user) => (
+                    {usersTest.map((user) => (
                       <div
                         key={user.id}
                         className="w-full flex items-center justify-start"
@@ -349,15 +406,18 @@ export default function Dashboard() {
                         </div>
                         <div
                           className={`px-2 rounded-3xl ${
-                            user.role.name === "superadmin"
-                              ? "bg-red-100 text-red-500"
-                              : user.role.name === "admin"
-                              ? "bg-blue-100 text-blue-500"
+                            user.role === "superadmin"
+                              ? // Recordar poner user.role.name cuando funcione con db
+                                "bg-red-100 text-red-500"
+                              : user.role === "admin"
+                              ? // Recordar poner user.role.name cuando funcione con db
+                                "bg-blue-100 text-blue-500"
                               : "bg-neutral-100 text-black"
                           }`}
                         >
                           <span className="text-sm font-semibold">
-                            {user.role.name}
+                            {user.role}
+                            {/* Recordar poner user.role.name cuando funcione con db */}
                           </span>
                         </div>
                       </div>
