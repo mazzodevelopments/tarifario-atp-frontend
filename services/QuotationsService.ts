@@ -69,4 +69,16 @@ export const QuotationsService = {
 
     return await response.json();
   },
+
+  getLastModifiedQuotation: async () => {
+    const response = await fetch(`${API_BASE_URL}/quotations/last-modified`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al traer las ultimas cotizaciones");
+    }
+
+    return await response.json();
+  },
 };

@@ -8,8 +8,11 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { QuotationData } from "@/types/QuotationData";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { QuotationsService } from "@/services/QuotationsService";
+import { Budget } from "@/types/Budget";
+import { Item } from "@/types/Item";
 
 type StepKeys = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
@@ -24,40 +27,59 @@ const stepTexts: Record<StepKeys, string> = {
 };
 
 export default function CurrentQuotationCard() {
+  const [quotation, setQuotation] = useState<{
+    id?: number;
+    taskNumber: string;
+    buyer: {
+      id: number;
+      name: string;
+      lastname: string;
+      client: { id: number; name: string };
+    };
+    receptionDate: string;
+    uploadDate: string;
+    expirationDateTime: string;
+    materialsNeededDate: string;
+    customerRequestNumber: string;
+    step?: number;
+    stageId: number;
+    budgets: Budget[] | null;
+    items: Item[] | null;
+  } | null>(null);
+  useEffect(() => {
+    const fetchLastQuotation = async () => {
+      try {
+        const data = await QuotationsService.getLastModifiedQuotation();
+        setQuotation(data);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+    fetchLastQuotation();
+  }, []);
   const usersWorking = 12;
-  const quotation: QuotationData = {
-    id: 1,
-    taskNumber: "A25R-0005",
-    client: "MicroTech Solutions",
-    buyer: "Andrea Gómez",
-    receptionDate: "2025-01-18",
-    uploadDate: "2025-01-19",
-    expirationDateTime: "2025-02-05T20:00:00",
-    materialsNeededDate: "2025-02-01",
-    customerRequestNumber: "REQ-2025-005",
-    step: 2,
-    stageId: 1,
-    items: null,
-    budgets: null,
-  };
 
   const stepLinks: Record<StepKeys, string> = {
-    1: `/create/${quotation.id}/items`,
-    2: `/create/${quotation.id}/purchase-data`,
-    3: `/create/${quotation.id}/logistic`,
-    4: `/create/${quotation.id}/sales-data`,
-    5: `/create/${quotation.id}/select-budgets`,
-    6: `/create/${quotation.id}/review`,
-    7: `/history/${quotation.taskNumber}`,
+    1: `/create/${quotation?.id}/items`,
+    2: `/create/${quotation?.id}/purchase-data`,
+    3: `/create/${quotation?.id}/logistic`,
+    4: `/create/${quotation?.id}/sales-data`,
+    5: `/create/${quotation?.id}/select-budgets`,
+    6: `/create/${quotation?.id}/review`,
+    7: `/history/${quotation?.taskNumber}`,
   };
 
-  const actualStep = quotation.step as StepKeys;
+  const actualStep = quotation?.step as StepKeys;
   const stepText = stepTexts[actualStep] || "Estado desconocido";
 
-  const isCompleted = quotation.step === 7;
+  const isCompleted = quotation?.step === 7;
   const colors = isCompleted
     ? "bg-green-100 text-green-600"
     : "bg-orange-100 text-orange-600";
+
+  if (!quotation) {
+    return;
+  }
 
   return (
     <div className="w-full h-[65%] bg-white border border-neutral-200 shadow-sm rounded-[18px] relative">
@@ -98,21 +120,31 @@ export default function CurrentQuotationCard() {
               N# Tarea:
             </span>
             <span className="text-md text-neutral-900">
-              {quotation.taskNumber}
+              {quotation!.taskNumber}
             </span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-md font-medium text-neutral-700">
               Cliente:
             </span>
-            <span className="text-md text-neutral-900">{quotation.client}</span>
+            <span className="text-md text-neutral-900">
+              {quotation!.buyer.client.name}
+            </span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-md font-medium text-neutral-700">
+              Comprador:
+            </span>
+            <span className="text-md text-neutral-900">
+              {quotation!.buyer.name + " " + quotation.buyer.lastname}
+            </span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-md font-medium text-neutral-700">
               Fecha de Recepción:
             </span>
             <span className="text-md text-neutral-900">
-              {new Date(quotation.receptionDate).toLocaleDateString("es-ES")}
+              {new Date(quotation!.receptionDate).toLocaleDateString("es-ES")}
             </span>
           </div>
           <div className="flex items-center justify-between">
@@ -120,7 +152,7 @@ export default function CurrentQuotationCard() {
               Fecha de Expiración:
             </span>
             <span className="text-md text-neutral-900">
-              {new Date(quotation.expirationDateTime).toLocaleDateString(
+              {new Date(quotation!.expirationDateTime).toLocaleDateString(
                 "es-ES",
               )}
             </span>
