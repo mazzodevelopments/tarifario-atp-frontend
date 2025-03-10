@@ -204,54 +204,68 @@ export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("all");
 
-  // useEffect(() => {
-  //   const fetchUsers = async () => {
-  //     try {
-  //       const response = await fetch(
-  //         `https://apitarifario.mazzodevelopments.com/admin/users`,
-  //         {
-  //           method: "GET",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //             Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //           },
-  //         }
-  //       );
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const token = localStorage.getItem("token");
 
-  //       if (!response.ok) {
-  //         throw new Error("Error fetching users");
-  //       }
+        if (!token) {
+          console.error("No token found");
+          return;
+        }
 
-  //       const data = await response.json();
-  //       setUsers(data);
-  //     } catch (error) {
-  //       console.error("Error:", error);
-  //     }
-  //   };
+        console.log("token:", token);
 
-  //   const fetchLastFiveQuotations = async () => {
-  //     try {
-  //       const data = await QuotationsService.getLastFiveFinishedQuotations();
-  //       setLastQuotations(data);
-  //     } catch (error) {
-  //       console.error("Error:", error);
-  //     }
-  //   };
+        const response = await fetch(
+          `https://apitarifario.mazzodevelopments.com/admin/users`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-  //   fetchUsers();
-  //   fetchLastFiveQuotations();
-  // }, []);
+        if (response.status === 403) {
+          console.error("Acceso prohibido: No tienes permisos suficientes");
+          return;
+        }
 
-  // const filteredUsers = users
-  //   .filter((user) =>
-  //     user.username.toLowerCase().includes(searchQuery.toLowerCase())
-  //   )
-  //   .sort((a, b) => {
-  //     if (sortBy === "all") return 0;
-  //     if (sortBy === a.role.name) return -1;
-  //     if (sortBy === b.role.name) return 1;
-  //     return 0;
-  //   });
+        if (!response.ok) {
+          throw new Error(`Error fetching users: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setUsers(data);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    const fetchLastFiveQuotations = async () => {
+      try {
+        const data = await QuotationsService.getLastFiveFinishedQuotations();
+        setLastQuotations(data);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    fetchUsers();
+    fetchLastFiveQuotations();
+  }, []);
+
+  const filteredUsers = users
+    .filter((user) =>
+      user.username.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .sort((a, b) => {
+      if (sortBy === "all") return 0;
+      if (sortBy === a.role.name) return -1;
+      if (sortBy === b.role.name) return 1;
+      return 0;
+    });
 
   return (
     <div className="flex justify-start w-full h-screen flex-col bg-neutral-50">
@@ -464,9 +478,9 @@ export default function Dashboard() {
                   </div>
                 </div>
 
-                <ScrollArea className="border-neutral-100 border-t px-4 h-[28vw]">
+                <ScrollArea className="border-neutral-100 border-t px-4 h-[50vh]">
                   <div className="space-y-4 mt-4">
-                    {usersTest.map((user) => (
+                    {filteredUsers.map((user) => (
                       <div
                         key={user.id}
                         className="w-full flex items-center justify-between"
@@ -481,12 +495,6 @@ export default function Dashboard() {
                               className="w-8 h-8 rounded-full"
                             />
                             <div className="min-w-64 flex items-center">
-                              <p className="text-md font-semibold mr-1">
-                                {user.name}
-                              </p>
-                              <p className="text-md font-semibold mr-4">
-                                {user.surname}
-                              </p>
                               <p className="text-sm font-semibold opacity-60">
                                 @{user.username}
                               </p>
@@ -495,24 +503,22 @@ export default function Dashboard() {
                           <div className="w-28">
                             <div
                               className={`px-2 rounded-3xl inline-block ${
-                                user.role === "superadmin"
+                                user.role.name === "superadmin"
                                   ? // Recordar poner user.role.name cuando funcione con db
                                     "bg-red-100 text-red-500"
-                                  : user.role === "admin"
+                                  : user.role.name === "admin"
                                   ? // Recordar poner user.role.name cuando funcione con db
                                     "bg-blue-100 text-blue-500"
                                   : "bg-neutral-100 text-black"
                               }`}
                             >
                               <span className="text-sm font-semibold">
-                                {user.role}
+                                {user.role.name}
                                 {/* Recordar poner user.role.name cuando funcione con db */}
                               </span>
                             </div>
                           </div>
-                          <div className="">
-                            <p className="text-sm">{user.email}</p>
-                          </div>
+                          <div className=""></div>
                         </div>
                         <div className="flex items-center gap-1">
                           <Button variant="secondary">Ver cotizaciones</Button>
