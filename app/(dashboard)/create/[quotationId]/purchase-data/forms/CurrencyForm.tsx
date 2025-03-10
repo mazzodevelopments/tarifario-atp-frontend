@@ -125,7 +125,7 @@ export default function CurrencyForm({
         ) => handleChange("dollarValue", e.target.value)}
         placeholder="Valor Dolar"
         label="Valor Dolar"
-        step={0.1}
+        step={0.000001}
         min={0}
         error={errors.dollarValue}
       />
