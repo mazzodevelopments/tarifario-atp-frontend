@@ -212,75 +212,74 @@ export default function Dropdown({
           }`}
         >
           <div className="relative border-b">
-            <div className="p-2">
+            <div className="p-2 flex items-center gap-2">
               <input
                 ref={inputRef}
                 type="text"
                 value={searchValue}
                 onChange={handleSearchChange}
-                className="w-[85%] px-2 py-1 text-sm focus:outline-none border rounded-md"
+                className="flex-1 px-2 py-1 text-sm focus:outline-none border rounded-md"
                 placeholder="Buscar..."
                 disabled={disabled || isLoading}
               />
+              {!disabled && (addItem || customForm) && (
+                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                  <DialogTrigger asChild>
+                    <button
+                      type="button"
+                      className="p-1 rounded-full hover:bg-gray-200 focus:outline-none disabled:opacity-50 flex-shrink-0"
+                      disabled={isLoading}
+                    >
+                      <Plus size={16} />
+                    </button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Agregar nuevo elemento</DialogTitle>
+                    </DialogHeader>
+                    {customForm ? (
+                      React.cloneElement(customForm, { closeDialog })
+                    ) : (
+                      <form onSubmit={handleAddItem} className="mt-4">
+                        <Input
+                          type="text"
+                          value={newItemName}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                            setNewItemName(e.target.value)
+                          }
+                          placeholder="Nombre del nuevo elemento"
+                          disabled={isLoading}
+                        />
+                        <div className="flex justify-end gap-2 mt-4">
+                          <Button
+                            type="button"
+                            onClick={() => setIsDialogOpen(false)}
+                            variant="secondary"
+                            className="px-2"
+                            disabled={isLoading}
+                          >
+                            Cancelar
+                          </Button>
+                          <Button
+                            type="submit"
+                            variant="primary"
+                            className="px-2 text-white"
+                            disabled={isLoading || !newItemName.trim()}
+                          >
+                            {isLoading ? "Agregando..." : "Agregar"}
+                          </Button>
+                        </div>
+                      </form>
+                    )}
+                  </DialogContent>
+                </Dialog>
+              )}
             </div>
 
             {isLoading && (
               <div className="absolute right-10 top-1/2 transform -translate-y-1/2">
                 <div className="animate-spin h-4 w-4 border-2 border-gray-500 border-t-transparent rounded-full"></div>
               </div>
-            )}
-
-            {!disabled && (addItem || customForm) && (
-              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogTrigger asChild>
-                  <button
-                    type="button"
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 rounded-full hover:bg-gray-200 focus:outline-none disabled:opacity-50"
-                    disabled={isLoading}
-                  >
-                    <Plus size={16} />
-                  </button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Agregar nuevo elemento</DialogTitle>
-                  </DialogHeader>
-                  {customForm ? (
-                    React.cloneElement(customForm, { closeDialog })
-                  ) : (
-                    <form onSubmit={handleAddItem} className="mt-4">
-                      <Input
-                        type="text"
-                        value={newItemName}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                          setNewItemName(e.target.value)
-                        }
-                        placeholder="Nombre del nuevo elemento"
-                        disabled={isLoading}
-                      />
-                      <div className="flex justify-end gap-2 mt-4">
-                        <Button
-                          type="button"
-                          onClick={() => setIsDialogOpen(false)}
-                          variant="secondary"
-                          className="px-2"
-                          disabled={isLoading}
-                        >
-                          Cancelar
-                        </Button>
-                        <Button
-                          type="submit"
-                          variant="primary"
-                          className="px-2 text-white"
-                          disabled={isLoading || !newItemName.trim()}
-                        >
-                          {isLoading ? "Agregando..." : "Agregar"}
-                        </Button>
-                      </div>
-                    </form>
-                  )}
-                </DialogContent>
-              </Dialog>
             )}
           </div>
 
