@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "@/app/(dashboard)/components/Header";
 import {
   Dialog,
@@ -9,7 +9,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import Button from "@/components/Button";
-import { Client } from "@/types/Client";
+import type { Client } from "@/types/Client";
 import ClientForm from "@/app/(dashboard)/create/[quotationId]/quotation-details/forms/ClientForm";
 import { CatalogService } from "@/services/CatalogService";
 import {
@@ -20,8 +20,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Pencil } from "lucide-react";
-import ClientDetails from "@/app/(dashboard)/clients/ClientDetails"; // Asegúrate de importar el componente
+import { Pencil, ArrowUp, ArrowDown } from "lucide-react";
+import ClientDetails from "@/app/(dashboard)/clients/ClientDetails";
 
 export default function Clients() {
   const [clients, setClients] = useState<Client[]>([]);
@@ -32,6 +32,10 @@ export default function Clients() {
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
   const [shouldFetch, setShouldFetch] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [sortConfig, setSortConfig] = useState<{
+    key: string;
+    direction: string;
+  } | null>(null);
 
   useEffect(() => {
     const fetchClients = async () => {
@@ -88,6 +92,62 @@ export default function Clients() {
     setDetailDialogOpen(false);
   };
 
+  const requestSort = (key: string) => {
+    let direction = "ascending";
+    if (
+      sortConfig &&
+      sortConfig.key === key &&
+      sortConfig.direction === "ascending"
+    ) {
+      direction = "descending";
+    } else if (
+      sortConfig &&
+      sortConfig.key === key &&
+      sortConfig.direction === "descending"
+    ) {
+      direction = "normal";
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const getSortedClients = () => {
+    if (!sortConfig) {
+      return clients;
+    }
+
+    const sortedClients = [...clients];
+    if (sortConfig.direction === "normal") {
+      return sortedClients;
+    }
+
+    sortedClients.sort((a, b) => {
+      if (sortConfig.key === "name") {
+        if (a[sortConfig.key] < b[sortConfig.key]) {
+          return sortConfig.direction === "ascending" ? -1 : 1;
+        }
+        if (a[sortConfig.key] > b[sortConfig.key]) {
+          return sortConfig.direction === "ascending" ? 1 : -1;
+        }
+        return 0;
+      } else if (sortConfig.key === "buyers") {
+        const buyersA = a.buyers?.length || 0;
+        const buyersB = b.buyers?.length || 0;
+        if (buyersA < buyersB) {
+          return sortConfig.direction === "ascending" ? -1 : 1;
+        }
+        if (buyersA > buyersB) {
+          return sortConfig.direction === "ascending" ? 1 : -1;
+        }
+        return 0;
+      }
+      return 0;
+    });
+
+    return sortedClients;
+  };
+
+  const sortedClients = getSortedClients();
+
   return (
     <div className="flex justify-start w-full h-full flex-col bg-transparent">
       <Header title="Clientes" description="Lista de clientes oficiales" />
@@ -120,20 +180,42 @@ export default function Clients() {
             <Table className="w-full">
               <TableHeader>
                 <TableRow className="bg-primary/5">
-                  <TableHead className="text-primary font-[600] text-center">
-                    Nombre
+                  <TableHead
+                    className="w-1/3 text-primary font-[600] text-center cursor-pointer select-none"
+                    onClick={() => requestSort("name")}
+                  >
+                    <div className="flex items-center justify-center gap-1">
+                      Nombre{" "}
+                      {(sortConfig?.key === "name" &&
+                        {
+                          ascending: <ArrowUp size={14} />,
+                          descending: <ArrowDown size={14} />,
+                        }[sortConfig.direction]) ||
+                        null}
+                    </div>
                   </TableHead>
-                  <TableHead className="text-primary font-[600] text-center">
-                    Cant. de Compradores
+                  <TableHead
+                    className="w-1/3 text-primary font-[600] text-center cursor-pointer select-none"
+                    onClick={() => requestSort("buyers")}
+                  >
+                    <div className="flex items-center justify-center gap-1">
+                      Cant. de Compradores{" "}
+                      {(sortConfig?.key === "buyers" &&
+                        {
+                          ascending: <ArrowUp size={14} />,
+                          descending: <ArrowDown size={14} />,
+                        }[sortConfig.direction]) ||
+                        null}
+                    </div>
                   </TableHead>
-                  <TableHead className="text-primary font-[600] text-center">
+                  <TableHead className="w-1/3 text-primary font-[600] text-center select-none">
                     Acciones
                   </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {clients.length > 0 ? (
-                  clients.map((client) => (
+                {sortedClients.length > 0 ? (
+                  sortedClients.map((client) => (
                     <TableRow key={client.id} className="text-sm text-center">
                       <TableCell className="font-[600] text-black">
                         {client.name}

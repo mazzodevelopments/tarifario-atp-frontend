@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useState } from "react";
 import Header from "@/app/(dashboard)/components/Header";
 import {
@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import Button from "@/components/Button";
 import { CatalogService } from "@/services/CatalogService";
-import { Supplier } from "@/types/Supplier";
+import type { Supplier } from "@/types/Supplier";
 import SupplierForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/forms/SupplierForm";
 import SupplierDetails from "@/app/(dashboard)/suppliers/SupplierDetails";
 import {
@@ -23,7 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Pencil } from "lucide-react";
+import { ArrowDown, ArrowUp, Pencil } from "lucide-react";
 
 export default function Proveedores() {
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
@@ -32,10 +32,14 @@ export default function Proveedores() {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
   const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(
-    null
+    null,
   );
   const [shouldFetch, setShouldFetch] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [sortConfig, setSortConfig] = useState<{
+    key: string;
+    direction: string;
+  } | null>(null);
 
   useEffect(() => {
     const fetchSuppliers = async () => {
@@ -111,6 +115,73 @@ export default function Proveedores() {
     return "bg-gray-100 text-gray-600";
   };
 
+  const requestSort = (key: string) => {
+    let direction = "ascending";
+    if (
+      sortConfig &&
+      sortConfig.key === key &&
+      sortConfig.direction === "ascending"
+    ) {
+      direction = "descending";
+    } else if (
+      sortConfig &&
+      sortConfig.key === key &&
+      sortConfig.direction === "descending"
+    ) {
+      direction = "normal";
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const getSortedSuppliers = () => {
+    if (!sortConfig) {
+      return suppliers;
+    }
+
+    const sortedSuppliers = [...suppliers];
+    if (sortConfig.direction === "normal") {
+      return sortedSuppliers;
+    }
+
+    sortedSuppliers.sort((a, b) => {
+      if (sortConfig.key === "name" || sortConfig.key === "email") {
+        if (a[sortConfig.key] < b[sortConfig.key]) {
+          return sortConfig.direction === "ascending" ? -1 : 1;
+        }
+        if (a[sortConfig.key] > b[sortConfig.key]) {
+          return sortConfig.direction === "ascending" ? 1 : -1;
+        }
+        return 0;
+      } else if (sortConfig.key === "type") {
+        const typeA = getTypeValue(a);
+        const typeB = getTypeValue(b);
+        if (typeA < typeB) {
+          return sortConfig.direction === "ascending" ? -1 : 1;
+        }
+        if (typeA > typeB) {
+          return sortConfig.direction === "ascending" ? 1 : -1;
+        }
+        return 0;
+      }
+      return 0;
+    });
+
+    return sortedSuppliers;
+  };
+
+  const getTypeValue = (supplier: Supplier) => {
+    if (supplier.isNational && supplier.isInternational) {
+      return 2;
+    } else if (supplier.isNational) {
+      return 0;
+    } else if (supplier.isInternational) {
+      return 1;
+    }
+    return -1;
+  };
+
+  const sortedSuppliers = getSortedSuppliers();
+
   return (
     <div className="flex justify-start w-full h-full flex-col bg-transparent">
       <Header title="Proveedores" description="Lista de suppliers oficiales" />
@@ -143,26 +214,59 @@ export default function Proveedores() {
             <Table className="w-full">
               <TableHeader>
                 <TableRow className="bg-primary/5">
-                  <TableHead className="text-primary font-[600] text-center">
-                    Nombre
+                  <TableHead
+                    className="w-1/5 text-primary font-[600] text-center cursor-pointer select-none"
+                    onClick={() => requestSort("name")}
+                  >
+                    <div className="flex items-center justify-center gap-1">
+                      Nombre{" "}
+                      {(sortConfig?.key === "name" &&
+                        {
+                          ascending: <ArrowUp size={14} />,
+                          descending: <ArrowDown size={14} />,
+                        }[sortConfig.direction]) ||
+                        null}
+                    </div>
                   </TableHead>
-                  <TableHead className="text-primary font-[600] text-center">
-                    Email
+                  <TableHead
+                    className="w-1/5 text-primary font-[600] text-center cursor-pointer select-none"
+                    onClick={() => requestSort("email")}
+                  >
+                    <div className="flex items-center justify-center gap-1">
+                      Email{" "}
+                      {(sortConfig?.key === "email" &&
+                        {
+                          ascending: <ArrowUp size={14} />,
+                          descending: <ArrowDown size={14} />,
+                        }[sortConfig.direction]) ||
+                        null}
+                    </div>
                   </TableHead>
-                  <TableHead className="text-primary font-[600] text-center">
+                  <TableHead className="w-1/5 text-primary font-[600] text-center select-none">
                     Teléfono
                   </TableHead>
-                  <TableHead className="text-primary font-[600] text-center">
-                    Tipo
+                  <TableHead
+                    className="w-1/5 text-primary font-[600] text-center cursor-pointer select-none"
+                    onClick={() => requestSort("type")}
+                  >
+                    <div className="flex items-center justify-center gap-1">
+                      Tipo{" "}
+                      {(sortConfig?.key === "type" &&
+                        {
+                          ascending: <ArrowUp size={14} />,
+                          descending: <ArrowDown size={14} />,
+                        }[sortConfig.direction]) ||
+                        null}
+                    </div>
                   </TableHead>
-                  <TableHead className="text-primary font-[600] text-center">
+                  <TableHead className="w-1/5 text-primary font-[600] text-center select-none">
                     Acciones
                   </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {suppliers.length > 0 ? (
-                  suppliers.map((supplier) => (
+                {sortedSuppliers.length > 0 ? (
+                  sortedSuppliers.map((supplier) => (
                     <TableRow
                       key={supplier.id}
                       className="text-sm text-center bg-white/50"
@@ -176,14 +280,14 @@ export default function Proveedores() {
                         <div
                           className={`py-1 px-3 rounded-3xl inline-block ${getTypeStyles(
                             supplier.isNational,
-                            supplier.isInternational
+                            supplier.isInternational,
                           )}`}
                         >
                           {supplier.isNational && supplier.isInternational
                             ? "Ambas"
                             : supplier.isNational
-                            ? "Nacional"
-                            : "Internacional"}
+                              ? "Nacional"
+                              : "Internacional"}
                         </div>
                       </TableCell>
                       <TableCell>
