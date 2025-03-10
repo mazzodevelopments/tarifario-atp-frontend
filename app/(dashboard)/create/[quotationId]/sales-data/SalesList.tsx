@@ -202,12 +202,15 @@ export default function SalesList({ quotationId }: { quotationId: number }) {
       );
     }
 
+    const isMarginDefined = budget.salesData?.margin !== undefined;
+
     return (
       <div className="w-full flex justify-center">
         <Button
           onClick={handleClick}
           variant="primary"
-          className="flex items-center gap-1 text-primary border border-primary/20 bg-primary/5 hover:text-primary-dark "
+          className="flex items-center gap-1 text-primary border border-primary/20 bg-primary/5 hover:text-primary-dark"
+          disabled={!isMarginDefined}
         >
           <PlusCircle className="w-4 h-4" />
           <span className="mt-[2px]">Agregar</span>
