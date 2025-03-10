@@ -485,7 +485,8 @@ export default function Dashboard() {
                                 Matias Marzorati
                               </h3>
                               <p className="text-xs font-semibold opacity-50 -mt-0.5">
-                                @{user.username}
+                                {/*{user.email}*/}
+                                matiasmarzorati@gmail.com
                               </p>
                             </div>
                           </div>

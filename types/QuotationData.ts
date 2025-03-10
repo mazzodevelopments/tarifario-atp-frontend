@@ -2,6 +2,7 @@ import { Budget } from "@/types/Budget";
 import { Item } from "@/types/Item";
 
 export interface QuotationData {
+  id?: number;
   taskNumber: string;
   client: string;
   buyer: string;
@@ -10,6 +11,7 @@ export interface QuotationData {
   expirationDateTime: string;
   materialsNeededDate: string;
   customerRequestNumber: string;
+  step?: number;
   stageId: number;
   budgets: Budget[] | null;
   items: Item[] | null;
