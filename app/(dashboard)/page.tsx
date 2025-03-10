@@ -1,5 +1,4 @@
 "use client";
-import { Briefcase } from "react-feather";
 import { Search } from "react-feather";
 import Image from "next/image";
 import defaultProfilePic from "@/public/default-profile-pic.png";
@@ -16,26 +15,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  ChevronDown,
-  LogOut,
-  Settings,
-  DollarSign,
-  ArrowUpRight,
-  ArrowDownRight,
-} from "lucide-react";
+import { ChevronDown, LogOut, Settings } from "lucide-react";
 import Link from "next/link";
 import { QuotationSlider } from "./components/QuotationCarousel";
 import CurrentQuotationCard from "./components/CurrentQuotation";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { NewUserDialog } from "./components/NewUserDialog";
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import { useEffect, useState } from "react";
 import { QuotationsService } from "@/services/QuotationsService";
 
 type User = {
   id: number;
   username: string;
+  name: string;
+  lastname: string;
   profilePic: string;
   firstLogin: boolean;
   role: {
@@ -49,7 +42,7 @@ const usersTest = [
     id: "1",
     username: "mmonzalvo",
     profilePic: "",
-    role: "superadmin",
+    role: { name: "superadmin" },
     email: "matias.monzalvo@example.com",
     name: "Matias",
     surname: "Monzalvo",
@@ -58,7 +51,7 @@ const usersTest = [
     id: "2",
     username: "lrodriguez",
     profilePic: "",
-    role: "admin",
+    role: { name: "user" },
     email: "laura.rodriguez@example.com",
     name: "Laura",
     surname: "Rodriguez",
@@ -67,7 +60,7 @@ const usersTest = [
     id: "3",
     username: "cgomez",
     profilePic: "",
-    role: "user",
+    role: { name: "user" },
     email: "carlos.gomez@example.com",
     name: "Carlos",
     surname: "Gomez",
@@ -76,7 +69,7 @@ const usersTest = [
     id: "4",
     username: "aperez",
     profilePic: "",
-    role: "user",
+    role: { name: "user" },
     email: "ana.perez@example.com",
     name: "Ana",
     surname: "Perez",
@@ -85,7 +78,7 @@ const usersTest = [
     id: "5",
     username: "jhernandez",
     profilePic: "",
-    role: "admin",
+    role: { name: "user" },
     email: "juan.hernandez@example.com",
     name: "Juan",
     surname: "Hernandez",
@@ -94,7 +87,7 @@ const usersTest = [
     id: "6",
     username: "mlopez",
     profilePic: "",
-    role: "user",
+    role: { name: "user" },
     email: "maria.lopez@example.com",
     name: "Maria",
     surname: "Lopez",
@@ -103,7 +96,7 @@ const usersTest = [
     id: "7",
     username: "dcastro",
     profilePic: "",
-    role: "user",
+    role: { name: "user" },
     email: "diego.castro@example.com",
     name: "Diego",
     surname: "Castro",
@@ -112,7 +105,7 @@ const usersTest = [
     id: "8",
     username: "sgonzalez",
     profilePic: "",
-    role: "admin",
+    role: { name: "admin" },
     email: "sofia.gonzalez@example.com",
     name: "Sofia",
     surname: "Gonzalez",
@@ -121,7 +114,7 @@ const usersTest = [
     id: "9",
     username: "pmartinez",
     profilePic: "",
-    role: "user",
+    role: { name: "user" },
     email: "pedro.martinez@example.com",
     name: "Pedro",
     surname: "Martinez",
@@ -130,7 +123,7 @@ const usersTest = [
     id: "10",
     username: "rfernandez",
     profilePic: "",
-    role: "admin",
+    role: { name: "admin" },
     email: "roberto.fernandez@example.com",
     name: "Roberto",
     surname: "Fernandez",
@@ -139,7 +132,7 @@ const usersTest = [
     id: "11",
     username: "aflores",
     profilePic: "",
-    role: "user",
+    role: { name: "user" },
     email: "andrea.flores@example.com",
     name: "Andrea",
     surname: "Flores",
@@ -148,7 +141,7 @@ const usersTest = [
     id: "12",
     username: "jtorres",
     profilePic: "",
-    role: "admin",
+    role: { name: "admin" },
     email: "javier.torres@example.com",
     name: "Javier",
     surname: "Torres",
@@ -157,7 +150,7 @@ const usersTest = [
     id: "13",
     username: "mruiz",
     profilePic: "",
-    role: "user",
+    role: { name: "user" },
     email: "marta.ruiz@example.com",
     name: "Marta",
     surname: "Ruiz",
@@ -166,7 +159,7 @@ const usersTest = [
     id: "14",
     username: "osantos",
     profilePic: "",
-    role: "user",
+    role: { name: "user" },
     email: "oscar.santos@example.com",
     name: "Oscar",
     surname: "Santos",
@@ -175,7 +168,7 @@ const usersTest = [
     id: "15",
     username: "lmoreno",
     profilePic: "",
-    role: "admin",
+    role: { name: "user" },
     email: "lucia.moreno@example.com",
     name: "Lucia",
     surname: "Moreno",
@@ -183,15 +176,6 @@ const usersTest = [
 ];
 
 export default function Dashboard() {
-  const salesData = [
-    { month: "Ene", sales: 4000 },
-    { month: "Feb", sales: 3000 },
-    { month: "Mar", sales: 5000 },
-    { month: "Abr", sales: 4500 },
-    { month: "May", sales: 6000 },
-    { month: "Jun", sales: 5500 },
-  ];
-
   const [users, setUsers] = useState<User[]>([]);
   const [lastQuotations, setLastQuotations] = useState<
     {
@@ -224,7 +208,7 @@ export default function Dashboard() {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
 
         if (response.status === 403) {
@@ -237,6 +221,7 @@ export default function Dashboard() {
         }
 
         const data = await response.json();
+        console.log("USERS:", data);
         setUsers(data);
       } catch (error) {
         console.error("Error:", error);
@@ -258,7 +243,7 @@ export default function Dashboard() {
 
   const filteredUsers = users
     .filter((user) =>
-      user.username.toLowerCase().includes(searchQuery.toLowerCase())
+      user.username.toLowerCase().includes(searchQuery.toLowerCase()),
     )
     .sort((a, b) => {
       if (sortBy === "all") return 0;
@@ -470,10 +455,10 @@ export default function Dashboard() {
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value)}
                     >
-                      <option value="all">Todos</option>
-                      <option value="superadmin">Superadmin</option>
-                      <option value="admin">Admin</option>
-                      <option value="user">Usuario</option>
+                      <option value="All">Todos</option>
+                      <option value="Superadmin">Superadmin</option>
+                      <option value="Admin">Admin</option>
+                      <option value="User">Usuario</option>
                     </select>
                   </div>
                 </div>
@@ -488,14 +473,18 @@ export default function Dashboard() {
                         <div className="flex items-center justify-start">
                           <div className="flex items-center space-x-2">
                             <Image
-                              src={user.profilePic || defaultProfilePic}
+                              src={defaultProfilePic}
                               width={700}
                               height={700}
                               alt="Picture of the author"
                               className="w-8 h-8 rounded-full"
                             />
-                            <div className="min-w-64 flex items-center">
-                              <p className="text-sm font-semibold opacity-60">
+                            <div className="flex flex-col items-start justify-start min-w-64">
+                              <h3 className="text-sm font-semibold">
+                                {/*{user.name + " " + user.lastname}*/}
+                                Matias Marzorati
+                              </h3>
+                              <p className="text-xs font-semibold opacity-50 -mt-0.5">
                                 @{user.username}
                               </p>
                             </div>
@@ -503,18 +492,15 @@ export default function Dashboard() {
                           <div className="w-28">
                             <div
                               className={`px-2 rounded-3xl inline-block ${
-                                user.role.name === "superadmin"
-                                  ? // Recordar poner user.role.name cuando funcione con db
-                                    "bg-red-100 text-red-500"
+                                user.role.name === "Superadmin"
+                                  ? "bg-red-100 text-red-500"
                                   : user.role.name === "admin"
-                                  ? // Recordar poner user.role.name cuando funcione con db
-                                    "bg-blue-100 text-blue-500"
-                                  : "bg-neutral-100 text-black"
+                                    ? "bg-blue-100 text-blue-500"
+                                    : "bg-neutral-100 text-black"
                               }`}
                             >
                               <span className="text-sm font-semibold">
                                 {user.role.name}
-                                {/* Recordar poner user.role.name cuando funcione con db */}
                               </span>
                             </div>
                           </div>
