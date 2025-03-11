@@ -3,16 +3,13 @@ import { AdminCreateUser } from "@/types/User";
 
 export const AdminService = {
   getAllUsers: async () => {
-    const response = await fetch(
-      `https://apitarifario.mazzodevelopments.com/admin/users`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+    const response = await fetch(`${API_BASE_URL}/admin/users`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
-    );
+    });
 
     if (response.status === 403) {
       console.error("Acceso prohibido: No tienes permisos suficientes");
@@ -34,7 +31,6 @@ export const AdminService = {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({
-        username: newUser.username,
         email: newUser.email,
         name: newUser.name,
         lastname: newUser.lastname,

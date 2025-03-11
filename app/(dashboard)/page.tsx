@@ -78,7 +78,7 @@ export default function Dashboard() {
 
   const filteredUsers = users
     .filter((user) =>
-      user.username.toLowerCase().includes(searchQuery.toLowerCase())
+      user.email.toLowerCase().includes(searchQuery.toLowerCase()),
     )
     .sort((a, b) => {
       if (sortBy === "all") return 0;
@@ -355,8 +355,8 @@ export default function Dashboard() {
                                 user.role.name === "Superadmin"
                                   ? "bg-red-100 text-red-500"
                                   : user.role.name === "Admin"
-                                  ? "bg-blue-100 text-blue-500"
-                                  : "bg-green-100 text-green-600"
+                                    ? "bg-blue-100 text-blue-500"
+                                    : "bg-green-100 text-green-600"
                               }`}
                             >
                               <span className="text-sm font-semibold">
