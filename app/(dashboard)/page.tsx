@@ -47,7 +47,7 @@ export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("all");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [shouldFetch, setShouldFetch] = useState(true);
+  const [shouldFetch, setShouldFetch] = useState(false);
 
   const { toast } = useToast();
 
