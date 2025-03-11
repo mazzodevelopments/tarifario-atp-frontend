@@ -1,7 +1,6 @@
 import { CreateQuotationData, QuotationData } from "@/types/QuotationData";
 import { CreateItem, CreateMassiveLoadItems } from "@/types/Item";
 import { CreatePurchaseData, PurchaseData } from "@/types/PurchaseData";
-import { SalesData } from "@/types/SalesData";
 import { API_BASE_URL } from "@/app/utils/config";
 
 export const QuoteService = {
