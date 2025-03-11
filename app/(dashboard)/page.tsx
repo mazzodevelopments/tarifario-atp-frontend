@@ -1,7 +1,6 @@
 "use client";
 import { Search } from "react-feather";
 import Image from "next/image";
-import defaultProfilePic from "@/public/default-profile-pic.png";
 import Button from "@/components/Button";
 import {
   SidebarMenu,
@@ -144,7 +143,7 @@ export default function Dashboard() {
                         className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                       >
                         <Image
-                          src={defaultProfilePic}
+                          src={"/default-profile-pic.png"}
                           width={700}
                           height={700}
                           alt="Picture of the author"
@@ -333,7 +332,7 @@ export default function Dashboard() {
                         <div className="flex items-center justify-start">
                           <div className="flex items-center space-x-2">
                             <Image
-                              src={defaultProfilePic}
+                              src={"/default-profile-pic.png"}
                               width={700}
                               height={700}
                               alt="Picture of the author"
