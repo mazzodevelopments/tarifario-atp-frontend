@@ -44,6 +44,16 @@ export const AdminService = {
         roleId: newUser.roleId,
       }),
     });
+
+    if (response.status === 403) {
+      console.error("Acceso prohibido: No tienes permisos suficientes");
+      return;
+    }
+
+    if (!response.ok) {
+      throw new Error(`Error al crear usuario: ${response.statusText}`);
+    }
+
     return await response.json();
   },
 };

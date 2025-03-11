@@ -93,7 +93,6 @@ export default function Dashboard() {
       await AdminService.createUser(newUser);
       setIsDialogOpen(false);
       setShouldFetch(true);
-      // TODO: TOAST TIENE QUE SALIR SOLO CUANDO SALIO BIEN EL REQUEST
       toast({
         title: "Usuario creado",
         description: `Se ha creado el usuario ${newUser.name + " " + newUser.lastname} con éxito.`,
