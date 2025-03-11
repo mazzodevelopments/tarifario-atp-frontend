@@ -7,10 +7,11 @@ import logo from "@/public/logo.png";
 import { CircleUserRound, KeyRound } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
+import { API_BASE_URL } from "@/app/utils/config";
 
 export default function Register() {
   const router = useRouter();
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
@@ -19,16 +20,13 @@ export default function Register() {
     setError("");
 
     try {
-      const response = await fetch(
-        "https://apitarifario.mazzodevelopments.com/auth/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ username, password }),
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
       if (response.ok) {
         const data = await response.json();
@@ -102,14 +100,14 @@ export default function Register() {
                 <div className="relative">
                   <CircleUserRound className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground h-5 w-5" />
                   <Input
-                    id="username"
+                    id="email"
                     type="text"
-                    placeholder="Nombre de usuario"
+                    placeholder="Email"
                     className="pl-10 w-full h-12 bg-muted/50"
                     required
-                    value={username}
+                    value={email}
                     onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                      setUsername(e.target.value)
+                      setEmail(e.target.value)
                     }
                   />
                 </div>

@@ -14,9 +14,8 @@ interface CreateUserProps {
 }
 
 interface NewUserForm {
-  username: string;
-  password: string;
   email: string;
+  password: string;
   role: string;
   roleId: number;
   name: string;
@@ -28,9 +27,8 @@ export default function CreateUser({
   onDialogClose,
 }: CreateUserProps) {
   const [formData, setFormData] = useState<NewUserForm>({
-    username: "",
-    password: "",
     email: "",
+    password: "",
     role: "",
     roleId: 0,
     name: "",
@@ -38,8 +36,8 @@ export default function CreateUser({
   });
 
   const [errors, setErrors] = useState({
-    password: "",
     email: "",
+    password: "",
     role: "",
     name: "",
     lastname: "",
@@ -47,24 +45,24 @@ export default function CreateUser({
 
   const validateForm = () => {
     const newErrors = {
-      password: "",
       email: "",
+      password: "",
       role: "",
       name: "",
       lastname: "",
     };
     let isValid = true;
 
-    if (!formData.password) {
-      newErrors.password = "La contraseña es requerida";
-      isValid = false;
-    }
-
     if (!formData.email) {
       newErrors.email = "El email es requerido";
       isValid = false;
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = "El email no es válido";
+      isValid = false;
+    }
+
+    if (!formData.password) {
+      newErrors.password = "La contraseña es requerida";
       isValid = false;
     }
 
@@ -96,7 +94,6 @@ export default function CreateUser({
     }
 
     const userData: AdminCreateUser = {
-      username: formData.username,
       password: formData.password,
       email: formData.email,
       roleId: formData.roleId,
@@ -114,7 +111,6 @@ export default function CreateUser({
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-      username: name === "email" ? value : prev.username,
     }));
     setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
@@ -163,8 +159,8 @@ export default function CreateUser({
         name="email"
         value={formData.email}
         onChange={handleChange}
-        placeholder="Mail"
-        label="Mail"
+        placeholder="Email"
+        label="Email"
         error={errors.email}
       />
       <Input

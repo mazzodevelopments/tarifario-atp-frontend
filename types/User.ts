@@ -13,10 +13,9 @@ export interface User {
 }
 
 export interface AdminCreateUser {
-  username: string;
+  email: string;
   password: string;
   name: string;
   lastname: string;
-  email: string;
   roleId: number;
 }
