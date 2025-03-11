@@ -23,157 +23,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { NewUserDialog } from "./components/NewUserDialog";
 import { useEffect, useState } from "react";
 import { QuotationsService } from "@/services/QuotationsService";
-
-type User = {
-  id: number;
-  username: string;
-  name: string;
-  lastname: string;
-  profilePic: string;
-  firstLogin: boolean;
-  role: {
-    id: number;
-    name: string;
-  };
-};
-
-const usersTest = [
-  {
-    id: "1",
-    username: "mmonzalvo",
-    profilePic: "",
-    role: { name: "superadmin" },
-    email: "matias.monzalvo@example.com",
-    name: "Matias",
-    surname: "Monzalvo",
-  },
-  {
-    id: "2",
-    username: "lrodriguez",
-    profilePic: "",
-    role: { name: "user" },
-    email: "laura.rodriguez@example.com",
-    name: "Laura",
-    surname: "Rodriguez",
-  },
-  {
-    id: "3",
-    username: "cgomez",
-    profilePic: "",
-    role: { name: "user" },
-    email: "carlos.gomez@example.com",
-    name: "Carlos",
-    surname: "Gomez",
-  },
-  {
-    id: "4",
-    username: "aperez",
-    profilePic: "",
-    role: { name: "user" },
-    email: "ana.perez@example.com",
-    name: "Ana",
-    surname: "Perez",
-  },
-  {
-    id: "5",
-    username: "jhernandez",
-    profilePic: "",
-    role: { name: "user" },
-    email: "juan.hernandez@example.com",
-    name: "Juan",
-    surname: "Hernandez",
-  },
-  {
-    id: "6",
-    username: "mlopez",
-    profilePic: "",
-    role: { name: "user" },
-    email: "maria.lopez@example.com",
-    name: "Maria",
-    surname: "Lopez",
-  },
-  {
-    id: "7",
-    username: "dcastro",
-    profilePic: "",
-    role: { name: "user" },
-    email: "diego.castro@example.com",
-    name: "Diego",
-    surname: "Castro",
-  },
-  {
-    id: "8",
-    username: "sgonzalez",
-    profilePic: "",
-    role: { name: "admin" },
-    email: "sofia.gonzalez@example.com",
-    name: "Sofia",
-    surname: "Gonzalez",
-  },
-  {
-    id: "9",
-    username: "pmartinez",
-    profilePic: "",
-    role: { name: "user" },
-    email: "pedro.martinez@example.com",
-    name: "Pedro",
-    surname: "Martinez",
-  },
-  {
-    id: "10",
-    username: "rfernandez",
-    profilePic: "",
-    role: { name: "admin" },
-    email: "roberto.fernandez@example.com",
-    name: "Roberto",
-    surname: "Fernandez",
-  },
-  {
-    id: "11",
-    username: "aflores",
-    profilePic: "",
-    role: { name: "user" },
-    email: "andrea.flores@example.com",
-    name: "Andrea",
-    surname: "Flores",
-  },
-  {
-    id: "12",
-    username: "jtorres",
-    profilePic: "",
-    role: { name: "admin" },
-    email: "javier.torres@example.com",
-    name: "Javier",
-    surname: "Torres",
-  },
-  {
-    id: "13",
-    username: "mruiz",
-    profilePic: "",
-    role: { name: "user" },
-    email: "marta.ruiz@example.com",
-    name: "Marta",
-    surname: "Ruiz",
-  },
-  {
-    id: "14",
-    username: "osantos",
-    profilePic: "",
-    role: { name: "user" },
-    email: "oscar.santos@example.com",
-    name: "Oscar",
-    surname: "Santos",
-  },
-  {
-    id: "15",
-    username: "lmoreno",
-    profilePic: "",
-    role: { name: "user" },
-    email: "lucia.moreno@example.com",
-    name: "Lucia",
-    surname: "Moreno",
-  },
-];
+import { AdminService } from "@/services/AdminService";
+import { User } from "@/types/User";
 
 export default function Dashboard() {
   const [users, setUsers] = useState<User[]>([]);
@@ -191,37 +42,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const token = localStorage.getItem("token");
-
-        if (!token) {
-          console.error("No token found");
-          return;
-        }
-
-        console.log("token:", token);
-
-        const response = await fetch(
-          `https://apitarifario.mazzodevelopments.com/admin/users`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-
-        if (response.status === 403) {
-          console.error("Acceso prohibido: No tienes permisos suficientes");
-          return;
-        }
-
-        if (!response.ok) {
-          throw new Error(`Error fetching users: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log("USERS:", data);
+        const data = await AdminService.getAllUsers();
         setUsers(data);
       } catch (error) {
         console.error("Error:", error);
@@ -481,12 +302,10 @@ export default function Dashboard() {
                             />
                             <div className="flex flex-col items-start justify-start min-w-64">
                               <h3 className="text-sm font-semibold">
-                                {/*{user.name + " " + user.lastname}*/}
-                                Matias Marzorati
+                                {user.name + " " + user.lastname}
                               </h3>
                               <p className="text-xs font-semibold opacity-50 -mt-0.5">
-                                {/*{user.email}*/}
-                                matiasmarzorati@gmail.com
+                                {user.email}
                               </p>
                             </div>
                           </div>
@@ -495,9 +314,9 @@ export default function Dashboard() {
                               className={`px-2 rounded-3xl inline-block ${
                                 user.role.name === "Superadmin"
                                   ? "bg-red-100 text-red-500"
-                                  : user.role.name === "admin"
+                                  : user.role.name === "Admin"
                                     ? "bg-blue-100 text-blue-500"
-                                    : "bg-neutral-100 text-black"
+                                    : "bg-green-100 text-green-600"
                               }`}
                             >
                               <span className="text-sm font-semibold">
