@@ -1,8 +1,6 @@
 import { API_BASE_URL } from "@/app/utils/config";
 import { AdminCreateUser } from "@/types/User";
 
-const token = localStorage.getItem("token");
-
 export const AdminService = {
   getAllUsers: async () => {
     const response = await fetch(
@@ -11,7 +9,7 @@ export const AdminService = {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       },
     );
@@ -33,7 +31,7 @@ export const AdminService = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({
         username: newUser.username,
