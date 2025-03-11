@@ -203,12 +203,6 @@ export const QuoteService = {
 
     return await response.json();
   },
-  updateSalesData: async (budgetId: number, salesData: SalesData) => {
-    console.log("LLAMADO A LA API PARA EDITAR SALESDATA", salesData);
-  },
-  deleteSalesData: async (salesDataId: number) => {
-    console.log("LLAMADO A LA API PARA EDITAR SALESDATA", salesDataId);
-  },
 
   // ETAPA 6
   getSelectedBudgets: async (quotationId: number) => {
