@@ -468,4 +468,16 @@ export const CatalogService = {
     console.log("Incoterm agregado:", data);
     return data;
   },
+  // ROLES
+  listRoles: async (): Promise<{ id: number; name: string }[]> => {
+    const response = await fetch(`${API_BASE_URL}/catalog/roles`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al traer roles");
+    }
+
+    return await response.json();
+  },
 };

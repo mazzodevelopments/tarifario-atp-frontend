@@ -20,11 +20,20 @@ import Link from "next/link";
 import { QuotationSlider } from "./components/QuotationCarousel";
 import CurrentQuotationCard from "./components/CurrentQuotation";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { NewUserDialog } from "./components/NewUserDialog";
-import { useEffect, useState } from "react";
+import CreateUser from "./components/CreateUser";
+import React, { useEffect, useState } from "react";
 import { QuotationsService } from "@/services/QuotationsService";
 import { AdminService } from "@/services/AdminService";
 import { User } from "@/types/User";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
+import { Toaster } from "@/components/ui/toaster";
+import { AdminCreateUser } from "@/types/User";
 
 export default function Dashboard() {
   const [users, setUsers] = useState<User[]>([]);
@@ -38,12 +47,17 @@ export default function Dashboard() {
   >([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("all");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [shouldFetch, setShouldFetch] = useState(true);
+
+  const { toast } = useToast();
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const data = await AdminService.getAllUsers();
         setUsers(data);
+        setShouldFetch(false);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -53,6 +67,7 @@ export default function Dashboard() {
       try {
         const data = await QuotationsService.getLastFiveFinishedQuotations();
         setLastQuotations(data);
+        setShouldFetch(false);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -60,7 +75,7 @@ export default function Dashboard() {
 
     fetchUsers();
     fetchLastFiveQuotations();
-  }, []);
+  }, [shouldFetch]);
 
   const filteredUsers = users
     .filter((user) =>
@@ -72,6 +87,31 @@ export default function Dashboard() {
       if (sortBy === b.role.name) return 1;
       return 0;
     });
+
+  const handleUserCreated = async (newUser: AdminCreateUser) => {
+    try {
+      await AdminService.createUser(newUser);
+      setIsDialogOpen(false);
+      setShouldFetch(true);
+      // TODO: TOAST TIENE QUE SALIR SOLO CUANDO SALIO BIEN EL REQUEST
+      toast({
+        title: "Usuario creado",
+        description: `Se ha creado el usuario ${newUser.name + " " + newUser.lastname} con éxito.`,
+      });
+    } catch (error) {
+      console.error("Error adding item:", error);
+      toast({
+        title: "Error",
+        description:
+          error instanceof Error ? error.message : "Error al crear el usuario",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+  };
 
   return (
     <div className="flex justify-start w-full h-screen flex-col bg-neutral-50">
@@ -335,8 +375,30 @@ export default function Dashboard() {
                   </div>
                 </ScrollArea>
                 <div className="w-auto flex pr-2 justify-end gap-2 items-end h-auto pt-4 border-t border-neutral-100">
-                  <NewUserDialog />
+                  <Button
+                    variant="primary"
+                    className="px-3 py-2 bg-neutral-900 text-white text-sm mr-2"
+                    onClick={() => setIsDialogOpen(true)}
+                  >
+                    Crear Usuario
+                  </Button>
+                  <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle className="text-2xl">
+                          Agregar nuevo usuario
+                        </DialogTitle>
+                      </DialogHeader>
+                      <div className="bg-white rounded-lg w-full">
+                        <CreateUser
+                          onUserCreated={handleUserCreated}
+                          onDialogClose={handleDialogClose}
+                        />{" "}
+                      </div>
+                    </DialogContent>
+                  </Dialog>
                 </div>
+                <Toaster />
               </div>
             </div>
           </div>

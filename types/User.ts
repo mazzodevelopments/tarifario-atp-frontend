@@ -11,3 +11,12 @@ export interface User {
     name: string;
   };
 }
+
+export interface AdminCreateUser {
+  username: string;
+  password: string;
+  name: string;
+  lastname: string;
+  email: string;
+  roleId: number;
+}

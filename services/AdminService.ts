@@ -1,4 +1,5 @@
 import { API_BASE_URL } from "@/app/utils/config";
+import { AdminCreateUser } from "@/types/User";
 
 const token = localStorage.getItem("token");
 
@@ -24,6 +25,25 @@ export const AdminService = {
       throw new Error(`Error fetching users: ${response.status}`);
     }
 
+    return await response.json();
+  },
+
+  createUser: async (newUser: AdminCreateUser) => {
+    const response = await fetch(`${API_BASE_URL}/admin/create-user`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        username: newUser.username,
+        email: newUser.email,
+        name: newUser.name,
+        lastname: newUser.lastname,
+        password: newUser.password,
+        roleId: newUser.roleId,
+      }),
+    });
     return await response.json();
   },
 };
