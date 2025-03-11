@@ -78,7 +78,7 @@ export default function Dashboard() {
 
   const filteredUsers = users
     .filter((user) =>
-      user.username.toLowerCase().includes(searchQuery.toLowerCase()),
+      user.username.toLowerCase().includes(searchQuery.toLowerCase())
     )
     .sort((a, b) => {
       if (sortBy === "all") return 0;
@@ -94,7 +94,9 @@ export default function Dashboard() {
       setShouldFetch(true);
       toast({
         title: "Usuario creado",
-        description: `Se ha creado el usuario ${newUser.name + " " + newUser.lastname} con éxito.`,
+        description: `Se ha creado el usuario ${
+          newUser.name + " " + newUser.lastname
+        } con éxito.`,
       });
     } catch (error) {
       console.error("Error adding item:", error);
@@ -112,7 +114,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="flex justify-start w-full h-screen flex-col bg-neutral-50">
+    <div className="flex justify-start w-full h-auto lg:h-screen flex-col bg-neutral-50">
       <div className="w-full h-20 flex-shrink-0 border-b border-neutral-200">
         <div className="flex justify-between items-center h-full px-6 mb-4">
           <div className="flex flex-col justify-center items-start w-[12vw]">
@@ -181,8 +183,8 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-      <div className="flex flex-row items-start w-full h-[calc(100%-5rem)]">
-        <div className="w-1/3 h-full flex flex-col border-r border-neutral-200 relative p-6">
+      <div className="flex flex-col lg:flex-row items-start w-full h-[calc(100%-5rem)]">
+        <div className="w-full lg:w-1/3 h-full flex flex-col border-r border-neutral-200 relative p-6">
           <div className="w-full flex flex-col pb-4">
             <h2 className="text-3xl font-[800]">Mis cotizaciones</h2>
             <p className="text-gray-500 ml-1">
@@ -195,7 +197,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="w-2/3 h-full flex flex-col relative p-6 gap-3">
+        <div className="w-full lg:w-2/3 h-full flex flex-col relative p-6 gap-3">
           <div className="w-full flex flex-col pb-1 h-20">
             <h2 className="text-3xl font-[800]">Panel Administrador</h2>
             <p className="text-gray-500 ml-1">
@@ -353,8 +355,8 @@ export default function Dashboard() {
                                 user.role.name === "Superadmin"
                                   ? "bg-red-100 text-red-500"
                                   : user.role.name === "Admin"
-                                    ? "bg-blue-100 text-blue-500"
-                                    : "bg-green-100 text-green-600"
+                                  ? "bg-blue-100 text-blue-500"
+                                  : "bg-green-100 text-green-600"
                               }`}
                             >
                               <span className="text-sm font-semibold">
