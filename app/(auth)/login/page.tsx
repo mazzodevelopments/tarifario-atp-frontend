@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 import { API_BASE_URL } from "@/app/utils/config";
 
-export default function Register() {
+export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
