@@ -38,6 +38,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
+import { useAuth } from "@/context/AuthContext";
 
 const menuItems = [
   { icon: Home, label: "Home", id: "" },
@@ -51,6 +52,7 @@ const menuItems = [
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
   const { state } = useSidebar();
+  const { user } = useAuth();
 
   return (
     <Sidebar collapsible="icon" {...props} className="border-neutral-200">
@@ -128,15 +130,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                 >
                   <Image
-                    src="/default-profile-pic.png"
+                    src={user?.profilePic || "/default-profile-pic.png"}
                     width={700}
                     height={700}
                     alt="Picture of the author"
                     className="w-8 h-8 rounded-full"
                   />
                   <div className="flex flex-col gap-0.5 leading-none">
-                    <span className="font-semibold">username</span>
-                    <span className="text-xs text-muted-foreground">role</span>
+                    <span className="font-semibold">
+                      {user?.name + " " + user?.lastname}
+                    </span>
+                    <span className="text-xs text-muted-foreground -mt-0.5">
+                      {user?.email}
+                    </span>
                   </div>
                   <ChevronDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
                 </SidebarMenuButton>
