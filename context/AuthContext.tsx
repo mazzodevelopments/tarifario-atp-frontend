@@ -1,5 +1,6 @@
 "use client";
 
+import type React from "react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -7,42 +8,47 @@ interface AuthContextType {
   isAuthenticated: boolean;
   token: string | null;
   logout: () => void;
+  loading: boolean; // Add loading state
 }
 
 const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
   token: null,
   logout: () => {},
+  loading: true, // Default to loading
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [token, setToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true); // Add loading state
   const router = useRouter();
 
   useEffect(() => {
-    const token = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("token="))
-      ?.split("=")[1];
+    if (typeof window !== "undefined") {
+      const storedToken = localStorage.getItem("token");
 
-    if (token) {
-      setToken(token);
-      setIsAuthenticated(true);
-    } else {
-      router.push("/login");
+      if (storedToken) {
+        setToken(storedToken);
+        setIsAuthenticated(true);
+      }
+
+      // Always set loading to false after checking
+      setLoading(false);
     }
-  }, [router]);
+  }, []); // Remove router dependency to prevent re-runs
 
   const logout = () => {
-    document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("token");
+    }
     setToken(null);
     setIsAuthenticated(false);
     router.push("/login");
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, token, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, token, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

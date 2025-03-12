@@ -1,5 +1,6 @@
 import { Avenir } from "@/fonts/fonts";
 import "./globals.css";
+import { AuthProvider } from "@/context/AuthContext";
 
 export const metadata = {
   title: "ATP - Tarifario Web",
@@ -13,7 +14,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={Avenir.className}>{children}</body>
+      <body className={Avenir.className}>
+        {" "}
+        <AuthProvider>{children}</AuthProvider>
+      </body>
     </html>
   );
 }
