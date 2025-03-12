@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Home,
   PlusSquare,
@@ -52,7 +52,11 @@ const menuItems = [
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
   const { state } = useSidebar();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+  };
 
   return (
     <Sidebar collapsible="icon" {...props} className="border-neutral-200">
@@ -159,10 +163,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem className="cursor-pointer">
-                  <Link href="../login" className="flex items-center">
+                  <button onClick={handleLogout} className="flex items-center">
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Cerrar sesión</span>
-                  </Link>
+                  </button>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

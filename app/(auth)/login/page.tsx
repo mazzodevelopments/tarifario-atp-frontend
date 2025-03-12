@@ -5,46 +5,27 @@ import Input from "@/components/Input";
 import Image from "next/image";
 import logo from "@/public/logo.png";
 import { CircleUserRound, KeyRound } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
-import { API_BASE_URL } from "@/app/utils/config";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Login() {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const { login } = useAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem("token", data.access_token);
-
-        if (data.firstLogin) {
-          // router.push("/change-password");
-          router.push("/");
-        } else {
-          router.push("/");
-        }
-      } else {
-        const errorData = await response.json();
-        setError(errorData.message || "Login failed. Please try again.");
-      }
+      await login(email, password);
     } catch (error) {
-      console.error("Login error:", error);
-      setError("An error occurred. Please try again.");
+      if (error instanceof Error) {
+        setError(error.message || "An error occurred. Please try again.");
+      } else {
+        setError("An unexpected error occurred. Please try again.");
+      }
     }
   };
 
