@@ -8,20 +8,20 @@ interface AuthContextType {
   isAuthenticated: boolean;
   token: string | null;
   logout: () => void;
-  loading: boolean; // Add loading state
+  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
   token: null,
   logout: () => {},
-  loading: true, // Default to loading
+  loading: true,
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [token, setToken] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
@@ -33,10 +33,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setIsAuthenticated(true);
       }
 
-      // Always set loading to false after checking
       setLoading(false);
     }
-  }, []); // Remove router dependency to prevent re-runs
+  }, []);
 
   const logout = () => {
     if (typeof window !== "undefined") {

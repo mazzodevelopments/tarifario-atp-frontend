@@ -15,7 +15,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={Avenir.className}>
-        {" "}
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
