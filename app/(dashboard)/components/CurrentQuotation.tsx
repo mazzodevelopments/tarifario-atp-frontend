@@ -116,7 +116,9 @@ export default function CurrentQuotationCard() {
                 </TooltipTrigger>
                 <TooltipContent className="bg-sky-100">
                   <p className="text-primary text-[1.2em] font-[600]">
-                    {quotation.users.length} usuarios trabajando
+                    {quotation.users.length}{" "}
+                    {quotation.users.length > 1 ? "usuarios" : "usuario"}{" "}
+                    trabajando
                   </p>
                 </TooltipContent>
               </Tooltip>
