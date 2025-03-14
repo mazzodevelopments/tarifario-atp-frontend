@@ -33,6 +33,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
 import { AdminCreateUser } from "@/types/User";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Dashboard() {
   const [users, setUsers] = useState<User[]>([]);
@@ -50,6 +51,7 @@ export default function Dashboard() {
   const [shouldFetch, setShouldFetch] = useState(false);
 
   const { toast } = useToast();
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -78,7 +80,7 @@ export default function Dashboard() {
 
   const filteredUsers = users
     .filter((user) =>
-      user.email.toLowerCase().includes(searchQuery.toLowerCase())
+      user.email.toLowerCase().includes(searchQuery.toLowerCase()),
     )
     .sort((a, b) => {
       if (sortBy === "all") return 0;
@@ -145,16 +147,18 @@ export default function Dashboard() {
                         className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                       >
                         <Image
-                          src={"/default-profile-pic.png"}
+                          src={user?.profilePic || "/default-profile-pic.png"}
                           width={700}
                           height={700}
                           alt="Picture of the author"
                           className="w-8 h-8 rounded-full"
                         />
                         <div className="flex flex-col gap-0.5 leading-none">
-                          <span className="font-semibold">Usuario</span>
-                          <span className="text-xs text-muted-foreground">
-                            usuario@ejemplo.com
+                          <span className="font-semibold">
+                            {user?.name + " " + user?.lastname}
+                          </span>
+                          <span className="text-xs text-muted-foreground -mt-0.5">
+                            {user?.email}
                           </span>
                         </div>
                         <ChevronDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
@@ -355,8 +359,8 @@ export default function Dashboard() {
                                 user.role.name === "Superadmin"
                                   ? "bg-red-100 text-red-500"
                                   : user.role.name === "Admin"
-                                  ? "bg-blue-100 text-blue-500"
-                                  : "bg-green-100 text-green-600"
+                                    ? "bg-blue-100 text-blue-500"
+                                    : "bg-green-100 text-green-600"
                               }`}
                             >
                               <span className="text-sm font-semibold">
