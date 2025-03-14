@@ -76,8 +76,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setIsAuthenticated(true);
         setUser(data.user);
 
-        if (data.firstLogin) {
-          router.push("/");
+        if (data.user.firstLogin) {
+          router.push("/complete-user");
         } else {
           router.push("/");
         }
