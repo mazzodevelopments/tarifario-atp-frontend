@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "@/app/utils/config";
-import { AdminCreateUser } from "@/types/User";
+import { AdminCreateUser, AdminUpdateUser } from "@/types/User";
 
 export const AdminService = {
   getAllUsers: async () => {
@@ -46,6 +46,27 @@ export const AdminService = {
 
     if (!response.ok) {
       throw new Error(`Error al crear usuario: ${response.statusText}`);
+    }
+
+    return await response.json();
+  },
+  updateUser: async (id: number, updatedUser: AdminUpdateUser) => {
+    const response = await fetch(`${API_BASE_URL}/admin/update-user/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify(updatedUser),
+    });
+
+    if (response.status === 403) {
+      console.error("Acceso prohibido: No tienes permisos suficientes");
+      return;
+    }
+
+    if (!response.ok) {
+      throw new Error(`Error al actualizar usuario: ${response.statusText}`);
     }
 
     return await response.json();

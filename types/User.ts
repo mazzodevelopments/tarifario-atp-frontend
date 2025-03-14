@@ -1,6 +1,5 @@
 export interface User {
   id: number;
-  username: string;
   name: string;
   lastname: string;
   email: string;
@@ -18,4 +17,17 @@ export interface AdminCreateUser {
   name: string;
   lastname: string;
   roleId: number;
+}
+
+export interface AdminUpdateUser {
+  id?: number;
+  password?: string;
+  name?: string;
+  lastname?: string;
+  email?: string;
+  profilePic?: string;
+  firstLogin?: boolean;
+  phone?: string;
+  birthDate?: string;
+  roleId?: number;
 }

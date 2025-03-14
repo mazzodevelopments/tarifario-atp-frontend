@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { API_BASE_URL } from "@/app/utils/config";
 
 interface User {
+  id: number;
   email: string;
   name: string;
   lastname: string;
