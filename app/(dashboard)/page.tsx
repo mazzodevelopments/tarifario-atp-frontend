@@ -338,7 +338,9 @@ export default function Dashboard() {
                         <div className="flex items-center justify-start">
                           <div className="flex items-center space-x-2">
                             <Image
-                              src={"/default-profile-pic.png"}
+                              src={
+                                user.profilePic || "/default-profile-pic.png"
+                              }
                               width={700}
                               height={700}
                               alt="Picture of the author"
