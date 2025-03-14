@@ -41,10 +41,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedToken = localStorage.getItem("token");
+      const storedUser = localStorage.getItem("user");
 
       if (storedToken) {
         setToken(storedToken);
         setIsAuthenticated(true);
+
+        if (storedUser) {
+          setUser(JSON.parse(storedUser));
+        }
       }
 
       setLoading(false);
@@ -64,12 +69,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem("token", data.access_token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+
         setToken(data.access_token);
         setIsAuthenticated(true);
         setUser(data.user);
 
         if (data.firstLogin) {
-          // router.push("/change-password");
           router.push("/");
         } else {
           router.push("/");
@@ -87,8 +93,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = () => {
     if (typeof window !== "undefined") {
       localStorage.removeItem("token");
+      localStorage.removeItem("user");
     }
     setToken(null);
+    setUser(null);
     setIsAuthenticated(false);
     router.push("/login");
   };
