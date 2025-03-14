@@ -1,6 +1,19 @@
+"use client";
 import FirstLoginForm from "./FirstLoginForm";
+import { useAuth } from "@/context/AuthContext";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function FirstLoginPage() {
+  const { user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user?.firstLogin !== true) {
+      router.push("/");
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-neutral-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
