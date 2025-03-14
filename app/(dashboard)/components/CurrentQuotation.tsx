@@ -45,6 +45,10 @@ export default function CurrentQuotationCard() {
     stageId: number;
     budgets: Budget[] | null;
     items: Item[] | null;
+    users: {
+      id: number;
+      profilePic: string;
+    }[];
   } | null>(null);
   useEffect(() => {
     const fetchLastQuotation = async () => {
@@ -57,7 +61,6 @@ export default function CurrentQuotationCard() {
     };
     fetchLastQuotation();
   }, []);
-  const usersWorking = 12;
 
   const stepLinks: Record<StepKeys, string> = {
     1: `/create/${quotation?.id}/items`,
@@ -91,23 +94,29 @@ export default function CurrentQuotationCard() {
               <Tooltip delayDuration={250}>
                 <TooltipTrigger>
                   <div className="flex -space-x-2 overflow-hidden items-center hover:bg-neutral-100 p-1 rounded-md">
-                    <Avatar className="inline-block border-2 size-7 border-white">
-                      <img src="/default-profile-pic.png" alt="User 1" />
-                    </Avatar>
-                    <Avatar className="inline-block border-2 size-7 border-white">
-                      <img src="/default-profile-pic.png" alt="User 2" />
-                    </Avatar>
-                    <Avatar className="inline-block border-2 size-7 border-white">
-                      <img src="/default-profile-pic.png" alt="User 3" />
-                    </Avatar>
-                    <div className="pl-3">
-                      <span className="font-[600]">+9</span>
-                    </div>
+                    {quotation.users.slice(0, 3).map((user) => (
+                      <Avatar
+                        key={user.id}
+                        className="inline-block border-2 size-7 border-white"
+                      >
+                        <img
+                          src={user.profilePic || "/default-profile-pic.png"}
+                          alt={`User ${user.id}`}
+                        />
+                      </Avatar>
+                    ))}
+                    {quotation.users.length > 3 && (
+                      <div className="pl-3">
+                        <span className="font-[600]">
+                          +{quotation.users.length - 3}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </TooltipTrigger>
                 <TooltipContent className="bg-sky-100">
                   <p className="text-primary text-[1.2em] font-[600]">
-                    {usersWorking} usuarios trabajando
+                    {quotation.users.length} usuarios trabajando
                   </p>
                 </TooltipContent>
               </Tooltip>

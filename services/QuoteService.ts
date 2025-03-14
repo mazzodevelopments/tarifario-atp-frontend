@@ -50,6 +50,7 @@ export const QuoteService = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify(newItem),
     });
@@ -67,6 +68,7 @@ export const QuoteService = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify(newItems),
     });
@@ -84,6 +86,7 @@ export const QuoteService = {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({ ...editedItem, id: itemToEditId }),
     });
@@ -99,6 +102,9 @@ export const QuoteService = {
   deleteItem: async (itemId: number): Promise<{ message: string }> => {
     const response = await fetch(`${API_BASE_URL}/quote/items/${itemId}`, {
       method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
     });
 
     if (!response.ok) {
