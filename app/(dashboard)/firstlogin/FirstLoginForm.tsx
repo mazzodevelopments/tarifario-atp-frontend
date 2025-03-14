@@ -32,9 +32,7 @@ export default function FirstLoginForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Here you would typically send the form data to your backend
     console.log("Form submitted:", formData);
-    // After successful submission, redirect to the main app
     router.push("/dashboard");
   };
 
