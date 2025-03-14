@@ -1,4 +1,4 @@
-import { CreateQuotationData, QuotationData } from "@/types/QuotationData";
+import { CreateQuotationData } from "@/types/QuotationData";
 import { CreateItem, CreateMassiveLoadItems } from "@/types/Item";
 import { CreatePurchaseData, PurchaseData } from "@/types/PurchaseData";
 import { API_BASE_URL } from "@/app/utils/config";
@@ -8,6 +8,9 @@ export const QuoteService = {
   fetchQuotationTaskNumber: async (): Promise<string> => {
     const response = await fetch(`${API_BASE_URL}/quote/task-number`, {
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
     });
 
     if (!response.ok) {
@@ -21,6 +24,7 @@ export const QuoteService = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify(quotationData),
     });
@@ -36,6 +40,9 @@ export const QuoteService = {
   getQuotationItems: async (quotationId: number) => {
     const response = await fetch(`${API_BASE_URL}/quote/${quotationId}/items`, {
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
     });
 
     if (!response.ok) {
@@ -120,6 +127,9 @@ export const QuoteService = {
       `${API_BASE_URL}/quote/${quotationId}/budgets?includes=${query}`,
       {
         method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       },
     );
 
@@ -144,6 +154,7 @@ export const QuoteService = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify(newPurchaseData),
       },
@@ -163,9 +174,22 @@ export const QuoteService = {
       editedPurchaseData,
     );
   },
-  deletePurchaseData: async (purchaseDataId: string) => {
-    // ID EN REALIDAD ES NUMBER
-    console.log("LLAMADO A LA API PARA ELIMINAR PURCHASE DATA", purchaseDataId);
+  deletePurchaseData: async (purchaseDataId: number) => {
+    const response = await fetch(
+      `${API_BASE_URL}/quote/purchaseData/${purchaseDataId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Error al eliminar el purchaseData");
+    }
+
+    return await response.json();
   },
 
   // ETAPA 4
@@ -180,6 +204,7 @@ export const QuoteService = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({ margin }),
     });
@@ -197,6 +222,7 @@ export const QuoteService = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({ paymentCondition }),
       },
@@ -215,6 +241,9 @@ export const QuoteService = {
       `${API_BASE_URL}/quote/${quotationId}/selected-budgets`,
       {
         method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       },
     );
 
@@ -231,6 +260,7 @@ export const QuoteService = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify(budgetIds),
       },
@@ -250,15 +280,16 @@ export const QuoteService = {
   sendQuotationViaMail: async (quotationId: number) => {
     console.log("ENVIAR COTIZACION POR MAIL", quotationId);
   },
+
   // ETAPA 8
-  saveQuotation: async (quotationData: QuotationData) => {
-    console.log("Cotización completa: ", quotationData);
-  },
   getTaskNumberByQuotationId: async (quotationId: number) => {
     const response = await fetch(
       `${API_BASE_URL}/quote/${quotationId}/task-number`,
       {
         method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       },
     );
 
@@ -277,6 +308,7 @@ export const QuoteService = {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({ step }),
       },

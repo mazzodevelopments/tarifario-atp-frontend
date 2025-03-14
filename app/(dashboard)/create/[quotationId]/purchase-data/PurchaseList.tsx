@@ -75,14 +75,14 @@ export default function PurchaseList({ quotationId }: { quotationId: number }) {
     }
   };
 
-  const handleDeleteBudget = async (numbering: string) => {
+  const handleDeleteBudget = async (id: number) => {
     try {
-      await QuoteService.deletePurchaseData(numbering);
+      await QuoteService.deletePurchaseData(id);
       setShouldFetch(true);
     } catch (error) {
       console.error("Error deleting budget:", error);
     }
-    setBudgets(budgets.filter((budget) => budget.numbering !== numbering));
+    setBudgets(budgets.filter((budget) => budget.id !== id));
   };
 
   return (
@@ -166,7 +166,7 @@ export default function PurchaseList({ quotationId }: { quotationId: number }) {
                     </TableCell>
                     <TableCell>
                       <button
-                        onClick={() => handleDeleteBudget(budget.numbering)}
+                        onClick={() => handleDeleteBudget(budget.id)}
                         className="text-black hover:text-red-600 mx-2"
                       >
                         <X className="w-4" />
