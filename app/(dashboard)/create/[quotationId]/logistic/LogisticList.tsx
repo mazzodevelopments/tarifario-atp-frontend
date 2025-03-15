@@ -25,7 +25,7 @@ import type { Transport } from "@/types/Transport";
 import type { Custom } from "@/types/Custom";
 import type { DestinationExpenses } from "@/types/DestinationExpenses";
 import type { Freight } from "@/types/Freight";
-import "@/app/utils/formatNumber";
+import "@/utils/formatNumber";
 import { QuoteService } from "@/services/QuoteService";
 import { Checkbox } from "@/components/ui/checkbox";
 

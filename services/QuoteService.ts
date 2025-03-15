@@ -1,7 +1,7 @@
 import { CreateQuotationData } from "@/types/QuotationData";
 import { CreateItem, CreateMassiveLoadItems } from "@/types/Item";
 import { CreatePurchaseData, PurchaseData } from "@/types/PurchaseData";
-import { API_BASE_URL } from "@/app/utils/config";
+import { API_BASE_URL } from "@/utils/config";
 
 export const QuoteService = {
   // ETAPA 1

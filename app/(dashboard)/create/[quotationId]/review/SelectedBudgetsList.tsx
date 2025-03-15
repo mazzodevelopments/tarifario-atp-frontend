@@ -10,7 +10,7 @@ import {
 import Button from "@/components/Button";
 import type { Budget } from "@/types/Budget";
 import { Mail, Printer } from "lucide-react";
-import "@/app/utils/formatNumber";
+import "@/utils/formatNumber";
 import { QuoteService } from "@/services/QuoteService";
 
 export default function SelectedBudgetsList({

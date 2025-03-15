@@ -23,7 +23,7 @@ import type { Budget } from "@/types/Budget";
 import type { SalesData } from "@/types/SalesData";
 import AddMarginForm from "./forms/AddMarginForm";
 import AddPaymentConditionForm from "./forms/AddPaymentConditionForm";
-import "@/app/utils/formatNumber";
+import "@/utils/formatNumber";
 import { QuoteService } from "@/services/QuoteService";
 
 export default function SalesList({ quotationId }: { quotationId: number }) {

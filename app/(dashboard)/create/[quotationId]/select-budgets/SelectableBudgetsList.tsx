@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { Budget } from "@/types/Budget";
-import "@/app/utils/formatNumber";
+import "@/utils/formatNumber";
 import React, { useEffect, useState } from "react";
 import { QuoteService } from "@/services/QuoteService";
 

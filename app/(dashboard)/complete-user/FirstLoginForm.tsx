@@ -8,7 +8,7 @@ import Button from "@/components/Button";
 import { AdminService } from "@/services/AdminService";
 import { useAuth } from "@/context/AuthContext";
 import { AdminUpdateUser } from "@/types/User";
-import { convertImageToBase64 } from "@/app/utils/convertImageToBase64";
+import { convertImageToBase64 } from "@/utils/convertImageToBase64";
 
 export default function FirstLoginForm() {
   const [formData, setFormData] = useState({

@@ -3,7 +3,7 @@
 import type React from "react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { API_BASE_URL } from "@/app/utils/config";
+import { API_BASE_URL } from "@/utils/config";
 
 interface User {
   id: number;

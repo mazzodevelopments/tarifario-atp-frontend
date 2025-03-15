@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "@/app/utils/config";
+import { API_BASE_URL } from "@/utils/config";
 import { AdminCreateUser, AdminUpdateUser } from "@/types/User";
 
 export const AdminService = {

@@ -20,7 +20,7 @@ import type { Budget } from "@/types/Budget";
 import type { Item } from "@/types/Item";
 import type { CreatePurchaseData } from "@/types/PurchaseData";
 import { X } from "react-feather";
-import "@/app/utils/formatNumber";
+import "@/utils/formatNumber";
 import { PlusCircle } from "lucide-react";
 import { QuoteService } from "@/services/QuoteService";
 

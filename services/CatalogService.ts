@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "@/app/utils/config";
+import { API_BASE_URL } from "@/utils/config";
 import { EditSupplier, Supplier } from "@/types/Supplier";
 import { Client, EditClient } from "@/types/Client";
 
