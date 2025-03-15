@@ -34,6 +34,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
 import { AdminCreateUser } from "@/types/User";
 import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function Dashboard() {
   const [users, setUsers] = useState<User[]>([]);
@@ -51,7 +52,8 @@ export default function Dashboard() {
   const [shouldFetch, setShouldFetch] = useState(false);
 
   const { toast } = useToast();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -175,9 +177,14 @@ export default function Dashboard() {
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem className="cursor-pointer">
-                        <LogOut className="mr-2 h-4 w-4" />
-                        <span>Cerrar sesión</span>
+                      <DropdownMenuItem
+                        className="cursor-pointer"
+                        onClick={() => logout()}
+                      >
+                        <div className="flex items-center">
+                          <LogOut className="mr-2 h-4 w-4" />
+                          <span>Cerrar sesión</span>
+                        </div>
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>

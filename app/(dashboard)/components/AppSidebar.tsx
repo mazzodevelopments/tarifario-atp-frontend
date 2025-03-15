@@ -54,10 +54,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { state } = useSidebar();
   const { user, logout } = useAuth();
 
-  const handleLogout = () => {
-    logout();
-  };
-
   return (
     <Sidebar collapsible="icon" {...props} className="border-neutral-200">
       <SidebarHeader className="h-20 mb-6 justify-center items-center">
@@ -162,11 +158,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="cursor-pointer">
-                  <button onClick={handleLogout} className="flex items-center">
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => logout()}
+                >
+                  <div className="flex items-center">
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Cerrar sesión</span>
-                  </button>
+                  </div>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
