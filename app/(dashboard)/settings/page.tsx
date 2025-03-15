@@ -1,71 +1,65 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { UploadCloud } from "react-feather";
-import defaultProfilePic from "@/public/default-profile-pic.png";
-import Button from "@/components/Button";
 import Header from "@/app/(dashboard)/components/Header";
 import { useAuth } from "@/context/AuthContext";
+import { AdminService } from "@/services/AdminService";
+import EditUser from "@/app/(dashboard)/settings/forms/EditUser";
+import Button from "@/components/Button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { AdminUpdateUser, User } from "@/types/User";
 
 export default function Settings() {
-  const [editingField, setEditingField] = useState<string | null>(null);
+  const [userData, setUserData] = useState<User | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { user } = useAuth();
-  const username = user?.username;
-  const role = user?.role;
-  const [userData, setUserData] = useState({
-    Nombre: username || "Matias Monzalvo",
-    Rol: role || "Administrador",
-    Email: "matiasmonzalvo@mazzodevelopments.com",
-    Telefono: "+542944723412",
-    Direccion: "Soldado de la Independencia 1468",
-  });
 
-  const handleEdit = (field: string) => {
-    setEditingField(field);
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (user) {
+        const data = await AdminService.getUsersById(user!.id);
+        setUserData(data);
+      }
+    };
+
+    fetchUser();
+  }, [user]);
+
+  const handleUserUpdated = async (updatedUser: AdminUpdateUser) => {
+    if (user) {
+      await AdminService.updateUser(user.id, {
+        ...updatedUser,
+        id: user.id,
+      });
+      const data = await AdminService.getUsersById(user.id);
+      setUserData(data);
+      setIsDialogOpen(false); // Cierra el modal después de actualizar
+    }
   };
 
-  // const handleSave = (field: string) => {
-  //   setEditingField(null);
-  // };
+  const userFields = [
+    { label: "Nombre", value: userData?.name || "N/A" },
+    { label: "Apellido", value: userData?.lastname || "N/A" },
+    { label: "Correo electrónico", value: userData?.email || "N/A" },
+    { label: "Teléfono", value: userData?.phone || "N/A" },
+    { label: "Cumpleaños", value: userData?.birthDate || "N/A" },
+    { label: "Rol", value: userData?.role.name || "N/A" },
+  ];
 
-  const handleChange = (field: string, value: string) => {
-    setUserData((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const EditableField = ({
-    label,
-    value,
-  }: {
-    label: string;
-    value: string;
-  }) => (
-    <div className="w-full py-4 flex flex-col justify-between h-full">
+  const Field = ({ label, value }: { label: string; value: string }) => (
+    <div className="w-full py-2 flex flex-col justify-between h-full">
       <label className="text-sm font-[800] text-gray-700">{label}</label>
       <div className="relative w-full pb-1 pr-1">
-        {editingField === label ? (
-          <input
-            type="text"
-            value={value}
-            onChange={(e) => handleChange(label, e.target.value)}
-            className="w-full pr-1.5 pt-2.5 font-[600] text-gray-600 text-sm outline-none border-b border-gray-300"
-            autoFocus
-          />
-        ) : (
-          <p className="w-full pr-1.5 pt-2.5 font-[600] text-gray-600 text-sm">
-            {value}
-          </p>
-        )}
-        <Button
-          className="mt-2 text-xs rounded-xl text-white"
-          onClick={() =>
-            editingField === label
-              ? () => console.log("Guardar")
-              : handleEdit(label)
-          }
-        >
-          {editingField === label ? "Guardar" : "Editar"}
-        </Button>
+        <p className="w-full pr-1.5 mt-2 font-[600] text-gray-600 text-sm">
+          {value}
+        </p>
       </div>
     </div>
   );
@@ -82,39 +76,46 @@ export default function Settings() {
             <div className="flex w-full justify-between items-center pb-4 border-b border-neutral-200">
               <div className="flex gap-4 items-center">
                 <Image
-                  className="w-20 h-20 rounded-[28px]"
-                  src={defaultProfilePic.src || "/placeholder.svg"}
+                  className="w-20 h-20 rounded-full"
+                  src={userData?.profilePic || "/default-profile-pic.png"}
                   alt="Settings"
                   width={80}
                   height={80}
                 />
-                <div className="flex flex-col w-[60%]">
-                  <h3 className="font-[800] text-sm text-gray-600">
-                    Sube una foto de perfil
-                  </h3>
-                  <label className="font-[600] text-sm text-gray-500">
-                    Así tu equipo te reconocerá en cada etapa.
-                  </label>
-                </div>
-              </div>
-              <div className="w-auto flex items-center justify-center gap-2">
-                <Button variant="secondary">Eliminar</Button>
-                <button
-                  className="relative flex flex-row overflow-hidden px-3 py-2 rounded-[12px] font-[600] cursor-pointer
-    transition-all duration-300 ease-out text-sm
-    transform hover:scale-95 bg-neutral-900 text-white
-      before:absolute before:top-0 before:left-0 before:w-full before:h-full
-      before:bg-white before:opacity-0 before:transition-opacity before:duration-300
-      hover:before:opacity-20"
-                >
-                  <UploadCloud className="mr-2" size={20} />
-                  Nueva foto de perfil
-                </button>
+                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button variant="primary" className="px-2 text-white">
+                      Editar
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-md">
+                    <DialogHeader>
+                      <DialogTitle className="text-2xl">
+                        Editar Usuario
+                      </DialogTitle>
+                    </DialogHeader>
+                    <div className="bg-white rounded-lg w-full">
+                      <EditUser
+                        user={{
+                          name: userData?.name || "",
+                          lastname: userData?.lastname || "",
+                          email: userData?.email || "",
+                          profilePic: userData?.profilePic || "",
+                          phone: userData?.phone || "",
+                          birthDate: userData?.birthDate || "",
+                        }}
+                        onUserUpdated={handleUserUpdated}
+                        onDialogClose={() => setIsDialogOpen(false)}
+                      />
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </div>
             </div>
             <div className="w-full h-full">
-              {Object.entries(userData).map(([label, value]) => (
-                <EditableField key={label} label={label} value={value} />
+              {/* Mostrar todos los campos del usuario */}
+              {userFields.map((field, index) => (
+                <Field key={index} label={field.label} value={field.value} />
               ))}
             </div>
           </div>

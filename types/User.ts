@@ -1,10 +1,12 @@
 export interface User {
   id: number;
-  name: string;
-  lastname: string;
   email: string;
   profilePic: string;
+  name: string;
+  lastname: string;
   firstLogin: boolean;
+  birthDate: string;
+  phone: string;
   role: {
     id: number;
     name: string;
