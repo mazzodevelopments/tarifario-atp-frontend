@@ -1,17 +1,28 @@
 "use client";
 
-import type React from "react";
+import React, { useEffect } from "react";
 import PageTransition from "@/components/PageTransition";
 import { AppSidebar } from "./components/AppSidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AnimatePresence } from "framer-motion";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push("/login");
+    }
+  }, []);
+
   return (
     <ProtectedRoute>
       <SidebarProvider>
