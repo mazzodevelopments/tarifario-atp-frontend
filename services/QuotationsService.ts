@@ -25,6 +25,36 @@ export const QuotationsService = {
     return await response.json();
   },
 
+  getUserUnfinishedQuotations: async (userId: number) => {
+    const response = await fetch(
+      `${API_BASE_URL}/quotations/unfinished/${userId}`,
+      {
+        method: "GET",
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Error al traer cotizaciones");
+    }
+
+    return await response.json();
+  },
+
+  getUserFinishedQuotations: async (userId: number) => {
+    const response = await fetch(
+      `${API_BASE_URL}/quotations/finished/${userId}`,
+      {
+        method: "GET",
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Error al traer cotizaciones");
+    }
+
+    return await response.json();
+  },
+
   getCompleteFinishedQuotation: async (taskNumber: string) => {
     const response = await fetch(
       `${API_BASE_URL}/quotations/${taskNumber}/finished-complete`,

@@ -23,6 +23,27 @@ export const AdminService = {
     return await response.json();
   },
 
+  getUsersById: async (userId: number) => {
+    const response = await fetch(`${API_BASE_URL}/admin/users/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    if (response.status === 403) {
+      console.error("Acceso prohibido: No tienes permisos suficientes");
+      return;
+    }
+
+    if (!response.ok) {
+      throw new Error(`Error fetching users: ${response.status}`);
+    }
+
+    return await response.json();
+  },
+
   createUser: async (newUser: AdminCreateUser) => {
     const response = await fetch(`${API_BASE_URL}/admin/create-user`, {
       method: "POST",

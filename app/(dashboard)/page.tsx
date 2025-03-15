@@ -380,7 +380,14 @@ export default function Dashboard() {
                           <div className=""></div>
                         </div>
                         <div className="flex items-center gap-1">
-                          <Button variant="secondary">Ver cotizaciones</Button>
+                          <Button
+                            onClick={() => {
+                              router.push(`/user-history/${user.id}`);
+                            }}
+                            variant="secondary"
+                          >
+                            Ver cotizaciones
+                          </Button>
                           <Button variant="secondary">Gestionar usuario</Button>
                         </div>
                       </div>
