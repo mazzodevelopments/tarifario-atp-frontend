@@ -40,7 +40,7 @@ export default function Settings() {
       });
       const data = await AdminService.getUsersById(user.id);
       setUserData(data);
-      setIsDialogOpen(false); // Cierra el modal después de actualizar
+      setIsDialogOpen(false);
     }
   };
 
