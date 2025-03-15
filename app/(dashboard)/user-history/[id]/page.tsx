@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Search } from "react-feather";
 import {
   Table,
@@ -17,6 +17,7 @@ import type { HistoryQuotationCard } from "@/types/Quotations";
 import { useParams } from "next/navigation";
 import { User } from "@/types/User";
 import { AdminService } from "@/services/AdminService";
+import Image from "next/image";
 
 export default function History() {
   const [unfinishedQuotations, setUnfinishedQuotations] = useState<
@@ -81,10 +82,25 @@ export default function History() {
     <div className="flex justify-start w-full h-full flex-col bg-neutral-50">
       <div className="w-full h-20 flex-shrink-0 border-b border-neutral-200">
         <div className="flex justify-between items-center h-full px-6 mb-4">
-          <div className="flex flex-col justify-center items-start w-[20vw]">
-            <h2 className="flex items-center text-xl leading-[1] p-0 font-[800] text-black">
-              Cotizaciones de {user?.name + " " + user?.lastname}
-            </h2>
+          <div className="flex flex-col justify-center items-start w-[25vw]">
+            <div className="flex gap-3 items-center">
+              <h2 className="text-xl leading-tight font-bold text-black p-0 mt-1">
+                Cotizaciones
+              </h2>
+              <span className="text-xl font-medium text-gray-300">|</span>
+              <div className="flex items-center gap-2">
+                <Image
+                  src={user?.profilePic || "/default-profile-pic.png"}
+                  width={32}
+                  height={32}
+                  alt="Picture of the author"
+                  className="w-8 h-8 rounded-full object-cover border-2 border-white shadow-sm"
+                />
+                <h2 className="text-xl leading-tight font-bold text-black p-0 mt-1 -ml-0.5">
+                  {user?.name + " " + user?.lastname}
+                </h2>
+              </div>
+            </div>
           </div>
           <div className="flex items-center gap-2 h-14 hover:cursor-pointer">
             <div className="relative w-[22vw]">

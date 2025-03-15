@@ -66,7 +66,7 @@ export default function History() {
       <div className="w-full h-20 flex-shrink-0 border-b border-neutral-200">
         <div className="flex justify-between items-center h-full px-6 mb-4">
           <div className="flex flex-col justify-center items-start w-[12vw]">
-            <h2 className="flex items-center text-xl leading-[1] p-0 font-[800] text-black">
+            <h2 className="flex items-center text-xl leading-[1] p-0 font-[800] text-black mt-1">
               Cotizaciones
             </h2>
           </div>
