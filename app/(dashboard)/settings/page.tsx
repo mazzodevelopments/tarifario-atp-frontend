@@ -16,6 +16,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import Header from "@/app/(dashboard)/components/Header";
 
 export default function Settings() {
   const [userData, setUserData] = useState<User | null>(null);
@@ -56,48 +57,12 @@ export default function Settings() {
 
   return (
     <div className="flex flex-col justify-start w-full h-full bg-neutral-50">
-      <div className="w-full h-20 flex-shrink-0 border-b border-neutral-200">
-        <div className="flex justify-between items-center h-full px-6 mb-4">
-          <div className="flex flex-col justify-center items-start">
-            <h2 className="flex items-center text-xl leading-[1] p-0 font-[800] text-black mt-1">
-              Ajustes
-            </h2>
-          </div>
-          <div className="flex items-center gap-2 h-14 hover:cursor-pointer">
-            <div className="relative w-[22vw]">
-              <Search
-                size={20}
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black"
-              />
-              <input
-                className="w-full h-[2.25vw] rounded-full pl-10 pr-4 bg-white shadow-sm border border-neutral-200 text-sm focus:outline-none placeholder-secondary"
-                placeholder="Buscar configuración"
-              />
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            {userData && (
-              <div className="flex items-center gap-2">
-                <Image
-                  src={userData?.profilePic || "/default-profile-pic.png"}
-                  width={32}
-                  height={32}
-                  alt="Profile picture"
-                  className="rounded-full"
-                />
-                <span className="font-semibold text-sm">
-                  {userData.name} {userData.lastname}
-                </span>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
+      <Header title="Ajustes" description={""} />
 
       <div className="flex flex-col lg:flex-row items-start w-full h-[calc(100%-5rem)]">
         <div className="w-full lg:w-2/3 h-full flex flex-col relative p-6">
           <div className="w-full flex flex-col pb-4">
-            <h2 className="text-3xl font-[800]">Mi cuenta</h2>
+            <h2 className="text-3xl font-[800]">Mi perfil</h2>
             <p className="text-gray-500 ml-1">
               Información y configuración de la cuenta
             </p>
