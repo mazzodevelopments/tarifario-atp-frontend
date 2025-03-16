@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import type React from "react";
+import { useState } from "react";
+import Image from "next/image";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
-
-import { AdminUpdateUser } from "@/types/User";
+import type { AdminUpdateUser } from "@/types/User";
+import { convertImageToBase64 } from "@/utils/convertImageToBase64";
 
 interface EditUserProps {
   user: AdminUpdateUser;
@@ -16,7 +18,7 @@ interface EditUserForm {
   name: string;
   lastname: string;
   email: string;
-  profilePic: string;
+  profilePic: string | null;
   phone: string;
   birthDate: string;
 }
@@ -30,10 +32,14 @@ export default function EditUser({
     name: user.name || "",
     lastname: user.lastname || "",
     email: user.email || "",
-    profilePic: user.profilePic || "",
+    profilePic: user.profilePic || null,
     phone: user.phone || "",
     birthDate: user.birthDate || "",
   });
+
+  const [previewUrl, setPreviewUrl] = useState<string | null>(
+    user.profilePic || null
+  );
 
   const [errors, setErrors] = useState({
     name: "",
@@ -99,7 +105,7 @@ export default function EditUser({
       name: formData.name,
       lastname: formData.lastname,
       email: formData.email,
-      profilePic: formData.profilePic,
+      profilePic: formData.profilePic || undefined,
       phone: formData.phone,
       birthDate: formData.birthDate,
     };
@@ -114,6 +120,24 @@ export default function EditUser({
       [name]: value,
     }));
     setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
+  };
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      try {
+        const base64String = await convertImageToBase64(file);
+        setFormData((prev) => ({ ...prev, profilePic: base64String }));
+        setPreviewUrl(base64String);
+        setErrors((prevErrors) => ({ ...prevErrors, profilePic: "" }));
+      } catch (error) {
+        console.error("Error al convertir la imagen:", error);
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          profilePic: "Error al procesar la imagen",
+        }));
+      }
+    }
   };
 
   return (
@@ -150,16 +174,43 @@ export default function EditUser({
         label="Email"
         error={errors.email}
       />
-      <Input
-        type="text"
-        id="profilePic"
-        name="profilePic"
-        value={formData.profilePic}
-        onChange={handleChange}
-        placeholder="URL de la foto de perfil"
-        label="Foto de perfil"
-        error={errors.profilePic}
-      />
+
+      <div>
+        <label
+          htmlFor="profilePic"
+          className="block text-sm font-[600] text-gray-700"
+        >
+          Foto de perfil
+        </label>
+        <input
+          type="file"
+          name="profilePic"
+          id="profilePic"
+          accept="image/*"
+          onChange={handleImageChange}
+          className="mt-1 block w-full text-sm text-gray-500
+            file:mr-4 file:py-2 file:px-4
+            file:rounded-full file:border-0
+            file:text-sm file:font-semibold
+            file:bg-primary/10 file:text-primary
+            hover:file:bg-primary/20"
+        />
+        {errors.profilePic && (
+          <p className="text-red-500 text-xs mt-1">{errors.profilePic}</p>
+        )}
+        {previewUrl && (
+          <div className="mt-2">
+            <Image
+              src={previewUrl || "/placeholder.svg"}
+              alt="Profile preview"
+              width={100}
+              height={100}
+              className="rounded-full object-cover"
+            />
+          </div>
+        )}
+      </div>
+
       <Input
         type="text"
         id="phone"
