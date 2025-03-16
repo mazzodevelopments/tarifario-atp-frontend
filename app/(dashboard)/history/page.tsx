@@ -23,7 +23,7 @@ export default function History() {
     HistoryQuotationCard[]
   >([]);
   const [activeTab, setActiveTab] = useState<"pending" | "completed">(
-    "pending",
+    "pending"
   );
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -54,11 +54,11 @@ export default function History() {
 
   const filteredUnfinishedQuotations = unfinishedQuotations.filter(
     (quotation) =>
-      quotation.taskNumber.toLowerCase().includes(searchTerm.toLowerCase()),
+      quotation.taskNumber.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const filteredFinishedQuotations = finishedQuotations.filter((quotation) =>
-    quotation.taskNumber.toLowerCase().includes(searchTerm.toLowerCase()),
+    quotation.taskNumber.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -112,7 +112,7 @@ export default function History() {
 
         <div className="w-auto h-auto overflow-hidden rounded-[12px] shadow-sm shadow-cyan-500/20">
           <div className="border rounded-[12px] overflow-auto max-h-[70vh] relative w-full">
-            <Table className="w-full">
+            <Table className="w-full bg-white">
               <TableHeader>
                 <TableRow className="bg-primary/5">
                   <TableHead className="text-primary font-[600] text-center">

@@ -177,7 +177,7 @@ export default function Clients() {
       <div className="w-full px-6 pb-6 pt-4">
         <div className="w-auto h-auto overflow-hidden rounded-[12px] shadow-sm shadow-cyan-500/20">
           <div className="border rounded-[12px] overflow-auto max-h-[70vh] relative w-full">
-            <Table className="w-full">
+            <Table className="w-full bg-white">
               <TableHeader>
                 <TableRow className="bg-primary/5">
                   <TableHead
