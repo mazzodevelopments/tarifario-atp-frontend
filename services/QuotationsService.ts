@@ -126,4 +126,19 @@ export const QuotationsService = {
 
     return await response.json();
   },
+
+  getUserLastModifiedQuotation: async (userId: number) => {
+    const response = await fetch(
+      `${API_BASE_URL}/quotations/last-modified/${userId}`,
+      {
+        method: "GET",
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Error al traer las ultimas cotizaciones");
+    }
+
+    return await response.json();
+  },
 };

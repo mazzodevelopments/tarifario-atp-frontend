@@ -133,7 +133,7 @@ export default function UserPage() {
             <p className="text-gray-500">Cotizaciones recientes y pasadas</p>
           </div>
           <div className="w-full h-full gap-3 flex flex-col">
-            <CurrentQuotationCard />
+            <CurrentQuotationCard userId={user ? user.id : 0} />
             <QuotationSlider quotations={lastQuotations} />
           </div>
         </div>

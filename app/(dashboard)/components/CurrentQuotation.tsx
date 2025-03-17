@@ -26,7 +26,7 @@ const stepTexts: Record<StepKeys, string> = {
   7: "Completada",
 };
 
-export default function CurrentQuotationCard() {
+export default function CurrentQuotationCard({ userId }: { userId?: number }) {
   const [quotation, setQuotation] = useState<{
     id?: number;
     taskNumber: string;
@@ -53,12 +53,19 @@ export default function CurrentQuotationCard() {
   useEffect(() => {
     const fetchLastQuotation = async () => {
       try {
-        const data = await QuotationsService.getLastModifiedQuotation();
-        setQuotation(data);
+        if (userId) {
+          const data =
+            await QuotationsService.getUserLastModifiedQuotation(userId);
+          setQuotation(data);
+        } else {
+          const data = await QuotationsService.getLastModifiedQuotation();
+          setQuotation(data);
+        }
       } catch (error) {
         console.error("Error:", error);
       }
     };
+
     fetchLastQuotation();
   }, []);
 
