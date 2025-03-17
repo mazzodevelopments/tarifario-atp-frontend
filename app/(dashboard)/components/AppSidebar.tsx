@@ -45,21 +45,30 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { state } = useSidebar();
   const { user, logout } = useAuth();
 
-  const menuItems = !["Superadmin", "Admin"].includes(user?.role.name as string)
+  const role = user?.role.name as string;
+
+  const menuItems = ["Superadmin", "Admin"].includes(role)
     ? [
-        { icon: Home, label: "Home", id: "" },
-        { icon: PlusSquare, label: "Crear", id: "create" },
-        { icon: Clock, label: "Cotizaciones", id: "history" },
-        { icon: Truck, label: "Proveedores", id: "suppliers" },
-      ]
-    : [
         { icon: Home, label: "Home", id: "" },
         { icon: PlusSquare, label: "Crear", id: "create" },
         { icon: Clock, label: "Cotizaciones", id: "history" },
         { icon: Users, label: "Clientes", id: "clients" },
         { icon: Truck, label: "Proveedores", id: "suppliers" },
         { icon: BarChart2, label: "Comparar", id: "compare" },
-      ];
+      ]
+    : role === "Ventas"
+      ? [
+          { icon: Home, label: "Home", id: "" },
+          { icon: PlusSquare, label: "Crear", id: "create" },
+          { icon: Clock, label: "Cotizaciones", id: "history" },
+        ]
+      : [
+          { icon: Home, label: "Home", id: "" },
+          { icon: PlusSquare, label: "Crear", id: "create" },
+          { icon: Clock, label: "Cotizaciones", id: "history" },
+          { icon: Users, label: "Clientes", id: "clients" },
+          { icon: Truck, label: "Proveedores", id: "suppliers" },
+        ];
 
   return (
     <Sidebar collapsible="icon" {...props} className="border-neutral-200">
