@@ -85,14 +85,14 @@ export default function UserPage() {
             </div>
           </div>
           <div className="flex items-center gap-2 h-14 hover:cursor-pointer">
-            <div className="relative w-[12vw]">
+            <div className="relative w-auto">
               <SidebarMenu>
                 <SidebarMenuItem>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <SidebarMenuButton
                         size="lg"
-                        className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                        className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground hover:bg-primary/5 transition-all duration-300 rounded-xl"
                       >
                         <Image
                           src={user?.profilePic || "/default-profile-pic.png"}
