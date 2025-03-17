@@ -45,20 +45,27 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { state } = useSidebar();
   const { user, logout } = useAuth();
 
-  const menuItems = !["Superadmin", "Admin"].includes(user?.role.name as string)
-    ? [
-        { icon: Home, label: "Home", id: "" },
-        { icon: PlusSquare, label: "Crear", id: "create" },
-        { icon: Clock, label: "Cotizaciones", id: "history" },
-        { icon: Truck, label: "Proveedores", id: "suppliers" },
-      ]
+  const menuItems = ["Superadmin", "Admin"].includes(user?.role.name as string)
+    ? ["Ventas"].includes(user?.role.name as string)
+      ? [
+          { icon: Home, label: "Home", id: "" },
+          { icon: PlusSquare, label: "Crear", id: "create" },
+          { icon: Clock, label: "Cotizaciones", id: "history" },
+          { icon: Users, label: "Clientes", id: "clients" },
+          { icon: Truck, label: "Proveedores", id: "suppliers" },
+          { icon: BarChart2, label: "Comparar", id: "compare" },
+        ]
+      : [
+          { icon: Home, label: "Home", id: "" },
+          { icon: PlusSquare, label: "Crear", id: "create" },
+          { icon: Clock, label: "Cotizaciones", id: "history" },
+          { icon: Users, label: "Clientes", id: "clients" },
+          { icon: Truck, label: "Proveedores", id: "suppliers" },
+        ]
     : [
         { icon: Home, label: "Home", id: "" },
         { icon: PlusSquare, label: "Crear", id: "create" },
         { icon: Clock, label: "Cotizaciones", id: "history" },
-        { icon: Users, label: "Clientes", id: "clients" },
-        { icon: Truck, label: "Proveedores", id: "suppliers" },
-        { icon: BarChart2, label: "Comparar", id: "compare" },
       ];
 
   return (
