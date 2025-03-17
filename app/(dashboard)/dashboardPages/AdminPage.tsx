@@ -140,14 +140,14 @@ export default function AdminPage() {
             linkWithName
           />
           <div className="flex items-center gap-2 h-14 hover:cursor-pointer">
-            <div className="relative w-[12vw]">
+            <div className="relative w-auto">
               <SidebarMenu>
                 <SidebarMenuItem>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <SidebarMenuButton
                         size="lg"
-                        className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                        className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground hover:bg-primary/5 transition-all duration-300 rounded-xl"
                       >
                         <Image
                           src={user?.profilePic || "/default-profile-pic.png"}
@@ -306,18 +306,15 @@ export default function AdminPage() {
                 </div>
               </div> */}
             <div className="flex flex-col w-full h-full">
-              <div className="flex flex-col relative py-4 bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full">
-                <div className="mb-4 mx-4 relative flex items-center justify-between">
+              <div className="flex flex-col relative p-[1vw] bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full">
+                <div className="mb-4 relative flex items-center justify-between">
                   <input
-                    className="w-60 h-10 rounded-3xl bg-gray-50 border border-neutral-200 px-8"
+                    className="w-60 h-[2.5vw] rounded-3xl bg-gray-50 border border-neutral-200 px-[2.25vw] mt-[0.4spx] text-[1.2vw]"
                     placeholder="Buscar usuario"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
-                  <Search
-                    size={20}
-                    className="absolute left-2 top-1/2 transform -translate-y-1/2 text-neutral-400 z-10"
-                  />
+                  <Search className="w-[1.3vw] h-[1.3vw] absolute left-2 top-1/2 transform -translate-y-1/2 text-neutral-400 z-10" />
 
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-neutral-500">
@@ -336,7 +333,7 @@ export default function AdminPage() {
                   </div>
                 </div>
 
-                <ScrollArea className="border-neutral-100 border-t px-4 h-[50vh]">
+                <ScrollArea className="border-neutral-100 border-t h-[50vh]">
                   <div className="space-y-4 mt-4">
                     {filteredUsers.map((user) => (
                       <div
