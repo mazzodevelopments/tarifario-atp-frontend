@@ -12,6 +12,7 @@ interface User {
   lastname: string;
   firstLogin: boolean;
   profilePic: string;
+  role: { id: number; name: string };
 }
 
 interface AuthContextType {

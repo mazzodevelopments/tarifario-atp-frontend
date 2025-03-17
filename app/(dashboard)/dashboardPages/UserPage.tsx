@@ -11,11 +11,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import defaultProfilePic from "@/public/default-profile-pic.png";
 import { ChevronDown, LogOut, Search, Settings } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { QuotationData } from "@/types/QuotationData";
+import React from "react";
+import { useAuth } from "@/context/AuthContext";
 
 const quotation: QuotationData = {
   taskNumber: "A25R-0005",
@@ -28,9 +29,12 @@ const quotation: QuotationData = {
   customerRequestNumber: "REQ-2025-005",
   items: null,
   budgets: null,
+  stageId: 0,
 };
 
 export default function UserPage() {
+  const { user, logout } = useAuth();
+
   return (
     <div className="flex justify-start w-full h-screen flex-col bg-neutral-50">
       <div className="w-full h-20 flex-shrink-0 border-b border-neutral-200">
@@ -63,16 +67,18 @@ export default function UserPage() {
                         className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                       >
                         <Image
-                          src={defaultProfilePic}
+                          src={user?.profilePic || "/default-profile-pic.png"}
                           width={700}
                           height={700}
                           alt="Picture of the author"
                           className="w-8 h-8 rounded-full"
                         />
                         <div className="flex flex-col gap-0.5 leading-none">
-                          <span className="font-semibold">Usuario</span>
-                          <span className="text-xs text-muted-foreground">
-                            usuario@ejemplo.com
+                          <span className="font-semibold">
+                            {user?.name + " " + user?.lastname}
+                          </span>
+                          <span className="text-xs text-muted-foreground -mt-0.5">
+                            {user?.email}
                           </span>
                         </div>
                         <ChevronDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
@@ -89,9 +95,14 @@ export default function UserPage() {
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem className="cursor-pointer">
-                        <LogOut className="mr-2 h-4 w-4" />
-                        <span>Cerrar sesión</span>
+                      <DropdownMenuItem
+                        className="cursor-pointer"
+                        onClick={() => logout()}
+                      >
+                        <div className="flex items-center">
+                          <LogOut className="mr-2 h-4 w-4" />
+                          <span>Cerrar sesión</span>
+                        </div>
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
