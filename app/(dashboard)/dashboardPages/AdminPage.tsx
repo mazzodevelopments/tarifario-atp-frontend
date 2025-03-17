@@ -134,6 +134,7 @@ export default function AdminPage() {
             </h2>
           </div>
           <SearchInput
+            placeholder="Buscar cotización"
             onSearch={fetchSearchResults}
             link="/history"
             linkWithName

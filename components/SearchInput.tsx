@@ -10,12 +10,14 @@ interface SearchResult {
 }
 
 interface SearchInputProps {
+  placeholder: string;
   onSearch: (query: string) => Promise<SearchResult[]>;
   link: string;
   linkWithName: boolean;
 }
 
 export default function SearchInput({
+  placeholder,
   onSearch,
   link,
   linkWithName,
@@ -51,7 +53,7 @@ export default function SearchInput({
         />
         <input
           className="w-full h-[2.25vw] rounded-full pl-10 pr-4 bg-white shadow-sm border border-neutral-200 text-sm focus:outline-none placeholder-secondary"
-          placeholder="Buscar cotización"
+          placeholder={placeholder}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />

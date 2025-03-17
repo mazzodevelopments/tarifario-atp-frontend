@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Search } from "react-feather";
 import {
   Table,
@@ -14,6 +14,8 @@ import Button from "@/components/Button";
 import { QuotationTableRow } from "@/app/(dashboard)/history/QuotationTableRow";
 import { QuotationsService } from "@/services/QuotationsService";
 import type { HistoryQuotationCard } from "@/types/Quotations";
+import SearchInput from "@/components/SearchInput";
+import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 
 export default function History() {
   const [unfinishedQuotations, setUnfinishedQuotations] = useState<
@@ -23,7 +25,7 @@ export default function History() {
     HistoryQuotationCard[]
   >([]);
   const [activeTab, setActiveTab] = useState<"pending" | "completed">(
-    "pending"
+    "pending",
   );
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -54,12 +56,18 @@ export default function History() {
 
   const filteredUnfinishedQuotations = unfinishedQuotations.filter(
     (quotation) =>
-      quotation.taskNumber.toLowerCase().includes(searchTerm.toLowerCase())
+      quotation.taskNumber.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const filteredFinishedQuotations = finishedQuotations.filter((quotation) =>
-    quotation.taskNumber.toLowerCase().includes(searchTerm.toLowerCase())
+    quotation.taskNumber.toLowerCase().includes(searchTerm.toLowerCase()),
   );
+
+  const fetchSearchResults = async (searchTerm: string) => {
+    const data: { id: number; taskNumber: string }[] =
+      await QuotationsService.searchQuotationByTaskNumber(searchTerm);
+    return adaptToDropdown(data, "id", "taskNumber");
+  };
 
   return (
     <div className="flex justify-start w-full h-full flex-col bg-neutral-50">
@@ -70,20 +78,12 @@ export default function History() {
               Cotizaciones
             </h2>
           </div>
-          <div className="flex items-center gap-2 h-14 hover:cursor-pointer">
-            <div className="relative w-[22vw]">
-              <Search
-                size={20}
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black"
-              />
-              <input
-                className="w-full h-[2.25vw] rounded-full pl-10 pr-4 bg-white shadow-sm border border-neutral-200 text-sm focus:outline-none placeholder-secondary"
-                placeholder="Buscar cotización"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-          </div>
+          <SearchInput
+            placeholder="Buscar cotización"
+            onSearch={fetchSearchResults}
+            link="/history"
+            linkWithName
+          />
         </div>
       </div>
       <div className="w-full px-6 pb-6 pt-4">

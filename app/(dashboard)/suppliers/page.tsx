@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
-import Header from "@/app/(dashboard)/components/Header";
 import {
   Dialog,
   DialogContent,
@@ -24,6 +23,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ArrowDown, ArrowUp, Pencil } from "lucide-react";
+import SearchInput from "@/components/SearchInput";
+import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 
 export default function Proveedores() {
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
@@ -182,9 +183,35 @@ export default function Proveedores() {
 
   const sortedSuppliers = getSortedSuppliers();
 
+  const fetchSearchResults = async (searchTerm: string) => {
+    const filteredSuppliers: { id: number; name: string }[] = suppliers
+      .filter((supplier) =>
+        supplier.name.toLowerCase().includes(searchTerm.toLowerCase()),
+      )
+      .map((supplier) => ({
+        id: supplier.id || 0,
+        name: supplier.name,
+      }));
+    return adaptToDropdown(filteredSuppliers, "id", "name");
+  };
+
   return (
     <div className="flex justify-start w-full h-full flex-col bg-transparent">
-      <Header title="Proveedores" description="Lista de suppliers oficiales" />
+      <div className="w-full h-20 flex-shrink-0 border-b border-neutral-200">
+        <div className="flex justify-between items-center h-full px-6 mb-4">
+          <div className="flex flex-col justify-center items-start w-[12vw]">
+            <h2 className="flex items-center text-xl leading-[1] p-0 font-[800] text-black mt-1">
+              Proovedores
+            </h2>
+          </div>
+          <SearchInput
+            placeholder="Buscar proovedores"
+            onSearch={fetchSearchResults}
+            link="/supplier"
+            linkWithName
+          />
+        </div>
+      </div>
       <div className="mt-6 px-6">
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
