@@ -208,7 +208,6 @@ export default function Proveedores() {
             placeholder="Buscar proovedores"
             onSearch={fetchSearchResults}
             link="/supplier"
-            linkWithName
           />
         </div>
       </div>
