@@ -141,4 +141,15 @@ export const QuotationsService = {
 
     return await response.json();
   },
+  searchQuotationByTaskNumber: async (term: string) => {
+    const response = await fetch(`${API_BASE_URL}/quotations/search/${term}`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al traer las ultimas cotizaciones");
+    }
+
+    return await response.json();
+  },
 };

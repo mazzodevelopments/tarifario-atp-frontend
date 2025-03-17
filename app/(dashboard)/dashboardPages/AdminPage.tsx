@@ -35,6 +35,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { AdminCreateUser } from "@/types/User";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
+import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
+import SearchInput from "@/components/SearchInput";
 
 export default function AdminPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -116,6 +118,12 @@ export default function AdminPage() {
     setIsDialogOpen(false);
   };
 
+  const fetchSearchResults = async (searchTerm: string) => {
+    const data: { id: number; taskNumber: string }[] =
+      await QuotationsService.searchQuotationByTaskNumber(searchTerm);
+    return adaptToDropdown(data, "id", "taskNumber");
+  };
+
   return (
     <div className="flex justify-start w-full h-auto lg:h-screen flex-col bg-neutral-50">
       <div className="w-full h-20 flex-shrink-0 border-b border-neutral-200">
@@ -125,18 +133,11 @@ export default function AdminPage() {
               General
             </h2>
           </div>
-          <div className="flex items-center gap-2 h-14 hover:cursor-pointer">
-            <div className="relative w-[22vw]">
-              <Search
-                size={20}
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black"
-              />
-              <input
-                className="w-full h-[2.25vw] rounded-full pl-10 pr-4 bg-white shadow-sm border border-neutral-200 text-sm focus:outline-none placeholder-secondary"
-                placeholder="Buscar cotización"
-              />
-            </div>
-          </div>
+          <SearchInput
+            onSearch={fetchSearchResults}
+            link="/history"
+            linkWithName
+          />
           <div className="flex items-center gap-2 h-14 hover:cursor-pointer">
             <div className="relative w-[12vw]">
               <SidebarMenu>
