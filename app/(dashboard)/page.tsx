@@ -60,7 +60,6 @@ export default function Dashboard() {
       try {
         const data = await AdminService.getAllUsers();
         setUsers(data);
-        setShouldFetch(false);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -70,7 +69,6 @@ export default function Dashboard() {
       try {
         const data = await QuotationsService.getLastFiveFinishedQuotations();
         setLastQuotations(data);
-        setShouldFetch(false);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -78,6 +76,7 @@ export default function Dashboard() {
 
     fetchUsers();
     fetchLastFiveQuotations();
+    setShouldFetch(false);
   }, [shouldFetch]);
 
   const filteredUsers = users
