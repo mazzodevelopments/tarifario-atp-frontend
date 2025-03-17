@@ -30,6 +30,7 @@ export default function UserPage() {
       clientName: string;
     }[]
   >([]);
+  const [finishedQuotations, setFinishedQuotations] = useState<number>(0);
   const [shouldFetch, setShouldFetch] = useState(false);
 
   useEffect(() => {
@@ -45,7 +46,20 @@ export default function UserPage() {
       }
     };
 
+    const fetchFinishedQuotations = async () => {
+      try {
+        if (user) {
+          const finishedQuotations =
+            await QuotationsService.getUserFinishedQuotations(user.id);
+          setFinishedQuotations(finishedQuotations.length);
+        }
+      } catch (error) {
+        console.error("Error fetching quotation items:", error);
+      }
+    };
+
     fetchUserLastFiveQuotations();
+    fetchFinishedQuotations();
     setShouldFetch(false);
   }, [shouldFetch]);
 
@@ -166,7 +180,7 @@ export default function UserPage() {
                 Estás en el grupo de
               </span>
               <h3 className="text-center font-[700] text-[3vw] text-primary">
-                Logística
+                {user?.role.name}
               </h3>
               <p className="text-center text-[0.85vw]">
                 Solo podrás participar en la etapa correspondiente a tu grupo en
@@ -178,7 +192,7 @@ export default function UserPage() {
                 Cotizaciones completadas
               </span>
               <h3 className="text-center font-[700] text-[4vw] text-primary">
-                50
+                {finishedQuotations}
               </h3>
               <Button
                 variant="primary"
