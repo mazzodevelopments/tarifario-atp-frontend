@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   Home,
   PlusSquare,
@@ -40,19 +40,26 @@ import {
 import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
 
-const menuItems = [
-  { icon: Home, label: "Home", id: "" },
-  { icon: PlusSquare, label: "Crear", id: "create" },
-  { icon: Clock, label: "Cotizaciones", id: "history" },
-  { icon: Users, label: "Clientes", id: "clients" },
-  { icon: Truck, label: "Proveedores", id: "suppliers" },
-  { icon: BarChart2, label: "Comparar", id: "compare" },
-];
-
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
   const { state } = useSidebar();
   const { user, logout } = useAuth();
+
+  const menuItems = !["Superadmin", "Admin"].includes(user?.role.name as string)
+    ? [
+        { icon: Home, label: "Home", id: "" },
+        { icon: PlusSquare, label: "Crear", id: "create" },
+        { icon: Clock, label: "Cotizaciones", id: "history" },
+        { icon: Truck, label: "Proveedores", id: "suppliers" },
+      ]
+    : [
+        { icon: Home, label: "Home", id: "" },
+        { icon: PlusSquare, label: "Crear", id: "create" },
+        { icon: Clock, label: "Cotizaciones", id: "history" },
+        { icon: Users, label: "Clientes", id: "clients" },
+        { icon: Truck, label: "Proveedores", id: "suppliers" },
+        { icon: BarChart2, label: "Comparar", id: "compare" },
+      ];
 
   return (
     <Sidebar collapsible="icon" {...props} className="border-neutral-200">

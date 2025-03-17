@@ -126,7 +126,11 @@ export default function CreateUser({
 
   const fetchRoles = useCallback(async () => {
     const roles = await CatalogService.listRoles();
-    return adaptToDropdown(roles, "id", "name");
+    return adaptToDropdown(
+      roles.filter((r) => r.name !== "Superadmin"),
+      "id",
+      "name",
+    );
   }, []);
 
   return (
