@@ -36,7 +36,6 @@ export default function CurrentQuotationCard({ userId }: { userId?: number }) {
       lastname: string;
       client: { id: number; name: string };
     };
-    receptionDate: string;
     uploadDate: string;
     expirationDateTime: string;
     materialsNeededDate: string;
@@ -54,8 +53,9 @@ export default function CurrentQuotationCard({ userId }: { userId?: number }) {
     const fetchLastQuotation = async () => {
       try {
         if (userId) {
-          const data =
-            await QuotationsService.getUserLastModifiedQuotation(userId);
+          const data = await QuotationsService.getUserLastModifiedQuotation(
+            userId
+          );
           setQuotation(data);
         } else {
           const data = await QuotationsService.getLastModifiedQuotation();
@@ -92,8 +92,8 @@ export default function CurrentQuotationCard({ userId }: { userId?: number }) {
   }
 
   return (
-    <div className="w-full h-[65%] bg-white border border-neutral-200 shadow-sm rounded-[18px] relative">
-      <div className="flex flex-col p-4 relative">
+    <div className="w-full h-auto p-4 bg-white border border-neutral-200 shadow-sm rounded-[18px] relative">
+      <div className="flex flex-col relative">
         <div className="flex items-start justify-between mb-3">
           <h2 className="text-lg font-[800] text-black">Cotización reciente</h2>
           <div className="flex flex-col items-end w-[25%]">
@@ -159,19 +159,11 @@ export default function CurrentQuotationCard({ userId }: { userId?: number }) {
           </div>
           <div className="flex items-center justify-between">
             <span className="text-md font-medium text-neutral-700">
-              Fecha de Recepción:
-            </span>
-            <span className="text-md text-neutral-900">
-              {new Date(quotation!.receptionDate).toLocaleDateString("es-ES")}
-            </span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-md font-medium text-neutral-700">
               Fecha de Expiración:
             </span>
             <span className="text-md text-neutral-900">
               {new Date(quotation!.expirationDateTime).toLocaleDateString(
-                "es-ES",
+                "es-ES"
               )}
             </span>
           </div>
@@ -185,7 +177,7 @@ export default function CurrentQuotationCard({ userId }: { userId?: number }) {
           </div>
         </div>
       </div>
-      <div className="absolute bottom-4 right-4 w-auto flex justify-end gap-2 items-end h-auto">
+      <div className="w-auto flex justify-end gap-2 mt-4 items-end h-auto">
         <Button variant="secondary" className="px-3 py-2 text-sm">
           Ver más cotizaciones
         </Button>

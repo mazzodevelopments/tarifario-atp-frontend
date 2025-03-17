@@ -183,8 +183,9 @@ export default function EditUser({
       throw new Error("No 2d context");
     }
 
-    canvas.width = pixelCrop.width;
-    canvas.height = pixelCrop.height;
+    const scale = 2;
+    canvas.width = pixelCrop.width * scale;
+    canvas.height = pixelCrop.height * scale;
 
     ctx.drawImage(
       image,
@@ -194,12 +195,11 @@ export default function EditUser({
       pixelCrop.height,
       0,
       0,
-      pixelCrop.width,
-      pixelCrop.height
+      canvas.width,
+      canvas.height
     );
 
-    // As Base64 string
-    return canvas.toDataURL("image/jpeg");
+    return canvas.toDataURL("image/jpeg", 5);
   };
 
   const handleCropConfirm = async () => {

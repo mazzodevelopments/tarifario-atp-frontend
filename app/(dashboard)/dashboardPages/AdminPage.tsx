@@ -83,7 +83,7 @@ export default function AdminPage() {
 
   const filteredUsers = users
     .filter((user) =>
-      user.email.toLowerCase().includes(searchQuery.toLowerCase()),
+      user.email.toLowerCase().includes(searchQuery.toLowerCase())
     )
     .sort((a, b) => {
       if (sortBy === "all") return 0;
@@ -196,12 +196,12 @@ export default function AdminPage() {
         </div>
       </div>
       <div className="flex flex-col lg:flex-row items-start w-full h-[calc(100%-5rem)]">
-        <div className="w-full lg:w-1/3 h-full flex flex-col border-r border-neutral-200 relative p-6">
-          <div className="w-full flex flex-col pb-4">
-            <h2 className="text-3xl font-[800]">Mis cotizaciones</h2>
-            <p className="text-gray-500 ml-1">
-              Vista general de mis cotizaciones
-            </p>
+        <div className="w-full lg:w-1/3 h-full flex flex-col border-r border-neutral-200 relative p-[1vw]">
+          <div className="w-full flex flex-col pb-[0.5vw]">
+            <h2 className="text-[2vw] font-[800] leading-[1.1]">
+              Mis cotizaciones
+            </h2>
+            <p className="text-gray-500">Vista general de mis cotizaciones</p>
           </div>
           <div className="h-full gap-3 flex flex-col">
             <CurrentQuotationCard />
@@ -209,12 +209,12 @@ export default function AdminPage() {
           </div>
         </div>
 
-        <div className="w-full lg:w-2/3 h-full flex flex-col relative p-6 gap-3">
-          <div className="w-full flex flex-col pb-1 h-20">
-            <h2 className="text-3xl font-[800]">Panel Administrador</h2>
-            <p className="text-gray-500 ml-1">
-              Panel de acciones de administrador
-            </p>
+        <div className="w-full lg:w-2/3 h-full flex flex-col relative p-[1vw]">
+          <div className="w-full flex flex-col pb-[0.5vw]">
+            <h2 className="text-[2vw] font-[800] leading-[1]">
+              Panel Administrador
+            </h2>
+            <p className="text-gray-500">Panel de acciones de administrador</p>
           </div>
           <div className="flex flex-row gap-3 h-full">
             {/* <div className="flex flex-col p-4 relative bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full">
@@ -369,8 +369,8 @@ export default function AdminPage() {
                                 user.role.name === "Superadmin"
                                   ? "bg-red-100 text-red-500"
                                   : user.role.name === "Admin"
-                                    ? "bg-blue-100 text-blue-500"
-                                    : "bg-green-100 text-green-600"
+                                  ? "bg-blue-100 text-blue-500"
+                                  : "bg-green-100 text-green-600"
                               }`}
                             >
                               <span className="text-sm font-semibold">
