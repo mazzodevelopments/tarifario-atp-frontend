@@ -1,6 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
-import Header from "@/app/(dashboard)/components/Header";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -22,6 +21,8 @@ import {
 } from "@/components/ui/table";
 import { Pencil, ArrowUp, ArrowDown } from "lucide-react";
 import ClientDetails from "@/app/(dashboard)/clients/ClientDetails";
+import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
+import SearchInput from "@/components/SearchInput";
 
 export default function Clients() {
   const [clients, setClients] = useState<Client[]>([]);
@@ -148,9 +149,35 @@ export default function Clients() {
 
   const sortedClients = getSortedClients();
 
+  const fetchSearchResults = async (searchTerm: string) => {
+    const filteredClients: { id: number; name: string }[] = clients
+      .filter((client) =>
+        client.name.toLowerCase().includes(searchTerm.toLowerCase()),
+      )
+      .map((client) => ({
+        id: client.id,
+        name: client.name,
+      }));
+    return adaptToDropdown(filteredClients, "id", "name");
+  };
+
   return (
     <div className="flex justify-start w-full h-full flex-col bg-transparent">
-      <Header title="Clientes" description="Lista de clientes oficiales" />
+      <div className="w-full h-20 flex-shrink-0 border-b border-neutral-200">
+        <div className="flex justify-between items-center h-full px-6 mb-4">
+          <div className="flex flex-col justify-center items-start w-[12vw]">
+            <h2 className="flex items-center text-xl leading-[1] p-0 font-[800] text-black mt-1">
+              Clientes
+            </h2>
+          </div>
+          <SearchInput
+            placeholder="Buscar clientes"
+            onSearch={fetchSearchResults}
+            link="/client"
+            linkWithName
+          />
+        </div>
+      </div>
       <div className="mt-6 px-6">
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
