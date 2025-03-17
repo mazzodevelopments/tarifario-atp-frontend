@@ -174,7 +174,6 @@ export default function Clients() {
             placeholder="Buscar clientes"
             onSearch={fetchSearchResults}
             link="/client"
-            linkWithName
           />
         </div>
       </div>

@@ -13,35 +13,39 @@ interface SearchInputProps {
   placeholder: string;
   onSearch: (query: string) => Promise<SearchResult[]>;
   link: string;
-  linkWithName: boolean;
+  linkWithName?: boolean;
 }
 
 export default function SearchInput({
   placeholder,
   onSearch,
   link,
-  linkWithName,
+  linkWithName = false,
 }: SearchInputProps) {
   const [query, setQuery] = useState<string>("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (query.length > 1) {
-      setIsLoading(true);
-      setResults([]);
-      onSearch(query)
-        .then((data: SearchResult[]) => {
-          setResults(data);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-          setIsLoading(false);
-        });
-    } else {
-      setResults([]);
-    }
+    const debounceTimer = setTimeout(() => {
+      if (query.length > 0) {
+        setIsLoading(true);
+        setResults([]);
+        onSearch(query)
+          .then((data: SearchResult[]) => {
+            setResults(data);
+            setIsLoading(false);
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+            setIsLoading(false);
+          });
+      } else {
+        setResults([]);
+      }
+    }, 500);
+
+    return () => clearTimeout(debounceTimer);
   }, [query, onSearch]);
 
   return (
