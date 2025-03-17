@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "@/utils/config";
-import { EditSupplier, Supplier } from "@/types/Supplier";
+import { CreateSupplier, EditSupplier, Supplier } from "@/types/Supplier";
 import { Client, EditClient } from "@/types/Client";
 
 export const CatalogService = {
@@ -271,7 +271,7 @@ export const CatalogService = {
     return await response.json();
   },
 
-  addSupplier: async (newSupplier: Supplier): Promise<Supplier> => {
+  addSupplier: async (newSupplier: CreateSupplier): Promise<Supplier> => {
     const response = await fetch(`${API_BASE_URL}/catalog/supplier`, {
       method: "POST",
       headers: {

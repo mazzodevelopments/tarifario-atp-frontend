@@ -189,7 +189,7 @@ export default function Proveedores() {
         supplier.name.toLowerCase().includes(searchTerm.toLowerCase()),
       )
       .map((supplier) => ({
-        id: supplier.id || 0,
+        id: supplier.id,
         name: supplier.name,
       }));
     return adaptToDropdown(filteredSuppliers, "id", "name");

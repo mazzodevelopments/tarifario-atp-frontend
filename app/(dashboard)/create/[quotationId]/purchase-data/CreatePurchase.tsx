@@ -17,7 +17,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { PlusCircle, Pencil } from "lucide-react";
-import type { Supplier } from "@/types/Supplier";
+import type { CreateSupplier } from "@/types/Supplier";
 import SupplierForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/forms/SupplierForm";
 import IncotermForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/forms/IncotermForm";
 import CurrencyForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/forms/CurrencyForm";
@@ -365,7 +365,7 @@ export default function CreatePurchase({
     setIsDestinationModalOpen(false);
   };
 
-  const handleAddSupplier = async (newSupplier: Supplier) => {
+  const handleAddSupplier = async (newSupplier: CreateSupplier) => {
     if (!newSupplier) return;
     try {
       setIsLoading(true);
