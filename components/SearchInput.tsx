@@ -22,19 +22,20 @@ export default function SearchInput({
 }: SearchInputProps) {
   const [query, setQuery] = useState<string>("");
   const [results, setResults] = useState<SearchResult[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (query.length > 1) {
-      setLoading(true);
+      setIsLoading(true);
+      setResults([]);
       onSearch(query)
         .then((data: SearchResult[]) => {
           setResults(data);
-          setLoading(false);
+          setIsLoading(false);
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
-          setLoading(false);
+          setIsLoading(false);
         });
     } else {
       setResults([]);
@@ -55,9 +56,12 @@ export default function SearchInput({
           onChange={(e) => setQuery(e.target.value)}
         />
 
-        {results.length > 0 && (
+        {(results.length > 0 || isLoading) && (
           <div className="absolute w-full mt-1 bg-white border border-neutral-200 rounded-2xl shadow-lg z-10 overflow-hidden">
-            <div className="py-1">
+            <div className={`py-1 ${isLoading && "text-center"}`}>
+              {isLoading && (
+                <span className="px-4 py-2 text-xs">Cargando...</span>
+              )}
               {results.map((result) => (
                 <Link
                   key={result.id}
