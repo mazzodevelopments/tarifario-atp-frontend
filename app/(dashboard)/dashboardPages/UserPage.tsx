@@ -14,26 +14,40 @@ import {
 import { ChevronDown, LogOut, Search, Settings } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { QuotationData } from "@/types/QuotationData";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-
-const quotation: QuotationData = {
-  taskNumber: "A25R-0005",
-  client: "MicroTech Solutions",
-  buyer: "Andrea Gómez",
-  receptionDate: "2025-01-18",
-  uploadDate: "2025-01-19",
-  expirationDateTime: "2025-02-05T20:00:00",
-  materialsNeededDate: "2025-02-01",
-  customerRequestNumber: "REQ-2025-005",
-  items: null,
-  budgets: null,
-  stageId: 0,
-};
+import CurrentQuotationCard from "@/app/(dashboard)/components/CurrentQuotation";
+import { QuotationSlider } from "@/app/(dashboard)/components/QuotationCarousel";
+import { QuotationsService } from "@/services/QuotationsService";
 
 export default function UserPage() {
   const { user, logout } = useAuth();
+  const [lastQuotations, setLastQuotations] = useState<
+    {
+      taskNumber: string;
+      expirationDateTime: string;
+      buyerName: string;
+      clientName: string;
+    }[]
+  >([]);
+  const [shouldFetch, setShouldFetch] = useState(false);
+
+  useEffect(() => {
+    const fetchUserLastFiveQuotations = async () => {
+      try {
+        if (user) {
+          const data =
+            await QuotationsService.getUserLastFiveFinishedQuotations(user.id);
+          setLastQuotations(data);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    fetchUserLastFiveQuotations();
+    setShouldFetch(false);
+  }, [shouldFetch]);
 
   return (
     <div className="flex justify-start w-full h-screen flex-col bg-neutral-50">
@@ -118,37 +132,10 @@ export default function UserPage() {
             <h2 className="text-3xl font-[800]">Mis Cotizaciones</h2>
             <p className="text-gray-500">Cotizaciones recientes y pasadas</p>
           </div>
-          <div className="flex flex-row gap-3 w-full h-full relative">
-            <div className="flex flex-col w-full">
-              <div className="flex flex-col p-4 relative bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full">
-                <div className="flex w-full justify-between relative">
-                  <h2 className="font-[800] text-[1.5vw]">
-                    {quotation.taskNumber}
-                  </h2>
-                </div>
-                <div className="w-full relative h-full flex justify-center items-center">
-                  <span className="text-center font-[600]">
-                    Aquí se renderizará la tabla perteneciente a la etapa en la
-                    que está trabajando el usuario
-                  </span>
-                </div>
-                <div className="relative w-auto flex justify-end gap-2 items-end h-auto">
-                  <Button
-                    variant="primary"
-                    className="px-3 py-2 bg-neutral-900 text-white text-sm"
-                  >
-                    Abrir Cotización
-                  </Button>
-                </div>
-              </div>
-            </div>
+          <div className="w-full h-full gap-3 flex flex-col">
+            <CurrentQuotationCard />
+            <QuotationSlider quotations={lastQuotations} />
           </div>
-          <Button
-            variant="primary"
-            className="bg-primary/5 text-primary border border-primary/30 w-[30%] py-3 justify-center items-center flex"
-          >
-            Ver más cotizaciones
-          </Button>
         </div>
 
         <div className="w-1/2 h-full flex flex-col relative p-6 gap-3">

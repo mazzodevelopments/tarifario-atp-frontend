@@ -100,6 +100,21 @@ export const QuotationsService = {
     return await response.json();
   },
 
+  getUserLastFiveFinishedQuotations: async (userId: number) => {
+    const response = await fetch(
+      `${API_BASE_URL}/quotations/last-five-finished/${userId}`,
+      {
+        method: "GET",
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Error al traer las ultimas cotizaciones");
+    }
+
+    return await response.json();
+  },
+
   getLastModifiedQuotation: async () => {
     const response = await fetch(`${API_BASE_URL}/quotations/last-modified`, {
       method: "GET",
