@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -13,7 +12,6 @@ import Button from "@/components/Button";
 import { CatalogService } from "@/services/CatalogService";
 import type { Supplier } from "@/types/Supplier";
 import SupplierForm from "@/app/(dashboard)/create/[quotationId]/purchase-data/forms/SupplierForm";
-import SupplierDetails from "@/app/(dashboard)/suppliers/SupplierDetails";
 import {
   Table,
   TableBody,
@@ -25,22 +23,20 @@ import {
 import { ArrowDown, ArrowUp, Pencil } from "lucide-react";
 import SearchInput from "@/components/SearchInput";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
+import { useRouter } from "next/navigation";
 
-export default function Proveedores() {
+export default function Suppliers() {
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [editedSupplier, setEditedSupplier] = useState<Supplier | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [detailDialogOpen, setDetailDialogOpen] = useState(false);
-  const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(
-    null,
-  );
   const [shouldFetch, setShouldFetch] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [sortConfig, setSortConfig] = useState<{
     key: string;
     direction: string;
   } | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchSuppliers = async () => {
@@ -86,34 +82,12 @@ export default function Proveedores() {
   };
 
   const handleEdit = (supplier: Supplier) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { families, ...supplierData } = supplier;
-    setEditedSupplier(supplierData as Supplier);
+    setEditedSupplier(supplier);
     setEditDialogOpen(true);
   };
 
   const handleViewDetails = (supplier: Supplier) => {
-    setSelectedSupplier(supplier);
-    setDetailDialogOpen(true);
-  };
-
-  const handleFamilyAdded = () => {
-    setShouldFetch(true);
-  };
-
-  const handleCloseDetails = () => {
-    setDetailDialogOpen(false);
-  };
-
-  const getTypeStyles = (isNational: boolean, isInternational: boolean) => {
-    if (isNational && isInternational) {
-      return "bg-green-100 text-green-600";
-    } else if (isNational) {
-      return "bg-blue-100 text-blue-600";
-    } else if (isInternational) {
-      return "bg-purple-100 text-purple-600";
-    }
-    return "bg-gray-100 text-gray-600";
+    router.push(`/suppliers/${supplier.id}`);
   };
 
   const requestSort = (key: string) => {
@@ -201,13 +175,13 @@ export default function Proveedores() {
         <div className="flex justify-between items-center h-full px-6 mb-4">
           <div className="flex flex-col justify-center items-start w-[12vw]">
             <h2 className="flex items-center text-xl leading-[1] p-0 font-[800] text-black mt-1">
-              Proovedores
+              Proveedores
             </h2>
           </div>
           <SearchInput
-            placeholder="Buscar proovedores"
+            placeholder="Buscar proveedores"
             onSearch={fetchSearchResults}
-            link="/supplier"
+            link="/suppliers"
           />
         </div>
       </div>
@@ -237,7 +211,7 @@ export default function Proveedores() {
       <div className="w-full px-6 pb-6 pt-4">
         <div className="w-auto h-auto overflow-hidden rounded-[12px] shadow-sm shadow-cyan-500/20">
           <div className="border rounded-[12px] overflow-auto max-h-[70vh] relative w-full">
-            <Table className="w-full">
+            <Table className="w-full bg-white">
               <TableHeader>
                 <TableRow className="bg-primary/5">
                   <TableHead
@@ -293,10 +267,7 @@ export default function Proveedores() {
               <TableBody>
                 {sortedSuppliers.length > 0 ? (
                   sortedSuppliers.map((supplier) => (
-                    <TableRow
-                      key={supplier.id}
-                      className="text-sm text-center bg-white/50"
-                    >
+                    <TableRow key={supplier.id} className="text-sm text-center">
                       <TableCell className="font-[600] text-black">
                         {supplier.name}
                       </TableCell>
@@ -354,7 +325,7 @@ export default function Proveedores() {
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Editar Supplier</DialogTitle>
+            <DialogTitle>Editar Proveedor</DialogTitle>
           </DialogHeader>
           <SupplierForm
             onSubmit={handleSubmit}
@@ -364,15 +335,17 @@ export default function Proveedores() {
           />
         </DialogContent>
       </Dialog>
-
-      {selectedSupplier && (
-        <SupplierDetails
-          supplier={selectedSupplier}
-          onClose={handleCloseDetails}
-          onFamilyAdded={handleFamilyAdded}
-          open={detailDialogOpen}
-        />
-      )}
     </div>
   );
 }
+
+const getTypeStyles = (isNational: boolean, isInternational: boolean) => {
+  if (isNational && isInternational) {
+    return "bg-green-100 text-green-600";
+  } else if (isNational) {
+    return "bg-blue-100 text-blue-600";
+  } else if (isInternational) {
+    return "bg-purple-100 text-purple-600";
+  }
+  return "bg-gray-100 text-gray-600";
+};

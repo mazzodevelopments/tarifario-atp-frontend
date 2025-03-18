@@ -282,6 +282,21 @@ export const CatalogService = {
     return await response.json();
   },
 
+  getSupplierById: async (supplierId: number) => {
+    const response = await fetch(
+      `${API_BASE_URL}/catalog/supplier/${supplierId}`,
+      {
+        method: "GET",
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Error al traer supplier");
+    }
+
+    return await response.json();
+  },
+
   addSupplier: async (newSupplier: CreateSupplier): Promise<Supplier> => {
     const response = await fetch(`${API_BASE_URL}/catalog/supplier`, {
       method: "POST",
