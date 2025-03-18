@@ -22,11 +22,28 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import Header from "@/app/(dashboard)/components/Header";
-import { Supplier } from "@/types/Supplier";
+import { ArrowDown, ArrowUp } from "lucide-react";
+
+export interface FetchedSupplier {
+  id: number;
+  name: string;
+  isNational: boolean;
+  isInternational: boolean;
+  email: string;
+  phone: string;
+  families?: {
+    id: number;
+    name: string;
+    subfamilies?: {
+      id: number;
+      name: string;
+    }[];
+  }[];
+}
 
 export default function SupplierDetailsPage() {
   const { id } = useParams();
-  const [supplier, setSupplier] = useState<Supplier | null>(null);
+  const [supplier, setSupplier] = useState<FetchedSupplier | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [familyToDelete, setFamilyToDelete] = useState<{
@@ -34,12 +51,15 @@ export default function SupplierDetailsPage() {
     name: string;
   } | null>(null);
   const [isFamilyFormOpen, setIsFamilyFormOpen] = useState(false);
+  const [sortConfig, setSortConfig] = useState<{
+    key: string;
+    direction: string;
+  } | null>(null);
 
   useEffect(() => {
     const fetchSupplier = async () => {
       setIsLoading(true);
       try {
-        console.log(id);
         const fetchedSupplier = await CatalogService.getSupplierById(
           Number(id),
         );
@@ -133,6 +153,56 @@ export default function SupplierDetailsPage() {
     }
   };
 
+  const requestSort = (key: string) => {
+    let direction = "ascending";
+    if (
+      sortConfig &&
+      sortConfig.key === key &&
+      sortConfig.direction === "ascending"
+    ) {
+      direction = "descending";
+    } else if (
+      sortConfig &&
+      sortConfig.key === key &&
+      sortConfig.direction === "descending"
+    ) {
+      direction = "normal";
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const getSortedFamilies = () => {
+    if (!supplier || !supplier.families) return [];
+
+    const families = [...supplier.families];
+    if (!sortConfig || sortConfig.direction === "normal") return families;
+
+    return families.sort((a, b) => {
+      if (sortConfig.key === "name") {
+        if (a.name < b.name) {
+          return sortConfig.direction === "ascending" ? -1 : 1;
+        }
+        if (a.name > b.name) {
+          return sortConfig.direction === "ascending" ? 1 : -1;
+        }
+        return 0;
+      } else if (sortConfig.key === "subfamiliesCount") {
+        const aCount = a.subfamilies ? a.subfamilies.length : 0;
+        const bCount = b.subfamilies ? b.subfamilies.length : 0;
+        if (aCount < bCount) {
+          return sortConfig.direction === "ascending" ? -1 : 1;
+        }
+        if (aCount > bCount) {
+          return sortConfig.direction === "ascending" ? 1 : -1;
+        }
+        return 0;
+      }
+      return 0;
+    });
+  };
+
+  const sortedFamilies = getSortedFamilies();
+
   if (supplier)
     return (
       <div className="flex justify-start w-full h-full flex-col bg-transparent">
@@ -172,8 +242,33 @@ export default function SupplierDetailsPage() {
               <Table className="w-full bg-white">
                 <TableHeader>
                   <TableRow className="bg-primary/5">
-                    <TableHead className="w-1/2 text-primary font-[600] text-center">
-                      Nombre
+                    <TableHead
+                      className="w-1/3 text-primary font-[600] text-center cursor-pointer select-none"
+                      onClick={() => requestSort("name")}
+                    >
+                      <div className="flex items-center justify-center gap-1">
+                        Nombre{" "}
+                        {(sortConfig?.key === "name" &&
+                          {
+                            ascending: <ArrowUp size={14} />,
+                            descending: <ArrowDown size={14} />,
+                          }[sortConfig.direction]) ||
+                          null}
+                      </div>
+                    </TableHead>
+                    <TableHead
+                      className="w-1/3 text-primary font-[600] text-center cursor-pointer select-none"
+                      onClick={() => requestSort("subfamiliesCount")}
+                    >
+                      <div className="flex items-center justify-center gap-1">
+                        Cant. de Subfamilias{" "}
+                        {(sortConfig?.key === "subfamiliesCount" &&
+                          {
+                            ascending: <ArrowUp size={14} />,
+                            descending: <ArrowDown size={14} />,
+                          }[sortConfig.direction]) ||
+                          null}
+                      </div>
                     </TableHead>
                     <TableHead className="w-1/2 text-primary font-[600] text-center">
                       Acciones
@@ -181,12 +276,13 @@ export default function SupplierDetailsPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {supplier.families!.length > 0 ? (
-                    supplier.families!.map((family) => (
+                  {sortedFamilies.length > 0 ? (
+                    sortedFamilies.map((family) => (
                       <TableRow key={family.id} className="text-sm text-center">
                         <TableCell className="font-[600] text-black">
                           {family.name}
                         </TableCell>
+                        <TableCell>{family.subfamilies?.length || 0}</TableCell>
                         <TableCell>
                           <div className="flex justify-center gap-2">
                             <Button

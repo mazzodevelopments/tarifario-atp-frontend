@@ -23,6 +23,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import Header from "@/app/(dashboard)/components/Header";
+import { ArrowDown, ArrowUp } from "lucide-react";
 
 export default function ClientDetailsPage() {
   const { id } = useParams();
@@ -34,6 +35,10 @@ export default function ClientDetailsPage() {
     name: string;
   } | null>(null);
   const [isBuyerFormOpen, setIsBuyerFormOpen] = useState(false);
+  const [sortConfig, setSortConfig] = useState<{
+    key: string;
+    direction: string;
+  } | null>(null);
 
   useEffect(() => {
     const fetchClient = async () => {
@@ -130,6 +135,58 @@ export default function ClientDetailsPage() {
     }
   };
 
+  const requestSort = (key: string) => {
+    let direction = "ascending";
+    if (
+      sortConfig &&
+      sortConfig.key === key &&
+      sortConfig.direction === "ascending"
+    ) {
+      direction = "descending";
+    } else if (
+      sortConfig &&
+      sortConfig.key === key &&
+      sortConfig.direction === "descending"
+    ) {
+      direction = "normal";
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const getSortedBuyers = () => {
+    if (!client || !client.buyers) return [];
+
+    const buyers = [...client.buyers];
+    if (!sortConfig) return buyers;
+
+    if (sortConfig.direction === "normal") return buyers;
+
+    return buyers.sort((a, b) => {
+      if (sortConfig.key === "name") {
+        const nameA = `${a.name} ${a.lastname}`.toLowerCase();
+        const nameB = `${b.name} ${b.lastname}`.toLowerCase();
+        if (nameA < nameB) {
+          return sortConfig.direction === "ascending" ? -1 : 1;
+        }
+        if (nameA > nameB) {
+          return sortConfig.direction === "ascending" ? 1 : -1;
+        }
+        return 0;
+      } else if (sortConfig.key === "email" && a.email && b.email) {
+        if (a.email < b.email) {
+          return sortConfig.direction === "ascending" ? -1 : 1;
+        }
+        if (a.email > b.email) {
+          return sortConfig.direction === "ascending" ? 1 : -1;
+        }
+        return 0;
+      }
+      return 0;
+    });
+  };
+
+  const sortedBuyers = getSortedBuyers();
+
   if (client)
     return (
       <div className="flex justify-start w-full h-full flex-col bg-transparent">
@@ -153,11 +210,33 @@ export default function ClientDetailsPage() {
               <Table className="w-full bg-white">
                 <TableHeader>
                   <TableRow className="bg-primary/5">
-                    <TableHead className="w-1/4 text-primary font-[600] text-center">
-                      Nombre
+                    <TableHead
+                      className="w-1/4 text-primary font-[600] text-center cursor-pointer select-none"
+                      onClick={() => requestSort("name")}
+                    >
+                      <div className="flex items-center justify-center gap-1">
+                        Nombre{" "}
+                        {(sortConfig?.key === "name" &&
+                          {
+                            ascending: <ArrowUp size={14} />,
+                            descending: <ArrowDown size={14} />,
+                          }[sortConfig.direction]) ||
+                          null}
+                      </div>
                     </TableHead>
-                    <TableHead className="w-1/4 text-primary font-[600] text-center">
-                      Email
+                    <TableHead
+                      className="w-1/4 text-primary font-[600] text-center cursor-pointer select-none"
+                      onClick={() => requestSort("email")}
+                    >
+                      <div className="flex items-center justify-center gap-1">
+                        Email{" "}
+                        {(sortConfig?.key === "email" &&
+                          {
+                            ascending: <ArrowUp size={14} />,
+                            descending: <ArrowDown size={14} />,
+                          }[sortConfig.direction]) ||
+                          null}
+                      </div>
                     </TableHead>
                     <TableHead className="w-1/4 text-primary font-[600] text-center">
                       Teléfono
@@ -168,8 +247,8 @@ export default function ClientDetailsPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {client.buyers!.length > 0 ? (
-                    client.buyers!.map((buyer) => (
+                  {sortedBuyers.length > 0 ? (
+                    sortedBuyers.map((buyer) => (
                       <TableRow key={buyer.id} className="text-sm text-center">
                         <TableCell className="font-[600] text-black">
                           {buyer.name + " " + buyer.lastname}
@@ -191,7 +270,7 @@ export default function ClientDetailsPage() {
                   ) : (
                     <TableRow className="h-36">
                       <TableCell
-                        colSpan={3}
+                        colSpan={4}
                         className="text-sm m-auto h-full text-center text-gray-500"
                       >
                         No hay compradores registrados
