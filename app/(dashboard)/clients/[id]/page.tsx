@@ -99,10 +99,14 @@ export default function ClientDetailsPage() {
     }
   };
 
-  const openDeleteDialog = (buyer: { id: number; name: string }) => {
+  const openDeleteDialog = (buyer: {
+    id: number;
+    name: string;
+    lastname?: string;
+  }) => {
     setBuyerToDelete({
       id: Number(buyer.id),
-      name: buyer.name,
+      name: buyer.name + " " + buyer.lastname,
     });
     setDeleteDialogOpen(true);
   };
