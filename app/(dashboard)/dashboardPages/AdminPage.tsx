@@ -195,7 +195,7 @@ export default function AdminPage() {
           </div>
         </div>
       </div>
-      <div className="flex flex-col lg:flex-row items-start w-full h-[calc(100%-10rem)]">
+      <div className="flex flex-col lg:flex-row items-start w-full h-[100vh]">
         <div className="w-full lg:w-1/3 h-full flex flex-col border-r border-neutral-200 relative p-[1vw]">
           <div className="w-full flex flex-col pb-[0.5vw]">
             <h2 className="text-[2vw] font-[800] leading-[1.1]">
