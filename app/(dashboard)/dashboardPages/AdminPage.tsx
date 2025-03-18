@@ -323,16 +323,51 @@ export default function AdminPage() {
                     <span className="text-sm text-neutral-500">
                       Ordenar por:
                     </span>
-                    <select
-                      className="h-10 rounded-lg bg-gray-50 border border-neutral-200 px-3 text-sm"
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value)}
-                    >
-                      <option value="All">Todos</option>
-                      <option value="Superadmin">Superadmin</option>
-                      <option value="Admin">Admin</option>
-                      <option value="User">Usuario</option>
-                    </select>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="secondary"
+                          className="h-9 px-3 bg-gray-50 border-neutral-200"
+                        >
+                          {sortBy === "all"
+                            ? "Todos"
+                            : sortBy === "Superadmin"
+                            ? "Superadmin"
+                            : sortBy === "Admin"
+                            ? "Admin"
+                            : sortBy === "User"
+                            ? "Usuario"
+                            : "Todos"}
+                          <ChevronDown className="ml-2 h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="shadow-sm">
+                        <DropdownMenuItem
+                          onClick={() => setSortBy("all")}
+                          className="cursor-pointer"
+                        >
+                          Todos
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => setSortBy("Superadmin")}
+                          className="cursor-pointer"
+                        >
+                          Superadmin
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => setSortBy("Admin")}
+                          className="cursor-pointer"
+                        >
+                          Admin
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => setSortBy("User")}
+                          className="cursor-pointer"
+                        >
+                          Usuario
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
                 </div>
 
