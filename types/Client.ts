@@ -2,7 +2,7 @@ export interface Client {
   id: number;
   name: string;
   buyers?: {
-    id: string;
+    id: number;
     name: string;
     lastname?: string;
     email?: string;

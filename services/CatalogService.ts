@@ -26,6 +26,17 @@ export const CatalogService = {
 
     return await response.json();
   },
+  getClientById: async (clientId: number) => {
+    const response = await fetch(`${API_BASE_URL}/catalog/client/${clientId}`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al traer clientes");
+    }
+
+    return await response.json();
+  },
   addClient: async (newClient: CreateClient): Promise<number> => {
     const response = await fetch(`${API_BASE_URL}/catalog/client`, {
       method: "POST",

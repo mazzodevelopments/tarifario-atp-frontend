@@ -20,7 +20,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Pencil, ArrowUp, ArrowDown } from "lucide-react";
-import ClientDetails from "@/app/(dashboard)/clients/ClientDetails";
+import { useRouter } from "next/navigation";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 import SearchInput from "@/components/SearchInput";
 
@@ -29,14 +29,13 @@ export default function Clients() {
   const [editedClient, setEditedClient] = useState<Client | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [detailDialogOpen, setDetailDialogOpen] = useState(false);
-  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
   const [shouldFetch, setShouldFetch] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [sortConfig, setSortConfig] = useState<{
     key: string;
     direction: string;
   } | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchClients = async () => {
@@ -81,16 +80,7 @@ export default function Clients() {
   };
 
   const handleViewDetails = (client: Client) => {
-    setSelectedClient(client);
-    setDetailDialogOpen(true);
-  };
-
-  const handleBuyerAdded = () => {
-    setShouldFetch(true);
-  };
-
-  const handleCloseDetails = () => {
-    setDetailDialogOpen(false);
+    router.push(`/clients/${client.id}`);
   };
 
   const requestSort = (key: string) => {
@@ -173,7 +163,7 @@ export default function Clients() {
           <SearchInput
             placeholder="Buscar clientes"
             onSearch={fetchSearchResults}
-            link="/client"
+            link="/clients"
           />
         </div>
       </div>
@@ -271,7 +261,7 @@ export default function Clients() {
                 ) : (
                   <TableRow className="h-36">
                     <TableCell
-                      colSpan={2}
+                      colSpan={3}
                       className="text-sm m-auto h-full text-center text-gray-500"
                     >
                       No hay clientes registrados
@@ -297,15 +287,6 @@ export default function Clients() {
           />
         </DialogContent>
       </Dialog>
-
-      {selectedClient && (
-        <ClientDetails
-          client={selectedClient}
-          onClose={handleCloseDetails}
-          onBuyerAdded={handleBuyerAdded}
-          open={detailDialogOpen}
-        />
-      )}
     </div>
   );
 }
