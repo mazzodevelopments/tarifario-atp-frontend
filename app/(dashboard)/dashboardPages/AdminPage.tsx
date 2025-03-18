@@ -20,10 +20,10 @@ import { QuotationSlider } from "../components/QuotationCarousel";
 import CurrentQuotationCard from "../components/CurrentQuotation";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import CreateUser from "../components/CreateUser";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { QuotationsService } from "@/services/QuotationsService";
 import { AdminService } from "@/services/AdminService";
-import { User } from "@/types/User";
+import type { User } from "@/types/User";
 import {
   Dialog,
   DialogContent,
@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
-import { AdminCreateUser } from "@/types/User";
+import type { AdminCreateUser } from "@/types/User";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
@@ -195,7 +195,7 @@ export default function AdminPage() {
           </div>
         </div>
       </div>
-      <div className="flex flex-col lg:flex-row items-start w-full h-[calc(100%-5rem)]">
+      <div className="flex flex-col lg:flex-row items-start w-full h-[calc(100%-10rem)]">
         <div className="w-full lg:w-1/3 h-full flex flex-col border-r border-neutral-200 relative p-[1vw]">
           <div className="w-full flex flex-col pb-[0.5vw]">
             <h2 className="text-[2vw] font-[800] leading-[1.1]">
@@ -306,19 +306,20 @@ export default function AdminPage() {
                 </div>
               </div> */}
             <div className="flex flex-col w-full h-full">
-              <div className="flex flex-col relative p-[1vw] bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full">
-                <div className="mb-4 relative flex items-center justify-between">
-                  <input
-                    className="w-60 h-9 rounded-3xl bg-gray-50 border border-neutral-200 px-8 mt-[0.4px] text-md"
-                    placeholder="Buscar usuario"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                  />
-                  <Search
-                    size={18}
-                    className="absolute left-2 top-1/2 transform -translate-y-1/2 text-neutral-400 z-10"
-                  />
-
+              <div className="flex flex-col relative  bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full flex-grow overflow-hidden">
+                <div className="relative flex items-center justify-between p-[1vw]">
+                  <div className="relative">
+                    <input
+                      className="w-60 h-9 rounded-3xl bg-gray-50 border border-neutral-200 px-8 mt-[0.4px] text-md"
+                      placeholder="Buscar usuario"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                    <Search
+                      size={18}
+                      className="absolute left-2 top-1/2 transform -translate-y-1/2 text-neutral-400 z-10"
+                    />
+                  </div>
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-neutral-500">
                       Ordenar por:
@@ -370,67 +371,184 @@ export default function AdminPage() {
                     </DropdownMenu>
                   </div>
                 </div>
-
-                <ScrollArea className="border-neutral-100 border-t h-[50vh]">
-                  <div className="space-y-4 mt-4">
-                    {filteredUsers.map((user) => (
-                      <div
-                        key={user.id}
-                        className="w-full flex items-center justify-between"
-                      >
-                        <div className="flex items-center justify-start">
-                          <div className="flex items-center space-x-2">
-                            <Image
-                              src={
-                                user.profilePic || "/default-profile-pic.png"
-                              }
-                              width={700}
-                              height={700}
-                              alt="Picture of the author"
-                              className="w-8 h-8 rounded-full"
-                            />
-                            <div className="flex flex-col items-start justify-start min-w-64">
-                              <h3 className="text-sm font-semibold">
-                                {user.name + " " + user.lastname}
-                              </h3>
-                              <p className="text-xs font-semibold opacity-50 -mt-0.5">
-                                {user.email}
-                              </p>
+                <div className="flex-grow overflow-hidden relative">
+                  <ScrollArea className="border-neutral-100 border-t h-full max-h-[calc(100vh-340px)] px-[1vw]">
+                    <div className="space-y-4 mt-4">
+                      {filteredUsers.map((user) => (
+                        <div
+                          key={user.id}
+                          className="w-full flex items-center justify-between"
+                        >
+                          <div className="flex items-center justify-start">
+                            <div className="flex items-center space-x-2">
+                              <Image
+                                src={
+                                  user.profilePic || "/default-profile-pic.png"
+                                }
+                                width={700}
+                                height={700}
+                                alt="Picture of the author"
+                                className="w-8 h-8 rounded-full"
+                              />
+                              <div className="flex flex-col items-start justify-start min-w-64">
+                                <h3 className="text-sm font-semibold">
+                                  {user.name + " " + user.lastname}
+                                </h3>
+                                <p className="text-xs font-semibold opacity-50 -mt-0.5">
+                                  {user.email}
+                                </p>
+                              </div>
                             </div>
+                            <div className="w-28">
+                              <div
+                                className={`px-2 rounded-3xl inline-block ${
+                                  user.role.name === "Superadmin"
+                                    ? "bg-red-100 text-red-500"
+                                    : user.role.name === "Admin"
+                                    ? "bg-blue-100 text-blue-500"
+                                    : "bg-green-100 text-green-600"
+                                }`}
+                              >
+                                <span className="text-sm font-semibold">
+                                  {user.role.name}
+                                </span>
+                              </div>
+                            </div>
+                            <div className=""></div>
                           </div>
-                          <div className="w-28">
-                            <div
-                              className={`px-2 rounded-3xl inline-block ${
-                                user.role.name === "Superadmin"
-                                  ? "bg-red-100 text-red-500"
-                                  : user.role.name === "Admin"
-                                  ? "bg-blue-100 text-blue-500"
-                                  : "bg-green-100 text-green-600"
-                              }`}
+                          <div className="flex items-center gap-1">
+                            <Button
+                              onClick={() => {
+                                router.push(`/user-history/${user.id}`);
+                              }}
+                              variant="secondary"
                             >
-                              <span className="text-sm font-semibold">
-                                {user.role.name}
-                              </span>
-                            </div>
+                              Ver cotizaciones
+                            </Button>
+                            <Button variant="secondary">
+                              Gestionar usuario
+                            </Button>
                           </div>
-                          <div className=""></div>
                         </div>
-                        <div className="flex items-center gap-1">
-                          <Button
-                            onClick={() => {
-                              router.push(`/user-history/${user.id}`);
-                            }}
-                            variant="secondary"
-                          >
-                            Ver cotizaciones
-                          </Button>
-                          <Button variant="secondary">Gestionar usuario</Button>
+                      ))}
+                      {filteredUsers.map((user) => (
+                        <div
+                          key={user.id}
+                          className="w-full flex items-center justify-between"
+                        >
+                          <div className="flex items-center justify-start">
+                            <div className="flex items-center space-x-2">
+                              <Image
+                                src={
+                                  user.profilePic || "/default-profile-pic.png"
+                                }
+                                width={700}
+                                height={700}
+                                alt="Picture of the author"
+                                className="w-8 h-8 rounded-full"
+                              />
+                              <div className="flex flex-col items-start justify-start min-w-64">
+                                <h3 className="text-sm font-semibold">
+                                  {user.name + " " + user.lastname}
+                                </h3>
+                                <p className="text-xs font-semibold opacity-50 -mt-0.5">
+                                  {user.email}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="w-28">
+                              <div
+                                className={`px-2 rounded-3xl inline-block ${
+                                  user.role.name === "Superadmin"
+                                    ? "bg-red-100 text-red-500"
+                                    : user.role.name === "Admin"
+                                    ? "bg-blue-100 text-blue-500"
+                                    : "bg-green-100 text-green-600"
+                                }`}
+                              >
+                                <span className="text-sm font-semibold">
+                                  {user.role.name}
+                                </span>
+                              </div>
+                            </div>
+                            <div className=""></div>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Button
+                              onClick={() => {
+                                router.push(`/user-history/${user.id}`);
+                              }}
+                              variant="secondary"
+                            >
+                              Ver cotizaciones
+                            </Button>
+                            <Button variant="secondary">
+                              Gestionar usuario
+                            </Button>
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
-                </ScrollArea>
-                <div className="w-auto flex pr-2 justify-end gap-2 items-end h-auto pt-4 border-t border-neutral-100">
+                      ))}
+                      {filteredUsers.map((user) => (
+                        <div
+                          key={user.id}
+                          className="w-full flex items-center justify-between"
+                        >
+                          <div className="flex items-center justify-start">
+                            <div className="flex items-center space-x-2">
+                              <Image
+                                src={
+                                  user.profilePic || "/default-profile-pic.png"
+                                }
+                                width={700}
+                                height={700}
+                                alt="Picture of the author"
+                                className="w-8 h-8 rounded-full"
+                              />
+                              <div className="flex flex-col items-start justify-start min-w-64">
+                                <h3 className="text-sm font-semibold">
+                                  {user.name + " " + user.lastname}
+                                </h3>
+                                <p className="text-xs font-semibold opacity-50 -mt-0.5">
+                                  {user.email}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="w-28">
+                              <div
+                                className={`px-2 rounded-3xl inline-block ${
+                                  user.role.name === "Superadmin"
+                                    ? "bg-red-100 text-red-500"
+                                    : user.role.name === "Admin"
+                                    ? "bg-blue-100 text-blue-500"
+                                    : "bg-green-100 text-green-600"
+                                }`}
+                              >
+                                <span className="text-sm font-semibold">
+                                  {user.role.name}
+                                </span>
+                              </div>
+                            </div>
+                            <div className=""></div>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Button
+                              onClick={() => {
+                                router.push(`/user-history/${user.id}`);
+                              }}
+                              variant="secondary"
+                            >
+                              Ver cotizaciones
+                            </Button>
+                            <Button variant="secondary">
+                              Gestionar usuario
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </ScrollArea>
+                </div>
+                <div className="w-auto flex pr-2 justify-end gap-2 items-end relative h-auto py-4 border-t border-neutral-100 flex-shrink-0">
                   <Button
                     variant="primary"
                     className="px-3 py-2 bg-neutral-900 text-white text-sm mr-2"
@@ -449,7 +567,7 @@ export default function AdminPage() {
                         <CreateUser
                           onUserCreated={handleUserCreated}
                           onDialogClose={handleDialogClose}
-                        />{" "}
+                        />
                       </div>
                     </DialogContent>
                   </Dialog>
