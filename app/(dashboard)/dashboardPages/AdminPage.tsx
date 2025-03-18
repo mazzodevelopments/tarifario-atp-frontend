@@ -309,12 +309,15 @@ export default function AdminPage() {
               <div className="flex flex-col relative p-[1vw] bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full">
                 <div className="mb-4 relative flex items-center justify-between">
                   <input
-                    className="w-60 h-[2.5vw] rounded-3xl bg-gray-50 border border-neutral-200 px-[2.25vw] mt-[0.4spx] text-[1.2vw]"
+                    className="w-60 h-9 rounded-3xl bg-gray-50 border border-neutral-200 px-8 mt-[0.4px] text-md"
                     placeholder="Buscar usuario"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
-                  <Search className="w-[1.3vw] h-[1.3vw] absolute left-2 top-1/2 transform -translate-y-1/2 text-neutral-400 z-10" />
+                  <Search
+                    size={18}
+                    className="absolute left-2 top-1/2 transform -translate-y-1/2 text-neutral-400 z-10"
+                  />
 
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-neutral-500">

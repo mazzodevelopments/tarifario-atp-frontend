@@ -49,14 +49,14 @@ export default function SearchInput({
   }, [query, onSearch]);
 
   return (
-    <div className="flex items-center gap-2 h-14">
-      <div className="relative w-[22vw]">
+    <div className="flex items-center gap-2 h-9">
+      <div className="relative w-[22vw] h-full">
         <Search
-          size={20}
-          className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black z-10"
+          size={18}
+          className="absolute left-2 top-1/2 transform -translate-y-1/2 text-neutral-400 z-10"
         />
         <input
-          className="w-full h-[2.25vw] rounded-full pl-10 pr-4 bg-white shadow-sm border border-neutral-200 text-sm focus:outline-none placeholder-secondary"
+          className="w-full h-full rounded-full px-8 mt-[0.4px] bg-white text shadow-sm border border-neutral-200 text-sm focus:outline-none pt-[0.5px]"
           placeholder={placeholder}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
