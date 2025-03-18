@@ -120,6 +120,7 @@ export default function Suppliers() {
       setSuppliers(
         suppliers.filter((supplier) => supplier.id !== supplierToDelete.id),
       );
+      setIsLoading(false);
       closeDeleteDialog();
     } catch (error) {
       console.error("Error deleting supplier:", error);
