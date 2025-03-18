@@ -372,7 +372,7 @@ export default function AdminPage() {
                   </div>
                 </div>
                 <div className="flex-grow overflow-hidden relative">
-                  <ScrollArea className="border-neutral-100 border-t h-full max-h-[calc(100vh-340px)] px-[1vw]">
+                  <ScrollArea className="border-neutral-100 border-t h-full max-h-[calc(100vh-330px)] px-[1vw]">
                     <div className="space-y-4 mt-4">
                       {filteredUsers.map((user) => (
                         <div
