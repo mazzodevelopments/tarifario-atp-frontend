@@ -60,15 +60,20 @@ export default function Suppliers() {
     phone: string;
     isNational: boolean;
     isInternational: boolean;
+    families?: { id: number; name: string };
   }) => {
     setIsLoading(true);
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { families, ...submittedData } = data;
+
     try {
       if (editedSupplier) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { families, ...supplierData } = editedSupplier;
-        await CatalogService.editSupplier({ ...supplierData, ...data });
+        await CatalogService.editSupplier({
+          ...submittedData,
+        });
       } else {
-        await CatalogService.addSupplier(data);
+        await CatalogService.addSupplier({ ...submittedData });
       }
       setEditedSupplier(null);
       setEditDialogOpen(false);
@@ -327,12 +332,14 @@ export default function Suppliers() {
           <DialogHeader>
             <DialogTitle>Editar Proveedor</DialogTitle>
           </DialogHeader>
-          <SupplierForm
-            onSubmit={handleSubmit}
-            isLoading={isLoading}
-            initialData={editedSupplier || undefined}
-            closeDialog={() => setEditDialogOpen(false)}
-          />
+          {editedSupplier && (
+            <SupplierForm
+              onSubmit={handleSubmit}
+              isLoading={isLoading}
+              initialData={editedSupplier || undefined}
+              closeDialog={() => setEditDialogOpen(false)}
+            />
+          )}
         </DialogContent>
       </Dialog>
     </div>
