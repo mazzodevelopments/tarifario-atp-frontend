@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -20,7 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ArrowDown, ArrowUp, Pencil } from "lucide-react";
+import { AlertTriangle, ArrowDown, ArrowUp, Pencil, Trash } from "lucide-react";
 import SearchInput from "@/components/SearchInput";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 import { useRouter } from "next/navigation";
@@ -28,7 +30,12 @@ import { useRouter } from "next/navigation";
 export default function Suppliers() {
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [editedSupplier, setEditedSupplier] = useState<Supplier | null>(null);
+  const [supplierToDelete, setSupplierToDelete] = useState<{
+    id: number;
+    name: string;
+  } | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [shouldFetch, setShouldFetch] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -53,6 +60,19 @@ export default function Suppliers() {
       fetchSuppliers();
     }
   }, [shouldFetch]);
+
+  const openDeleteDialog = (family: { id: number; name: string }) => {
+    setSupplierToDelete({
+      id: Number(family.id),
+      name: family.name,
+    });
+    setDeleteDialogOpen(true);
+  };
+
+  const closeDeleteDialog = () => {
+    setDeleteDialogOpen(false);
+    setSupplierToDelete(null);
+  };
 
   const handleSubmit = async (data: {
     name: string;
@@ -89,6 +109,21 @@ export default function Suppliers() {
   const handleEdit = (supplier: Supplier) => {
     setEditedSupplier(supplier);
     setEditDialogOpen(true);
+  };
+
+  const handleDeleteSupplier = async () => {
+    if (!supplierToDelete) return;
+
+    setIsLoading(true);
+    try {
+      await CatalogService.deleteSupplier(supplierToDelete.id);
+      setSuppliers(
+        suppliers.filter((supplier) => supplier.id !== supplierToDelete.id),
+      );
+      closeDeleteDialog();
+    } catch (error) {
+      console.error("Error deleting supplier:", error);
+    }
   };
 
   const handleViewDetails = (supplier: Supplier) => {
@@ -302,6 +337,12 @@ export default function Suppliers() {
                           </Button>
                           <Button
                             variant="secondary"
+                            onClick={() => openDeleteDialog(supplier)}
+                          >
+                            <Trash className="w-4 h-4 text-red-500" />
+                          </Button>
+                          <Button
+                            variant="secondary"
                             className="p-1 h-auto hover:bg-gray-100"
                             onClick={() => handleViewDetails(supplier)}
                           >
@@ -327,6 +368,7 @@ export default function Suppliers() {
         </div>
       </div>
 
+      {/* EDIT DIALOG*/}
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
         <DialogContent>
           <DialogHeader>
@@ -340,6 +382,43 @@ export default function Suppliers() {
               closeDialog={() => setEditDialogOpen(false)}
             />
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* DELETE DIALOG */}
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <div className="flex items-center justify-center w-12 h-12 mx-auto mb-4 rounded-full bg-red-100">
+              <AlertTriangle className="w-6 h-6 text-red-600" />
+            </div>
+            <DialogTitle className="text-center">
+              Confirmar eliminación
+            </DialogTitle>
+            <DialogDescription className="text-center">
+              ¿Estás seguro de eliminar el comprador{" "}
+              <span className="font-medium">{supplierToDelete?.name}</span> de
+              este proveedor?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex flex-row justify-center gap-2 sm:gap-0 mt-2">
+            <Button
+              variant="secondary"
+              onClick={closeDeleteDialog}
+              className="flex-1 sm:flex-none"
+              disabled={isLoading}
+            >
+              Cancelar
+            </Button>
+            <Button
+              variant="primary"
+              onClick={handleDeleteSupplier}
+              className="flex-1 sm:flex-none bg-red-100 text-red-500"
+              disabled={isLoading}
+            >
+              {isLoading ? "Eliminando..." : "Eliminar"}
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

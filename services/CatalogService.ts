@@ -333,6 +333,26 @@ export const CatalogService = {
     return data;
   },
 
+  deleteSupplier: async (supplierId: number): Promise<number> => {
+    const response = await fetch(
+      `${API_BASE_URL}/catalog/supplier/${supplierId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Error al eliminar proovedor");
+    }
+
+    const data = await response.json();
+    console.log("Proovedor eliminado:", data);
+    return data;
+  },
+
   // UNITS
   listUnits: async (): Promise<{ id: number; name: string }[]> => {
     const response = await fetch(`${API_BASE_URL}/catalog/units`, {
