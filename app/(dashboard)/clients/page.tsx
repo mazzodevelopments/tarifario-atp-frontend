@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -19,7 +21,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Pencil, ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react";
+import {
+  Pencil,
+  ArrowUp,
+  ArrowDown,
+  ArrowUpDown,
+  AlertTriangle,
+  Trash,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 import SearchInput from "@/components/SearchInput";
@@ -27,7 +36,12 @@ import SearchInput from "@/components/SearchInput";
 export default function Clients() {
   const [clients, setClients] = useState<Client[]>([]);
   const [editedClient, setEditedClient] = useState<Client | null>(null);
+  const [clientToDelete, setClientToDelete] = useState<{
+    id: number;
+    name: string;
+  } | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [shouldFetch, setShouldFetch] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -71,6 +85,33 @@ export default function Clients() {
     } finally {
       setIsLoading(false);
       setShouldFetch(true);
+    }
+  };
+
+  const openDeleteDialog = (family: { id: number; name: string }) => {
+    setClientToDelete({
+      id: Number(family.id),
+      name: family.name,
+    });
+    setDeleteDialogOpen(true);
+  };
+
+  const closeDeleteDialog = () => {
+    setDeleteDialogOpen(false);
+    setClientToDelete(null);
+  };
+
+  const handleDeleteClient = async () => {
+    if (!clientToDelete) return;
+
+    setIsLoading(true);
+    try {
+      await CatalogService.deleteClient(clientToDelete.id);
+      setClients(clients.filter((client) => client.id !== clientToDelete.id));
+      setIsLoading(false);
+      closeDeleteDialog();
+    } catch (error) {
+      console.error("Error deleting supplier:", error);
     }
   };
 
@@ -239,16 +280,22 @@ export default function Clients() {
                         <div className="flex justify-center gap-2">
                           <Button
                             variant="secondary"
+                            className="p-1 h-auto hover:bg-gray-100"
+                            onClick={() => handleViewDetails(client)}
+                          >
+                            Detalles
+                          </Button>
+                          <Button
+                            variant="secondary"
                             onClick={() => handleEdit(client)}
                           >
                             <Pencil className="w-4 h-4 text-primary" />
                           </Button>
                           <Button
                             variant="secondary"
-                            className="p-1 h-auto hover:bg-gray-100"
-                            onClick={() => handleViewDetails(client)}
+                            onClick={() => openDeleteDialog(client)}
                           >
-                            Detalles
+                            <Trash className="w-4 h-4 text-red-500" />
                           </Button>
                         </div>
                       </TableCell>
@@ -270,6 +317,7 @@ export default function Clients() {
         </div>
       </div>
 
+      {/* EDIT DIALOG */}
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
         <DialogContent>
           <DialogHeader>
@@ -281,6 +329,43 @@ export default function Clients() {
             initialData={editedClient || undefined}
             closeDialog={() => setEditDialogOpen(false)}
           />
+        </DialogContent>
+      </Dialog>
+
+      {/* DELETE DIALOG */}
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <div className="flex items-center justify-center w-12 h-12 mx-auto mb-4 rounded-full bg-red-100">
+              <AlertTriangle className="w-6 h-6 text-red-600" />
+            </div>
+            <DialogTitle className="text-center">
+              Confirmar eliminación
+            </DialogTitle>
+            <DialogDescription className="text-center">
+              ¿Estás seguro de eliminar el cliente{" "}
+              <span className="font-medium">{clientToDelete?.name}</span> de
+              este proveedor?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex flex-row justify-center gap-2 sm:gap-0 mt-2">
+            <Button
+              variant="secondary"
+              onClick={closeDeleteDialog}
+              className="flex-1 sm:flex-none"
+              disabled={isLoading}
+            >
+              Cancelar
+            </Button>
+            <Button
+              variant="primary"
+              onClick={handleDeleteClient}
+              className="flex-1 sm:flex-none bg-red-100 text-red-500"
+              disabled={isLoading}
+            >
+              {isLoading ? "Eliminando..." : "Eliminar"}
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

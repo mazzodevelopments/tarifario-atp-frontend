@@ -401,7 +401,7 @@ export default function Suppliers() {
               Confirmar eliminación
             </DialogTitle>
             <DialogDescription className="text-center">
-              ¿Estás seguro de eliminar el comprador{" "}
+              ¿Estás seguro de eliminar el proovedor{" "}
               <span className="font-medium">{supplierToDelete?.name}</span> de
               este proveedor?
             </DialogDescription>

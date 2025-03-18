@@ -71,6 +71,23 @@ export const CatalogService = {
     console.log("Cliente editado:", data);
     return data;
   },
+  deleteClient: async (clientId: number): Promise<number> => {
+    const response = await fetch(`${API_BASE_URL}/catalog/client/${clientId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al eliminar client");
+    }
+
+    const data = await response.json();
+    console.log("Proovedor client:", data);
+    return data;
+  },
+
   // BUYER
   listBuyers: async (
     clientId: number,
