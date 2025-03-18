@@ -1,8 +1,8 @@
 "use client";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { CatalogService } from "@/services/CatalogService";
-import { AlertTriangle, Trash } from "lucide-react";
+import { AlertTriangle, ArrowUpDown, Trash } from "lucide-react";
 import { Client } from "@/types/Client";
 import BuyerForm from "@/app/(dashboard)/create/[quotationId]/quotation-details/forms/BuyerForm";
 import Button from "@/components/Button";
@@ -220,8 +220,7 @@ export default function ClientDetailsPage() {
                           {
                             ascending: <ArrowUp size={14} />,
                             descending: <ArrowDown size={14} />,
-                          }[sortConfig.direction]) ||
-                          null}
+                          }[sortConfig.direction]) || <ArrowUpDown size={14} />}
                       </div>
                     </TableHead>
                     <TableHead
@@ -234,8 +233,7 @@ export default function ClientDetailsPage() {
                           {
                             ascending: <ArrowUp size={14} />,
                             descending: <ArrowDown size={14} />,
-                          }[sortConfig.direction]) ||
-                          null}
+                          }[sortConfig.direction]) || <ArrowUpDown size={14} />}
                       </div>
                     </TableHead>
                     <TableHead className="w-1/4 text-primary font-[600] text-center">

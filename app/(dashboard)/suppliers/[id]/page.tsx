@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { CatalogService } from "@/services/CatalogService";
-import { AlertTriangle, Trash } from "lucide-react";
+import { AlertTriangle, ArrowUpDown, Trash } from "lucide-react";
 import FamilyForm from "@/app/(dashboard)/suppliers/forms/FamilyForm";
 import Button from "@/components/Button";
 import {
@@ -252,8 +252,7 @@ export default function SupplierDetailsPage() {
                           {
                             ascending: <ArrowUp size={14} />,
                             descending: <ArrowDown size={14} />,
-                          }[sortConfig.direction]) ||
-                          null}
+                          }[sortConfig.direction]) || <ArrowUpDown size={14} />}
                       </div>
                     </TableHead>
                     <TableHead
@@ -266,8 +265,7 @@ export default function SupplierDetailsPage() {
                           {
                             ascending: <ArrowUp size={14} />,
                             descending: <ArrowDown size={14} />,
-                          }[sortConfig.direction]) ||
-                          null}
+                          }[sortConfig.direction]) || <ArrowUpDown size={14} />}
                       </div>
                     </TableHead>
                     <TableHead className="w-1/2 text-primary font-[600] text-center">

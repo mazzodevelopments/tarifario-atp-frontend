@@ -19,7 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Pencil, ArrowUp, ArrowDown } from "lucide-react";
+import { Pencil, ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 import SearchInput from "@/components/SearchInput";
@@ -206,8 +206,7 @@ export default function Clients() {
                         {
                           ascending: <ArrowUp size={14} />,
                           descending: <ArrowDown size={14} />,
-                        }[sortConfig.direction]) ||
-                        null}
+                        }[sortConfig.direction]) || <ArrowUpDown size={14} />}
                     </div>
                   </TableHead>
                   <TableHead
@@ -220,8 +219,7 @@ export default function Clients() {
                         {
                           ascending: <ArrowUp size={14} />,
                           descending: <ArrowDown size={14} />,
-                        }[sortConfig.direction]) ||
-                        null}
+                        }[sortConfig.direction]) || <ArrowUpDown size={14} />}
                     </div>
                   </TableHead>
                   <TableHead className="w-1/3 text-primary font-[600] text-center select-none">
