@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Search } from "react-feather";
 import {
   Table,
   TableBody,
@@ -16,6 +15,7 @@ import { QuotationsService } from "@/services/QuotationsService";
 import type { HistoryQuotationCard } from "@/types/Quotations";
 import SearchInput from "@/components/SearchInput";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
+import { ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react";
 
 export default function History() {
   const [unfinishedQuotations, setUnfinishedQuotations] = useState<
@@ -27,7 +27,10 @@ export default function History() {
   const [activeTab, setActiveTab] = useState<"pending" | "completed">(
     "pending",
   );
-  const [searchTerm, setSearchTerm] = useState("");
+  const [sortConfig, setSortConfig] = useState<{
+    key: string;
+    direction: string;
+  } | null>(null);
 
   useEffect(() => {
     const fetchUnfinishedQuotations = async () => {
@@ -54,14 +57,92 @@ export default function History() {
     fetchFinishedQuotations();
   }, []);
 
-  const filteredUnfinishedQuotations = unfinishedQuotations.filter(
-    (quotation) =>
-      quotation.taskNumber.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
+  const requestSort = (key: string) => {
+    let direction = "ascending";
+    if (
+      sortConfig &&
+      sortConfig.key === key &&
+      sortConfig.direction === "ascending"
+    ) {
+      direction = "descending";
+    } else if (
+      sortConfig &&
+      sortConfig.key === key &&
+      sortConfig.direction === "descending"
+    ) {
+      direction = "normal";
+    }
+    setSortConfig({ key, direction });
+  };
 
-  const filteredFinishedQuotations = finishedQuotations.filter((quotation) =>
-    quotation.taskNumber.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
+  const getSortedQuotations = (quotations: HistoryQuotationCard[]) => {
+    if (!sortConfig) {
+      return quotations;
+    }
+
+    const sortedQuotations = [...quotations];
+    if (sortConfig.direction === "normal") {
+      return sortedQuotations;
+    }
+
+    sortedQuotations.sort((a, b) => {
+      if (sortConfig.key === "taskNumber") {
+        if (a.taskNumber < b.taskNumber) {
+          return sortConfig.direction === "ascending" ? -1 : 1;
+        }
+        if (a.taskNumber > b.taskNumber) {
+          return sortConfig.direction === "ascending" ? 1 : -1;
+        }
+        return 0;
+      } else if (sortConfig.key === "clientName") {
+        if (a.client < b.client) {
+          return sortConfig.direction === "ascending" ? -1 : 1;
+        }
+        if (a.client > b.client) {
+          return sortConfig.direction === "ascending" ? 1 : -1;
+        }
+        return 0;
+      } else if (sortConfig.key === "buyerName") {
+        if (a.buyer < b.buyer) {
+          return sortConfig.direction === "ascending" ? -1 : 1;
+        }
+        if (a.buyer > b.buyer) {
+          return sortConfig.direction === "ascending" ? 1 : -1;
+        }
+        return 0;
+      } else if (sortConfig.key === "receptionDate") {
+        if (a.receptionDate < b.receptionDate) {
+          return sortConfig.direction === "ascending" ? -1 : 1;
+        }
+        if (a.receptionDate > b.receptionDate) {
+          return sortConfig.direction === "ascending" ? 1 : -1;
+        }
+        return 0;
+      } else if (sortConfig.key === "expirationDate") {
+        if (a.expirationDateTime < b.expirationDateTime) {
+          return sortConfig.direction === "ascending" ? -1 : 1;
+        }
+        if (a.expirationDateTime > b.expirationDateTime) {
+          return sortConfig.direction === "ascending" ? 1 : -1;
+        }
+        return 0;
+      } else if (sortConfig.key === "stage") {
+        if (a.step < b.step) {
+          return sortConfig.direction === "ascending" ? -1 : 1;
+        }
+        if (a.step > b.step) {
+          return sortConfig.direction === "ascending" ? 1 : -1;
+        }
+        return 0;
+      }
+      return 0;
+    });
+
+    return sortedQuotations;
+  };
+
+  const sortedUnfinishedQuotations = getSortedQuotations(unfinishedQuotations);
+  const sortedFinishedQuotations = getSortedQuotations(finishedQuotations);
 
   const fetchSearchResults = async (searchTerm: string) => {
     const data: { id: number; taskNumber: string }[] =
@@ -115,24 +196,84 @@ export default function History() {
             <Table className="w-full bg-white">
               <TableHeader>
                 <TableRow className="bg-primary/5">
-                  <TableHead className="text-primary font-[600] text-center">
-                    Número
+                  <TableHead
+                    className="text-primary font-[600] text-center cursor-pointer select-none"
+                    onClick={() => requestSort("taskNumber")}
+                  >
+                    <div className="flex items-center justify-center gap-1">
+                      Número{" "}
+                      {(sortConfig?.key === "taskNumber" &&
+                        {
+                          ascending: <ArrowUp size={14} />,
+                          descending: <ArrowDown size={14} />,
+                        }[sortConfig.direction]) || <ArrowUpDown size={14} />}
+                    </div>
                   </TableHead>
-                  <TableHead className="text-primary font-[600] text-center">
-                    Cliente
+                  <TableHead
+                    className="text-primary font-[600] text-center cursor-pointer select-none"
+                    onClick={() => requestSort("clientName")}
+                  >
+                    <div className="flex items-center justify-center gap-1">
+                      Cliente{" "}
+                      {(sortConfig?.key === "clientName" &&
+                        {
+                          ascending: <ArrowUp size={14} />,
+                          descending: <ArrowDown size={14} />,
+                        }[sortConfig.direction]) || <ArrowUpDown size={14} />}
+                    </div>
                   </TableHead>
-                  <TableHead className="text-primary font-[600] text-center">
-                    Comprador
+                  <TableHead
+                    className="text-primary font-[600] text-center cursor-pointer select-none"
+                    onClick={() => requestSort("buyerName")}
+                  >
+                    <div className="flex items-center justify-center gap-1">
+                      Comprador{" "}
+                      {(sortConfig?.key === "buyerName" &&
+                        {
+                          ascending: <ArrowUp size={14} />,
+                          descending: <ArrowDown size={14} />,
+                        }[sortConfig.direction]) || <ArrowUpDown size={14} />}
+                    </div>
                   </TableHead>
-                  <TableHead className="text-primary font-[600] text-center">
-                    Fecha Recepción
+                  <TableHead
+                    className="text-primary font-[600] text-center cursor-pointer select-none"
+                    onClick={() => requestSort("receptionDate")}
+                  >
+                    <div className="flex items-center justify-center gap-1">
+                      Fecha Recepción{" "}
+                      {(sortConfig?.key === "receptionDate" &&
+                        {
+                          ascending: <ArrowUp size={14} />,
+                          descending: <ArrowDown size={14} />,
+                        }[sortConfig.direction]) || <ArrowUpDown size={14} />}
+                    </div>
                   </TableHead>
-                  <TableHead className="text-primary font-[600] text-center">
-                    Fecha Expiración
+                  <TableHead
+                    className="text-primary font-[600] text-center cursor-pointer select-none"
+                    onClick={() => requestSort("expirationDate")}
+                  >
+                    <div className="flex items-center justify-center gap-1">
+                      Fecha Expiración{" "}
+                      {(sortConfig?.key === "expirationDate" &&
+                        {
+                          ascending: <ArrowUp size={14} />,
+                          descending: <ArrowDown size={14} />,
+                        }[sortConfig.direction]) || <ArrowUpDown size={14} />}
+                    </div>
                   </TableHead>
                   {activeTab === "pending" && (
-                    <TableHead className="text-primary font-[600] text-center">
-                      Etapa
+                    <TableHead
+                      className="text-primary font-[600] text-center cursor-pointer select-none"
+                      onClick={() => requestSort("stage")}
+                    >
+                      <div className="flex items-center justify-center gap-1">
+                        Etapa{" "}
+                        {(sortConfig?.key === "stage" &&
+                          {
+                            ascending: <ArrowUp size={14} />,
+                            descending: <ArrowDown size={14} />,
+                          }[sortConfig.direction]) || <ArrowUpDown size={14} />}
+                      </div>
                     </TableHead>
                   )}
                   <TableHead className="text-primary font-[600] text-center">
@@ -142,8 +283,8 @@ export default function History() {
               </TableHeader>
               <TableBody>
                 {activeTab === "pending" ? (
-                  filteredUnfinishedQuotations.length > 0 ? (
-                    filteredUnfinishedQuotations.map((quotation) => (
+                  sortedUnfinishedQuotations.length > 0 ? (
+                    sortedUnfinishedQuotations.map((quotation) => (
                       <QuotationTableRow
                         key={quotation.id}
                         quotation={quotation}
@@ -160,8 +301,8 @@ export default function History() {
                       </TableCell>
                     </TableRow>
                   )
-                ) : filteredFinishedQuotations.length > 0 ? (
-                  filteredFinishedQuotations.map((quotation) => (
+                ) : sortedFinishedQuotations.length > 0 ? (
+                  sortedFinishedQuotations.map((quotation) => (
                     <QuotationTableRow
                       key={quotation.id}
                       quotation={quotation}
