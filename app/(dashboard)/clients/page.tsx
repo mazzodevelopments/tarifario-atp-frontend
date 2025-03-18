@@ -236,9 +236,7 @@ export default function Clients() {
                       <TableCell className="font-[600] text-black">
                         {client.name}
                       </TableCell>
-                      <TableCell className="font-[600] text-black">
-                        {client.buyers?.length || 0}
-                      </TableCell>
+                      <TableCell>{client.buyers?.length || 0}</TableCell>
                       <TableCell>
                         <div className="flex justify-center gap-2">
                           <Button
