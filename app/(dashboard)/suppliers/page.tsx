@@ -22,7 +22,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { AlertTriangle, ArrowDown, ArrowUp, Pencil, Trash } from "lucide-react";
+import {
+  AlertTriangle,
+  ArrowDown,
+  ArrowUp,
+  ArrowUpDown,
+  Pencil,
+  Trash,
+} from "lucide-react";
 import SearchInput from "@/components/SearchInput";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 import { useRouter } from "next/navigation";
@@ -265,8 +272,7 @@ export default function Suppliers() {
                         {
                           ascending: <ArrowUp size={14} />,
                           descending: <ArrowDown size={14} />,
-                        }[sortConfig.direction]) ||
-                        null}
+                        }[sortConfig.direction]) || <ArrowUpDown size={14} />}
                     </div>
                   </TableHead>
                   <TableHead
@@ -279,8 +285,7 @@ export default function Suppliers() {
                         {
                           ascending: <ArrowUp size={14} />,
                           descending: <ArrowDown size={14} />,
-                        }[sortConfig.direction]) ||
-                        null}
+                        }[sortConfig.direction]) || <ArrowUpDown size={14} />}
                     </div>
                   </TableHead>
                   <TableHead className="w-1/5 text-primary font-[600] text-center select-none">
@@ -296,8 +301,7 @@ export default function Suppliers() {
                         {
                           ascending: <ArrowUp size={14} />,
                           descending: <ArrowDown size={14} />,
-                        }[sortConfig.direction]) ||
-                        null}
+                        }[sortConfig.direction]) || <ArrowUpDown size={14} />}
                     </div>
                   </TableHead>
                   <TableHead className="w-1/5 text-primary font-[600] text-center select-none">
@@ -332,6 +336,13 @@ export default function Suppliers() {
                         <div className="flex justify-center gap-2">
                           <Button
                             variant="secondary"
+                            className="p-1 h-auto hover:bg-gray-100"
+                            onClick={() => handleViewDetails(supplier)}
+                          >
+                            Detalles
+                          </Button>
+                          <Button
+                            variant="secondary"
                             onClick={() => handleEdit(supplier)}
                           >
                             <Pencil className="w-4 h-4 text-primary" />
@@ -341,13 +352,6 @@ export default function Suppliers() {
                             onClick={() => openDeleteDialog(supplier)}
                           >
                             <Trash className="w-4 h-4 text-red-500" />
-                          </Button>
-                          <Button
-                            variant="secondary"
-                            className="p-1 h-auto hover:bg-gray-100"
-                            onClick={() => handleViewDetails(supplier)}
-                          >
-                            Detalles
                           </Button>
                         </div>
                       </TableCell>
