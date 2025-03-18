@@ -19,6 +19,7 @@ import { useAuth } from "@/context/AuthContext";
 import CurrentQuotationCard from "@/app/(dashboard)/components/CurrentQuotation";
 import { QuotationSlider } from "@/app/(dashboard)/components/QuotationCarousel";
 import { QuotationsService } from "@/services/QuotationsService";
+import PagesHeader from "./pagesHeader";
 
 export default function UserPage() {
   const { user, logout } = useAuth();
@@ -140,24 +141,24 @@ export default function UserPage() {
           </div>
         </div>
       </div>
-      <div className="flex flex-row items-start w-full h-[calc(100%-5rem)]">
-        <div className="w-1/2 h-full flex flex-col justify-center items-center relative p-6 gap-3 border-r border-neutral-200">
-          <div className="w-full flex flex-col pb-1 relative">
-            <h2 className="text-3xl font-[800]">Mis Cotizaciones</h2>
-            <p className="text-gray-500">Cotizaciones recientes y pasadas</p>
-          </div>
+      <div className="flex flex-row items-start w-full h-[100vh]">
+        <div className="w-1/2 h-full flex flex-col justify-center items-center relative p-[1vw] border-r border-neutral-200 ">
+          <PagesHeader
+            title="Mis Cotizaciones"
+            subtitle="Vista general de mis cotizaciones"
+          />
           <div className="w-full h-full gap-3 flex flex-col">
             <CurrentQuotationCard userId={user ? user.id : 0} />
             <QuotationSlider quotations={lastQuotations} />
           </div>
         </div>
 
-        <div className="w-1/2 h-full flex flex-col relative p-6 gap-3">
-          <div className="w-full flex flex-col pb-1">
-            <h2 className="text-3xl font-[800]">Panel de usuario</h2>
-            <p className="text-gray-500">Información individual y grupal</p>
-          </div>
-          <div className="flex flex-row gap-3 h-[50%]">
+        <div className="w-1/2 h-full flex flex-col relative p-[1vw] gap-[1vw]">
+          <PagesHeader
+            title="Panel de usuario"
+            subtitle="Información individual y grupal"
+          />
+          <div className="flex flex-row gap-[0.5vw] h-[50%]">
             <div className="flex flex-col w-full">
               <div className="flex flex-col p-4 relative bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full">
                 <div className="absolute bottom-4 right-4 w-auto flex justify-end gap-2 items-end h-auto">
@@ -174,7 +175,7 @@ export default function UserPage() {
               </div>
             </div>
           </div>
-          <div className="h-[50%]  w-full flex gap-3">
+          <div className="h-[50%] w-full flex gap-3">
             <div className="w-1/2 h-full bg-white shadow-sm border border-neutral-200 rounded-[16px] flex justify-center items-center p-10 flex-col gap-3">
               <span className="text-center text-[0.85vw]">
                 Estás en el grupo de

@@ -37,6 +37,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 import SearchInput from "@/components/SearchInput";
+import PagesHeader from "./pagesHeader";
 
 export default function AdminPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -197,12 +198,10 @@ export default function AdminPage() {
       </div>
       <div className="flex flex-col lg:flex-row items-start w-full h-[100vh]">
         <div className="w-full lg:w-1/3 h-full flex flex-col border-r border-neutral-200 relative p-[1vw]">
-          <div className="w-full flex flex-col pb-[0.5vw]">
-            <h2 className="text-[2vw] font-[800] leading-[1.1]">
-              Mis cotizaciones
-            </h2>
-            <p className="text-gray-500">Vista general de mis cotizaciones</p>
-          </div>
+          <PagesHeader
+            title="Mis Cotizaciones"
+            subtitle="Vista general de mis cotizaciones"
+          />
           <div className="h-full gap-3 flex flex-col">
             <CurrentQuotationCard />
             <QuotationSlider quotations={lastQuotations} />
@@ -210,12 +209,10 @@ export default function AdminPage() {
         </div>
 
         <div className="w-full lg:w-2/3 h-full flex flex-col relative p-[1vw]">
-          <div className="w-full flex flex-col pb-[0.5vw]">
-            <h2 className="text-[2vw] font-[800] leading-[1]">
-              Panel Administrador
-            </h2>
-            <p className="text-gray-500">Panel de acciones de administrador</p>
-          </div>
+          <PagesHeader
+            title="Panel Administrador"
+            subtitle="Panel de acciones de administrador"
+          />
           <div className="flex flex-row gap-3 h-full">
             {/* <div className="flex flex-col p-4 relative bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full">
                 <div className="flex items-center justify-between mb-4">
