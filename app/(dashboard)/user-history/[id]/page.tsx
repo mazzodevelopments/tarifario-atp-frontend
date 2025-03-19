@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Button from "@/components/Button";
-import { QuotationTableRow } from "@/app/(dashboard)/history/QuotationTableRow";
+import { QuotationTableRow } from "@/app/(dashboard)/quotations/QuotationTableRow";
 import { QuotationsService } from "@/services/QuotationsService";
 import type { HistoryQuotationCard } from "@/types/Quotations";
 import { useParams } from "next/navigation";

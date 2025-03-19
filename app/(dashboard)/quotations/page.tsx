@@ -10,14 +10,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Button from "@/components/Button";
-import { QuotationTableRow } from "@/app/(dashboard)/history/QuotationTableRow";
+import { QuotationTableRow } from "@/app/(dashboard)/quotations/QuotationTableRow";
 import { QuotationsService } from "@/services/QuotationsService";
 import type { HistoryQuotationCard } from "@/types/Quotations";
 import SearchInput from "@/components/SearchInput";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 import { ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react";
 
-export default function History() {
+export default function Quotations() {
   const [unfinishedQuotations, setUnfinishedQuotations] = useState<
     HistoryQuotationCard[]
   >([]);
@@ -36,7 +36,7 @@ export default function History() {
     const fetchUnfinishedQuotations = async () => {
       try {
         const unfinishedQuotations =
-          await QuotationsService.getUnfinishedQuotations();
+          await QuotationsService.getAssignedQuotations();
         setUnfinishedQuotations(unfinishedQuotations);
       } catch (error) {
         console.error("Error fetching quotation items:", error);

@@ -11,6 +11,7 @@ import {
   Users,
   Truck,
   Settings,
+  ListTodo,
   LogOut,
   ChevronDown,
   ChevronsUpDown,
@@ -51,7 +52,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     ? [
         { icon: Home, label: "Home", id: "" },
         { icon: PlusSquare, label: "Crear", id: "create" },
-        { icon: Clock, label: "Cotizaciones", id: "history" },
+        { icon: Clock, label: "Cotizaciones", id: "quotations" },
         { icon: Users, label: "Clientes", id: "clients" },
         { icon: Truck, label: "Proveedores", id: "suppliers" },
         { icon: BarChart2, label: "Comparar", id: "compare" },
@@ -60,12 +61,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       ? [
           { icon: Home, label: "Home", id: "" },
           { icon: PlusSquare, label: "Crear", id: "create" },
-          { icon: Clock, label: "Cotizaciones", id: "history" },
+          { icon: ListTodo, label: "Cotizaciones", id: "quotations" },
         ]
       : [
           { icon: Home, label: "Home", id: "" },
           { icon: PlusSquare, label: "Crear", id: "create" },
-          { icon: Clock, label: "Cotizaciones", id: "history" },
+          { icon: ListTodo, label: "Cotizaciones", id: "quotations" },
           { icon: Users, label: "Clientes", id: "clients" },
           { icon: Truck, label: "Proveedores", id: "suppliers" },
         ];

@@ -1,9 +1,12 @@
 import { API_BASE_URL } from "@/utils/config";
 
 export const QuotationsService = {
-  getUnfinishedQuotations: async () => {
-    const response = await fetch(`${API_BASE_URL}/quotations/unfinished`, {
+  getAssignedQuotations: async () => {
+    const response = await fetch(`${API_BASE_URL}/quotations/assigned`, {
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
     });
 
     if (!response.ok) {
