@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Header from "@/app/(dashboard)/components/Header";
+import PagesHeader from "../dashboardPages/pagesHeader";
 
 export default function Settings() {
   const [userData, setUserData] = useState<User | null>(null);
@@ -59,14 +60,12 @@ export default function Settings() {
     <div className="flex flex-col justify-start w-full h-full bg-neutral-50">
       <Header title="Ajustes" description={""} />
 
-      <div className="flex flex-col lg:flex-row items-start w-full h-[calc(100%-5rem)]">
-        <div className="w-full lg:w-2/3 h-full flex flex-col relative p-6">
-          <div className="w-full flex flex-col pb-4">
-            <h2 className="text-3xl font-[800]">Mi perfil</h2>
-            <p className="text-gray-500 ml-1">
-              Información y configuración de la cuenta
-            </p>
-          </div>
+      <div className="flex flex-col lg:flex-row items-start w-full h-auto">
+        <div className="w-full lg:w-2/3 h-full flex flex-col relative p-[1vw]">
+          <PagesHeader
+            title="Mi perfil"
+            subtitle="Información y configuración de la cuenta"
+          />
 
           <div className="flex flex-col relative py-4 bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full">
             <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-100">
