@@ -1,12 +1,12 @@
 import { type NextRequest, NextResponse } from "next/server";
 
-const protectedRoutes = ["/suppliers", "/user-history", "/clients"];
+const protectedRoutes = ["/suppliers", "/clients"];
 const publicRoutes = ["/login", "/"];
 
 export default function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
   const isProtectedRoute = protectedRoutes.some(
-    (route) => path === route || path.startsWith(`${route}/`)
+    (route) => path === route || path.startsWith(`${route}/`),
   );
   const isPublicRoute = publicRoutes.includes(path);
 
