@@ -33,6 +33,7 @@ import {
 import SearchInput from "@/components/SearchInput";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 import { useRouter } from "next/navigation";
+import RoleProtectedRoute from "@/components/RoleProtectedRoute";
 
 export default function Suppliers() {
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
@@ -125,7 +126,7 @@ export default function Suppliers() {
     try {
       await CatalogService.deleteSupplier(supplierToDelete.id);
       setSuppliers(
-        suppliers.filter((supplier) => supplier.id !== supplierToDelete.id),
+        suppliers.filter((supplier) => supplier.id !== supplierToDelete.id)
       );
       setIsLoading(false);
       closeDeleteDialog();
@@ -208,7 +209,7 @@ export default function Suppliers() {
   const fetchSearchResults = async (searchTerm: string) => {
     const filteredSuppliers: { id: number; name: string }[] = suppliers
       .filter((supplier) =>
-        supplier.name.toLowerCase().includes(searchTerm.toLowerCase()),
+        supplier.name.toLowerCase().includes(searchTerm.toLowerCase())
       )
       .map((supplier) => ({
         id: supplier.id,
@@ -218,215 +219,220 @@ export default function Suppliers() {
   };
 
   return (
-    <div className="flex justify-start w-full h-full flex-col bg-transparent">
-      <div className="w-full h-20 flex-shrink-0 border-b border-neutral-200">
-        <div className="flex justify-between items-center h-full px-6 mb-4">
-          <div className="flex flex-col justify-center items-start w-[12vw]">
-            <h2 className="flex items-center text-xl leading-[1] p-0 font-[800] text-black mt-1">
-              Proveedores
-            </h2>
+    <RoleProtectedRoute allowedRoles={["Admin", "Superadmin"]}>
+      <div className="flex justify-start w-full h-full flex-col bg-transparent">
+        <div className="w-full h-20 flex-shrink-0 border-b border-neutral-200">
+          <div className="flex justify-between items-center h-full px-6 mb-4">
+            <div className="flex flex-col justify-center items-start w-[12vw]">
+              <h2 className="flex items-center text-xl leading-[1] p-0 font-[800] text-black mt-1">
+                Proveedores
+              </h2>
+            </div>
+            <SearchInput
+              placeholder="Buscar proveedores"
+              onSearch={fetchSearchResults}
+              link="/suppliers"
+            />
           </div>
-          <SearchInput
-            placeholder="Buscar proveedores"
-            onSearch={fetchSearchResults}
-            link="/suppliers"
-          />
         </div>
-      </div>
-      <div className="mt-6 px-6">
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogTrigger asChild>
-            <Button
-              variant="primary"
-              className="py-2 px-4 rounded-lg font-semibold text-sm border bg-primary/5 text-primary"
-            >
-              Agregar Proveedor
-            </Button>
-          </DialogTrigger>
+        <div className="mt-6 px-6">
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogTrigger asChild>
+              <Button
+                variant="primary"
+                className="py-2 px-4 rounded-lg font-semibold text-sm border bg-primary/5 text-primary"
+              >
+                Agregar Proveedor
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Agregar Nuevo Proveedor</DialogTitle>
+              </DialogHeader>
+              <SupplierForm
+                onSubmit={handleSubmit}
+                isLoading={isLoading}
+                closeDialog={() => setDialogOpen(false)}
+              />
+            </DialogContent>
+          </Dialog>
+        </div>
+
+        <div className="w-full px-6 pb-6 pt-4">
+          <div className="w-auto h-auto overflow-hidden rounded-[12px] shadow-sm shadow-cyan-500/20">
+            <div className="border rounded-[12px] overflow-auto max-h-[70vh] relative w-full">
+              <Table className="w-full bg-white">
+                <TableHeader>
+                  <TableRow className="bg-primary/5">
+                    <TableHead
+                      className="w-1/5 text-primary font-[600] text-center cursor-pointer select-none"
+                      onClick={() => requestSort("name")}
+                    >
+                      <div className="flex items-center justify-center gap-1">
+                        Nombre{" "}
+                        {(sortConfig?.key === "name" &&
+                          {
+                            ascending: <ArrowUp size={14} />,
+                            descending: <ArrowDown size={14} />,
+                          }[sortConfig.direction]) || <ArrowUpDown size={14} />}
+                      </div>
+                    </TableHead>
+                    <TableHead
+                      className="w-1/5 text-primary font-[600] text-center cursor-pointer select-none"
+                      onClick={() => requestSort("email")}
+                    >
+                      <div className="flex items-center justify-center gap-1">
+                        Email{" "}
+                        {(sortConfig?.key === "email" &&
+                          {
+                            ascending: <ArrowUp size={14} />,
+                            descending: <ArrowDown size={14} />,
+                          }[sortConfig.direction]) || <ArrowUpDown size={14} />}
+                      </div>
+                    </TableHead>
+                    <TableHead className="w-1/5 text-primary font-[600] text-center select-none">
+                      Teléfono
+                    </TableHead>
+                    <TableHead
+                      className="w-1/5 text-primary font-[600] text-center cursor-pointer select-none"
+                      onClick={() => requestSort("type")}
+                    >
+                      <div className="flex items-center justify-center gap-1">
+                        Tipo{" "}
+                        {(sortConfig?.key === "type" &&
+                          {
+                            ascending: <ArrowUp size={14} />,
+                            descending: <ArrowDown size={14} />,
+                          }[sortConfig.direction]) || <ArrowUpDown size={14} />}
+                      </div>
+                    </TableHead>
+                    <TableHead className="w-1/5 text-primary font-[600] text-center select-none">
+                      Acciones
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {sortedSuppliers.length > 0 ? (
+                    sortedSuppliers.map((supplier) => (
+                      <TableRow
+                        key={supplier.id}
+                        className="text-sm text-center"
+                      >
+                        <TableCell className="font-[600] text-black">
+                          {supplier.name}
+                        </TableCell>
+                        <TableCell>{supplier.email}</TableCell>
+                        <TableCell>{supplier.phone}</TableCell>
+                        <TableCell>
+                          <div
+                            className={`py-1 px-3 rounded-3xl inline-block ${getTypeStyles(
+                              supplier.isNational,
+                              supplier.isInternational
+                            )}`}
+                          >
+                            {supplier.isNational && supplier.isInternational
+                              ? "Ambas"
+                              : supplier.isNational
+                              ? "Nacional"
+                              : "Internacional"}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex justify-center gap-2">
+                            <Button
+                              variant="secondary"
+                              className="p-1 h-auto hover:bg-gray-100"
+                              onClick={() => handleViewDetails(supplier)}
+                            >
+                              Detalles
+                            </Button>
+                            <Button
+                              variant="secondary"
+                              onClick={() => handleEdit(supplier)}
+                            >
+                              <Pencil className="w-4 h-4 text-primary" />
+                            </Button>
+                            <Button
+                              variant="secondary"
+                              onClick={() => openDeleteDialog(supplier)}
+                            >
+                              <Trash className="w-4 h-4 text-red-500" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow className="h-36">
+                      <TableCell
+                        colSpan={5}
+                        className="text-sm m-auto h-full text-center text-gray-500"
+                      >
+                        No hay proveedores registrados
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+          </div>
+        </div>
+
+        {/* EDIT DIALOG*/}
+        <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Agregar Nuevo Proveedor</DialogTitle>
+              <DialogTitle>Editar Proveedor</DialogTitle>
             </DialogHeader>
-            <SupplierForm
-              onSubmit={handleSubmit}
-              isLoading={isLoading}
-              closeDialog={() => setDialogOpen(false)}
-            />
+            {editedSupplier && (
+              <SupplierForm
+                onSubmit={handleSubmit}
+                isLoading={isLoading}
+                initialData={editedSupplier || undefined}
+                closeDialog={() => setEditDialogOpen(false)}
+              />
+            )}
+          </DialogContent>
+        </Dialog>
+
+        {/* DELETE DIALOG */}
+        <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+          <DialogContent className="max-w-sm">
+            <DialogHeader>
+              <div className="flex items-center justify-center w-12 h-12 mx-auto mb-4 rounded-full bg-red-100">
+                <AlertTriangle className="w-6 h-6 text-red-600" />
+              </div>
+              <DialogTitle className="text-center">
+                Confirmar eliminación
+              </DialogTitle>
+              <DialogDescription className="text-center">
+                ¿Estás seguro de eliminar el proovedor{" "}
+                <span className="font-medium">{supplierToDelete?.name}</span> de
+                este proveedor?
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter className="flex flex-row justify-center gap-2 sm:gap-0 mt-2">
+              <Button
+                variant="secondary"
+                onClick={closeDeleteDialog}
+                className="flex-1 sm:flex-none"
+                disabled={isLoading}
+              >
+                Cancelar
+              </Button>
+              <Button
+                variant="primary"
+                onClick={handleDeleteSupplier}
+                className="flex-1 sm:flex-none bg-red-100 text-red-500"
+                disabled={isLoading}
+              >
+                {isLoading ? "Eliminando..." : "Eliminar"}
+              </Button>
+            </DialogFooter>
           </DialogContent>
         </Dialog>
       </div>
-
-      <div className="w-full px-6 pb-6 pt-4">
-        <div className="w-auto h-auto overflow-hidden rounded-[12px] shadow-sm shadow-cyan-500/20">
-          <div className="border rounded-[12px] overflow-auto max-h-[70vh] relative w-full">
-            <Table className="w-full bg-white">
-              <TableHeader>
-                <TableRow className="bg-primary/5">
-                  <TableHead
-                    className="w-1/5 text-primary font-[600] text-center cursor-pointer select-none"
-                    onClick={() => requestSort("name")}
-                  >
-                    <div className="flex items-center justify-center gap-1">
-                      Nombre{" "}
-                      {(sortConfig?.key === "name" &&
-                        {
-                          ascending: <ArrowUp size={14} />,
-                          descending: <ArrowDown size={14} />,
-                        }[sortConfig.direction]) || <ArrowUpDown size={14} />}
-                    </div>
-                  </TableHead>
-                  <TableHead
-                    className="w-1/5 text-primary font-[600] text-center cursor-pointer select-none"
-                    onClick={() => requestSort("email")}
-                  >
-                    <div className="flex items-center justify-center gap-1">
-                      Email{" "}
-                      {(sortConfig?.key === "email" &&
-                        {
-                          ascending: <ArrowUp size={14} />,
-                          descending: <ArrowDown size={14} />,
-                        }[sortConfig.direction]) || <ArrowUpDown size={14} />}
-                    </div>
-                  </TableHead>
-                  <TableHead className="w-1/5 text-primary font-[600] text-center select-none">
-                    Teléfono
-                  </TableHead>
-                  <TableHead
-                    className="w-1/5 text-primary font-[600] text-center cursor-pointer select-none"
-                    onClick={() => requestSort("type")}
-                  >
-                    <div className="flex items-center justify-center gap-1">
-                      Tipo{" "}
-                      {(sortConfig?.key === "type" &&
-                        {
-                          ascending: <ArrowUp size={14} />,
-                          descending: <ArrowDown size={14} />,
-                        }[sortConfig.direction]) || <ArrowUpDown size={14} />}
-                    </div>
-                  </TableHead>
-                  <TableHead className="w-1/5 text-primary font-[600] text-center select-none">
-                    Acciones
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {sortedSuppliers.length > 0 ? (
-                  sortedSuppliers.map((supplier) => (
-                    <TableRow key={supplier.id} className="text-sm text-center">
-                      <TableCell className="font-[600] text-black">
-                        {supplier.name}
-                      </TableCell>
-                      <TableCell>{supplier.email}</TableCell>
-                      <TableCell>{supplier.phone}</TableCell>
-                      <TableCell>
-                        <div
-                          className={`py-1 px-3 rounded-3xl inline-block ${getTypeStyles(
-                            supplier.isNational,
-                            supplier.isInternational,
-                          )}`}
-                        >
-                          {supplier.isNational && supplier.isInternational
-                            ? "Ambas"
-                            : supplier.isNational
-                              ? "Nacional"
-                              : "Internacional"}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex justify-center gap-2">
-                          <Button
-                            variant="secondary"
-                            className="p-1 h-auto hover:bg-gray-100"
-                            onClick={() => handleViewDetails(supplier)}
-                          >
-                            Detalles
-                          </Button>
-                          <Button
-                            variant="secondary"
-                            onClick={() => handleEdit(supplier)}
-                          >
-                            <Pencil className="w-4 h-4 text-primary" />
-                          </Button>
-                          <Button
-                            variant="secondary"
-                            onClick={() => openDeleteDialog(supplier)}
-                          >
-                            <Trash className="w-4 h-4 text-red-500" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow className="h-36">
-                    <TableCell
-                      colSpan={5}
-                      className="text-sm m-auto h-full text-center text-gray-500"
-                    >
-                      No hay proveedores registrados
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-        </div>
-      </div>
-
-      {/* EDIT DIALOG*/}
-      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Editar Proveedor</DialogTitle>
-          </DialogHeader>
-          {editedSupplier && (
-            <SupplierForm
-              onSubmit={handleSubmit}
-              isLoading={isLoading}
-              initialData={editedSupplier || undefined}
-              closeDialog={() => setEditDialogOpen(false)}
-            />
-          )}
-        </DialogContent>
-      </Dialog>
-
-      {/* DELETE DIALOG */}
-      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <DialogContent className="max-w-sm">
-          <DialogHeader>
-            <div className="flex items-center justify-center w-12 h-12 mx-auto mb-4 rounded-full bg-red-100">
-              <AlertTriangle className="w-6 h-6 text-red-600" />
-            </div>
-            <DialogTitle className="text-center">
-              Confirmar eliminación
-            </DialogTitle>
-            <DialogDescription className="text-center">
-              ¿Estás seguro de eliminar el proovedor{" "}
-              <span className="font-medium">{supplierToDelete?.name}</span> de
-              este proveedor?
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="flex flex-row justify-center gap-2 sm:gap-0 mt-2">
-            <Button
-              variant="secondary"
-              onClick={closeDeleteDialog}
-              className="flex-1 sm:flex-none"
-              disabled={isLoading}
-            >
-              Cancelar
-            </Button>
-            <Button
-              variant="primary"
-              onClick={handleDeleteSupplier}
-              className="flex-1 sm:flex-none bg-red-100 text-red-500"
-              disabled={isLoading}
-            >
-              {isLoading ? "Eliminando..." : "Eliminar"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </div>
+    </RoleProtectedRoute>
   );
 }
 

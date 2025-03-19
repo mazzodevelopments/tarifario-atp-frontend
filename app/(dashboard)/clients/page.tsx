@@ -32,6 +32,7 @@ import {
 import { useRouter } from "next/navigation";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 import SearchInput from "@/components/SearchInput";
+import RoleProtectedRoute from "@/components/RoleProtectedRoute";
 
 export default function Clients() {
   const [clients, setClients] = useState<Client[]>([]);
@@ -183,7 +184,7 @@ export default function Clients() {
   const fetchSearchResults = async (searchTerm: string) => {
     const filteredClients: { id: number; name: string }[] = clients
       .filter((client) =>
-        client.name.toLowerCase().includes(searchTerm.toLowerCase()),
+        client.name.toLowerCase().includes(searchTerm.toLowerCase())
       )
       .map((client) => ({
         id: client.id,
@@ -193,181 +194,183 @@ export default function Clients() {
   };
 
   return (
-    <div className="flex justify-start w-full h-full flex-col bg-transparent">
-      <div className="w-full h-20 flex-shrink-0 border-b border-neutral-200">
-        <div className="flex justify-between items-center h-full px-6 mb-4">
-          <div className="flex flex-col justify-center items-start w-[12vw]">
-            <h2 className="flex items-center text-xl leading-[1] p-0 font-[800] text-black mt-1">
-              Clientes
-            </h2>
+    <RoleProtectedRoute allowedRoles={["Admin", "Superadmin"]}>
+      <div className="flex justify-start w-full h-full flex-col bg-transparent">
+        <div className="w-full h-20 flex-shrink-0 border-b border-neutral-200">
+          <div className="flex justify-between items-center h-full px-6 mb-4">
+            <div className="flex flex-col justify-center items-start w-[12vw]">
+              <h2 className="flex items-center text-xl leading-[1] p-0 font-[800] text-black mt-1">
+                Clientes
+              </h2>
+            </div>
+            <SearchInput
+              placeholder="Buscar clientes"
+              onSearch={fetchSearchResults}
+              link="/clients"
+            />
           </div>
-          <SearchInput
-            placeholder="Buscar clientes"
-            onSearch={fetchSearchResults}
-            link="/clients"
-          />
         </div>
-      </div>
-      <div className="mt-6 px-6">
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogTrigger asChild>
-            <Button
-              variant="primary"
-              className="py-2 px-4 rounded-lg font-semibold text-sm border bg-primary/5 text-primary"
-            >
-              Agregar Cliente
-            </Button>
-          </DialogTrigger>
+        <div className="mt-6 px-6">
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogTrigger asChild>
+              <Button
+                variant="primary"
+                className="py-2 px-4 rounded-lg font-semibold text-sm border bg-primary/5 text-primary"
+              >
+                Agregar Cliente
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Agregar Nuevo Cliente</DialogTitle>
+              </DialogHeader>
+              <ClientForm
+                onSubmit={handleSubmit}
+                isLoading={isLoading}
+                closeDialog={() => setDialogOpen(false)}
+              />
+            </DialogContent>
+          </Dialog>
+        </div>
+
+        <div className="w-full px-6 pb-6 pt-4">
+          <div className="w-auto h-auto overflow-hidden rounded-[12px] shadow-sm shadow-cyan-500/20">
+            <div className="border rounded-[12px] overflow-auto max-h-[70vh] relative w-full">
+              <Table className="w-full bg-white">
+                <TableHeader>
+                  <TableRow className="bg-primary/5">
+                    <TableHead
+                      className="w-1/3 text-primary font-[600] text-center cursor-pointer select-none"
+                      onClick={() => requestSort("name")}
+                    >
+                      <div className="flex items-center justify-center gap-1">
+                        Nombre{" "}
+                        {(sortConfig?.key === "name" &&
+                          {
+                            ascending: <ArrowUp size={14} />,
+                            descending: <ArrowDown size={14} />,
+                          }[sortConfig.direction]) || <ArrowUpDown size={14} />}
+                      </div>
+                    </TableHead>
+                    <TableHead
+                      className="w-1/3 text-primary font-[600] text-center cursor-pointer select-none"
+                      onClick={() => requestSort("buyers")}
+                    >
+                      <div className="flex items-center justify-center gap-1">
+                        Cant. de Compradores{" "}
+                        {(sortConfig?.key === "buyers" &&
+                          {
+                            ascending: <ArrowUp size={14} />,
+                            descending: <ArrowDown size={14} />,
+                          }[sortConfig.direction]) || <ArrowUpDown size={14} />}
+                      </div>
+                    </TableHead>
+                    <TableHead className="w-1/3 text-primary font-[600] text-center select-none">
+                      Acciones
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {sortedClients.length > 0 ? (
+                    sortedClients.map((client) => (
+                      <TableRow key={client.id} className="text-sm text-center">
+                        <TableCell className="font-[600] text-black">
+                          {client.name}
+                        </TableCell>
+                        <TableCell>{client.buyers?.length || 0}</TableCell>
+                        <TableCell>
+                          <div className="flex justify-center gap-2">
+                            <Button
+                              variant="secondary"
+                              className="p-1 h-auto hover:bg-gray-100"
+                              onClick={() => handleViewDetails(client)}
+                            >
+                              Detalles
+                            </Button>
+                            <Button
+                              variant="secondary"
+                              onClick={() => handleEdit(client)}
+                            >
+                              <Pencil className="w-4 h-4 text-primary" />
+                            </Button>
+                            <Button
+                              variant="secondary"
+                              onClick={() => openDeleteDialog(client)}
+                            >
+                              <Trash className="w-4 h-4 text-red-500" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow className="h-36">
+                      <TableCell
+                        colSpan={3}
+                        className="text-sm m-auto h-full text-center text-gray-500"
+                      >
+                        No hay clientes registrados
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+          </div>
+        </div>
+
+        {/* EDIT DIALOG */}
+        <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Agregar Nuevo Cliente</DialogTitle>
+              <DialogTitle>Editar Cliente</DialogTitle>
             </DialogHeader>
             <ClientForm
               onSubmit={handleSubmit}
               isLoading={isLoading}
-              closeDialog={() => setDialogOpen(false)}
+              initialData={editedClient || undefined}
+              closeDialog={() => setEditDialogOpen(false)}
             />
           </DialogContent>
         </Dialog>
+
+        {/* DELETE DIALOG */}
+        <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+          <DialogContent className="max-w-sm">
+            <DialogHeader>
+              <div className="flex items-center justify-center w-12 h-12 mx-auto mb-4 rounded-full bg-red-100">
+                <AlertTriangle className="w-6 h-6 text-red-600" />
+              </div>
+              <DialogTitle className="text-center">
+                Confirmar eliminación
+              </DialogTitle>
+              <DialogDescription className="text-center">
+                ¿Estás seguro de eliminar el cliente{" "}
+                <span className="font-medium">{clientToDelete?.name}</span> de
+                este proveedor?
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter className="flex flex-row justify-center gap-2 sm:gap-0 mt-2">
+              <Button
+                variant="secondary"
+                onClick={closeDeleteDialog}
+                className="flex-1 sm:flex-none"
+                disabled={isLoading}
+              >
+                Cancelar
+              </Button>
+              <Button
+                variant="primary"
+                onClick={handleDeleteClient}
+                className="flex-1 sm:flex-none bg-red-100 text-red-500"
+                disabled={isLoading}
+              >
+                {isLoading ? "Eliminando..." : "Eliminar"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
-
-      <div className="w-full px-6 pb-6 pt-4">
-        <div className="w-auto h-auto overflow-hidden rounded-[12px] shadow-sm shadow-cyan-500/20">
-          <div className="border rounded-[12px] overflow-auto max-h-[70vh] relative w-full">
-            <Table className="w-full bg-white">
-              <TableHeader>
-                <TableRow className="bg-primary/5">
-                  <TableHead
-                    className="w-1/3 text-primary font-[600] text-center cursor-pointer select-none"
-                    onClick={() => requestSort("name")}
-                  >
-                    <div className="flex items-center justify-center gap-1">
-                      Nombre{" "}
-                      {(sortConfig?.key === "name" &&
-                        {
-                          ascending: <ArrowUp size={14} />,
-                          descending: <ArrowDown size={14} />,
-                        }[sortConfig.direction]) || <ArrowUpDown size={14} />}
-                    </div>
-                  </TableHead>
-                  <TableHead
-                    className="w-1/3 text-primary font-[600] text-center cursor-pointer select-none"
-                    onClick={() => requestSort("buyers")}
-                  >
-                    <div className="flex items-center justify-center gap-1">
-                      Cant. de Compradores{" "}
-                      {(sortConfig?.key === "buyers" &&
-                        {
-                          ascending: <ArrowUp size={14} />,
-                          descending: <ArrowDown size={14} />,
-                        }[sortConfig.direction]) || <ArrowUpDown size={14} />}
-                    </div>
-                  </TableHead>
-                  <TableHead className="w-1/3 text-primary font-[600] text-center select-none">
-                    Acciones
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {sortedClients.length > 0 ? (
-                  sortedClients.map((client) => (
-                    <TableRow key={client.id} className="text-sm text-center">
-                      <TableCell className="font-[600] text-black">
-                        {client.name}
-                      </TableCell>
-                      <TableCell>{client.buyers?.length || 0}</TableCell>
-                      <TableCell>
-                        <div className="flex justify-center gap-2">
-                          <Button
-                            variant="secondary"
-                            className="p-1 h-auto hover:bg-gray-100"
-                            onClick={() => handleViewDetails(client)}
-                          >
-                            Detalles
-                          </Button>
-                          <Button
-                            variant="secondary"
-                            onClick={() => handleEdit(client)}
-                          >
-                            <Pencil className="w-4 h-4 text-primary" />
-                          </Button>
-                          <Button
-                            variant="secondary"
-                            onClick={() => openDeleteDialog(client)}
-                          >
-                            <Trash className="w-4 h-4 text-red-500" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow className="h-36">
-                    <TableCell
-                      colSpan={3}
-                      className="text-sm m-auto h-full text-center text-gray-500"
-                    >
-                      No hay clientes registrados
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-        </div>
-      </div>
-
-      {/* EDIT DIALOG */}
-      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Editar Cliente</DialogTitle>
-          </DialogHeader>
-          <ClientForm
-            onSubmit={handleSubmit}
-            isLoading={isLoading}
-            initialData={editedClient || undefined}
-            closeDialog={() => setEditDialogOpen(false)}
-          />
-        </DialogContent>
-      </Dialog>
-
-      {/* DELETE DIALOG */}
-      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <DialogContent className="max-w-sm">
-          <DialogHeader>
-            <div className="flex items-center justify-center w-12 h-12 mx-auto mb-4 rounded-full bg-red-100">
-              <AlertTriangle className="w-6 h-6 text-red-600" />
-            </div>
-            <DialogTitle className="text-center">
-              Confirmar eliminación
-            </DialogTitle>
-            <DialogDescription className="text-center">
-              ¿Estás seguro de eliminar el cliente{" "}
-              <span className="font-medium">{clientToDelete?.name}</span> de
-              este proveedor?
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="flex flex-row justify-center gap-2 sm:gap-0 mt-2">
-            <Button
-              variant="secondary"
-              onClick={closeDeleteDialog}
-              className="flex-1 sm:flex-none"
-              disabled={isLoading}
-            >
-              Cancelar
-            </Button>
-            <Button
-              variant="primary"
-              onClick={handleDeleteClient}
-              className="flex-1 sm:flex-none bg-red-100 text-red-500"
-              disabled={isLoading}
-            >
-              {isLoading ? "Eliminando..." : "Eliminar"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </div>
+    </RoleProtectedRoute>
   );
 }
