@@ -39,7 +39,7 @@ export default function UserPage() {
       try {
         if (user) {
           const data =
-            await QuotationsService.getUserLastFiveFinishedQuotations(user.id);
+            await QuotationsService.getUserLastFiveFinishedQuotations();
           setLastQuotations(data);
         }
       } catch (error) {
@@ -51,7 +51,7 @@ export default function UserPage() {
       try {
         if (user) {
           const finishedQuotations =
-            await QuotationsService.getUserFinishedQuotations(user.id);
+            await QuotationsService.getUserFinishedQuotations();
           setFinishedQuotations(finishedQuotations.length);
         }
       } catch (error) {

@@ -25,13 +25,13 @@ export const QuotationsService = {
     return await response.json();
   },
 
-  getUserUnfinishedQuotations: async (userId: number) => {
-    const response = await fetch(
-      `${API_BASE_URL}/quotations/unfinished/${userId}`,
-      {
-        method: "GET",
+  getUserUnfinishedQuotations: async () => {
+    const response = await fetch(`${API_BASE_URL}/quotations/user-unfinished`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
-    );
+    });
 
     if (!response.ok) {
       throw new Error("Error al traer cotizaciones");
@@ -40,13 +40,13 @@ export const QuotationsService = {
     return await response.json();
   },
 
-  getUserFinishedQuotations: async (userId: number) => {
-    const response = await fetch(
-      `${API_BASE_URL}/quotations/finished/${userId}`,
-      {
-        method: "GET",
+  getUserFinishedQuotations: async () => {
+    const response = await fetch(`${API_BASE_URL}/quotations/user-finished`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
-    );
+    });
 
     if (!response.ok) {
       throw new Error("Error al traer cotizaciones");
@@ -100,11 +100,14 @@ export const QuotationsService = {
     return await response.json();
   },
 
-  getUserLastFiveFinishedQuotations: async (userId: number) => {
+  getUserLastFiveFinishedQuotations: async () => {
     const response = await fetch(
-      `${API_BASE_URL}/quotations/last-five-finished/${userId}`,
+      `${API_BASE_URL}/quotations/user-last-five-finished`,
       {
         method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       },
     );
 
@@ -127,11 +130,14 @@ export const QuotationsService = {
     return await response.json();
   },
 
-  getUserLastModifiedQuotation: async (userId: number) => {
+  getUserLastModifiedQuotation: async () => {
     const response = await fetch(
-      `${API_BASE_URL}/quotations/last-modified/${userId}`,
+      `${API_BASE_URL}/quotations/user-last-modified`,
       {
         method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       },
     );
 

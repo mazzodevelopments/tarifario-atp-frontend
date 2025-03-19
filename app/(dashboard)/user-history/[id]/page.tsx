@@ -28,7 +28,7 @@ export default function UserHistory() {
     HistoryQuotationCard[]
   >([]);
   const [activeTab, setActiveTab] = useState<"pending" | "completed">(
-    "pending"
+    "pending",
   );
   const [user, setUser] = useState<User | null>(null);
   const [sortConfig, setSortConfig] = useState<{
@@ -42,7 +42,7 @@ export default function UserHistory() {
     const fetchUnfinishedQuotations = async () => {
       try {
         const unfinishedQuotations =
-          await QuotationsService.getUserUnfinishedQuotations(Number(id));
+          await QuotationsService.getUserUnfinishedQuotations();
         setUnfinishedQuotations(unfinishedQuotations);
       } catch (error) {
         console.error("Error fetching quotation items:", error);
@@ -52,7 +52,7 @@ export default function UserHistory() {
     const fetchFinishedQuotations = async () => {
       try {
         const finishedQuotations =
-          await QuotationsService.getUserFinishedQuotations(Number(id));
+          await QuotationsService.getUserFinishedQuotations();
         setFinishedQuotations(finishedQuotations);
       } catch (error) {
         console.error("Error fetching quotation items:", error);

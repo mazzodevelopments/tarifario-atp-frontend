@@ -53,9 +53,7 @@ export default function CurrentQuotationCard({ userId }: { userId?: number }) {
     const fetchLastQuotation = async () => {
       try {
         if (userId) {
-          const data = await QuotationsService.getUserLastModifiedQuotation(
-            userId
-          );
+          const data = await QuotationsService.getUserLastModifiedQuotation();
           setQuotation(data);
         } else {
           const data = await QuotationsService.getLastModifiedQuotation();
@@ -163,7 +161,7 @@ export default function CurrentQuotationCard({ userId }: { userId?: number }) {
             </span>
             <span className="text-md text-neutral-900">
               {new Date(quotation!.expirationDateTime).toLocaleDateString(
-                "es-ES"
+                "es-ES",
               )}
             </span>
           </div>
