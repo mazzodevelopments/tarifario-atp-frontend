@@ -16,6 +16,7 @@ import type { HistoryQuotationCard } from "@/types/Quotations";
 import SearchInput from "@/components/SearchInput";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 import { ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Quotations() {
   const [unfinishedQuotations, setUnfinishedQuotations] = useState<
@@ -31,6 +32,7 @@ export default function Quotations() {
     key: string;
     direction: string;
   } | null>(null);
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchUnfinishedQuotations = async () => {
@@ -154,9 +156,14 @@ export default function Quotations() {
     <div className="flex justify-start w-full h-full flex-col bg-neutral-50">
       <div className="w-full h-20 flex-shrink-0 border-b border-neutral-200">
         <div className="flex justify-between items-center h-full px-6 mb-4">
-          <div className="flex flex-col justify-center items-start w-[12vw]">
+          <div className="flex flex-col justify-center items-start w-[16vw]">
             <h2 className="flex items-center text-xl leading-[1] p-0 font-[800] text-black mt-1">
-              Cotizaciones
+              {activeTab === "pending"
+                ? user?.role.name !== "Superadmin" &&
+                  user?.role.name !== "Admin"
+                  ? "Cotizaciones asignadas"
+                  : "Cotizaciones"
+                : "Cotizaciones completadas"}
             </h2>
           </div>
           <SearchInput
