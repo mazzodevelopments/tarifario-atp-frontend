@@ -153,7 +153,7 @@ export default function UserPage() {
           </div>
         </div>
 
-        <div className="w-1/2 h-full flex flex-col relative p-[1vw] gap-[1vw]">
+        <div className="w-1/2 h-full flex flex-col relative p-[1vw]">
           <PagesHeader
             title="Panel de usuario"
             subtitle="Información individual y grupal"
@@ -175,7 +175,7 @@ export default function UserPage() {
               </div>
             </div>
           </div>
-          <div className="h-[50%] w-full flex gap-3">
+          <div className="h-[50%] w-full flex gap-3 mt-3">
             <div className="w-1/2 h-full bg-white shadow-sm border border-neutral-200 rounded-[16px] flex justify-center items-center p-10 flex-col gap-3">
               <span className="text-center text-[0.85vw]">
                 Estás en el grupo de
