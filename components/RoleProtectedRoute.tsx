@@ -33,7 +33,7 @@ export default function RoleProtectedRoute({
 
   if (authorized === false) {
     return (
-      <div className="flex flex-col items-center justify-center h-[70vh] w-full">
+      <div className="flex flex-col items-center justify-center h-[100vh] w-full">
         <div className="max-w-md text-center p-8 rounded-lg border border-neutral-200 bg-white shadow-sm">
           <h2 className="text-xl font-bold text-red-500 mb-4">
             Acceso Restringido
@@ -45,7 +45,7 @@ export default function RoleProtectedRoute({
           <Button
             variant="primary"
             onClick={() => router.back()}
-            className="mx-auto"
+            className="mx-auto text-white"
           >
             Regresar a la página anterior
           </Button>
