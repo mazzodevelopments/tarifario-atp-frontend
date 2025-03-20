@@ -56,11 +56,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         if (storedUser) {
           setUser(JSON.parse(storedUser));
+          // Sincronizar con cookies para el middleware
+          document.cookie = `user=${encodeURIComponent(storedUser)}; path=/`;
+          document.cookie = `token=${storedToken}; path=/`;
         }
       }
 
       scheduleRelogin();
-
       setLoading(false);
     }
   }, []);
@@ -89,9 +91,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (response.ok) {
         const data = await response.json();
+        const userStr = JSON.stringify(data.user);
+
         localStorage.setItem("token", data.access_token);
-        localStorage.setItem("user", JSON.stringify(data.user));
+        localStorage.setItem("user", userStr);
         localStorage.setItem("loginTime", new Date().toISOString());
+
+        document.cookie = `user=${encodeURIComponent(userStr)}; path=/`;
+        document.cookie = `token=${data.access_token}; path=/`;
 
         setToken(data.access_token);
         setIsAuthenticated(true);
@@ -125,6 +132,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem("token", data.access_token);
         localStorage.setItem("loginTime", new Date().toISOString());
 
+        // Actualizar cookie del token
+        document.cookie = `token=${data.access_token}; path=/`;
+
         setToken(data.access_token);
         setIsAuthenticated(true);
 
@@ -141,6 +151,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       localStorage.removeItem("loginTime");
+
+      // Eliminar cookies
+      document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+      document.cookie = "user=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
     }
     setToken(null);
     setUser(null);
@@ -151,7 +165,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const updateUser = (userUpdates: Partial<User>) => {
     setUser((prevUser) => {
       if (!prevUser) return prevUser;
-      return { ...prevUser, ...userUpdates } as User;
+      const updatedUser = { ...prevUser, ...userUpdates } as User;
+
+      // Actualizar localStorage y cookie
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      document.cookie = `user=${encodeURIComponent(
+        JSON.stringify(updatedUser)
+      )}; path=/`;
+
+      return updatedUser;
     });
   };
 
