@@ -73,14 +73,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   return (
     <Sidebar collapsible="icon" {...props} className="border-neutral-200">
-      <div className="absolute top-[65vh] -left-[10vw] opacity-30 h-[400px] w-[400px]">
-        <Image
-          src="/logo.png"
-          fill
-          style={{ objectFit: "contain" }}
-          alt="Picture of the author"
-        />
-      </div>
+      {state === "expanded" && (
+        <div className="absolute top-[65vh] -left-[10vw] opacity-30 h-[400px] w-[400px]">
+          <Image
+            src="/logo.png"
+            fill
+            style={{ objectFit: "contain" }}
+            alt="Picture of the author"
+          />
+        </div>
+      )}
       <SidebarHeader className="h-20 mb-6 justify-center items-center">
         <SidebarMenu className="">
           <SidebarMenuItem className="flex flex-row items-center ">
