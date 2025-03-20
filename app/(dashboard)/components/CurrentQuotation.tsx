@@ -74,7 +74,7 @@ export default function CurrentQuotationCard({ userId }: { userId?: number }) {
     4: `/create/${quotation?.id}/sales-data`,
     5: `/create/${quotation?.id}/select-budgets`,
     6: `/create/${quotation?.id}/review`,
-    7: `/history/${quotation?.taskNumber}`,
+    7: `/quotations/${quotation?.taskNumber}`,
   };
 
   const actualStep = quotation?.step as StepKeys;
@@ -176,9 +176,11 @@ export default function CurrentQuotationCard({ userId }: { userId?: number }) {
         </div>
       </div>
       <div className="w-auto flex justify-end gap-2 mt-4 items-end h-auto">
-        <Button variant="secondary" className="px-3 py-2 text-sm">
-          Ver más cotizaciones
-        </Button>
+        <Link href="quotations" passHref>
+          <Button variant="secondary" className="px-3 py-2 text-sm">
+            Ver más cotizaciones
+          </Button>
+        </Link>
 
         <Link href={stepLinks[actualStep] || ""} passHref>
           <Button
