@@ -21,6 +21,7 @@ interface AuthContextType {
   login: (email: string, password: string) => void;
   logout: () => void;
   loading: boolean;
+  updateUser: (userUpdates: Partial<User>) => void;
   user: User | null;
 }
 
@@ -29,6 +30,7 @@ const AuthContext = createContext<AuthContextType>({
   token: null,
   login: async () => {},
   logout: () => {},
+  updateUser: () => {},
   loading: true,
   user: null,
 });
@@ -103,9 +105,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     router.push("/login");
   };
 
+  const updateUser = (userUpdates: Partial<User>) => {
+    setUser((prevUser) => {
+      if (!prevUser) return prevUser;
+      return { ...prevUser, ...userUpdates } as User;
+    });
+  };
+
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, token, login, logout, loading, user }}
+      value={{
+        isAuthenticated,
+        token,
+        login,
+        logout,
+        loading,
+        user,
+        updateUser,
+      }}
     >
       {children}
     </AuthContext.Provider>

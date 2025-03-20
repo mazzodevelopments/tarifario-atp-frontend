@@ -8,6 +8,7 @@ import Input from "@/components/Input";
 import Button from "@/components/Button";
 import type { AdminUpdateUser } from "@/types/User";
 import { convertImageToBase64 } from "@/utils/convertImageToBase64";
+import { useAuth } from "@/context/AuthContext";
 
 interface EditUserProps {
   user: AdminUpdateUser;
@@ -46,15 +47,16 @@ export default function EditUser({
   });
 
   const [previewUrl, setPreviewUrl] = useState<string | null>(
-    user.profilePic || null
+    user.profilePic || null,
   );
   const [showCropper, setShowCropper] = useState(false);
   const [imageToCrop, setImageToCrop] = useState<string | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<CropArea | null>(
-    null
+    null,
   );
+  const { updateUser } = useAuth();
 
   const [errors, setErrors] = useState({
     name: "",
@@ -126,6 +128,7 @@ export default function EditUser({
     };
 
     onUserUpdated(userData);
+    updateUser(userData);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -159,7 +162,7 @@ export default function EditUser({
     (croppedArea: any, croppedAreaPixels: any) => {
       setCroppedAreaPixels(croppedAreaPixels);
     },
-    []
+    [],
   );
 
   const createImage = (url: string): Promise<HTMLImageElement> =>
@@ -173,7 +176,7 @@ export default function EditUser({
 
   const getCroppedImg = async (
     imageSrc: string,
-    pixelCrop: CropArea
+    pixelCrop: CropArea,
   ): Promise<string> => {
     const image = await createImage(imageSrc);
     const canvas = document.createElement("canvas");
@@ -196,7 +199,7 @@ export default function EditUser({
       0,
       0,
       canvas.width,
-      canvas.height
+      canvas.height,
     );
 
     return canvas.toDataURL("image/jpeg", 5);
@@ -207,7 +210,7 @@ export default function EditUser({
       try {
         const croppedImage = await getCroppedImg(
           imageToCrop,
-          croppedAreaPixels
+          croppedAreaPixels,
         );
         setFormData((prev) => ({ ...prev, profilePic: croppedImage }));
         setPreviewUrl(croppedImage);
