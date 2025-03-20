@@ -26,7 +26,7 @@ export default function SuccessAnimation({
 
           <a
             className="text-md text-secondary hover:text-primary underline font-medium cursor-pointer"
-            href={`/history/${taskNumber}`}
+            href={`/quotations/${taskNumber}`}
           >
             Ir a la cotización
           </a>
