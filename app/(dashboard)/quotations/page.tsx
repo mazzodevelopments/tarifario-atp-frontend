@@ -48,7 +48,9 @@ export default function Quotations() {
     const fetchFinishedQuotations = async () => {
       try {
         const finishedQuotations =
-          await QuotationsService.getFinishedQuotations();
+          user?.role.name === "Superadmin" || user?.role.name === "Admin"
+            ? await QuotationsService.getFinishedQuotations()
+            : await QuotationsService.getUserFinishedQuotations();
         setFinishedQuotations(finishedQuotations);
       } catch (error) {
         console.error("Error fetching quotation items:", error);
