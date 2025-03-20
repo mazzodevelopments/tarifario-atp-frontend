@@ -19,6 +19,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   token: string | null;
   login: (email: string, password: string) => void;
+  relogin: () => Promise<void>;
   logout: () => void;
   loading: boolean;
   updateUser: (userUpdates: Partial<User>) => void;
@@ -29,6 +30,7 @@ const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
   token: null,
   login: async () => {},
+  relogin: async () => {},
   logout: () => {},
   updateUser: () => {},
   loading: true,
@@ -40,6 +42,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -56,9 +59,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
       }
 
+      scheduleRelogin();
+
       setLoading(false);
     }
   }, []);
+
+  const scheduleRelogin = () => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+
+    const id = setTimeout(
+      () => {
+        relogin();
+        console.log(relogin);
+      },
+      // 59 * 60 * 1000 + 50 * 1000,
+      19 * 1000,
+    );
+
+    setTimeoutId(id);
+  };
 
   const login = async (email: string, password: string) => {
     try {
@@ -79,6 +101,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setIsAuthenticated(true);
         setUser(data.user);
 
+        scheduleRelogin();
+
         if (data.user.firstLogin) {
           router.push("/complete-user");
         } else {
@@ -90,6 +114,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     } catch (error) {
       console.error("Login error:", error);
+      throw error;
+    }
+  };
+
+  const relogin = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/relogin`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem("token", data.access_token);
+
+        setToken(data.access_token);
+        setIsAuthenticated(true);
+
+        scheduleRelogin();
+      } else {
+        const errorData = await response.json();
+        throw new Error(
+          errorData.message || "Relogin failed. Please try again.",
+        );
+      }
+    } catch (error) {
+      console.error("Relogin error:", error);
       throw error;
     }
   };
@@ -118,6 +171,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         isAuthenticated,
         token,
         login,
+        relogin,
         logout,
         loading,
         user,
