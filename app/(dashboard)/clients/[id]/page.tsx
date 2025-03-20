@@ -196,9 +196,9 @@ export default function ClientDetailsPage() {
       <div className="flex justify-start w-full h-full flex-col bg-transparent">
         <Header title="Clientes" />
         <div className="flex justify-between items-center w-full mt-6 px-6">
-          <h2 className="text-xl font-[800]">{client?.name}</h2>
+          <h2 className="text-2xl font-[800]">{client?.name}</h2>
         </div>
-        <div className="mt-6 px-6">
+        <div className="mt-3 px-6">
           <Button
             variant="primary"
             className="py-2 px-4 rounded-lg font-semibold text-sm border bg-primary/5 text-primary"

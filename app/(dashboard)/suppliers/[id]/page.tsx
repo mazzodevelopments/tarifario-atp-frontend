@@ -208,12 +208,12 @@ export default function SupplierDetailsPage() {
       <div className="flex justify-start w-full h-full flex-col bg-transparent">
         <Header title="Proveedores" />
         <div className="flex flex-col mt-6 px-6 gap-1">
-          <h2 className="text-xl font-[800]">{supplier.name}</h2>
-          <p className="text-sm font-[400] text-gray-600">{supplier.email}</p>
-          <p className="text-sm font-[400] text-gray-600">{supplier.phone}</p>
+          <h2 className="text-2xl font-[800]">{supplier.name}</h2>
+          <p className="text-md font-[400] text-gray-600">{supplier.email}</p>
+          <p className="text-md font-[400] text-gray-600">{supplier.phone}</p>
           <div>
             <div
-              className={`py-0.5 px-1.5 text-xs rounded-3xl inline-block ${getTypeStyles(
+              className={`py-1 px-3 text-sm rounded-3xl inline-block ${getTypeStyles(
                 supplier.isNational,
                 supplier.isInternational,
               )}`}
