@@ -3,7 +3,7 @@
 import type React from "react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { API_BASE_URL } from "@/utils/config";
+import { API_BASE_URL, TOKEN_EXPIRATION_TIME } from "@/utils/config";
 
 interface User {
   id: number;
@@ -19,7 +19,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   token: string | null;
   login: (email: string, password: string) => void;
-  relogin: () => Promise<void>;
+  relogin: () => void;
   logout: () => void;
   loading: boolean;
   updateUser: (userUpdates: Partial<User>) => void;
@@ -70,14 +70,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       clearTimeout(timeoutId);
     }
 
-    const id = setTimeout(
-      () => {
-        relogin();
-        console.log(relogin);
-      },
-      // 59 * 60 * 1000 + 50 * 1000,
-      19 * 1000,
-    );
+    const id = setTimeout(() => {
+      relogin();
+    }, TOKEN_EXPIRATION_TIME);
 
     setTimeoutId(id);
   };
@@ -96,6 +91,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const data = await response.json();
         localStorage.setItem("token", data.access_token);
         localStorage.setItem("user", JSON.stringify(data.user));
+        localStorage.setItem("loginTime", new Date().toISOString());
 
         setToken(data.access_token);
         setIsAuthenticated(true);
@@ -108,9 +104,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         } else {
           router.push("/");
         }
-      } else {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Login failed. Please try again.");
       }
     } catch (error) {
       console.error("Login error:", error);
@@ -130,16 +123,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem("token", data.access_token);
+        localStorage.setItem("loginTime", new Date().toISOString());
 
         setToken(data.access_token);
         setIsAuthenticated(true);
 
         scheduleRelogin();
-      } else {
-        const errorData = await response.json();
-        throw new Error(
-          errorData.message || "Relogin failed. Please try again.",
-        );
       }
     } catch (error) {
       console.error("Relogin error:", error);
@@ -151,6 +140,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (typeof window !== "undefined") {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
+      localStorage.removeItem("loginTime");
     }
     setToken(null);
     setUser(null);
@@ -164,6 +154,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return { ...prevUser, ...userUpdates } as User;
     });
   };
+
+  useEffect(() => {
+    const checkTokenExpiration = () => {
+      const loginTime = localStorage.getItem("loginTime");
+      if (loginTime) {
+        const currentTime = new Date();
+        const loginTimeDate = new Date(loginTime);
+        const timeDifference = currentTime.getTime() - loginTimeDate.getTime();
+
+        if (timeDifference > TOKEN_EXPIRATION_TIME) {
+          logout();
+        }
+      }
+    };
+
+    const intervalId = setInterval(checkTokenExpiration, 1000);
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
     <AuthContext.Provider
