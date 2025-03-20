@@ -111,8 +111,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 className="w-[--radix-dropdown-menu-trigger-width]"
                 align="start"
               >
-                <DropdownMenuItem>Opción 1</DropdownMenuItem>
-                <DropdownMenuItem>Opción 2</DropdownMenuItem>
+                <DropdownMenuItem>Importar</DropdownMenuItem>
+                <DropdownMenuItem>Exportar</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             {state === "expanded" && <SidebarTrigger />}

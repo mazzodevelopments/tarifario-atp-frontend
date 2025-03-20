@@ -206,7 +206,7 @@ export default function SupplierDetailsPage() {
   if (supplier)
     return (
       <div className="flex justify-start w-full h-full flex-col bg-transparent">
-        <Header title="Clients" description="" />
+        <Header title="Proveedores" />
         <div className="flex flex-col mt-6 px-6 gap-1">
           <h2 className="text-xl font-[800]">{supplier.name}</h2>
           <p className="text-sm font-[400] text-gray-600">{supplier.email}</p>

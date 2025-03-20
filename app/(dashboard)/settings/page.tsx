@@ -6,7 +6,7 @@ import { useAuth } from "@/context/AuthContext";
 import { AdminService } from "@/services/AdminService";
 import EditUser from "@/app/(dashboard)/settings/forms/EditUser";
 import type { AdminUpdateUser, User } from "@/types/User";
-import { Search, Pencil } from "lucide-react";
+import { Pencil } from "lucide-react";
 import Button from "@/components/Button";
 import {
   Dialog,
@@ -58,7 +58,7 @@ export default function Settings() {
 
   return (
     <div className="flex flex-col justify-start w-full h-full bg-neutral-50">
-      <Header title="Ajustes" description={""} />
+      <Header title="Ajustes" />
 
       <div className="flex flex-col lg:flex-row items-start w-full h-auto">
         <div className="w-full lg:w-2/3 h-full flex flex-col relative p-[1vw]">

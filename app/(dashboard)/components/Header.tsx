@@ -6,7 +6,6 @@ import { Search } from "react-feather";
 
 interface HeaderProps {
   title: string;
-  description: string;
   className?: string;
   searchInput?: boolean;
 }

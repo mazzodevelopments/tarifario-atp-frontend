@@ -46,10 +46,7 @@ export default function CreateLayout({
 
   return (
     <div className="flex flex-col w-full h-full bg-neutral-50">
-      <Header
-        title="Nueva Cotización"
-        description="Crea una nueva cotización"
-      />
+      <Header title="Nueva Cotización" />
       <div className="flex w-full h-full p-6">
         <div className="flex flex-col gap-6 w-full h-full p-[20px] border border-neutral-200 shadow-sm bg-white rounded-[18px] relative">
           <div className="flex w-full flex-col h-full">

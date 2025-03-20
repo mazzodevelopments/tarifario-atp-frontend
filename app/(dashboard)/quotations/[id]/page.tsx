@@ -11,10 +11,7 @@ export default function QuotationView() {
 
   return (
     <div className="flex justify-start w-full h-full flex-col bg-transparent">
-      <Header
-        title={`Cotización ${taskNumber}`}
-        description="Detalles de la cotización"
-      />
+      <Header title={`Cotización ${taskNumber}`} />
       <div className="p-6">
         {taskNumber ? (
           <QuotationDetails taskNumber={taskNumber} />

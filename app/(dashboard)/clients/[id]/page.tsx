@@ -194,7 +194,7 @@ export default function ClientDetailsPage() {
   if (client)
     return (
       <div className="flex justify-start w-full h-full flex-col bg-transparent">
-        <Header title="Clients" description="" />
+        <Header title="Clientes" />
         <div className="flex justify-between items-center w-full mt-6 px-6">
           <h2 className="text-xl font-[800]">{client?.name}</h2>
         </div>
