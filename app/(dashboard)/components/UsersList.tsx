@@ -1,4 +1,3 @@
-// UserSection.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -54,18 +53,16 @@ export default function UsersList() {
     .filter((user) =>
       user.email.toLowerCase().includes(searchQuery.toLowerCase()),
     )
-    .sort((a, b) => {
-      if (sortBy === "all") return 0;
-      if (sortBy === a.role.name) return -1;
-      if (sortBy === b.role.name) return 1;
-      return 0;
+    .filter((user) => {
+      if (sortBy === "all") return true;
+      return user.role.name === sortBy;
     });
 
   const handleUserCreated = async (newUser: AdminCreateUser) => {
     try {
       await AdminService.createUser(newUser);
       setIsDialogOpen(false);
-      setShouldFetch(true); // Refrescar la lista de usuarios
+      setShouldFetch(true);
       toast({
         title: "Usuario creado",
         description: `Se ha creado el usuario ${
@@ -89,10 +86,10 @@ export default function UsersList() {
 
   return (
     <div className="flex flex-col relative bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full flex-grow overflow-hidden">
-      <div className="relative flex items-center justify-between p-[1vw]">
+      <div className="relative flex items-center justify-between p-[1vw] ">
         <div className="relative">
           <input
-            className="w-60 h-9 rounded-3xl bg-gray-50 border border-neutral-200 px-8 mt-[0.4px] text-md"
+            className="w-60 h-9 rounded-3xl bg-gray-50 border border-neutral-200 px-8 mt-[0.4px] text-md focus:ring-0 focus:outline-none"
             placeholder="Buscar usuario"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -108,7 +105,7 @@ export default function UsersList() {
             <DropdownMenuTrigger asChild>
               <Button
                 variant="secondary"
-                className="h-9 px-3 bg-gray-50 border-neutral-200"
+                className="h-9 px-3 bg-gray-50 border-neutral-200 focus:ring-none"
               >
                 {sortBy === "all"
                   ? "Todos"
@@ -116,9 +113,13 @@ export default function UsersList() {
                     ? "Superadmin"
                     : sortBy === "Admin"
                       ? "Admin"
-                      : sortBy === "User"
-                        ? "Usuario"
-                        : "Todos"}
+                      : sortBy === "Compras"
+                        ? "Compras"
+                        : sortBy === "Ventas"
+                          ? "Ventas"
+                          : sortBy === "Logística"
+                            ? "Logística"
+                            : "Todos"}
                 <ChevronDown className="ml-2 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -142,10 +143,22 @@ export default function UsersList() {
                 Admin
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => setSortBy("User")}
+                onClick={() => setSortBy("Compras")}
                 className="cursor-pointer"
               >
-                Usuario
+                Compras
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => setSortBy("Ventas")}
+                className="cursor-pointer"
+              >
+                Ventas
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => setSortBy("Logística")}
+                className="cursor-pointer"
+              >
+                Logística
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -154,58 +167,67 @@ export default function UsersList() {
       <div className="flex-grow overflow-hidden relative">
         <ScrollArea className="border-neutral-100 border-t h-full max-h-[calc(100vh-330px)] px-[1vw]">
           <div className="space-y-4 mt-4">
-            {filteredUsers.map((user) => (
-              <div
-                key={user.id}
-                className="w-full flex items-center justify-between"
-              >
-                <div className="flex items-center justify-start">
-                  <div className="flex items-center space-x-2">
-                    <Image
-                      src={user.profilePic || "/default-profile-pic.png"}
-                      width={700}
-                      height={700}
-                      alt="Picture of the author"
-                      className="w-8 h-8 rounded-full"
-                    />
-                    <div className="flex flex-col items-start justify-start min-w-64">
-                      <h3 className="text-sm font-semibold">
-                        {user.name + " " + user.lastname}
-                      </h3>
-                      <p className="text-xs font-semibold opacity-50 -mt-0.5">
-                        {user.email}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="w-28">
-                    <div
-                      className={`px-2 rounded-3xl inline-block ${
-                        user.role.name === "Superadmin"
-                          ? "bg-red-100 text-red-500"
-                          : user.role.name === "Admin"
-                            ? "bg-blue-100 text-blue-500"
-                            : "bg-green-100 text-green-600"
-                      }`}
-                    >
-                      <span className="text-sm font-semibold">
-                        {user.role.name}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Button
-                    onClick={() => {
-                      router.push(`/user-history/${user.id}`);
-                    }}
-                    variant="secondary"
-                  >
-                    Ver cotizaciones
-                  </Button>
-                  <Button variant="secondary">Gestionar usuario</Button>
-                </div>
+            {filteredUsers.length === 0 ? (
+              <div className="flex items-center justify-center h-full">
+                <p className="text-neutral-500 text-sm">
+                  No hay usuarios con el rol de{" "}
+                  {sortBy === "all" ? "seleccionado" : sortBy}.
+                </p>
               </div>
-            ))}
+            ) : (
+              filteredUsers.map((user) => (
+                <div
+                  key={user.id}
+                  className="w-full flex items-center justify-between"
+                >
+                  <div className="flex items-center justify-start">
+                    <div className="flex items-center space-x-2">
+                      <Image
+                        src={user.profilePic || "/default-profile-pic.png"}
+                        width={700}
+                        height={700}
+                        alt="Picture of the author"
+                        className="w-8 h-8 rounded-full"
+                      />
+                      <div className="flex flex-col items-start justify-start min-w-64">
+                        <h3 className="text-sm font-semibold">
+                          {user.name + " " + user.lastname}
+                        </h3>
+                        <p className="text-xs font-semibold opacity-50 -mt-0.5">
+                          {user.email}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="w-28">
+                      <div
+                        className={`px-2 rounded-3xl inline-block ${
+                          user.role.name === "Superadmin"
+                            ? "bg-red-100 text-red-500"
+                            : user.role.name === "Admin"
+                              ? "bg-blue-100 text-blue-500"
+                              : "bg-green-100 text-green-600"
+                        }`}
+                      >
+                        <span className="text-sm font-semibold">
+                          {user.role.name}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Button
+                      onClick={() => {
+                        router.push(`/user-history/${user.id}`);
+                      }}
+                      variant="secondary"
+                    >
+                      Ver cotizaciones
+                    </Button>
+                    <Button variant="secondary">Gestionar usuario</Button>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </ScrollArea>
       </div>
