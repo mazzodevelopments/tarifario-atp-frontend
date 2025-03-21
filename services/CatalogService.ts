@@ -1,6 +1,13 @@
 import { API_BASE_URL } from "@/utils/config";
 import { CreateSupplier, EditSupplier, Supplier } from "@/types/Supplier";
 import { Client, CreateClient, EditClient } from "@/types/Client";
+import { Buyer, CreateBuyer } from "@/types/Buyer";
+import { Brand, Model } from "@/types/Model";
+import { Family, Subfamily } from "@/types/Family";
+import { CreateWeightUnit, Unit, WeightUnit } from "@/types/Unit";
+import { CreateCurrency, Currency } from "@/types/Currency";
+import { CreateIncoterm, Incoterm } from "@/services/Incoterm";
+import { PaymentCondition } from "@/types/PaymentCondition";
 
 export const CatalogService = {
   // CLIENT
@@ -107,25 +114,13 @@ export const CatalogService = {
 
     return await response.json();
   },
-  addBuyer: async (buyer: {
-    name: string;
-    lastname: string;
-    email: string;
-    phone: string;
-    birthDate: string;
-    street: string;
-    streetNumber: string;
-    country: string;
-    city: string;
-    zipCode: string;
-    clientId: number;
-  }) => {
+  addBuyer: async (newBuyer: CreateBuyer): Promise<Buyer> => {
     const response = await fetch(`${API_BASE_URL}/catalog/buyer`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(buyer),
+      body: JSON.stringify(newBuyer),
     });
 
     if (!response.ok) {
@@ -150,7 +145,7 @@ export const CatalogService = {
   },
 
   // BRAND
-  listBrands: async (): Promise<{ id: number; name: string }[]> => {
+  listBrands: async (): Promise<Brand[]> => {
     const response = await fetch(`${API_BASE_URL}/catalog/brands`, {
       method: "GET",
     });
@@ -161,7 +156,7 @@ export const CatalogService = {
 
     return await response.json();
   },
-  addBrand: async (name: string) => {
+  addBrand: async (name: string): Promise<Brand> => {
     const response = await fetch(`${API_BASE_URL}/catalog/brand`, {
       method: "POST",
       headers: {
@@ -180,9 +175,7 @@ export const CatalogService = {
   },
 
   // MODEL
-  listModels: async (
-    brandId: number,
-  ): Promise<{ id: number; name: string }[]> => {
+  listModels: async (brandId: number): Promise<Model[]> => {
     const response = await fetch(
       `${API_BASE_URL}/catalog/models?brandId=${brandId}`,
       {
@@ -196,7 +189,7 @@ export const CatalogService = {
 
     return await response.json();
   },
-  addModel: async (name: string, brandId: number) => {
+  addModel: async (name: string, brandId: number): Promise<Model> => {
     const response = await fetch(`${API_BASE_URL}/catalog/model`, {
       method: "POST",
       headers: {
@@ -215,7 +208,7 @@ export const CatalogService = {
   },
 
   // FAMILY
-  listFamilies: async (): Promise<{ id: number; name: string }[]> => {
+  listFamilies: async (): Promise<Family[]> => {
     const response = await fetch(`${API_BASE_URL}/catalog/families`, {
       method: "GET",
     });
@@ -226,7 +219,7 @@ export const CatalogService = {
 
     return await response.json();
   },
-  addFamily: async (name: string) => {
+  addFamily: async (name: string): Promise<Family> => {
     const response = await fetch(`${API_BASE_URL}/catalog/family`, {
       method: "POST",
       headers: {
@@ -245,9 +238,7 @@ export const CatalogService = {
   },
 
   // SUBFAMILY
-  listSubfamilies: async (
-    familyId: number,
-  ): Promise<{ id: number; name: string }[]> => {
+  listSubfamilies: async (familyId: number): Promise<Subfamily[]> => {
     const response = await fetch(
       `${API_BASE_URL}/catalog/subfamilies?familyId=${familyId}`,
       {
@@ -261,7 +252,7 @@ export const CatalogService = {
 
     return await response.json();
   },
-  addSubfamily: async (name: string, familyId: number) => {
+  addSubfamily: async (name: string, familyId: number): Promise<Subfamily> => {
     const response = await fetch(`${API_BASE_URL}/catalog/subfamily`, {
       method: "POST",
       headers: {
@@ -280,16 +271,7 @@ export const CatalogService = {
   },
 
   // SUPPLIER
-  listSuppliers: async (): Promise<
-    {
-      id: number;
-      name: string;
-      isNational: boolean;
-      isInternational: boolean;
-      email: string;
-      phone: string;
-    }[]
-  > => {
+  listSuppliers: async (): Promise<Supplier[]> => {
     const response = await fetch(`${API_BASE_URL}/catalog/suppliers`, {
       method: "GET",
     });
@@ -301,7 +283,7 @@ export const CatalogService = {
     return await response.json();
   },
 
-  getSupplierById: async (supplierId: number) => {
+  getSupplierById: async (supplierId: number): Promise<Supplier> => {
     const response = await fetch(
       `${API_BASE_URL}/catalog/supplier/${supplierId}`,
       {
@@ -334,7 +316,9 @@ export const CatalogService = {
     return data;
   },
 
-  editSupplier: async (editedSupplier: EditSupplier) => {
+  editSupplier: async (
+    editedSupplier: EditSupplier,
+  ): Promise<{ message: string }> => {
     const response = await fetch(`${API_BASE_URL}/catalog/supplier`, {
       method: "PUT",
       headers: {
@@ -352,7 +336,7 @@ export const CatalogService = {
     return data;
   },
 
-  deleteSupplier: async (supplierId: number) => {
+  deleteSupplier: async (supplierId: number): Promise<{ message: string }> => {
     const response = await fetch(
       `${API_BASE_URL}/catalog/supplier/${supplierId}`,
       {
@@ -373,7 +357,7 @@ export const CatalogService = {
   },
 
   // UNITS
-  listUnits: async (): Promise<{ id: number; name: string }[]> => {
+  listUnits: async (): Promise<Unit[]> => {
     const response = await fetch(`${API_BASE_URL}/catalog/units`, {
       method: "GET",
     });
@@ -385,7 +369,7 @@ export const CatalogService = {
     return await response.json();
   },
 
-  addUnit: async (name: string) => {
+  addUnit: async (name: string): Promise<Unit> => {
     const response = await fetch(`${API_BASE_URL}/catalog/unit`, {
       method: "POST",
       headers: {
@@ -404,7 +388,7 @@ export const CatalogService = {
   },
 
   // WEIGHT UNITS
-  listWeightUnits: async (): Promise<{ id: number; name: string }[]> => {
+  listWeightUnits: async (): Promise<WeightUnit[]> => {
     const response = await fetch(`${API_BASE_URL}/catalog/weight-units`, {
       method: "GET",
     });
@@ -416,7 +400,9 @@ export const CatalogService = {
     return await response.json();
   },
 
-  addWeightUnit: async (newWeightUnit: { name: string; kgValue: number }) => {
+  addWeightUnit: async (
+    newWeightUnit: CreateWeightUnit,
+  ): Promise<WeightUnit> => {
     const response = await fetch(`${API_BASE_URL}/catalog/weight-unit`, {
       method: "POST",
       headers: {
@@ -435,9 +421,7 @@ export const CatalogService = {
   },
 
   // CURRENCIES
-  listCurrencies: async (): Promise<
-    { id: number; name: string; abbreviation: string; dollarValue: number }[]
-  > => {
+  listCurrencies: async (): Promise<Currency[]> => {
     const response = await fetch(`${API_BASE_URL}/catalog/currencies`, {
       method: "GET",
     });
@@ -449,11 +433,7 @@ export const CatalogService = {
     return await response.json();
   },
 
-  addCurrency: async (newCurrency: {
-    name: string;
-    abbreviation: string;
-    dollarValue: number;
-  }) => {
+  addCurrency: async (newCurrency: CreateCurrency): Promise<Currency> => {
     const response = await fetch(`${API_BASE_URL}/catalog/currency`, {
       method: "POST",
       headers: {
@@ -472,9 +452,7 @@ export const CatalogService = {
   },
 
   // INCOTERMS
-  listIncoterms: async (): Promise<
-    { id: number; name: string; abbreviation: string }[]
-  > => {
+  listIncoterms: async (): Promise<Incoterm[]> => {
     const response = await fetch(`${API_BASE_URL}/catalog/incoterms`, {
       method: "GET",
     });
@@ -486,7 +464,7 @@ export const CatalogService = {
     return await response.json();
   },
 
-  addIncoterm: async (newIncoterm: { name: string; abbreviation: string }) => {
+  addIncoterm: async (newIncoterm: CreateIncoterm): Promise<Incoterm> => {
     const response = await fetch(`${API_BASE_URL}/catalog/incoterm`, {
       method: "POST",
       headers: {
@@ -505,7 +483,7 @@ export const CatalogService = {
   },
 
   // PAYMENT CONDITIONS
-  listPaymentConditions: async (): Promise<{ id: number; name: string }[]> => {
+  listPaymentConditions: async (): Promise<PaymentCondition[]> => {
     const response = await fetch(`${API_BASE_URL}/catalog/payment-conditions`, {
       method: "GET",
     });
@@ -516,7 +494,7 @@ export const CatalogService = {
 
     return await response.json();
   },
-  addPaymentCondition: async (name: string) => {
+  addPaymentCondition: async (name: string): Promise<PaymentCondition> => {
     const response = await fetch(`${API_BASE_URL}/catalog/payment-condition`, {
       method: "POST",
       headers: {
