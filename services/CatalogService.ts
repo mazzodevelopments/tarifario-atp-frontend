@@ -1,6 +1,6 @@
 import { API_BASE_URL } from "@/utils/config";
 import { CreateSupplier, EditSupplier, Supplier } from "@/types/Supplier";
-import { CreateClient, EditClient } from "@/types/Client";
+import { Client, CreateClient, EditClient } from "@/types/Client";
 
 export const CatalogService = {
   // CLIENT
@@ -37,7 +37,7 @@ export const CatalogService = {
 
     return await response.json();
   },
-  addClient: async (newClient: CreateClient): Promise<number> => {
+  addClient: async (newClient: CreateClient): Promise<Client> => {
     const response = await fetch(`${API_BASE_URL}/catalog/client`, {
       method: "POST",
       headers: {
@@ -159,7 +159,7 @@ export const CatalogService = {
 
     return await response.json();
   },
-  addBrand: async (name: string): Promise<number> => {
+  addBrand: async (name: string) => {
     const response = await fetch(`${API_BASE_URL}/catalog/brand`, {
       method: "POST",
       headers: {
@@ -259,7 +259,7 @@ export const CatalogService = {
 
     return await response.json();
   },
-  addSubfamily: async (name: string, familyId: number): Promise<number> => {
+  addSubfamily: async (name: string, familyId: number) => {
     const response = await fetch(`${API_BASE_URL}/catalog/subfamily`, {
       method: "POST",
       headers: {
@@ -332,7 +332,7 @@ export const CatalogService = {
     return data;
   },
 
-  editSupplier: async (editedSupplier: EditSupplier): Promise<number> => {
+  editSupplier: async (editedSupplier: EditSupplier) => {
     const response = await fetch(`${API_BASE_URL}/catalog/supplier`, {
       method: "PUT",
       headers: {
@@ -342,15 +342,15 @@ export const CatalogService = {
     });
 
     if (!response.ok) {
-      throw new Error("Error al agregar provedor");
+      throw new Error("Error al editar provedor");
     }
 
     const data = await response.json();
-    console.log("Proovedor agregado:", data);
+    console.log("Proovedor editado:", data);
     return data;
   },
 
-  deleteSupplier: async (supplierId: number): Promise<number> => {
+  deleteSupplier: async (supplierId: number) => {
     const response = await fetch(
       `${API_BASE_URL}/catalog/supplier/${supplierId}`,
       {

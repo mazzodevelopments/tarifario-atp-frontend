@@ -25,7 +25,7 @@ type CustomFormType = React.ReactElement<CustomFormProps>;
 
 interface DropdownProps {
   fetchItems: () => Promise<DropdownItem[]>;
-  addItem?: (name: string) => Promise<number>;
+  addItem?: (name: string) => Promise<{ id: number }>;
   onSelect: (item: DropdownItem) => void;
   value?: string;
   label?: string;
@@ -144,9 +144,9 @@ export default function Dropdown({
 
     try {
       setIsLoading(true);
-      const itemId = await addItem(newItemName.trim());
+      const item = await addItem(newItemName.trim());
 
-      const newItem = { name: newItemName, id: itemId };
+      const newItem = { name: newItemName, id: item.id };
 
       setItems((prevItems) => [...prevItems, newItem]);
       handleSelect(newItem);

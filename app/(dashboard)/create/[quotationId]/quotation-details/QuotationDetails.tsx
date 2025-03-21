@@ -205,7 +205,7 @@ export default function QuotationDetails({
 
     try {
       setIsLoading(true);
-      const buyerId = await CatalogService.addBuyer({
+      const buyer = await CatalogService.addBuyer({
         name: data.name,
         lastname: data.lastname,
         email: data.email,
@@ -218,6 +218,7 @@ export default function QuotationDetails({
         zipCode: data.zipCode,
         clientId: selectedClientId,
       });
+      const buyerId = buyer.id;
 
       const newBuyer = { name: `${data.name} ${data.lastname}`, id: buyerId };
 
@@ -238,7 +239,8 @@ export default function QuotationDetails({
   const handleAddClient = async (data: { name: string }) => {
     try {
       setIsClientLoading(true);
-      const clientId = await CatalogService.addClient(data);
+      const client = await CatalogService.addClient(data);
+      const clientId = client.id;
       const newClient = { name: data.name, id: clientId };
 
       setFormData((prevData) => ({

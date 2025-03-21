@@ -71,10 +71,11 @@ export default function ClientDetailsPage() {
   }) => {
     setIsLoading(true);
     try {
-      const buyerId = await CatalogService.addBuyer({
+      const buyer = await CatalogService.addBuyer({
         ...data,
         clientId: client!.id!,
       });
+      const buyerId = buyer.id;
 
       const updatedClient = {
         ...client!,
