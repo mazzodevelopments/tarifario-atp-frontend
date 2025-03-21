@@ -31,7 +31,7 @@ export default function CreateLayout({
       return steps.findIndex((step) => {
         const dynamicPath = step.path.replace(
           "[quotationId]",
-          quotationId?.toString() || "",
+          quotationId?.toString() || ""
         );
         return pathname === dynamicPath;
       });
@@ -47,12 +47,14 @@ export default function CreateLayout({
   return (
     <div className="flex flex-col w-full h-full bg-neutral-50">
       <Header title="Nueva Cotización" />
-      <div className="flex w-full h-full p-6">
+      <div className="flex w-full h-full p-[1vw]">
         <div className="flex flex-col gap-6 w-full h-full p-[20px] border border-neutral-200 shadow-sm bg-white rounded-[18px] relative">
           <div className="flex w-full flex-col h-full">
             <div className="flex w-full justify-center items-center h-full">
               <div className="w-full h-full relative flex flex-col">
-                <h3 className="text-xl font-[800]">{`Etapa ${currentStep + 1} - ${steps[currentStep].title}`}</h3>
+                <h3 className="text-xl font-[800]">{`Etapa ${
+                  currentStep + 1
+                } - ${steps[currentStep].title}`}</h3>
                 <div className="flex justify-center relative h-full items-center">
                   {children}
                 </div>

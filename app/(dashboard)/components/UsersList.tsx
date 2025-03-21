@@ -24,7 +24,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import CreateUser from "../components/CreateUser";
-import ManageUser from "../components/ManageUser"; // Importa el nuevo componente
+import ManageUser from "../components/ManageUser";
 
 export default function UsersList() {
   const [users, setUsers] = useState<User[]>([]);
@@ -52,7 +52,7 @@ export default function UsersList() {
 
   const filteredUsers = users
     .filter((user) =>
-      user.email.toLowerCase().includes(searchQuery.toLowerCase()),
+      user.email.toLowerCase().includes(searchQuery.toLowerCase())
     )
     .filter((user) => {
       if (sortBy === "all") return true;
@@ -147,16 +147,16 @@ export default function UsersList() {
                 {sortBy === "all"
                   ? "Todos"
                   : sortBy === "Superadmin"
-                    ? "Superadmin"
-                    : sortBy === "Admin"
-                      ? "Admin"
-                      : sortBy === "Compras"
-                        ? "Compras"
-                        : sortBy === "Ventas"
-                          ? "Ventas"
-                          : sortBy === "Logística"
-                            ? "Logística"
-                            : "Todos"}
+                  ? "Superadmin"
+                  : sortBy === "Admin"
+                  ? "Admin"
+                  : sortBy === "Compras"
+                  ? "Compras"
+                  : sortBy === "Ventas"
+                  ? "Ventas"
+                  : sortBy === "Logística"
+                  ? "Logística"
+                  : "Todos"}
                 <ChevronDown className="ml-2 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -202,7 +202,7 @@ export default function UsersList() {
         </div>
       </div>
       <div className="flex-grow overflow-hidden relative">
-        <ScrollArea className="border-neutral-100 border-t h-full max-h-[calc(100vh-330px)] px-[1vw]">
+        <ScrollArea className="border-neutral-100 border-t h-full max-h-[calc(100vh-5vh)] px-[1vw]">
           <div className="space-y-4 mt-4">
             {filteredUsers.length === 0 ? (
               <div className="flex items-center justify-center h-full">
@@ -241,8 +241,8 @@ export default function UsersList() {
                           user.role.name === "Superadmin"
                             ? "bg-red-100 text-red-500"
                             : user.role.name === "Admin"
-                              ? "bg-blue-100 text-blue-500"
-                              : "bg-green-100 text-green-600"
+                            ? "bg-blue-100 text-blue-500"
+                            : "bg-green-100 text-green-600"
                         }`}
                       >
                         <span className="text-sm font-semibold">

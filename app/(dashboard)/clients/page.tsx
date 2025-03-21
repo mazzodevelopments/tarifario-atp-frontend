@@ -210,12 +210,12 @@ export default function Clients() {
             />
           </div>
         </div>
-        <div className="mt-6 px-6">
+        <div className="mt-[1vw] px-[1vw]">
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
               <Button
                 variant="primary"
-                className="py-2 px-4 rounded-lg font-semibold text-sm border bg-primary/5 text-primary"
+                className="py-2 px-4 rounded-[12px] font-semibold text-sm border bg-primary/5 text-primary"
               >
                 Agregar Cliente
               </Button>
@@ -233,7 +233,7 @@ export default function Clients() {
           </Dialog>
         </div>
 
-        <div className="w-full px-6 pb-6 pt-4">
+        <div className="w-full p-[1vw]">
           <div className="w-auto h-auto overflow-hidden rounded-[12px] shadow-sm shadow-cyan-500/20">
             <div className="border rounded-[12px] overflow-auto max-h-[70vh] relative w-full">
               <Table className="w-full bg-white">

@@ -199,17 +199,17 @@ export default function Quotations() {
           />
         </div>
       </div>
-      <div className="w-full px-6 pb-6 pt-4">
-        <div className="flex space-x-4 mb-4">
+      <div className="w-full px-[1vw] mt-[1vw]">
+        <div className="flex space-x-[0.5vw]">
           <Button
             onClick={() =>
               handleTabChange(
                 user?.role.name !== "Superadmin" && user?.role.name !== "Admin"
                   ? "assigned"
-                  : "pending",
+                  : "pending"
               )
             }
-            className={`py-2 px-4 rounded-lg font-semibold text-sm border ${
+            className={`py-2 px-4 rounded-[12px] font-semibold text-sm border ${
               activeTab === "pending" || activeTab === "assigned"
                 ? "bg-primary/5 text-primary"
                 : "bg-white text-gray-500 border-neutral-200"
@@ -219,7 +219,7 @@ export default function Quotations() {
           </Button>
           <Button
             onClick={() => handleTabChange("completed")}
-            className={`py-2 px-4 rounded-lg font-semibold text-sm border ${
+            className={`py-2 px-4 rounded-[12px] font-semibold text-sm border ${
               activeTab === "completed"
                 ? "bg-primary/5 text-primary"
                 : "bg-white text-gray-500 border-neutral-200"
@@ -229,7 +229,7 @@ export default function Quotations() {
           </Button>
         </div>
 
-        <div className="w-auto h-auto overflow-hidden rounded-[12px] shadow-sm shadow-cyan-500/20">
+        <div className="w-auto h-auto overflow-hidden rounded-[12px] mt-[1vw] shadow-sm shadow-cyan-500/20">
           <div className="border rounded-[12px] overflow-auto max-h-[70vh] relative w-full">
             <Table className="w-full bg-white">
               <TableHeader>

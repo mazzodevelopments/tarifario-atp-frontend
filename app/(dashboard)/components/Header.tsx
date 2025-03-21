@@ -15,7 +15,7 @@ export default function Header({
   className = "",
   searchInput,
 }: HeaderProps) {
-  const baseClasses = "flex justify-between items-center h-full px-[1vw] mb-4";
+  const baseClasses = "flex justify-between items-center h-full p-[1vw] mb-4";
   const combinedClasses = `${baseClasses} ${className}`.trim();
 
   return (
