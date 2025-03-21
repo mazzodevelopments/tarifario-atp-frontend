@@ -50,7 +50,7 @@ export function QuotationSlider({
               {quotations.map((quotation) => (
                 <Link
                   key={quotation.taskNumber}
-                  href={`/history/${quotation.taskNumber}`}
+                  href={`/quotations/${quotation.taskNumber}`}
                   className="flex-[0_0_100%] min-w-0 mr-4 bg-white border-[0.5px] border-[#ebebebcc] rounded-lg p-4 cursor-pointer hover:bg-gray-50 flex flex-col"
                 >
                   <div className="flex flex-col space-y-4">
