@@ -4,7 +4,7 @@ import { Client, CreateClient, EditClient } from "@/types/Client";
 
 export const CatalogService = {
   // CLIENT
-  listClients: async (): Promise<{ id: number; name: string }[]> => {
+  listClients: async (): Promise<Client[]> => {
     const response = await fetch(`${API_BASE_URL}/catalog/clients`, {
       method: "GET",
     });
@@ -15,7 +15,7 @@ export const CatalogService = {
 
     return await response.json();
   },
-  listClientsWithBuyers: async (): Promise<{ id: number; name: string }[]> => {
+  listClientsWithBuyers: async (): Promise<Client[]> => {
     const response = await fetch(`${API_BASE_URL}/catalog/clients-buyers`, {
       method: "GET",
     });
@@ -54,7 +54,9 @@ export const CatalogService = {
     console.log("Cliente agregado:", data);
     return data;
   },
-  editClient: async (editedClient: EditClient): Promise<number> => {
+  editClient: async (
+    editedClient: EditClient,
+  ): Promise<{ message: string }> => {
     const response = await fetch(`${API_BASE_URL}/catalog/client`, {
       method: "PUT",
       headers: {
@@ -71,7 +73,7 @@ export const CatalogService = {
     console.log("Cliente editado:", data);
     return data;
   },
-  deleteClient: async (clientId: number): Promise<number> => {
+  deleteClient: async (clientId: number): Promise<{ message: string }> => {
     const response = await fetch(`${API_BASE_URL}/catalog/client/${clientId}`, {
       method: "DELETE",
       headers: {
