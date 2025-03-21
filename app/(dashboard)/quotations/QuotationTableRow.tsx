@@ -32,7 +32,7 @@ export function QuotationTableRow({
     4: `/create/${quotation.id}/sales-data`,
     5: `/create/${quotation.id}/select-budgets`,
     6: `/create/${quotation.id}/review`,
-    7: `/history/${quotation.taskNumber}`,
+    7: `/quotations/${quotation.taskNumber}`,
   };
 
   const actualStep = quotation.step as StepKeys;
