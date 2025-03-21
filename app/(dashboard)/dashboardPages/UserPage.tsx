@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown, LogOut, Search, Settings } from "lucide-react";
+import { ChevronDown, LogOut, Settings } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -20,6 +20,8 @@ import CurrentQuotationCard from "@/app/(dashboard)/components/CurrentQuotation"
 import { QuotationSlider } from "@/app/(dashboard)/components/QuotationCarousel";
 import { QuotationsService } from "@/services/QuotationsService";
 import PagesHeader from "./pagesHeader";
+import SearchInput from "@/components/SearchInput";
+import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 
 export default function UserPage() {
   const { user, logout } = useAuth();
@@ -64,6 +66,12 @@ export default function UserPage() {
     setShouldFetch(false);
   }, [shouldFetch]);
 
+  const fetchSearchResults = async (searchTerm: string) => {
+    const data: { id: number; taskNumber: string }[] =
+      await QuotationsService.searchQuotationByTaskNumber(searchTerm);
+    return adaptToDropdown(data, "id", "taskNumber");
+  };
+
   return (
     <div className="flex justify-start w-full h-screen flex-col bg-neutral-50">
       <div className="w-full h-20 flex-shrink-0 border-b border-neutral-200">
@@ -73,18 +81,12 @@ export default function UserPage() {
               General
             </h2>
           </div>
-          <div className="flex items-center gap-2 h-14 hover:cursor-pointer">
-            <div className="relative w-[22vw]">
-              <Search
-                size={20}
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black"
-              />
-              <input
-                className="w-full h-[2.25vw] rounded-full pl-10 pr-4 bg-white shadow-sm border border-neutral-200 text-sm focus:outline-none placeholder-secondary"
-                placeholder="Buscar cotización"
-              />
-            </div>
-          </div>
+          <SearchInput
+            placeholder="Buscar cotización"
+            onSearch={fetchSearchResults}
+            link="/quotations"
+            linkWithName
+          />
           <div className="flex items-center gap-2 h-14 hover:cursor-pointer">
             <div className="relative w-auto">
               <SidebarMenu>

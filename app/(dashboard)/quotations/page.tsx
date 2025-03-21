@@ -171,7 +171,7 @@ export default function Quotations() {
           <SearchInput
             placeholder="Buscar cotización"
             onSearch={fetchSearchResults}
-            link="/history"
+            link="/quotations"
             linkWithName
           />
         </div>

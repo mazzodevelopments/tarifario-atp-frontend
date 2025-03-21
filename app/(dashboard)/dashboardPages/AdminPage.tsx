@@ -69,7 +69,7 @@ export default function AdminPage() {
           <SearchInput
             placeholder="Buscar cotización"
             onSearch={fetchSearchResults}
-            link="/history"
+            link="/quotations"
             linkWithName
           />
           <div className="flex items-center gap-2 h-14 hover:cursor-pointer">
