@@ -24,6 +24,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import CreateUser from "../components/CreateUser";
+import ManageUser from "../components/ManageUser"; // Importa el nuevo componente
 
 export default function UsersList() {
   const [users, setUsers] = useState<User[]>([]);
@@ -75,6 +76,42 @@ export default function UsersList() {
         title: "Error",
         description:
           error instanceof Error ? error.message : "Error al crear el usuario",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleRoleChange = async (userId: number, newRoleId: number) => {
+    try {
+      await AdminService.updateUser({ id: userId, roleId: newRoleId });
+      setShouldFetch(true);
+      toast({
+        title: "Rol actualizado",
+        description: "El rol del usuario ha sido actualizado correctamente.",
+      });
+    } catch (error) {
+      console.error("Error updating user role:", error);
+      toast({
+        title: "Error",
+        description: "No se pudo actualizar el rol del usuario.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleUserDelete = async (userId: number) => {
+    try {
+      await AdminService.deleteUser(userId);
+      setShouldFetch(true);
+      toast({
+        title: "Usuario eliminado",
+        description: "El usuario ha sido eliminado correctamente.",
+      });
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      toast({
+        title: "Error",
+        description: "No se pudo eliminar el usuario.",
         variant: "destructive",
       });
     }
@@ -223,7 +260,11 @@ export default function UsersList() {
                     >
                       Ver cotizaciones
                     </Button>
-                    <Button variant="secondary">Gestionar usuario</Button>
+                    <ManageUser
+                      user={user}
+                      onRoleChange={handleRoleChange}
+                      onUserDelete={handleUserDelete}
+                    />
                   </div>
                 </div>
               ))

@@ -32,7 +32,7 @@ export default function FirstLoginForm() {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<CropArea | null>(
-    null
+    null,
   );
 
   const [errors, setErrors] = useState({
@@ -115,7 +115,7 @@ export default function FirstLoginForm() {
     (croppedArea: any, croppedAreaPixels: any) => {
       setCroppedAreaPixels(croppedAreaPixels);
     },
-    []
+    [],
   );
 
   const createImage = (url: string): Promise<HTMLImageElement> =>
@@ -129,7 +129,7 @@ export default function FirstLoginForm() {
 
   const getCroppedImg = async (
     imageSrc: string,
-    pixelCrop: CropArea
+    pixelCrop: CropArea,
   ): Promise<string> => {
     const image = await createImage(imageSrc);
     const canvas = document.createElement("canvas");
@@ -153,7 +153,7 @@ export default function FirstLoginForm() {
       0,
       0,
       pixelCrop.width,
-      pixelCrop.height
+      pixelCrop.height,
     );
 
     // As Base64 string
@@ -165,7 +165,7 @@ export default function FirstLoginForm() {
       try {
         const croppedImage = await getCroppedImg(
           imageToCrop,
-          croppedAreaPixels
+          croppedAreaPixels,
         );
         setFormData((prev) => ({ ...prev, profilePic: croppedImage }));
         setPreviewUrl(croppedImage);
@@ -197,7 +197,7 @@ export default function FirstLoginForm() {
     };
 
     if (user) {
-      await AdminService.updateUser(user.id, userToUpdate);
+      await AdminService.updateUser(userToUpdate);
       login(user.email, formData.password);
     }
   };

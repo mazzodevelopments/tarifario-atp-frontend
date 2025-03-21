@@ -35,10 +35,10 @@ export default function Settings() {
     fetchUser();
   }, [user]);
 
-  const handleUserUpdated = async (updatedUser: AdminUpdateUser) => {
+  const handleUserUpdated = async (userToUpdate: AdminUpdateUser) => {
     if (user) {
-      await AdminService.updateUser(user.id, {
-        ...updatedUser,
+      await AdminService.updateUser({
+        ...userToUpdate,
         id: user.id,
       });
       const data = await AdminService.getUsersById(user.id);
