@@ -74,7 +74,7 @@ export function QuotationSlider({
           </div>
         </div>
         <div className="absolute bottom-4 left-[50%] translate-x-[-50%] w-[60%] flex justify-center gap-2 items-end h-auto">
-          <Link href="/quotations" passHref>
+          <Link href="/quotations?tab=completed" passHref>
             <Button
               variant="secondary"
               className="px-3 py-2 text-sm flex flex-row items-center"

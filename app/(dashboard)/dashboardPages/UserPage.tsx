@@ -197,7 +197,7 @@ export default function UserPage() {
               <h3 className="text-center font-[700] text-[4vw] text-primary">
                 {finishedQuotations}
               </h3>
-              <Link href={`/quotations`}>
+              <Link href={`/quotations?tab=completed`}>
                 <Button
                   variant="primary"
                   className="bg-primary/5 text-primary border my-3 border-primary/30 px-4 py-3 justify-center items-center flex"

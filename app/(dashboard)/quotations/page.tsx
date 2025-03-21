@@ -16,6 +16,7 @@ import type { HistoryQuotationCard } from "@/types/Quotations";
 import SearchInput from "@/components/SearchInput";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 import { ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
 export default function Quotations() {
@@ -25,14 +26,36 @@ export default function Quotations() {
   const [finishedQuotations, setFinishedQuotations] = useState<
     HistoryQuotationCard[]
   >([]);
-  const [activeTab, setActiveTab] = useState<"pending" | "completed">(
-    "pending",
-  );
+  const [activeTab, setActiveTab] = useState<
+    "pending" | "assigned" | "completed"
+  >("pending");
   const [sortConfig, setSortConfig] = useState<{
     key: string;
     direction: string;
   } | null>(null);
   const { user } = useAuth();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const tab = searchParams.get("tab");
+    if (!tab) {
+      if (user?.role.name === "Superadmin" || user?.role.name === "Admin") {
+        router.replace("/quotations?tab=pending");
+      } else {
+        router.replace("/quotations?tab=assigned");
+      }
+    } else if (tab === "pending" || tab === "assigned" || tab === "completed") {
+      setActiveTab(tab);
+    }
+  }, [searchParams, router]);
+
+  const handleTabChange = (tab: "pending" | "completed" | "assigned") => {
+    if (tab === "pending" || tab === "assigned" || tab === "completed") {
+      setActiveTab(tab);
+    }
+    router.push(`/quotations?tab=${tab}`);
+  };
 
   useEffect(() => {
     const fetchUnfinishedQuotations = async () => {
@@ -160,7 +183,7 @@ export default function Quotations() {
         <div className="flex justify-between items-center h-full px-6 mb-4">
           <div className="flex flex-col justify-center items-start w-[16vw]">
             <h2 className="flex items-center text-xl leading-[1] p-0 font-[800] text-black mt-1">
-              {activeTab === "pending"
+              {activeTab === "pending" || activeTab === "assigned"
                 ? user?.role.name !== "Superadmin" &&
                   user?.role.name !== "Admin"
                   ? "Cotizaciones asignadas"
@@ -179,9 +202,15 @@ export default function Quotations() {
       <div className="w-full px-6 pb-6 pt-4">
         <div className="flex space-x-4 mb-4">
           <Button
-            onClick={() => setActiveTab("pending")}
+            onClick={() =>
+              handleTabChange(
+                user?.role.name !== "Superadmin" && user?.role.name !== "Admin"
+                  ? "assigned"
+                  : "pending",
+              )
+            }
             className={`py-2 px-4 rounded-lg font-semibold text-sm border ${
-              activeTab === "pending"
+              activeTab === "pending" || activeTab === "assigned"
                 ? "bg-primary/5 text-primary"
                 : "bg-white text-gray-500 border-neutral-200"
             }`}
@@ -189,7 +218,7 @@ export default function Quotations() {
             Pendientes
           </Button>
           <Button
-            onClick={() => setActiveTab("completed")}
+            onClick={() => handleTabChange("completed")}
             className={`py-2 px-4 rounded-lg font-semibold text-sm border ${
               activeTab === "completed"
                 ? "bg-primary/5 text-primary"
