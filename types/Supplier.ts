@@ -7,6 +7,7 @@ export interface Supplier {
   phone: string;
   origin: string;
   families?: { id: number; name: string }[];
+  familyIds?: number[];
 }
 
 export interface CreateSupplier {
@@ -16,5 +17,4 @@ export interface CreateSupplier {
   email: string;
   phone: string;
   origin: string;
-  families?: { id: string; name: string }[];
 }
