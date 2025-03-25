@@ -2,7 +2,16 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { CatalogService } from "@/services/CatalogService";
-import { AlertTriangle, ArrowUpDown, Trash } from "lucide-react";
+import {
+  AlertTriangle,
+  ArrowDown,
+  ArrowUp,
+  ArrowUpDown,
+  Trash,
+  Mail,
+  Phone,
+  Pin,
+} from "lucide-react";
 import FamilyForm from "@/app/(dashboard)/suppliers/forms/FamilyForm";
 import Button from "@/components/Button";
 import {
@@ -22,7 +31,6 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import Header from "@/app/(dashboard)/components/Header";
-import { ArrowDown, ArrowUp } from "lucide-react";
 
 export interface FetchedSupplier {
   id: number;
@@ -31,6 +39,7 @@ export interface FetchedSupplier {
   isInternational: boolean;
   email: string;
   phone: string;
+  origin: string;
   families?: {
     id: number;
     name: string;
@@ -209,11 +218,23 @@ export default function SupplierDetailsPage() {
         <Header title="Proveedores" />
         <div className="flex flex-col mt-6 px-6 gap-1">
           <h2 className="text-2xl font-[800]">{supplier.name}</h2>
-          <p className="text-md font-[400] text-gray-600">{supplier.email}</p>
-          <p className="text-md font-[400] text-gray-600">{supplier.phone}</p>
+          <div className="flex items-center gap-2">
+            <Mail className="w-4 h-4 text-gray-500" />
+            <p className="text-md font-[400] text-gray-600">{supplier.email}</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <Phone className="w-4 h-4 text-gray-500" />
+            <p className="text-md font-[400] text-gray-600">{supplier.phone}</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <Pin className="w-4 h-4 text-gray-500" />
+            <p className="text-md font-[400] text-gray-600">
+              {supplier.origin}
+            </p>
+          </div>
           <div>
             <div
-              className={`py-1 px-3 text-sm rounded-3xl inline-block ${getTypeStyles(
+              className={`mt-1 py-1 px-3 text-sm rounded-3xl inline-block ${getTypeStyles(
                 supplier.isNational,
                 supplier.isInternational,
               )}`}

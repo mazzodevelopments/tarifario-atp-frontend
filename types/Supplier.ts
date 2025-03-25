@@ -5,6 +5,7 @@ export interface Supplier {
   isInternational: boolean;
   email: string;
   phone: string;
+  origin: string;
   families?: { id: number; name: string }[];
 }
 
@@ -14,6 +15,7 @@ export interface CreateSupplier {
   isInternational: boolean;
   email: string;
   phone: string;
+  origin: string;
   families?: { id: string; name: string }[];
 }
 
@@ -24,5 +26,6 @@ export interface EditSupplier {
   isInternational?: boolean;
   email?: string;
   phone?: string;
+  origin?: string;
   familyIds?: number[];
 }

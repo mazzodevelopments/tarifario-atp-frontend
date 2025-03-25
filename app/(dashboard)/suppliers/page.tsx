@@ -88,6 +88,7 @@ export default function Suppliers() {
     phone: string;
     isNational: boolean;
     isInternational: boolean;
+    origin: string;
     families?: { id: number; name: string };
   }) => {
     setIsLoading(true);
@@ -126,7 +127,7 @@ export default function Suppliers() {
     try {
       await CatalogService.deleteSupplier(supplierToDelete.id);
       setSuppliers(
-        suppliers.filter((supplier) => supplier.id !== supplierToDelete.id)
+        suppliers.filter((supplier) => supplier.id !== supplierToDelete.id),
       );
       setIsLoading(false);
       closeDeleteDialog();
@@ -168,11 +169,17 @@ export default function Suppliers() {
     }
 
     sortedSuppliers.sort((a, b) => {
-      if (sortConfig.key === "name" || sortConfig.key === "email") {
-        if (a[sortConfig.key] < b[sortConfig.key]) {
+      if (
+        sortConfig.key === "name" ||
+        sortConfig.key === "email" ||
+        sortConfig.key === "origin"
+      ) {
+        const valueA = a[sortConfig.key] || "";
+        const valueB = b[sortConfig.key] || "";
+        if (valueA < valueB) {
           return sortConfig.direction === "ascending" ? -1 : 1;
         }
-        if (a[sortConfig.key] > b[sortConfig.key]) {
+        if (valueA > valueB) {
           return sortConfig.direction === "ascending" ? 1 : -1;
         }
         return 0;
@@ -209,7 +216,7 @@ export default function Suppliers() {
   const fetchSearchResults = async (searchTerm: string) => {
     const filteredSuppliers: { id: number; name: string }[] = suppliers
       .filter((supplier) =>
-        supplier.name.toLowerCase().includes(searchTerm.toLowerCase())
+        supplier.name.toLowerCase().includes(searchTerm.toLowerCase()),
       )
       .map((supplier) => ({
         id: supplier.id,
@@ -265,7 +272,7 @@ export default function Suppliers() {
                 <TableHeader>
                   <TableRow className="bg-primary/5">
                     <TableHead
-                      className="w-1/5 text-primary font-[600] text-center cursor-pointer select-none"
+                      className="w-1/6 text-primary font-[600] text-center cursor-pointer select-none"
                       onClick={() => requestSort("name")}
                     >
                       <div className="flex items-center justify-center gap-1">
@@ -278,7 +285,7 @@ export default function Suppliers() {
                       </div>
                     </TableHead>
                     <TableHead
-                      className="w-1/5 text-primary font-[600] text-center cursor-pointer select-none"
+                      className="w-1/6 text-primary font-[600] text-center cursor-pointer select-none"
                       onClick={() => requestSort("email")}
                     >
                       <div className="flex items-center justify-center gap-1">
@@ -290,11 +297,24 @@ export default function Suppliers() {
                           }[sortConfig.direction]) || <ArrowUpDown size={14} />}
                       </div>
                     </TableHead>
-                    <TableHead className="w-1/5 text-primary font-[600] text-center select-none">
+                    <TableHead className="w-1/6 text-primary font-[600] text-center select-none">
                       Teléfono
                     </TableHead>
                     <TableHead
-                      className="w-1/5 text-primary font-[600] text-center cursor-pointer select-none"
+                      className="w-1/6 text-primary font-[600] text-center cursor-pointer select-none"
+                      onClick={() => requestSort("origin")}
+                    >
+                      <div className="flex items-center justify-center gap-1">
+                        Origen{" "}
+                        {(sortConfig?.key === "origin" &&
+                          {
+                            ascending: <ArrowUp size={14} />,
+                            descending: <ArrowDown size={14} />,
+                          }[sortConfig.direction]) || <ArrowUpDown size={14} />}
+                      </div>
+                    </TableHead>
+                    <TableHead
+                      className="w-1/6 text-primary font-[600] text-center cursor-pointer select-none"
                       onClick={() => requestSort("type")}
                     >
                       <div className="flex items-center justify-center gap-1">
@@ -306,7 +326,7 @@ export default function Suppliers() {
                           }[sortConfig.direction]) || <ArrowUpDown size={14} />}
                       </div>
                     </TableHead>
-                    <TableHead className="w-1/5 text-primary font-[600] text-center select-none">
+                    <TableHead className="w-1/6 text-primary font-[600] text-center select-none">
                       Acciones
                     </TableHead>
                   </TableRow>
@@ -323,18 +343,19 @@ export default function Suppliers() {
                         </TableCell>
                         <TableCell>{supplier.email}</TableCell>
                         <TableCell>{supplier.phone}</TableCell>
+                        <TableCell>{supplier.origin || "-"}</TableCell>
                         <TableCell>
                           <div
                             className={`py-1 px-3 rounded-3xl inline-block ${getTypeStyles(
                               supplier.isNational,
-                              supplier.isInternational
+                              supplier.isInternational,
                             )}`}
                           >
                             {supplier.isNational && supplier.isInternational
                               ? "Ambas"
                               : supplier.isNational
-                              ? "Nacional"
-                              : "Internacional"}
+                                ? "Nacional"
+                                : "Internacional"}
                           </div>
                         </TableCell>
                         <TableCell>
@@ -365,7 +386,7 @@ export default function Suppliers() {
                   ) : (
                     <TableRow className="h-36">
                       <TableCell
-                        colSpan={5}
+                        colSpan={6}
                         className="text-sm m-auto h-full text-center text-gray-500"
                       >
                         No hay proveedores registrados

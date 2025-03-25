@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import parsePhoneNumberFromString from "libphonenumber-js";
+import { Country } from "country-state-city";
+import Dropdown from "@/components/Dropdown";
 
 interface SupplierFormProps {
   onSubmit: (data: {
     name: string;
     email: string;
     phone: string;
+    origin: string;
     isNational: boolean;
     isInternational: boolean;
   }) => void;
@@ -17,6 +20,7 @@ interface SupplierFormProps {
     name: string;
     email: string;
     phone: string;
+    origin: string;
     isNational: boolean;
     isInternational: boolean;
   };
@@ -32,6 +36,7 @@ export default function SupplierForm({
     name: "",
     email: "",
     phone: "",
+    origin: "",
     isNational: false,
     isInternational: false,
   });
@@ -40,6 +45,7 @@ export default function SupplierForm({
     name: "",
     email: "",
     phone: "",
+    origin: "",
   });
 
   useEffect(() => {
@@ -54,7 +60,7 @@ export default function SupplierForm({
   };
 
   const validateForm = () => {
-    const newErrors = { name: "", email: "", phone: "" };
+    const newErrors = { name: "", email: "", phone: "", origin: "" };
     let isValid = true;
 
     if (!formData.name) {
@@ -82,6 +88,11 @@ export default function SupplierForm({
       }
     }
 
+    if (!formData.origin) {
+      newErrors.origin = "El origen es requerido";
+      isValid = false;
+    }
+
     setErrors(newErrors);
     return isValid;
   };
@@ -96,6 +107,14 @@ export default function SupplierForm({
 
     await onSubmit(formData);
     closeDialog?.();
+  };
+
+  const fetchCountries = async () => {
+    const countriesRaw = Country.getAllCountries();
+    const countries = countriesRaw.map((country, acc) => {
+      return { id: acc, name: country.name };
+    });
+    return countries;
   };
 
   return (
@@ -129,6 +148,13 @@ export default function SupplierForm({
         placeholder="Teléfono"
         label="Teléfono"
         error={errors.phone}
+      />
+      <Dropdown
+        value={formData.origin}
+        fetchItems={fetchCountries}
+        onSelect={(item) => handleChange("origin", item?.name || "")}
+        label="Origen"
+        error={errors.origin}
       />
       <div className="flex flex-col space-y-2">
         <label className="block text-sm font-[600] text-gray-700">Tipo</label>
