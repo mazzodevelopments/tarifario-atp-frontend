@@ -258,7 +258,7 @@ export default function UserHistory() {
                     </TableHead>
                   </TableRow>
                 </TableHeader>
-                <TableBody>
+                <TableBody className="bg-white">
                   {sortedUserQuotations.length > 0 ? (
                     sortedUserQuotations.map((quotation) => (
                       <QuotationTableRow

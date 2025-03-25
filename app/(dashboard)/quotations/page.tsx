@@ -299,24 +299,21 @@ export default function Quotations() {
                         }[sortConfig.direction]) || <ArrowUpDown size={14} />}
                     </div>
                   </TableHead>
-                  {activeTab === "pending" ||
-                    (activeTab === "assigned" && (
-                      <TableHead
-                        className="text-primary font-[600] text-center cursor-pointer select-none"
-                        onClick={() => requestSort("stage")}
-                      >
-                        <div className="flex items-center justify-center gap-1">
-                          Etapa{" "}
-                          {(sortConfig?.key === "stage" &&
-                            {
-                              ascending: <ArrowUp size={14} />,
-                              descending: <ArrowDown size={14} />,
-                            }[sortConfig.direction]) || (
-                            <ArrowUpDown size={14} />
-                          )}
-                        </div>
-                      </TableHead>
-                    ))}
+                  {(activeTab === "pending" || activeTab === "assigned") && (
+                    <TableHead
+                      className="text-primary font-[600] text-center cursor-pointer select-none"
+                      onClick={() => requestSort("stage")}
+                    >
+                      <div className="flex items-center justify-center gap-1">
+                        Etapa{" "}
+                        {(sortConfig?.key === "stage" &&
+                          {
+                            ascending: <ArrowUp size={14} />,
+                            descending: <ArrowDown size={14} />,
+                          }[sortConfig.direction]) || <ArrowUpDown size={14} />}
+                      </div>
+                    </TableHead>
+                  )}
                   <TableHead className="text-primary font-[600] text-center">
                     Acciones
                   </TableHead>
