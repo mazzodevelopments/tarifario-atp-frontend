@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dialog";
 import { User } from "@/types/User";
 import { AlertTriangle } from "lucide-react";
+import Image from "next/image";
 
 interface ManageUserProps {
   user: User;
@@ -95,24 +96,35 @@ export default function ManageUser({
           <DialogHeader>
             <DialogTitle>Gestionar usuario</DialogTitle>
           </DialogHeader>
-          <div className="flex flex-col">
-            <div className="flex w-full justify-between">
-              <h2 className="text-2xl font-[600]">
-                {user.name + " " + user.lastname}
-              </h2>
-              <div
-                className={`mt-2 px-2 rounded-3xl w-fit ${
-                  user.role.name === "Superadmin"
-                    ? "bg-red-100 text-red-500"
-                    : user.role.name === "Admin"
-                      ? "bg-blue-100 text-blue-500"
-                      : "bg-green-100 text-green-600"
-                }`}
-              >
-                <span className="text-sm font-semibold">{user.role.name}</span>
+          <div className="flex w-full items-center gap-4">
+            <Image
+              src={user?.profilePic || "/default-profile-pic.png"}
+              width={700}
+              height={700}
+              alt="Picture of the author"
+              className="w-20 h-20 rounded-full"
+            />
+            <div className="flex flex-col w-full">
+              <div className="flex w-full justify-between">
+                <h2 className="text-2xl font-[600]">
+                  {user.name + " " + user.lastname}
+                </h2>
+                <div
+                  className={`px-2 rounded-3xl w-fit h-fit ${
+                    user.role.name === "Superadmin"
+                      ? "bg-red-100 text-red-500"
+                      : user.role.name === "Admin"
+                        ? "bg-blue-100 text-blue-500"
+                        : "bg-green-100 text-green-600"
+                  }`}
+                >
+                  <span className="text-sm font-semibold">
+                    {user.role.name}
+                  </span>
+                </div>
               </div>
+              <span className="text-gray-600 -mt-1">{user.email}</span>
             </div>
-            <span>{user.email}</span>
           </div>
           <div className="space-y-4 mt-2">
             <Button
