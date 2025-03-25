@@ -161,4 +161,18 @@ export const QuotationsService = {
 
     return await response.json();
   },
+  getQuotationsByUserId: async (userId: number) => {
+    const response = await fetch(`${API_BASE_URL}/quotations/user/${userId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al traer las ultimas cotizaciones");
+    }
+
+    return await response.json();
+  },
 };
