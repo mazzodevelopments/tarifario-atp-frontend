@@ -32,20 +32,3 @@ export interface CreateClient {
     zipCode?: string;
   }[];
 }
-
-export interface EditClient {
-  id?: number;
-  name?: string;
-  buyers?: {
-    name: string;
-    lastname: string;
-    email: string;
-    phone: string;
-    birthDate: string;
-    street: string;
-    streetNumber: string;
-    country: string;
-    city: string;
-    zipCode: string;
-  }[];
-}

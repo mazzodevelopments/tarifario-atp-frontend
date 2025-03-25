@@ -1,6 +1,6 @@
 import { API_BASE_URL } from "@/utils/config";
-import { CreateSupplier, EditSupplier, Supplier } from "@/types/Supplier";
-import { Client, CreateClient, EditClient } from "@/types/Client";
+import { CreateSupplier, Supplier } from "@/types/Supplier";
+import { Client, CreateClient } from "@/types/Client";
 import { Buyer, CreateBuyer } from "@/types/Buyer";
 import { Brand, Model } from "@/types/Model";
 import { Family, Subfamily } from "@/types/Family";
@@ -62,7 +62,7 @@ export const CatalogService = {
     return data;
   },
   editClient: async (
-    editedClient: EditClient,
+    editedClient: Partial<Client>,
   ): Promise<{ message: string }> => {
     const response = await fetch(`${API_BASE_URL}/catalog/client`, {
       method: "PUT",
@@ -317,7 +317,7 @@ export const CatalogService = {
   },
 
   editSupplier: async (
-    editedSupplier: EditSupplier,
+    editedSupplier: Partial<Supplier>,
   ): Promise<{ message: string }> => {
     const response = await fetch(`${API_BASE_URL}/catalog/supplier`, {
       method: "PUT",

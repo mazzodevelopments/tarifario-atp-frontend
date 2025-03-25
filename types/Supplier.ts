@@ -18,14 +18,3 @@ export interface CreateSupplier {
   origin: string;
   families?: { id: string; name: string }[];
 }
-
-export interface EditSupplier {
-  id?: number;
-  name?: string;
-  isNational?: boolean;
-  isInternational?: boolean;
-  email?: string;
-  phone?: string;
-  origin?: string;
-  familyIds?: number[];
-}
