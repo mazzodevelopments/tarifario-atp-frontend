@@ -206,7 +206,7 @@ export default function Quotations() {
               handleTabChange(
                 user?.role.name !== "Superadmin" && user?.role.name !== "Admin"
                   ? "assigned"
-                  : "pending"
+                  : "pending",
               )
             }
             className={`py-2 px-4 rounded-[12px] font-semibold text-sm border ${
@@ -299,28 +299,31 @@ export default function Quotations() {
                         }[sortConfig.direction]) || <ArrowUpDown size={14} />}
                     </div>
                   </TableHead>
-                  {activeTab === "pending" && (
-                    <TableHead
-                      className="text-primary font-[600] text-center cursor-pointer select-none"
-                      onClick={() => requestSort("stage")}
-                    >
-                      <div className="flex items-center justify-center gap-1">
-                        Etapa{" "}
-                        {(sortConfig?.key === "stage" &&
-                          {
-                            ascending: <ArrowUp size={14} />,
-                            descending: <ArrowDown size={14} />,
-                          }[sortConfig.direction]) || <ArrowUpDown size={14} />}
-                      </div>
-                    </TableHead>
-                  )}
+                  {activeTab === "pending" ||
+                    (activeTab === "assigned" && (
+                      <TableHead
+                        className="text-primary font-[600] text-center cursor-pointer select-none"
+                        onClick={() => requestSort("stage")}
+                      >
+                        <div className="flex items-center justify-center gap-1">
+                          Etapa{" "}
+                          {(sortConfig?.key === "stage" &&
+                            {
+                              ascending: <ArrowUp size={14} />,
+                              descending: <ArrowDown size={14} />,
+                            }[sortConfig.direction]) || (
+                            <ArrowUpDown size={14} />
+                          )}
+                        </div>
+                      </TableHead>
+                    ))}
                   <TableHead className="text-primary font-[600] text-center">
                     Acciones
                   </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {activeTab === "pending" ? (
+                {activeTab === "pending" || activeTab === "assigned" ? (
                   sortedUnfinishedQuotations.length > 0 ? (
                     sortedUnfinishedQuotations.map((quotation) => (
                       <QuotationTableRow
