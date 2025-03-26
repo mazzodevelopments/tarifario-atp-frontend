@@ -291,7 +291,7 @@ export default function UsersList() {
                       Ver cotizaciones
                     </Button>
                     <ManageUser
-                      user={user}
+                      userToManage={user}
                       onRolesChange={handleRolesChange}
                       onUserDelete={handleUserDelete}
                     />

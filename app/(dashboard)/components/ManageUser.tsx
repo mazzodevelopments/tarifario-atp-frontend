@@ -17,15 +17,16 @@ import {
 import { User } from "@/types/User";
 import { AlertTriangle } from "lucide-react";
 import Image from "next/image";
+import { useAuth } from "@/context/AuthContext";
 
 interface ManageUserProps {
-  user: User;
+  userToManage: User;
   onRolesChange: (userId: number, newRoleIds: number[]) => void;
   onUserDelete: (userId: number) => void;
 }
 
 export default function ManageUser({
-  user,
+  userToManage,
   onRolesChange,
   onUserDelete,
 }: ManageUserProps) {
@@ -34,20 +35,21 @@ export default function ManageUser({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedRoles, setSelectedRoles] = useState<DropdownItem[]>([]);
   const { toast } = useToast();
+  const { user } = useAuth();
 
   useEffect(() => {
     setSelectedRoles(
-      user.roles.map((role) => ({
+      userToManage.roles.map((role) => ({
         id: role.id,
         name: role.name,
       })),
     );
-  }, [user.roles]);
+  }, [userToManage.roles]);
 
   const handleRolesChange = async () => {
     try {
-      await onRolesChange(
-        user.id,
+      onRolesChange(
+        userToManage.id,
         selectedRoles.map((role) => role.id),
       );
       setIsRoleModalOpen(false);
@@ -68,14 +70,14 @@ export default function ManageUser({
 
   const handleDeleteUser = async () => {
     try {
-      await onUserDelete(user.id);
+      await onUserDelete(userToManage.id);
       setIsDeleteModalOpen(false);
       toast({
         title: "Usuario eliminado",
         description: "El usuario ha sido eliminado correctamente.",
       });
     } catch (error) {
-      console.error("Error deleting user:", error);
+      console.error("Error deleting userToManage:", error);
       toast({
         title: "Error",
         description: "No se pudo eliminar el usuario.",
@@ -117,7 +119,7 @@ export default function ManageUser({
           </DialogHeader>
           <div className="flex w-full items-center gap-4">
             <Image
-              src={user?.profilePic || "/default-profile-pic.png"}
+              src={userToManage?.profilePic || "/default-profile-pic.png"}
               width={700}
               height={700}
               alt="Picture of the author"
@@ -126,10 +128,10 @@ export default function ManageUser({
             <div className="flex flex-col w-full">
               <div className="flex w-full justify-between">
                 <h2 className="text-2xl font-[600]">
-                  {user.name + " " + user.lastname}
+                  {userToManage.name + " " + userToManage.lastname}
                 </h2>
                 <div className="flex flex-wrap gap-2">
-                  {user.roles.map((role) => (
+                  {userToManage.roles.map((role) => (
                     <div
                       key={role.id}
                       className={`px-2 rounded-3xl w-fit h-fit ${
@@ -145,7 +147,7 @@ export default function ManageUser({
                   ))}
                 </div>
               </div>
-              <span className="text-gray-600 -mt-1">{user.email}</span>
+              <span className="text-gray-600 -mt-1">{userToManage.email}</span>
             </div>
           </div>
           <div className="space-y-4 mt-2">
@@ -156,6 +158,12 @@ export default function ManageUser({
                 setIsManageModalOpen(false);
                 setIsRoleModalOpen(true);
               }}
+              disabled={
+                !user?.roles.some((r) => r.name === "Superadmin") &&
+                userToManage.roles.some(
+                  (r) => r.name === "Superadmin" || r.name === "Admin",
+                )
+              }
             >
               Gestionar roles
             </Button>
@@ -227,7 +235,7 @@ export default function ManageUser({
             <DialogDescription className="text-center">
               ¿Estás seguro de eliminar el usuario{" "}
               <span className="font-medium">
-                {user.name} {user.lastname}
+                {userToManage.name} {userToManage.lastname}
               </span>
               ?
             </DialogDescription>
