@@ -81,7 +81,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props} className="border-neutral-200">
       {state === "expanded" && (
-        <div className="absolute top-[65vh] -left-[10vw] opacity-30 h-[400px] w-[400px]">
+        <div className="absolute top-[65vh] left-4 -translate-x-1/2 opacity-30 h-[400px] w-[400px]">
           <Image
             src="/logo.png"
             fill
