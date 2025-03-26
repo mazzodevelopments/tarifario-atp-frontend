@@ -28,21 +28,6 @@ export const QuotationsService = {
     return await response.json();
   },
 
-  getUserUnfinishedQuotations: async () => {
-    const response = await fetch(`${API_BASE_URL}/quotations/user-unfinished`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("Error al traer cotizaciones");
-    }
-
-    return await response.json();
-  },
-
   getUserFinishedQuotations: async () => {
     const response = await fetch(`${API_BASE_URL}/quotations/user-finished`, {
       method: "GET",
