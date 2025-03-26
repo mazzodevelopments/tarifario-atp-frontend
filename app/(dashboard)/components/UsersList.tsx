@@ -65,7 +65,7 @@ export default function UsersList() {
 
   const filteredUsers = users
     .filter((user) =>
-      user.email.toLowerCase().includes(searchQuery.toLowerCase())
+      user.email.toLowerCase().includes(searchQuery.toLowerCase()),
     )
     .filter((user) => {
       if (sortBy === "all") return true;
@@ -135,20 +135,16 @@ export default function UsersList() {
     setIsDialogOpen(false);
   };
 
+  const roleOrder = ["Superadmin", "Admin", "Compras", "Logística", "Ventas"];
+
   const getRoleColor = (roleName: string) => {
     switch (roleName) {
       case "Superadmin":
         return "bg-red-100 text-red-500";
       case "Admin":
         return "bg-blue-100 text-blue-500";
-      case "Compras":
-        return "bg-purple-100 text-purple-500";
-      case "Ventas":
-        return "bg-green-100 text-green-600";
-      case "Logística":
-        return "bg-yellow-100 text-yellow-600";
       default:
-        return "bg-gray-100 text-gray-600";
+        return "bg-green-100 text-green-600";
     }
   };
 
@@ -178,16 +174,16 @@ export default function UsersList() {
                 {sortBy === "all"
                   ? "Todos"
                   : sortBy === "Superadmin"
-                  ? "Superadmin"
-                  : sortBy === "Admin"
-                  ? "Admin"
-                  : sortBy === "Compras"
-                  ? "Compras"
-                  : sortBy === "Ventas"
-                  ? "Ventas"
-                  : sortBy === "Logística"
-                  ? "Logística"
-                  : "Todos"}
+                    ? "Superadmin"
+                    : sortBy === "Admin"
+                      ? "Admin"
+                      : sortBy === "Compras"
+                        ? "Compras"
+                        : sortBy === "Ventas"
+                          ? "Ventas"
+                          : sortBy === "Logística"
+                            ? "Logística"
+                            : "Todos"}
                 <ChevronDown className="ml-2 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -267,18 +263,22 @@ export default function UsersList() {
                       </div>
                     </div>
                     <div className="flex gap-2">
-                      {user.roles.map((role) => (
-                        <div
-                          key={role.id}
-                          className={`px-2 py-0.5 rounded-3xl ${getRoleColor(
-                            role.name
-                          )}`}
-                        >
-                          <span className="text-sm font-semibold">
-                            {role.name}
-                          </span>
-                        </div>
-                      ))}
+                      {user.roles
+                        .sort(
+                          (a, b) =>
+                            roleOrder.indexOf(a.name) -
+                            roleOrder.indexOf(b.name),
+                        )
+                        .map((role) => (
+                          <div
+                            key={role.id}
+                            className={`px-2 py-0.5 rounded-3xl ${getRoleColor(role.name)}`}
+                          >
+                            <span className="text-sm font-semibold">
+                              {role.name}
+                            </span>
+                          </div>
+                        ))}
                     </div>
                   </div>
                   <div className="flex items-center gap-1">
