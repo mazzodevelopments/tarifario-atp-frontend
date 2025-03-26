@@ -81,7 +81,7 @@ export default function UsersList() {
     }
   };
 
-  const handleRoleChange = async (userId: number, newRoleIds: number[]) => {
+  const handleRolesChange = async (userId: number, newRoleIds: number[]) => {
     try {
       await AdminService.updateUser({ id: userId, roleIds: newRoleIds });
       setShouldFetch(true);
@@ -277,7 +277,7 @@ export default function UsersList() {
                     </Button>
                     <ManageUser
                       user={user}
-                      onRoleChange={handleRoleChange}
+                      onRolesChange={handleRolesChange}
                       onUserDelete={handleUserDelete}
                     />
                   </div>

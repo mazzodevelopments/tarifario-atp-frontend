@@ -20,40 +20,49 @@ import Image from "next/image";
 
 interface ManageUserProps {
   user: User;
-  onRoleChange: (userId: number, newRoleId: number) => void;
+  onRolesChange: (userId: number, newRoleIds: number[]) => void;
   onUserDelete: (userId: number) => void;
 }
 
 export default function ManageUser({
   user,
-  onRoleChange,
+  onRolesChange,
   onUserDelete,
 }: ManageUserProps) {
   const [isManageModalOpen, setIsManageModalOpen] = useState(false);
   const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [selectedRole, setSelectedRole] = useState<DropdownItem | null>(null);
+  const [selectedRoles, setSelectedRoles] = useState<DropdownItem[]>([]);
   const { toast } = useToast();
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    setSelectedRoles(
+      user.roles.map((role) => ({
+        id: role.id,
+        name: role.name,
+      })),
+    );
+  }, [user.roles]);
 
-  const handleRoleChange = async () => {
-    if (selectedRole) {
-      try {
-        await onRoleChange(user.id, selectedRole.id);
-        setIsRoleModalOpen(false);
-        toast({
-          title: "Rol actualizado",
-          description: `El rol del usuario ha sido cambiado a ${selectedRole.name}.`,
-        });
-      } catch (error) {
-        console.error("Error updating role:", error);
-        toast({
-          title: "Error",
-          description: "No se pudo actualizar el rol del usuario.",
-          variant: "destructive",
-        });
-      }
+  const handleRolesChange = async () => {
+    try {
+      await onRolesChange(
+        user.id,
+        selectedRoles.map((role) => role.id),
+      );
+      setIsRoleModalOpen(false);
+      toast({
+        title: "Roles actualizados",
+        description:
+          "Los roles del usuario han sido actualizados correctamente.",
+      });
+    } catch (error) {
+      console.error("Error updating roles:", error);
+      toast({
+        title: "Error",
+        description: "No se pudieron actualizar los roles del usuario.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -84,6 +93,16 @@ export default function ManageUser({
     );
   };
 
+  const handleRoleSelect = (role: DropdownItem) => {
+    setSelectedRoles((prev) => {
+      const roleExists = prev.some((r) => r.id === role.id);
+      if (roleExists) {
+        return prev.filter((r) => r.id !== role.id);
+      }
+      return [...prev, role];
+    });
+  };
+
   return (
     <>
       <Button variant="secondary" onClick={() => setIsManageModalOpen(true)}>
@@ -109,18 +128,21 @@ export default function ManageUser({
                 <h2 className="text-2xl font-[600]">
                   {user.name + " " + user.lastname}
                 </h2>
-                <div
-                  className={`px-2 rounded-3xl w-fit h-fit ${
-                    user.role.name === "Superadmin"
-                      ? "bg-red-100 text-red-500"
-                      : user.role.name === "Admin"
-                        ? "bg-blue-100 text-blue-500"
-                        : "bg-green-100 text-green-600"
-                  }`}
-                >
-                  <span className="text-sm font-semibold">
-                    {user.role.name}
-                  </span>
+                <div className="flex flex-wrap gap-2">
+                  {user.roles.map((role) => (
+                    <div
+                      key={role.id}
+                      className={`px-2 rounded-3xl w-fit h-fit ${
+                        role.name === "Superadmin"
+                          ? "bg-red-100 text-red-500"
+                          : role.name === "Admin"
+                            ? "bg-blue-100 text-blue-500"
+                            : "bg-green-100 text-green-600"
+                      }`}
+                    >
+                      <span className="text-sm font-semibold">{role.name}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
               <span className="text-gray-600 -mt-1">{user.email}</span>
@@ -135,7 +157,7 @@ export default function ManageUser({
                 setIsRoleModalOpen(true);
               }}
             >
-              Cambiar rol
+              Gestionar roles
             </Button>
             <Button
               className="w-full justify-center bg-red-100 text-red-500"
@@ -150,18 +172,29 @@ export default function ManageUser({
         </DialogContent>
       </Dialog>
 
-      {/* ROL CHANGE MODAL */}
+      {/* ROLES MANAGEMENT MODAL */}
       <Dialog open={isRoleModalOpen} onOpenChange={setIsRoleModalOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Cambiar rol del usuario</DialogTitle>
+            <DialogTitle>Gestionar roles del usuario</DialogTitle>
+            <DialogDescription>
+              Selecciona los roles que deseas asignar al usuario. Puedes
+              seleccionar múltiples roles.
+            </DialogDescription>
           </DialogHeader>
-          <Dropdown
-            value={selectedRole?.name || ""}
-            fetchItems={fetchRoles}
-            onSelect={(item) => setSelectedRole(item)}
-            label="Seleccionar nuevo rol"
-          />
+          <div className="space-y-4">
+            <Dropdown
+              value={
+                selectedRoles.map((role) => role.name).join(", ") ||
+                "Seleccionar roles"
+              }
+              fetchItems={fetchRoles}
+              onSelect={handleRoleSelect}
+              label="Seleccionar roles"
+              multiple
+              selectedItems={selectedRoles}
+            />
+          </div>
           <DialogFooter>
             <Button
               variant="secondary"
@@ -172,7 +205,8 @@ export default function ManageUser({
             <Button
               variant="primary"
               className="text-white"
-              onClick={handleRoleChange}
+              onClick={handleRolesChange}
+              disabled={selectedRoles.length === 0}
             >
               Confirmar
             </Button>

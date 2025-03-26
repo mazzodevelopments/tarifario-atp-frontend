@@ -16,8 +16,8 @@ interface CreateUserProps {
 interface NewUserForm {
   email: string;
   password: string;
-  role: string;
-  roleId: number;
+  roles: DropdownItem[];
+  roleIds: number[];
   name: string;
   lastname: string;
 }
@@ -29,8 +29,8 @@ export default function CreateUser({
   const [formData, setFormData] = useState<NewUserForm>({
     email: "",
     password: "",
-    role: "",
-    roleId: 0,
+    roles: [],
+    roleIds: [],
     name: "",
     lastname: "",
   });
@@ -38,7 +38,7 @@ export default function CreateUser({
   const [errors, setErrors] = useState({
     email: "",
     password: "",
-    role: "",
+    roles: "",
     name: "",
     lastname: "",
   });
@@ -47,7 +47,7 @@ export default function CreateUser({
     const newErrors = {
       email: "",
       password: "",
-      role: "",
+      roles: "",
       name: "",
       lastname: "",
     };
@@ -66,8 +66,8 @@ export default function CreateUser({
       isValid = false;
     }
 
-    if (!formData.roleId) {
-      newErrors.role = "El rol es requerido";
+    if (formData.roleIds.length === 0) {
+      newErrors.roles = "Debe seleccionar al menos un rol";
       isValid = false;
     }
 
@@ -96,12 +96,10 @@ export default function CreateUser({
     const userData: AdminCreateUser = {
       password: formData.password,
       email: formData.email,
-      roleId: formData.roleId,
+      roleIds: formData.roleIds,
       name: formData.name,
       lastname: formData.lastname,
     };
-
-    console.log(userData);
 
     onUserCreated(userData);
   };
@@ -115,13 +113,23 @@ export default function CreateUser({
     setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
 
-  const handleSelect = (field: keyof NewUserForm) => (item: DropdownItem) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: item.name,
-      roleId: item.id,
-    }));
-    setErrors((prevErrors) => ({ ...prevErrors, [field]: "" }));
+  const handleRoleSelect = (item: DropdownItem) => {
+    setFormData((prev) => {
+      const roleExists = prev.roles.some((role) => role.id === item.id);
+
+      const newRoles = roleExists
+        ? prev.roles.filter((role) => role.id !== item.id)
+        : [...prev.roles, item];
+
+      const newRoleIds = newRoles.map((role) => role.id);
+
+      return {
+        ...prev,
+        roles: newRoles,
+        roleIds: newRoleIds,
+      };
+    });
+    setErrors((prevErrors) => ({ ...prevErrors, roles: "" }));
   };
 
   const fetchRoles = useCallback(async () => {
@@ -177,13 +185,34 @@ export default function CreateUser({
         label="Contraseña"
         error={errors.password}
       />
-      <Dropdown
-        value={formData.role}
-        fetchItems={fetchRoles}
-        onSelect={handleSelect("role")}
-        label="Rol"
-        error={errors.role}
-      />
+      <div className="space-y-2">
+        <Dropdown
+          value={formData.roles.map((role) => role.name).join(", ") || ""}
+          fetchItems={fetchRoles}
+          onSelect={handleRoleSelect}
+          label="Roles"
+          error={errors.roles}
+          multiple
+          selectedItems={formData.roles}
+        />
+        <div className="flex flex-wrap gap-2">
+          {formData.roles.map((role) => (
+            <div
+              key={role.id}
+              className="px-2 py-1 rounded-full bg-primary/10 text-primary flex items-center gap-2"
+            >
+              <span>{role.name}</span>
+              <button
+                type="button"
+                onClick={() => handleRoleSelect(role)}
+                className="hover:text-destructive"
+              >
+                ×
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
       <div className="flex justify-end gap-3 mt-6">
         <Button type="button" variant="secondary" onClick={onDialogClose}>
           Cancelar

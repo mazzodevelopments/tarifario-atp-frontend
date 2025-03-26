@@ -33,6 +33,8 @@ interface DropdownProps {
   error?: string;
   disabled?: boolean;
   customForm?: CustomFormType;
+  multiple?: boolean;
+  selectedItems?: DropdownItem[];
 }
 
 export default function Dropdown({
@@ -44,6 +46,8 @@ export default function Dropdown({
   error,
   disabled,
   customForm,
+  multiple = false,
+  selectedItems = [],
 }: DropdownProps) {
   const [items, setItems] = useState<DropdownItem[]>([]);
   const [filteredItems, setFilteredItems] = useState<DropdownItem[]>([]);
@@ -72,7 +76,6 @@ export default function Dropdown({
   useEffect(() => {
     if (isOpen) {
       loadItems();
-      // LIMPIAR INPUT BUSQUEDA
       setSearchValue("");
     }
   }, [isOpen, loadItems]);
@@ -97,7 +100,6 @@ export default function Dropdown({
     };
   }, []);
 
-  // DROPDOWN DISABLED NO SE DEBE PODER ABRIR
   useEffect(() => {
     if (disabled && isOpen) {
       setIsOpen(false);
@@ -105,7 +107,6 @@ export default function Dropdown({
   }, [disabled, isOpen]);
 
   useEffect(() => {
-    // FILTRAR ITEMS SEGUN TERM
     setFilteredItems(
       items.filter((item) =>
         item.name.toLowerCase().includes(searchValue.toLowerCase()),
@@ -118,17 +119,32 @@ export default function Dropdown({
     setSearchValue(newValue);
   };
 
+  const isItemSelected = (item: DropdownItem) => {
+    return multiple
+      ? selectedItems.some((selected) => selected.id === item.id)
+      : selectedValue === item.name;
+  };
+
   const handleSelect = (item: DropdownItem) => {
-    setSelectedValue(item.name);
-    setSearchValue("");
-    setIsOpen(false);
-    onSelect(item);
+    if (multiple) {
+      onSelect(item);
+      setSearchValue("");
+    } else {
+      setSelectedValue(item.name);
+      setSearchValue("");
+      setIsOpen(false);
+      onSelect(item);
+    }
   };
 
   const handleClear = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setSelectedValue("");
-    onSelect({ id: 0, name: "" });
+    if (multiple) {
+      selectedItems.forEach((item) => onSelect(item));
+    } else {
+      setSelectedValue("");
+      onSelect({ id: 0, name: "" });
+    }
   };
 
   const toggleDropdown = () => {
@@ -164,6 +180,14 @@ export default function Dropdown({
     setIsDialogOpen(false);
   };
 
+  const getDisplayValue = () => {
+    if (multiple) {
+      if (selectedItems.length === 0) return "Seleccionar...";
+      return selectedItems.map((item) => item.name).join(", ");
+    }
+    return selectedValue || "Seleccionar...";
+  };
+
   return (
     <div>
       {label && (
@@ -178,20 +202,24 @@ export default function Dropdown({
             error ? "border-red-500" : "border-gray-300"
           } ${disabled ? "bg-gray-100 cursor-not-allowed" : "cursor-pointer"}`}
         >
-          <span className={`${selectedValue || "text-gray-400"}`}>
-            {selectedValue || "Seleccionar..."}
+          <span
+            className={`${(multiple ? selectedItems.length > 0 : selectedValue) || "text-gray-400"} truncate`}
+          >
+            {getDisplayValue()}
           </span>
           <div className="flex items-center">
-            {selectedValue && !disabled && (
-              <button
-                type="button"
-                onClick={handleClear}
-                className="mr-1 rounded-full hover:bg-gray-200 focus:outline-none"
-                disabled={disabled}
-              >
-                <X size={14} />
-              </button>
-            )}
+            {((multiple && selectedItems.length > 0) ||
+              (!multiple && selectedValue)) &&
+              !disabled && (
+                <button
+                  type="button"
+                  onClick={handleClear}
+                  className="mr-1 rounded-full hover:bg-gray-200 focus:outline-none"
+                  disabled={disabled}
+                >
+                  <X size={14} />
+                </button>
+              )}
             {!disabled && (
               <ChevronUp
                 size={16}
@@ -289,9 +317,14 @@ export default function Dropdown({
               <div
                 key={item.id}
                 onClick={() => handleSelect(item)}
-                className="px-2 py-2 text-sm hover:bg-gray-100 cursor-pointer"
+                className={`px-2 py-2 text-sm hover:bg-gray-100 cursor-pointer flex items-center justify-between ${
+                  isItemSelected(item) ? "bg-primary/10" : ""
+                }`}
               >
-                {item.name}
+                <span>{item.name}</span>
+                {isItemSelected(item) && (
+                  <span className="text-primary">Seleccionado</span>
+                )}
               </div>
             ))}
           </div>

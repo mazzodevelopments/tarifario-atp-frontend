@@ -18,7 +18,7 @@ export interface AdminCreateUser {
   password: string;
   name: string;
   lastname: string;
-  roleId: number;
+  roleIds: number[];
 }
 
 export interface AdminUpdateUser {

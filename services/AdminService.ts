@@ -56,7 +56,7 @@ export const AdminService = {
         name: newUser.name,
         lastname: newUser.lastname,
         password: newUser.password,
-        roleId: newUser.roleId,
+        roleIds: newUser.roleIds,
       }),
     });
 
