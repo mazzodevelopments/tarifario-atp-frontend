@@ -40,7 +40,20 @@ export default function UsersList() {
     const fetchUsers = async () => {
       try {
         const data = await AdminService.getAllUsers();
-        setUsers(data);
+        const sortedUsers = [...data].sort((a, b) => {
+          const hasSuperadmin = (user: User) =>
+            user.roles.some((role) => role.name === "Superadmin");
+          const hasAdmin = (user: User) =>
+            user.roles.some((role) => role.name === "Admin");
+
+          if (hasSuperadmin(a) && !hasSuperadmin(b)) return -1;
+          if (!hasSuperadmin(a) && hasSuperadmin(b)) return 1;
+          if (hasAdmin(a) && !hasAdmin(b)) return -1;
+          if (!hasAdmin(a) && hasAdmin(b)) return 1;
+          return 0;
+        });
+
+        setUsers(sortedUsers);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -52,7 +65,7 @@ export default function UsersList() {
 
   const filteredUsers = users
     .filter((user) =>
-      user.email.toLowerCase().includes(searchQuery.toLowerCase()),
+      user.email.toLowerCase().includes(searchQuery.toLowerCase())
     )
     .filter((user) => {
       if (sortBy === "all") return true;
@@ -165,16 +178,16 @@ export default function UsersList() {
                 {sortBy === "all"
                   ? "Todos"
                   : sortBy === "Superadmin"
-                    ? "Superadmin"
-                    : sortBy === "Admin"
-                      ? "Admin"
-                      : sortBy === "Compras"
-                        ? "Compras"
-                        : sortBy === "Ventas"
-                          ? "Ventas"
-                          : sortBy === "Logística"
-                            ? "Logística"
-                            : "Todos"}
+                  ? "Superadmin"
+                  : sortBy === "Admin"
+                  ? "Admin"
+                  : sortBy === "Compras"
+                  ? "Compras"
+                  : sortBy === "Ventas"
+                  ? "Ventas"
+                  : sortBy === "Logística"
+                  ? "Logística"
+                  : "Todos"}
                 <ChevronDown className="ml-2 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -257,7 +270,9 @@ export default function UsersList() {
                       {user.roles.map((role) => (
                         <div
                           key={role.id}
-                          className={`px-2 py-0.5 rounded-3xl ${getRoleColor(role.name)}`}
+                          className={`px-2 py-0.5 rounded-3xl ${getRoleColor(
+                            role.name
+                          )}`}
                         >
                           <span className="text-sm font-semibold">
                             {role.name}
