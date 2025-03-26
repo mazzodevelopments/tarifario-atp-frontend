@@ -7,10 +7,10 @@ export interface User {
   firstLogin: boolean;
   birthDate: string;
   phone: string;
-  role: {
+  roles: {
     id: number;
     name: string;
-  };
+  }[];
 }
 
 export interface AdminCreateUser {
@@ -31,5 +31,5 @@ export interface AdminUpdateUser {
   firstLogin?: boolean;
   phone?: string;
   birthDate?: string;
-  roleId?: number;
+  roleIds?: number[];
 }

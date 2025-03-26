@@ -37,18 +37,19 @@ export default function Quotations() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  const userRoles = user?.roles?.map((role) => role.name) || [];
+  const isAdmin = userRoles.some((role) =>
+    ["Superadmin", "Admin"].includes(role),
+  );
+
   useEffect(() => {
     const tab = searchParams.get("tab");
     if (!tab) {
-      if (user?.role.name === "Superadmin" || user?.role.name === "Admin") {
-        router.replace("/quotations?tab=pending");
-      } else {
-        router.replace("/quotations?tab=assigned");
-      }
+      router.replace(`/quotations?tab=${isAdmin ? "pending" : "assigned"}`);
     } else if (tab === "pending" || tab === "assigned" || tab === "completed") {
       setActiveTab(tab);
     }
-  }, [searchParams, router]);
+  }, [searchParams, router, isAdmin]);
 
   const handleTabChange = (tab: "pending" | "completed" | "assigned") => {
     if (tab === "pending" || tab === "assigned" || tab === "completed") {
@@ -70,10 +71,9 @@ export default function Quotations() {
 
     const fetchFinishedQuotations = async () => {
       try {
-        const finishedQuotations =
-          user?.role.name === "Superadmin" || user?.role.name === "Admin"
-            ? await QuotationsService.getFinishedQuotations()
-            : await QuotationsService.getUserFinishedQuotations();
+        const finishedQuotations = isAdmin
+          ? await QuotationsService.getFinishedQuotations()
+          : await QuotationsService.getUserFinishedQuotations();
         setFinishedQuotations(finishedQuotations);
       } catch (error) {
         console.error("Error fetching quotation items:", error);
@@ -82,7 +82,7 @@ export default function Quotations() {
 
     fetchUnfinishedQuotations();
     fetchFinishedQuotations();
-  }, []);
+  }, [isAdmin]);
 
   const requestSort = (key: string) => {
     let direction = "ascending";
@@ -184,8 +184,7 @@ export default function Quotations() {
           <div className="flex flex-col justify-center items-start w-[16vw]">
             <h2 className="flex items-center text-xl leading-[1] p-0 font-[800] text-black mt-1">
               {activeTab === "pending" || activeTab === "assigned"
-                ? user?.role.name !== "Superadmin" &&
-                  user?.role.name !== "Admin"
+                ? !isAdmin
                   ? "Cotizaciones asignadas"
                   : "Cotizaciones"
                 : "Cotizaciones completadas"}
@@ -202,13 +201,7 @@ export default function Quotations() {
       <div className="w-full px-[1vw] mt-[1vw]">
         <div className="flex space-x-[0.5vw]">
           <Button
-            onClick={() =>
-              handleTabChange(
-                user?.role.name !== "Superadmin" && user?.role.name !== "Admin"
-                  ? "assigned"
-                  : "pending",
-              )
-            }
+            onClick={() => handleTabChange(isAdmin ? "pending" : "assigned")}
             className={`py-2 px-4 rounded-[12px] font-semibold text-sm border ${
               activeTab === "pending" || activeTab === "assigned"
                 ? "bg-primary/5 text-primary"

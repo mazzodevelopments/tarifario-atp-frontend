@@ -52,11 +52,11 @@ export default function UsersList() {
 
   const filteredUsers = users
     .filter((user) =>
-      user.email.toLowerCase().includes(searchQuery.toLowerCase())
+      user.email.toLowerCase().includes(searchQuery.toLowerCase()),
     )
     .filter((user) => {
       if (sortBy === "all") return true;
-      return user.role.name === sortBy;
+      return user.roles.some((role) => role.name === sortBy);
     });
 
   const handleUserCreated = async (newUser: AdminCreateUser) => {
@@ -81,19 +81,20 @@ export default function UsersList() {
     }
   };
 
-  const handleRoleChange = async (userId: number, newRoleId: number) => {
+  const handleRoleChange = async (userId: number, newRoleIds: number[]) => {
     try {
-      await AdminService.updateUser({ id: userId, roleId: newRoleId });
+      await AdminService.updateUser({ id: userId, roleIds: newRoleIds });
       setShouldFetch(true);
       toast({
-        title: "Rol actualizado",
-        description: "El rol del usuario ha sido actualizado correctamente.",
+        title: "Roles actualizados",
+        description:
+          "Los roles del usuario han sido actualizados correctamente.",
       });
     } catch (error) {
-      console.error("Error updating user role:", error);
+      console.error("Error updating user roles:", error);
       toast({
         title: "Error",
-        description: "No se pudo actualizar el rol del usuario.",
+        description: "No se pudieron actualizar los roles del usuario.",
         variant: "destructive",
       });
     }
@@ -119,6 +120,23 @@ export default function UsersList() {
 
   const handleDialogClose = () => {
     setIsDialogOpen(false);
+  };
+
+  const getRoleColor = (roleName: string) => {
+    switch (roleName) {
+      case "Superadmin":
+        return "bg-red-100 text-red-500";
+      case "Admin":
+        return "bg-blue-100 text-blue-500";
+      case "Compras":
+        return "bg-purple-100 text-purple-500";
+      case "Ventas":
+        return "bg-green-100 text-green-600";
+      case "Logística":
+        return "bg-yellow-100 text-yellow-600";
+      default:
+        return "bg-gray-100 text-gray-600";
+    }
   };
 
   return (
@@ -147,16 +165,16 @@ export default function UsersList() {
                 {sortBy === "all"
                   ? "Todos"
                   : sortBy === "Superadmin"
-                  ? "Superadmin"
-                  : sortBy === "Admin"
-                  ? "Admin"
-                  : sortBy === "Compras"
-                  ? "Compras"
-                  : sortBy === "Ventas"
-                  ? "Ventas"
-                  : sortBy === "Logística"
-                  ? "Logística"
-                  : "Todos"}
+                    ? "Superadmin"
+                    : sortBy === "Admin"
+                      ? "Admin"
+                      : sortBy === "Compras"
+                        ? "Compras"
+                        : sortBy === "Ventas"
+                          ? "Ventas"
+                          : sortBy === "Logística"
+                            ? "Logística"
+                            : "Todos"}
                 <ChevronDown className="ml-2 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -235,20 +253,17 @@ export default function UsersList() {
                         </p>
                       </div>
                     </div>
-                    <div className="w-28">
-                      <div
-                        className={`px-2 rounded-3xl inline-block ${
-                          user.role.name === "Superadmin"
-                            ? "bg-red-100 text-red-500"
-                            : user.role.name === "Admin"
-                            ? "bg-blue-100 text-blue-500"
-                            : "bg-green-100 text-green-600"
-                        }`}
-                      >
-                        <span className="text-sm font-semibold">
-                          {user.role.name}
-                        </span>
-                      </div>
+                    <div className="flex gap-2">
+                      {user.roles.map((role) => (
+                        <div
+                          key={role.id}
+                          className={`px-2 py-0.5 rounded-3xl ${getRoleColor(role.name)}`}
+                        >
+                          <span className="text-sm font-semibold">
+                            {role.name}
+                          </span>
+                        </div>
+                      ))}
                     </div>
                   </div>
                   <div className="flex items-center gap-1">

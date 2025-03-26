@@ -72,6 +72,8 @@ export default function UserPage() {
     return adaptToDropdown(data, "id", "taskNumber");
   };
 
+  const roles = user?.roles?.map((role) => role.name);
+
   return (
     <div className="flex justify-start w-full h-screen flex-col bg-neutral-50">
       <div className="w-full h-20 flex-shrink-0 border-b border-neutral-200">
@@ -183,7 +185,7 @@ export default function UserPage() {
                 Estás en el grupo de
               </span>
               <h3 className="text-center font-[700] text-[3vw] text-primary">
-                {user?.role.name}
+                {roles}
               </h3>
               <p className="text-center text-[0.85vw]">
                 Solo podrás participar en la etapa correspondiente a tu grupo en

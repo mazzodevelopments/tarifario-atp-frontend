@@ -11,7 +11,7 @@ const rolePermissions: Record<string, string[]> = {
 export default function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
   const isProtectedRoute = protectedRoutes.some(
-    (route) => path === route || path.startsWith(`${route}/`)
+    (route) => path === route || path.startsWith(`${route}/`),
   );
   const isPublicRoute = publicRoutes.includes(path);
 
@@ -33,10 +33,16 @@ export default function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL("/login", req.url));
     }
 
-    // Verificar permisos de rol para la ruta
+    // Verificar permisos de roles para la ruta
     const allowedRoles = rolePermissions[path];
-    if (allowedRoles && user && !allowedRoles.includes(user.role.name)) {
-      return NextResponse.redirect(new URL("/", req.url));
+    if (allowedRoles && user?.roles) {
+      const hasPermission = user.roles.some((role: { name: string }) =>
+        allowedRoles.includes(role.name),
+      );
+
+      if (!hasPermission) {
+        return NextResponse.redirect(new URL("/", req.url));
+      }
     }
   }
 

@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import {
   Home,
   PlusSquare,
-  Clock,
   BarChart2,
   Users,
   Truck,
@@ -46,30 +45,38 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { state } = useSidebar();
   const { user, logout } = useAuth();
 
-  const role = user?.role.name as string;
+  const userRoles = user?.roles?.map((role) => role.name) || [];
 
-  const menuItems = ["Superadmin", "Admin"].includes(role)
-    ? [
-        { icon: Home, label: "Home", id: "" },
-        { icon: PlusSquare, label: "Crear", id: "create" },
-        { icon: Clock, label: "Cotizaciones", id: "quotations" },
+  // Definir los ítems del menú basados en los roles
+  const menuItems = React.useMemo(() => {
+    const baseItems = [
+      { icon: Home, label: "Home", id: "" },
+      { icon: PlusSquare, label: "Crear", id: "create" },
+      { icon: ListTodo, label: "Cotizaciones", id: "quotations" },
+    ];
+
+    if (userRoles.some((role) => ["Superadmin", "Admin"].includes(role))) {
+      return [
+        ...baseItems,
         { icon: Users, label: "Clientes", id: "clients" },
         { icon: Truck, label: "Proveedores", id: "suppliers" },
         { icon: BarChart2, label: "Comparar", id: "compare" },
-      ]
-    : role === "Ventas"
-      ? [
-          { icon: Home, label: "Home", id: "" },
-          { icon: PlusSquare, label: "Crear", id: "create" },
-          { icon: ListTodo, label: "Cotizaciones", id: "quotations" },
-        ]
-      : [
-          { icon: Home, label: "Home", id: "" },
-          { icon: PlusSquare, label: "Crear", id: "create" },
-          { icon: ListTodo, label: "Cotizaciones", id: "quotations" },
-          { icon: Users, label: "Clientes", id: "clients" },
-          { icon: Truck, label: "Proveedores", id: "suppliers" },
-        ];
+      ];
+    }
+
+    if (userRoles.includes("Ventas")) {
+      return [...baseItems, { icon: Users, label: "Clientes", id: "clients" }];
+    }
+
+    if (userRoles.some((role) => ["Compras", "Logística"].includes(role))) {
+      return [
+        ...baseItems,
+        { icon: Truck, label: "Proveedores", id: "suppliers" },
+      ];
+    }
+
+    return baseItems;
+  }, [userRoles]);
 
   return (
     <Sidebar collapsible="icon" {...props} className="border-neutral-200">

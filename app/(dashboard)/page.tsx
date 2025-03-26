@@ -6,9 +6,11 @@ import AdminPage from "@/app/(dashboard)/dashboardPages/AdminPage";
 export default function Dashboard() {
   const { user } = useAuth();
 
-  if (!["Superadmin", "Admin"].includes(user?.role.name as string)) {
-    return <UserPage />;
-  } else {
-    return <AdminPage />;
-  }
+  const userRoles = user?.roles?.map((role) => role.name) || [];
+
+  const isAdmin = userRoles.some((role) =>
+    ["Superadmin", "Admin"].includes(role),
+  );
+
+  return isAdmin ? <AdminPage /> : <UserPage />;
 }

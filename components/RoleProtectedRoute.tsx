@@ -1,7 +1,6 @@
 "use client";
 
 import type React from "react";
-
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -22,7 +21,9 @@ export default function RoleProtectedRoute({
 
   useEffect(() => {
     if (!loading) {
-      const hasRequiredRole = user && allowedRoles.includes(user.role.name);
+      const hasRequiredRole = user?.roles?.some((role: { name: string }) =>
+        allowedRoles.includes(role.name),
+      );
       setAuthorized(hasRequiredRole || false);
     }
   }, [user, loading, allowedRoles]);

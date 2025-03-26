@@ -12,7 +12,7 @@ interface User {
   lastname: string;
   firstLogin: boolean;
   profilePic: string;
-  role: { id: number; name: string };
+  roles: { name: string }[];
 }
 
 interface AuthContextType {
@@ -170,7 +170,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Actualizar localStorage y cookie
       localStorage.setItem("user", JSON.stringify(updatedUser));
       document.cookie = `user=${encodeURIComponent(
-        JSON.stringify(updatedUser)
+        JSON.stringify(updatedUser),
       )}; path=/`;
 
       return updatedUser;
