@@ -43,6 +43,7 @@ export default function UserPage() {
           const data =
             await QuotationsService.getUserLastFiveFinishedQuotations();
           setLastQuotations(data);
+          console.log(lastQuotations);
         }
       } catch (error) {
         console.error("Error:", error);

@@ -12,7 +12,7 @@ export default function FirstLoginPage() {
     if (user?.firstLogin !== true) {
       router.push("/");
     }
-  }, []);
+  });
 
   return (
     <div className="min-h-screen bg-neutral-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">

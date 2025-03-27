@@ -52,7 +52,7 @@ export default function SalesList({ quotationId }: { quotationId: number }) {
         );
         setBudgets(quotationBudgets);
         setIsLoading(false);
-        // setShouldFetch(false);
+        setShouldFetch(false);
       } catch (error) {
         setIsLoading(false);
         console.error("Error fetching quotation budgets:", error);

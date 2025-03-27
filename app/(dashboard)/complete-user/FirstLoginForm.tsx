@@ -3,7 +3,7 @@
 import type React from "react";
 import { useState, useCallback } from "react";
 import Image from "next/image";
-import Cropper from "react-easy-crop";
+import Cropper, { Area } from "react-easy-crop";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import { AdminService } from "@/services/AdminService";
@@ -112,7 +112,7 @@ export default function FirstLoginForm() {
   };
 
   const onCropComplete = useCallback(
-    (croppedArea: any, croppedAreaPixels: any) => {
+    (croppedArea: Area, croppedAreaPixels: Area) => {
       setCroppedAreaPixels(croppedAreaPixels);
     },
     [],

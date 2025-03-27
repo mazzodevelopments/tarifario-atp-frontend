@@ -9,7 +9,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ArrowRight } from "lucide-react";
 
 // Mock data for quotations
 const quotations = [

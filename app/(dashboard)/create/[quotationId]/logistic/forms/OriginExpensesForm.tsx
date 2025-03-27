@@ -37,7 +37,7 @@ export default function OriginExpensesForm({
     } else if (!includePickup) {
       setFormData((prev) => ({ ...prev, pickup: 0 }));
     }
-  }, [includePickup]);
+  }, [includePickup, formData.pickup]);
 
   useEffect(() => {
     const calculateTotal = () => {

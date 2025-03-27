@@ -53,7 +53,6 @@ export default function Settings() {
     { label: "Correo electrónico", value: userData?.email || "N/A" },
     { label: "Teléfono", value: userData?.phone || "N/A" },
     { label: "Cumpleaños", value: userData?.birthDate || "N/A" },
-    { label: "Rol", value: userData?.role.name || "N/A" },
   ];
 
   return (

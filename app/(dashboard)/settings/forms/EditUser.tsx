@@ -3,7 +3,7 @@
 import type React from "react";
 import { useState, useCallback } from "react";
 import Image from "next/image";
-import Cropper from "react-easy-crop";
+import Cropper, { Area } from "react-easy-crop";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import type { AdminUpdateUser } from "@/types/User";
@@ -159,7 +159,7 @@ export default function EditUser({
   };
 
   const onCropComplete = useCallback(
-    (croppedArea: any, croppedAreaPixels: any) => {
+    (croppedArea: Area, croppedAreaPixels: Area) => {
       setCroppedAreaPixels(croppedAreaPixels);
     },
     [],

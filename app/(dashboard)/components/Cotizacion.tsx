@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 interface CotizacionProps {
   name: string;
   client: string;
@@ -27,7 +29,7 @@ export default function Cotizacion({
       <td className="py-2">
         <div className="flex -space-x-3">
           {users.slice(0, 3).map((user, index) => (
-            <img
+            <Image
               key={index}
               src={user.profilePic}
               alt="User profile"

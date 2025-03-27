@@ -19,7 +19,7 @@ export default function DashboardLayout({
     if (!localStorage.getItem("token")) {
       router.push("/login");
     }
-  }, []);
+  });
 
   return (
     <ProtectedRoute>

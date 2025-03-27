@@ -54,7 +54,7 @@ export default function UserHistory() {
 
     fetchUserQuotations();
     getUser();
-  }, []);
+  });
 
   const requestSort = (key: string) => {
     let direction = "ascending";

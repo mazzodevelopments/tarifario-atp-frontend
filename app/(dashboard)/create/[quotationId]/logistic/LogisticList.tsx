@@ -27,7 +27,6 @@ import type { DestinationExpenses } from "@/types/DestinationExpenses";
 import type { Freight } from "@/types/Freight";
 import "@/utils/formatNumber";
 import { QuoteService } from "@/services/QuoteService";
-import { Checkbox } from "@/components/ui/checkbox";
 
 export default function LogisticList({ quotationId }: { quotationId: number }) {
   // BUDGETS
@@ -211,37 +210,37 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
     }
   };
 
-  const handleConfirmFreight = (budgetId: number) => {
-    const currentFreightId = selectedFreights[budgetId];
-    if (!currentFreightId) return;
-
-    const freight = freights.find((f) => f.id === currentFreightId);
-    if (!freight) return;
-
-    const rowsToUpdate = selectedRows.length > 0 ? selectedRows : [budgetId];
-
-    const updatedBudgets = budgets.map((budget) => {
-      if (rowsToUpdate.includes(budget.id)) {
-        return {
-          ...budget,
-          freight: {
-            ...freight,
-            id: freight.id,
-            name: freight.name,
-            originExpenses: freight.originExpenses,
-            transport: freight.transport,
-            custom: freight.custom,
-            destinationExpenses: freight.destinationExpenses,
-            total: freight.total,
-          },
-        };
-      }
-      return budget;
-    });
-
-    setBudgets(updatedBudgets);
-    setShouldFetch(true);
-  };
+  // const handleConfirmFreight = (budgetId: number) => {
+  //   const currentFreightId = selectedFreights[budgetId];
+  //   if (!currentFreightId) return;
+  //
+  //   const freight = freights.find((f) => f.id === currentFreightId);
+  //   if (!freight) return;
+  //
+  //   const rowsToUpdate = selectedRows.length > 0 ? selectedRows : [budgetId];
+  //
+  //   const updatedBudgets = budgets.map((budget) => {
+  //     if (rowsToUpdate.includes(budget.id)) {
+  //       return {
+  //         ...budget,
+  //         freight: {
+  //           ...freight,
+  //           id: freight.id,
+  //           name: freight.name,
+  //           originExpenses: freight.originExpenses,
+  //           transport: freight.transport,
+  //           custom: freight.custom,
+  //           destinationExpenses: freight.destinationExpenses,
+  //           total: freight.total,
+  //         },
+  //       };
+  //     }
+  //     return budget;
+  //   });
+  //
+  //   setBudgets(updatedBudgets);
+  //   setShouldFetch(true);
+  // };
 
   const renderLogisticsTable = () => (
     <Table>

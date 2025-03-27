@@ -65,7 +65,7 @@ export default function CurrentQuotationCard({ userId }: { userId?: number }) {
     };
 
     fetchLastQuotation();
-  }, []);
+  });
 
   const stepLinks: Record<StepKeys, string> = {
     1: `/create/${quotation?.id}/items`,
@@ -161,7 +161,7 @@ export default function CurrentQuotationCard({ userId }: { userId?: number }) {
             </span>
             <span className="text-md text-neutral-900">
               {new Date(quotation!.expirationDateTime).toLocaleDateString(
-                "es-ES"
+                "es-ES",
               )}
             </span>
           </div>

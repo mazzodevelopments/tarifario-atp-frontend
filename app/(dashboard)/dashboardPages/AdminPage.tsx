@@ -42,6 +42,7 @@ export default function AdminPage() {
       try {
         const data = await QuotationsService.getLastFiveFinishedQuotations();
         setLastQuotations(data);
+        console.log(lastQuotations);
       } catch (error) {
         console.error("Error:", error);
       }
