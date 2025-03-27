@@ -24,7 +24,7 @@ export default function CreatingPage() {
       const timer = setTimeout(() => {
         setIsCreating(false);
         setIsSuccess(true);
-      }, 3000);
+      }, 1000);
 
       return () => clearTimeout(timer);
     } catch (error) {
