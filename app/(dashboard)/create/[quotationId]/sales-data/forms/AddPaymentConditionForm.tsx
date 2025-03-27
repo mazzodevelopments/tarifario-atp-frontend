@@ -5,7 +5,10 @@ import { CatalogService } from "@/services/CatalogService";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 
 interface AddPaymentConditionProps {
-  onPaymentConditionCreated: (paymentCondition: string) => void;
+  onPaymentConditionCreated: (
+    paymentConditionId: number,
+    paymentCondition: string,
+  ) => void;
   onCancel: () => void;
 }
 
@@ -13,18 +16,28 @@ export default function AddPaymentConditionForm({
   onPaymentConditionCreated,
   onCancel,
 }: AddPaymentConditionProps) {
-  const [selectedPaymentCondition, setSelectedPaymentCondition] = useState("");
+  const [selectedPaymentCondition, setSelectedPaymentCondition] = useState<{
+    id: number;
+    name: string;
+  } | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedPaymentCondition) {
-      onPaymentConditionCreated(selectedPaymentCondition);
+      onPaymentConditionCreated(
+        selectedPaymentCondition.id,
+        selectedPaymentCondition.name,
+      );
     }
   };
 
   const fetchPaymentConditions = async () => {
     const paymentConditions = await CatalogService.listPaymentConditions();
     return adaptToDropdown(paymentConditions, "id", "name");
+  };
+
+  const handleSelect = (item: { id: number; name: string }) => {
+    setSelectedPaymentCondition(item);
   };
 
   return (
@@ -34,7 +47,7 @@ export default function AddPaymentConditionForm({
           label="Condición de Pago"
           fetchItems={fetchPaymentConditions}
           addItem={CatalogService.addPaymentCondition}
-          onSelect={(item) => setSelectedPaymentCondition(item.name)}
+          onSelect={handleSelect}
           required
         />
       </div>

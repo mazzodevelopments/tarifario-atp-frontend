@@ -215,7 +215,7 @@ export const QuoteService = {
 
     return await response.json();
   },
-  addPaymentCondition: async (paymentCondition: string, budgetId: number) => {
+  addPaymentCondition: async (paymentConditionId: number, budgetId: number) => {
     const response = await fetch(
       `${API_BASE_URL}/quote/${budgetId}/payment-condition`,
       {
@@ -224,7 +224,7 @@ export const QuoteService = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: JSON.stringify({ paymentCondition }),
+        body: JSON.stringify({ paymentConditionId }),
       },
     );
 

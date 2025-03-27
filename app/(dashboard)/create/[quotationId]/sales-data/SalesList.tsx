@@ -110,11 +110,14 @@ export default function SalesList({ quotationId }: { quotationId: number }) {
     }
   };
 
-  const handlePaymentConditionCreated = async (paymentCondition: string) => {
+  const handlePaymentConditionCreated = async (
+    paymentConditionId: number,
+    paymentCondition: string,
+  ) => {
     try {
       if (selectedBudgetId !== null) {
         await QuoteService.addPaymentCondition(
-          paymentCondition,
+          paymentConditionId,
           selectedBudgetId,
         );
         const updatedBudgets = budgets.map((budget) => {
