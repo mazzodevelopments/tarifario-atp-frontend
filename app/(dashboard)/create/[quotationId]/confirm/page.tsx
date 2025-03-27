@@ -20,13 +20,8 @@ export default function CreatingPage() {
 
     try {
       fetchQuotationTaskNumber();
-
-      const timer = setTimeout(() => {
-        setIsCreating(false);
-        setIsSuccess(true);
-      }, 1000);
-
-      return () => clearTimeout(timer);
+      setIsCreating(false);
+      setIsSuccess(true);
     } catch (error) {
       console.log("Error obteniendo el task number: ", error);
     }
