@@ -8,7 +8,6 @@ import SearchInput from "@/components/SearchInput";
 import PagesHeader from "./pagesHeader";
 import UsersList from "@/app/(dashboard)/components/UsersList";
 import CurrentQuotationCard from "../components/CurrentQuotation";
-import { QuotationSlider } from "@/app/(dashboard)/components/QuotationCarousel";
 import {
   SidebarMenu,
   SidebarMenuButton,
@@ -24,6 +23,7 @@ import {
 import { ChevronDown, LogOut, Settings } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import QuotationsList from "../components/QuotationList";
 
 export default function AdminPage() {
   const [lastQuotations, setLastQuotations] = useState<
@@ -138,7 +138,7 @@ export default function AdminPage() {
           />
           <div className="h-full gap-3 flex flex-col">
             <CurrentQuotationCard />
-            <QuotationSlider quotations={lastQuotations} />
+            <QuotationsList />
           </div>
         </div>
 

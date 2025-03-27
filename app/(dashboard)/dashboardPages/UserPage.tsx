@@ -17,11 +17,11 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import CurrentQuotationCard from "@/app/(dashboard)/components/CurrentQuotation";
-import { QuotationSlider } from "@/app/(dashboard)/components/QuotationCarousel";
 import { QuotationsService } from "@/services/QuotationsService";
 import PagesHeader from "./pagesHeader";
 import SearchInput from "@/components/SearchInput";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
+import QuotationsList from "../components/QuotationList";
 
 export default function UserPage() {
   const { user, logout } = useAuth();
@@ -153,7 +153,7 @@ export default function UserPage() {
           />
           <div className="w-full h-full gap-3 flex flex-col">
             <CurrentQuotationCard userId={user ? user.id : 0} />
-            <QuotationSlider quotations={lastQuotations} />
+            <QuotationsList />
           </div>
         </div>
 

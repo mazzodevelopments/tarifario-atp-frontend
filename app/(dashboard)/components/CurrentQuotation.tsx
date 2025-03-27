@@ -90,7 +90,7 @@ export default function CurrentQuotationCard({ userId }: { userId?: number }) {
   }
 
   return (
-    <div className="w-full h-full 2xl:h-2/3 p-4 bg-white border border-neutral-200 shadow-sm rounded-[18px] relative flex justify-between flex-col">
+    <div className="w-full h-full 2xl:h-auto p-4 bg-white border border-neutral-200 shadow-sm rounded-[18px] relative flex justify-between flex-col">
       <div className="flex flex-col relative">
         <div className="flex items-start justify-between mb-3">
           <h2 className="text-lg font-[800] text-black">Cotización reciente</h2>
@@ -161,7 +161,7 @@ export default function CurrentQuotationCard({ userId }: { userId?: number }) {
             </span>
             <span className="text-md text-neutral-900">
               {new Date(quotation!.expirationDateTime).toLocaleDateString(
-                "es-ES",
+                "es-ES"
               )}
             </span>
           </div>
