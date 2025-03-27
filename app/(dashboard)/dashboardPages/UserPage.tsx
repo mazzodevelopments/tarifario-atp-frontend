@@ -152,8 +152,8 @@ export default function UserPage() {
             title="Mis Cotizaciones"
             subtitle="Vista general de mis cotizaciones"
           />
-          <div className="w-full h-full gap-3 flex flex-col">
-            <CurrentQuotationCard userId={user ? user.id : 0} />
+          <div className="w-full h-full flex flex-col">
+            {/* <CurrentQuotationCard userId={user ? user.id : 0} /> */}
             <QuotationsList />
           </div>
         </div>
