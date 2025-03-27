@@ -15,9 +15,15 @@ import { QuotationsService } from "@/services/QuotationsService";
 import type { HistoryQuotationCard } from "@/types/Quotations";
 import SearchInput from "@/components/SearchInput";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
-import { ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react";
+import { ArrowUp, ArrowDown, ArrowUpDown, Filter } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function Quotations() {
   const [unfinishedQuotations, setUnfinishedQuotations] = useState<
@@ -33,6 +39,9 @@ export default function Quotations() {
     key: string;
     direction: string;
   } | null>(null);
+  const [timeFilter, setTimeFilter] = useState<"day" | "week" | "month" | null>(
+    null,
+  );
   const { user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -102,14 +111,40 @@ export default function Quotations() {
     setSortConfig({ key, direction });
   };
 
+  const filterQuotationsByTime = (quotations: HistoryQuotationCard[]) => {
+    if (!timeFilter) return quotations;
+
+    const now = new Date();
+    const filterDate = new Date();
+
+    switch (timeFilter) {
+      case "day":
+        filterDate.setDate(now.getDate() - 1);
+        break;
+      case "week":
+        filterDate.setDate(now.getDate() - 7);
+        break;
+      case "month":
+        filterDate.setMonth(now.getMonth() - 1);
+        break;
+      default:
+        return quotations;
+    }
+
+    return quotations.filter((quotation) => {
+      const modifiedDate = new Date(quotation.lastModifiedDate);
+      return modifiedDate > filterDate;
+    });
+  };
+
   const getSortedQuotations = (quotations: HistoryQuotationCard[]) => {
     if (!sortConfig) {
-      return quotations;
+      return filterQuotationsByTime(quotations);
     }
 
     const sortedQuotations = [...quotations];
     if (sortConfig.direction === "normal") {
-      return sortedQuotations;
+      return filterQuotationsByTime(sortedQuotations);
     }
 
     sortedQuotations.sort((a, b) => {
@@ -165,7 +200,7 @@ export default function Quotations() {
       return 0;
     });
 
-    return sortedQuotations;
+    return filterQuotationsByTime(sortedQuotations);
   };
 
   const sortedUnfinishedQuotations = getSortedQuotations(unfinishedQuotations);
@@ -175,6 +210,23 @@ export default function Quotations() {
     const data: { id: number; taskNumber: string }[] =
       await QuotationsService.searchQuotationByTaskNumber(searchTerm);
     return adaptToDropdown(data, "id", "taskNumber");
+  };
+
+  const handleTimeFilter = (filter: "day" | "week" | "month") => {
+    setTimeFilter(timeFilter === filter ? null : filter);
+  };
+
+  const getFilterLabel = () => {
+    switch (timeFilter) {
+      case "day":
+        return "Último día";
+      case "week":
+        return "Última semana";
+      case "month":
+        return "Último mes";
+      default:
+        return "Filtrar";
+    }
   };
 
   return (
@@ -199,27 +251,63 @@ export default function Quotations() {
         </div>
       </div>
       <div className="w-full px-[1vw] mt-[1vw]">
-        <div className="flex space-x-[0.5vw]">
-          <Button
-            onClick={() => handleTabChange(isAdmin ? "pending" : "assigned")}
-            className={`py-2 px-4 rounded-[12px] font-semibold text-sm border ${
-              activeTab === "pending" || activeTab === "assigned"
-                ? "bg-primary/5 text-primary"
-                : "bg-white text-gray-500 border-neutral-200"
-            }`}
-          >
-            Pendientes
-          </Button>
-          <Button
-            onClick={() => handleTabChange("completed")}
-            className={`py-2 px-4 rounded-[12px] font-semibold text-sm border ${
-              activeTab === "completed"
-                ? "bg-primary/5 text-primary"
-                : "bg-white text-gray-500 border-neutral-200"
-            }`}
-          >
-            Completadas
-          </Button>
+        <div className="flex justify-between items-center">
+          <div className="flex space-x-[0.5vw]">
+            <Button
+              onClick={() => handleTabChange(isAdmin ? "pending" : "assigned")}
+              className={`py-2 px-4 rounded-[12px] font-semibold text-sm border ${
+                activeTab === "pending" || activeTab === "assigned"
+                  ? "bg-primary/5 text-primary"
+                  : "bg-white text-gray-500 border-neutral-200"
+              }`}
+            >
+              Pendientes
+            </Button>
+            <Button
+              onClick={() => handleTabChange("completed")}
+              className={`py-2 px-4 rounded-[12px] font-semibold text-sm border ${
+                activeTab === "completed"
+                  ? "bg-primary/5 text-primary"
+                  : "bg-white text-gray-500 border-neutral-200"
+              }`}
+            >
+              Completadas
+            </Button>
+          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                className={`py-2 px-4 rounded-[12px] font-semibold text-sm border outline-none ${
+                  timeFilter
+                    ? "bg-primary/5 text-primary"
+                    : "bg-white text-gray-500 border-neutral-200"
+                }`}
+              >
+                <Filter className="mr-2 h-4 w-4" />
+                {getFilterLabel()}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                className={timeFilter === "day" ? "bg-primary/5" : ""}
+                onClick={() => handleTimeFilter("day")}
+              >
+                Último día
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className={timeFilter === "week" ? "bg-primary/5" : ""}
+                onClick={() => handleTimeFilter("week")}
+              >
+                Última semana
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className={timeFilter === "month" ? "bg-primary/5" : ""}
+                onClick={() => handleTimeFilter("month")}
+              >
+                Último mes
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         <div className="w-auto h-auto overflow-hidden rounded-[12px] mt-[1vw] shadow-sm shadow-cyan-500/20">

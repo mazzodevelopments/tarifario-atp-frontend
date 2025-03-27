@@ -6,6 +6,7 @@ export interface HistoryQuotationCard {
   expirationDateTime: string;
   materialsNeededDate: string;
   customerRequestNumber: string;
+  lastModifiedDate: string;
   step: number;
   buyer: string;
   client: string;
