@@ -24,6 +24,7 @@ interface BudgetDetailsProps {
 }
 
 interface Budget {
+  id?: number;
   numbering: string;
   purchaseData?: {
     item?: {
@@ -88,7 +89,7 @@ interface Budget {
     unitSalePrice: number;
     margin?: number;
     totalSalePrice: number;
-    paymentCondition: string;
+    paymentCondition: { id: number; name: string };
   };
   stage: string;
 }
@@ -487,7 +488,7 @@ export default function BudgetDetails({
                     <div>
                       <p className="text-sm text-gray-500">Condición de Pago</p>
                       <p className="font-medium">
-                        {budget.salesData.paymentCondition}
+                        {budget.salesData.paymentCondition.name}
                       </p>
                     </div>
                   </div>
