@@ -3,6 +3,7 @@ import Button from "@/components/Button";
 import Dropdown, { type DropdownItem } from "@/components/Dropdown";
 import type { Transport } from "@/types/Transport";
 import { LogisticDataService } from "@/services/LogisticDataService";
+import Input from "@/components/Input";
 
 interface CreateTransportProps {
   onTransportCreated: (transport: Transport | null) => void;
@@ -74,6 +75,28 @@ export default function TransportForm({
         required
         value={selectedTransport}
       />
+      {/*CODIGO EJEMPLO*/}
+      <Input
+        type="number"
+        name="value"
+        value={10000}
+        label="Valor Flete"
+        placeholder="Valor Flete"
+      />
+      <div className="ml-2 flex items-center space-x-2">
+        <input type="checkbox" id="pickup" className="rounded" />
+        <label htmlFor="pickup" className="font-[600]">
+          Seguro
+        </label>
+        <Input
+          type="number"
+          min={0}
+          value={200}
+          placeholder="Valor Seguro"
+          className="w-40"
+        />
+      </div>
+      {/* CODIGO EJEMPLO*/}
       <div className="flex justify-end gap-2">
         {existingTransport && (
           <Button type="button" onClick={handleDelete} variant="danger">
