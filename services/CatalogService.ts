@@ -8,6 +8,7 @@ import { CreateWeightUnit, Unit, WeightUnit } from "@/types/Unit";
 import { CreateCurrency, Currency } from "@/types/Currency";
 import { CreateIncoterm, Incoterm } from "@/services/Incoterm";
 import { PaymentCondition } from "@/types/PaymentCondition";
+import { OfferedCondition } from "@/types/OfferedCondition";
 
 export const CatalogService = {
   // CLIENT
@@ -496,6 +497,35 @@ export const CatalogService = {
   },
   addPaymentCondition: async (name: string): Promise<PaymentCondition> => {
     const response = await fetch(`${API_BASE_URL}/catalog/payment-condition`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al agregar incoterm");
+    }
+
+    const data = await response.json();
+    console.log("Incoterm agregado:", data);
+    return data;
+  },
+  // OFFERED CONDITIONS
+  listOfferedConditions: async (): Promise<PaymentCondition[]> => {
+    const response = await fetch(`${API_BASE_URL}/catalog/offered-conditions`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al traer condiciones de pago");
+    }
+
+    return await response.json();
+  },
+  addOfferedCondition: async (name: string): Promise<OfferedCondition> => {
+    const response = await fetch(`${API_BASE_URL}/catalog/offered-condition`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

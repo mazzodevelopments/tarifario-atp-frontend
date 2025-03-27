@@ -54,6 +54,8 @@ interface CreatePurchaseDataForm {
   weightUnitId: number | null;
   incoterm: string;
   incotermId: number | null;
+  offeredCondition: string;
+  offeredConditionId: number | null;
   productionTime: number;
   dollarValue: number;
 }
@@ -88,6 +90,8 @@ export default function CreatePurchase({
     weightUnitId: null,
     incoterm: "",
     incotermId: null,
+    offeredCondition: "",
+    offeredConditionId: null,
     additionalObservations: "",
   });
   const [errors, setErrors] = useState({
@@ -103,6 +107,7 @@ export default function CreatePurchase({
     unitWeight: "",
     weightUnit: "",
     incoterm: "",
+    offeredCondition: "",
   });
 
   const [isOriginModalOpen, setIsOriginModalOpen] = useState(false);
@@ -153,6 +158,7 @@ export default function CreatePurchase({
       unitWeight: "",
       weightUnit: "",
       incoterm: "",
+      offeredCondition: "",
     };
     let isValid = true;
 
@@ -222,6 +228,11 @@ export default function CreatePurchase({
       isValid = false;
     }
 
+    if (!formData.offeredConditionId) {
+      newErrors.offeredCondition = "El ofrecido es requerido";
+      isValid = false;
+    }
+
     setErrors(newErrors);
     return isValid;
   };
@@ -249,6 +260,7 @@ export default function CreatePurchase({
       currencyId: formData.currencyId,
       weightUnitId: formData.weightUnitId,
       incotermId: formData.incotermId,
+      offeredConditionId: formData.offeredConditionId,
     };
     onPurchaseCreated(purchaseData);
   };
@@ -331,6 +343,11 @@ export default function CreatePurchase({
   const fetchIncoterms = useCallback(async () => {
     const incoterms = await CatalogService.listIncoterms();
     return adaptToDropdown(incoterms, "id", "abbreviation");
+  }, []);
+
+  const fetchOfferedConditions = useCallback(async () => {
+    const offeredConditions = await CatalogService.listOfferedConditions();
+    return adaptToDropdown(offeredConditions, "id", "name");
   }, []);
 
   const fetchItems = useCallback(async () => {
@@ -597,16 +614,26 @@ export default function CreatePurchase({
           min="0"
         />
       </div>
-      <Dropdown
-        value={formData.supplier}
-        fetchItems={fetchSuppliers}
-        customForm={
-          <SupplierForm isLoading={isLoading} onSubmit={handleAddSupplier} />
-        }
-        onSelect={handleSelect("supplier")}
-        label="Proovedor"
-        error={errors.supplier}
-      />
+      <div className="grid grid-cols-2 gap-4">
+        <Dropdown
+          value={formData.supplier}
+          fetchItems={fetchSuppliers}
+          customForm={
+            <SupplierForm isLoading={isLoading} onSubmit={handleAddSupplier} />
+          }
+          onSelect={handleSelect("supplier")}
+          label="Proovedor"
+          error={errors.supplier}
+        />
+        <Dropdown
+          value={formData.offeredCondition}
+          fetchItems={fetchOfferedConditions}
+          addItem={CatalogService.addOfferedCondition}
+          onSelect={handleSelect("offeredCondition")}
+          label="Ofrecido"
+          error={errors.offeredCondition}
+        />
+      </div>
       <div className="grid grid-cols-2 gap-4">
         <Dropdown
           value={formData.currency}

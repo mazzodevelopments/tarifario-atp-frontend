@@ -15,6 +15,7 @@ export interface PurchaseData {
   totalWeight: number;
   unit: string;
   incoterm: string;
+  offeredCondition: string;
   additionalObservations: string;
 }
 
@@ -34,4 +35,5 @@ export interface CreatePurchaseData {
   currencyId: number | null;
   weightUnitId: number | null;
   incotermId: number | null;
+  offeredConditionId: number | null;
 }

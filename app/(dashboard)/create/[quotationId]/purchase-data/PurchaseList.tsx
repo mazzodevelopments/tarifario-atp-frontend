@@ -102,6 +102,9 @@ export default function PurchaseList({ quotationId }: { quotationId: number }) {
                   Proveedor
                 </TableHead>
                 <TableHead className="text-primary font-[600] text-center">
+                  Ofrecido
+                </TableHead>
+                <TableHead className="text-primary font-[600] text-center">
                   Precio Unitario
                 </TableHead>
                 <TableHead className="text-primary font-[600] text-center">
@@ -143,6 +146,9 @@ export default function PurchaseList({ quotationId }: { quotationId: number }) {
                     <TableCell>{budget.numbering}</TableCell>
                     <TableCell>{budget.purchaseData?.item?.detail}</TableCell>
                     <TableCell>{budget.purchaseData?.supplier}</TableCell>
+                    <TableCell>
+                      {budget.purchaseData?.offeredCondition}
+                    </TableCell>
                     <TableCell>
                       ${budget.purchaseData?.appliedUnitPrice.formatNumber()}
                     </TableCell>
