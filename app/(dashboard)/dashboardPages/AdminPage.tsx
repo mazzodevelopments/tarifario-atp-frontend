@@ -137,7 +137,7 @@ export default function AdminPage() {
             subtitle="Vista general de mis cotizaciones"
           />
           <div className="h-full gap-3 flex flex-col">
-            <CurrentQuotationCard />
+            {/* <CurrentQuotationCard /> */}
             <QuotationsList quotations={lastQuotations} />
           </div>
         </div>

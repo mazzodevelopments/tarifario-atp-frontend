@@ -1,6 +1,7 @@
 "use client";
 
 import Button from "@/components/Button";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Table,
   TableBody,
@@ -26,7 +27,7 @@ const stepTexts: Record<StepKeys, string> = {
 const getStepLink = (
   quotationId: number,
   taskNumber: string,
-  step: StepKeys,
+  step: StepKeys
 ): string => {
   const baseLinks = {
     1: `/create/${quotationId}/items`,
@@ -54,78 +55,86 @@ export default function LastModifiedQuotationsList({
   quotations,
 }: QuotationListProps) {
   return (
-    <div className="2xl:block w-full h-full bg-white border border-neutral-200 shadow-sm rounded-[18px] relative overflow-hidden select-none">
-      <div className="flex flex-col p-3 relative">
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="text-lg font-[800] text-black">
-            Últimas Cotizaciones Modificadas
-          </h2>
-        </div>
+    <div className="2xl:block w-full h-full  bg-white border border-neutral-200 shadow-sm rounded-[18px] relative overflow-hidden select-none">
+      <div className="flex-grow overflow-hidden relative p-3 h-full max-h-[calc(100vh-5vh)]">
+        <ScrollArea className="h-full ">
+          <div className="w-full min-w-max">
+            {/* Header Row */}
+            <div className="flex border-b border-neutral-200 py-2 items-center">
+              <div className="flex-1 text-center font-medium text-sm text-neutral-500">
+                Nombre
+              </div>
+              <div className="flex-1 text-center font-medium text-sm text-neutral-500">
+                Estado
+              </div>
+              <div className="flex-1 text-center font-medium text-sm text-neutral-500">
+                Fecha de Expiración
+              </div>
+              <div className="flex-1 text-center font-medium text-sm text-neutral-500">
+                Cotizar
+              </div>
+            </div>
 
-        <div className="h-auto overflow-y-auto pr-1">
-          <Table>
-            <TableHeader>
-              <TableRow className="hover:bg-transparent">
-                <TableHead className="text-center">Nombre</TableHead>
-                <TableHead className="text-center">Estado</TableHead>
-                <TableHead className="text-center">
-                  Fecha de Expiración
-                </TableHead>
-                <TableHead className="text-center">Cotizar</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {quotations.map((quotation) => {
-                const actualStep = quotation.step as StepKeys;
-                const stepText = stepTexts[actualStep] || "Estado desconocido";
-                const isCompleted = quotation.step === 7;
-                const link = getStepLink(
-                  quotation.id,
-                  quotation.taskNumber,
-                  actualStep,
-                );
+            {/* Data Rows */}
+            {quotations.map((quotation) => {
+              const actualStep = quotation.step as StepKeys;
+              const stepText = stepTexts[actualStep] || "Estado desconocido";
+              const isCompleted = quotation.step === 7;
+              const link = getStepLink(
+                quotation.id,
+                quotation.taskNumber,
+                actualStep
+              );
 
-                return (
-                  <TableRow key={quotation.id} className="hover:bg-transparent">
-                    <TableCell className="font-[600] text-center">
-                      {quotation.taskNumber}
-                    </TableCell>
-                    <TableCell className="flex justify-center">
-                      <div
-                        className={
-                          isCompleted
-                            ? "bg-green-100 text-green-600 flex w-[100px] py-1 justify-center items-center rounded-2xl"
-                            : "bg-orange-100 text-orange-600 flex w-[100px] py-1 justify-center items-center rounded-2xl"
-                        }
-                      >
-                        {stepText}
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {new Date(
-                        quotation.expirationDateTime,
-                      ).toLocaleDateString("es-ES", {
+              return (
+                <div
+                  key={quotation.id}
+                  className="flex items-center border-b border-neutral-100 py-3 hover:bg-neutral-50"
+                >
+                  <div className="flex-1 font-[600] text-center text-md">
+                    {quotation.taskNumber}
+                  </div>
+                  <div className="flex-1 flex justify-center">
+                    <div
+                      className={
+                        isCompleted
+                          ? "bg-green-100 text-green-600 flex px-3 py-1 justify-center items-center rounded-2xl text-sm"
+                          : "bg-orange-100 text-orange-600 flex px-3 py-1 justify-center items-center rounded-2xl text-sm"
+                      }
+                    >
+                      {stepText}
+                    </div>
+                  </div>
+                  <div className="flex-1 text-center text-sm">
+                    {new Date(quotation.expirationDateTime).toLocaleDateString(
+                      "es-ES",
+                      {
                         day: "2-digit",
                         month: "2-digit",
                         year: "numeric",
-                      })}
-                    </TableCell>
-                    <TableCell className="flex justify-center">
-                      <Link href={link} passHref>
-                        <Button
-                          variant="secondary"
-                          className="text-blue-600 hover:text-blue-800 hover:bg-blue-50"
-                        >
-                          {isCompleted ? "Ver cotización" : "Ir a cotizar"}
-                        </Button>
-                      </Link>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </div>
+                      }
+                    )}
+                  </div>
+                  <div className="flex-1 flex justify-center">
+                    <Link href={link} passHref>
+                      <Button variant="secondary">
+                        {isCompleted ? "Ver cotización" : "Ir a cotizar"}
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </ScrollArea>
+      </div>
+      <div className="w-auto flex pr-2 justify-end gap-2 items-end relative h-auto py-4 border-t border-neutral-100 flex-shrink-0">
+        <Button
+          variant="primary"
+          className="px-3 py-2 bg-neutral-900 text-white text-sm mr-2"
+        >
+          Crear Usuario
+        </Button>
       </div>
     </div>
   );
