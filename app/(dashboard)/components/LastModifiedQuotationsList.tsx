@@ -55,26 +55,27 @@ export default function LastModifiedQuotationsList({
   quotations,
 }: QuotationListProps) {
   return (
-    <div className="2xl:block w-full h-full  bg-white border border-neutral-200 shadow-sm rounded-[18px] relative overflow-hidden select-none">
-      <div className="flex-grow overflow-hidden relative p-3 h-full max-h-[calc(100vh-5vh)]">
-        <ScrollArea className="h-full ">
-          <div className="w-full min-w-max">
-            {/* Header Row */}
-            <div className="flex border-b border-neutral-200 py-2 items-center">
-              <div className="flex-1 text-center font-medium text-sm text-neutral-500">
-                Nombre
-              </div>
-              <div className="flex-1 text-center font-medium text-sm text-neutral-500">
-                Estado
-              </div>
-              <div className="flex-1 text-center font-medium text-sm text-neutral-500">
-                Fecha de Expiración
-              </div>
-              <div className="flex-1 text-center font-medium text-sm text-neutral-500">
-                Cotizar
-              </div>
+    <div className="flex flex-col relative bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full flex-grow overflow-hidden">
+      <div className="flex-grow overflow-hidden relative">
+        {/* Header Row */}
+        <div className="border-b border-neutral-100 py-[1vw] ">
+          <div className="flex items-center h-9">
+            <div className="flex-1 text-center font-medium text-sm text-neutral-700">
+              Nombre
             </div>
-
+            <div className="flex-1 text-center font-medium text-sm text-neutral-700">
+              Estado
+            </div>
+            <div className="flex-1 text-center font-medium text-sm text-neutral-700">
+              Fecha de Expiración
+            </div>
+            <div className="flex-1 text-center font-medium text-sm text-neutral-700">
+              Cotizar
+            </div>
+          </div>
+        </div>
+        <ScrollArea className="h-full max-h-[calc(100vh-5vh)]">
+          <div className="w-full min-w-max">
             {/* Data Rows */}
             {quotations.map((quotation) => {
               const actualStep = quotation.step as StepKeys;
