@@ -7,7 +7,6 @@ import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 import SearchInput from "@/components/SearchInput";
 import PagesHeader from "./pagesHeader";
 import UsersList from "@/app/(dashboard)/components/UsersList";
-import CurrentQuotationCard from "../components/CurrentQuotation";
 import {
   SidebarMenu,
   SidebarMenuButton,
@@ -40,7 +39,7 @@ export default function AdminPage() {
   useEffect(() => {
     const fetchLastFiveQuotations = async () => {
       try {
-        const data = await QuotationsService.getLastFiveQuotations();
+        const data = await QuotationsService.getLastModifiedQuotations();
         setLastQuotations(data);
       } catch (error) {
         console.error("Error:", error);

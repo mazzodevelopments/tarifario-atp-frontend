@@ -16,7 +16,6 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import CurrentQuotationCard from "@/app/(dashboard)/components/CurrentQuotation";
 import { QuotationsService } from "@/services/QuotationsService";
 import PagesHeader from "./pagesHeader";
 import SearchInput from "@/components/SearchInput";
@@ -27,21 +26,20 @@ export default function UserPage() {
   const { user, logout } = useAuth();
   const [lastQuotations, setLastQuotations] = useState<
     {
+      id: number;
       taskNumber: string;
       expirationDateTime: string;
-      buyerName: string;
-      clientName: string;
+      step: number;
     }[]
   >([]);
   const [finishedQuotations, setFinishedQuotations] = useState<number>(0);
   const [shouldFetch, setShouldFetch] = useState(false);
 
   useEffect(() => {
-    const fetchUserLastFiveQuotations = async () => {
+    const fetchLastModifiedQuotations = async () => {
       try {
         if (user) {
-          const data =
-            await QuotationsService.getUserLastFiveFinishedQuotations();
+          const data = await QuotationsService.getLastModifiedQuotations();
           setLastQuotations(data);
           console.log(lastQuotations);
         }
@@ -62,7 +60,7 @@ export default function UserPage() {
       }
     };
 
-    fetchUserLastFiveQuotations();
+    fetchLastModifiedQuotations();
     fetchFinishedQuotations();
     setShouldFetch(false);
   }, [shouldFetch]);
@@ -154,7 +152,7 @@ export default function UserPage() {
           />
           <div className="w-full h-full flex flex-col">
             {/* <CurrentQuotationCard userId={user ? user.id : 0} /> */}
-            <QuotationsList />
+            <QuotationsList quotations={lastQuotations} />
           </div>
         </div>
 
