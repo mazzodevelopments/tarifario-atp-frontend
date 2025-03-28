@@ -134,7 +134,7 @@ export default function LastModifiedQuotationsList({
           variant="primary"
           className="px-3 py-2 bg-neutral-900 text-white text-sm mr-2"
         >
-          Crear Usuario
+          Ver cotizaciones
         </Button>
       </div>
     </div>
