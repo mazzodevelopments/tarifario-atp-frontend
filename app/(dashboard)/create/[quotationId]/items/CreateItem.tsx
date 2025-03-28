@@ -9,6 +9,7 @@ import Dropdown, { type DropdownItem } from "@/components/Dropdown";
 import type { Item, CreateItem, ListedItem } from "@/types/Item";
 import { CatalogService } from "@/services/CatalogService";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
+import FamilyForm from "@/app/(dashboard)/create/[quotationId]/items/forms/FamilyForm";
 
 interface CreateItemProps {
   onItemCreated: (item: CreateItem) => void;
@@ -214,6 +215,24 @@ export default function CreateItem({
     setErrors((prevErrors) => ({ ...prevErrors, [field]: "" }));
   };
 
+  const handleAddFamily = async (newFamily: { name: string }) => {
+    try {
+      const addedFamily = await CatalogService.addFamily(newFamily.name);
+
+      setFormData((prev) => ({
+        ...prev,
+        family: addedFamily.name,
+      }));
+
+      setSelectedFamilyId(addedFamily.id);
+
+      return addedFamily;
+    } catch (error) {
+      console.error("Error adding new family:", error);
+      throw error;
+    }
+  };
+
   const fetchFamilies = useCallback(async () => {
     const families = await CatalogService.listFamilies();
     return adaptToDropdown(families, "id", "name");
@@ -248,6 +267,9 @@ export default function CreateItem({
           value={formData.family}
           fetchItems={fetchFamilies}
           addItem={CatalogService.addFamily}
+          customForm={
+            <FamilyForm onSubmit={handleAddFamily} isLoading={false} />
+          }
           onSelect={handleSelect("family")}
           label="Familia"
           error={errors.family}
