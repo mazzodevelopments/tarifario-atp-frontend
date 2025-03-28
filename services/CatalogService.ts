@@ -220,13 +220,16 @@ export const CatalogService = {
 
     return await response.json();
   },
-  addFamily: async (name: string): Promise<Family> => {
+  addFamily: async (newFamily: {
+    name: string;
+    identifier: string;
+  }): Promise<Family> => {
     const response = await fetch(`${API_BASE_URL}/catalog/family`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name }),
+      body: JSON.stringify(newFamily),
     });
 
     if (!response.ok) {
@@ -253,13 +256,16 @@ export const CatalogService = {
 
     return await response.json();
   },
-  addSubfamily: async (name: string, familyId: number): Promise<Subfamily> => {
+  addSubfamily: async (
+    newSubfamily: { name: string; identifier: string },
+    familyId: number,
+  ): Promise<Subfamily> => {
     const response = await fetch(`${API_BASE_URL}/catalog/subfamily`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name, familyId }),
+      body: JSON.stringify({ ...newSubfamily, familyId }),
     });
 
     if (!response.ok) {

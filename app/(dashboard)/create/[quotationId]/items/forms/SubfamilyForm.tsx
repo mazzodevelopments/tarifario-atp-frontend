@@ -4,17 +4,17 @@ import React, { useState } from "react";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 
-interface FamilyFormProps {
+interface SubfamilyFormProps {
   onSubmit: (data: { name: string; identifier: string }) => void;
   isLoading: boolean;
   closeDialog?: () => void;
 }
 
-export default function FamilyForm({
+export default function SubfamilyForm({
   onSubmit,
   isLoading,
   closeDialog,
-}: FamilyFormProps) {
+}: SubfamilyFormProps) {
   const [formData, setFormData] = useState({
     name: "",
     identifier: "",
@@ -46,7 +46,7 @@ export default function FamilyForm({
     let isValid = true;
 
     if (!formData.name.trim()) {
-      newErrors.name = "El nombre de la familia es requerido";
+      newErrors.name = "El nombre de la subfamilia es requerido";
       isValid = false;
     }
 
@@ -78,7 +78,7 @@ export default function FamilyForm({
       closeDialog?.();
       return result;
     } catch (error) {
-      console.error("Error submitting family form:", error);
+      console.error("Error submitting subfamily form:", error);
       throw error;
     }
   };
@@ -90,7 +90,7 @@ export default function FamilyForm({
         name="name"
         value={formData.name}
         onChange={handleNameChange}
-        placeholder="Nombre de la familia"
+        placeholder="Nombre de la subfamilia"
         label="Nombre"
         error={errors.name}
       />

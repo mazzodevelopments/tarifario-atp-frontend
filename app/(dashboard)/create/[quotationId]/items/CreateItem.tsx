@@ -10,6 +10,7 @@ import type { Item, CreateItem, ListedItem } from "@/types/Item";
 import { CatalogService } from "@/services/CatalogService";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 import FamilyForm from "@/app/(dashboard)/create/[quotationId]/items/forms/FamilyForm";
+import SubfamilyForm from "@/app/(dashboard)/create/[quotationId]/items/forms/SubfamilyForm";
 
 interface CreateItemProps {
   onItemCreated: (item: CreateItem) => void;
@@ -215,9 +216,12 @@ export default function CreateItem({
     setErrors((prevErrors) => ({ ...prevErrors, [field]: "" }));
   };
 
-  const handleAddFamily = async (newFamily: { name: string }) => {
+  const handleAddFamily = async (newFamily: {
+    name: string;
+    identifier: string;
+  }) => {
     try {
-      const addedFamily = await CatalogService.addFamily(newFamily.name);
+      const addedFamily = await CatalogService.addFamily(newFamily);
 
       setFormData((prev) => ({
         ...prev,
@@ -229,6 +233,33 @@ export default function CreateItem({
       return addedFamily;
     } catch (error) {
       console.error("Error adding new family:", error);
+      throw error;
+    }
+  };
+
+  const handleAddSubfamily = async (newSubfamily: {
+    name: string;
+    identifier: string;
+  }) => {
+    try {
+      if (!selectedFamilyId) {
+        throw new Error("Debes seleccionar una familia primero");
+      }
+
+      const addedSubfamily = await CatalogService.addSubfamily(
+        newSubfamily,
+        selectedFamilyId,
+      );
+
+      setFormData((prev) => ({
+        ...prev,
+        subfamily: addedSubfamily.name,
+        subfamilyId: addedSubfamily.id,
+      }));
+
+      return addedSubfamily;
+    } catch (error) {
+      console.error("Error adding new subfamily:", error);
       throw error;
     }
   };
@@ -266,7 +297,6 @@ export default function CreateItem({
         <Dropdown
           value={formData.family}
           fetchItems={fetchFamilies}
-          addItem={CatalogService.addFamily}
           customForm={
             <FamilyForm onSubmit={handleAddFamily} isLoading={false} />
           }
@@ -277,8 +307,8 @@ export default function CreateItem({
         <Dropdown
           value={formData.subfamily}
           fetchItems={fetchSubfamilies}
-          addItem={(name: string) =>
-            CatalogService.addSubfamily(name, selectedFamilyId!)
+          customForm={
+            <SubfamilyForm onSubmit={handleAddSubfamily} isLoading={false} />
           }
           onSelect={handleSelect("subfamily")}
           label="Subfamilia"
