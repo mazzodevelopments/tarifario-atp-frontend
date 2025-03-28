@@ -65,7 +65,7 @@ export default function CurrentQuotationCard({ userId }: { userId?: number }) {
     };
 
     fetchLastQuotation();
-  });
+  }, [userId]);
 
   const stepLinks: Record<StepKeys, string> = {
     1: `/create/${quotation?.id}/items`,

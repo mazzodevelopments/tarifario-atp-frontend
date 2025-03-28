@@ -23,15 +23,15 @@ import {
 import { ChevronDown, LogOut, Settings } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import QuotationsList from "../components/QuotationList";
+import QuotationsList from "../components/LastModifiedQuotationsList";
 
 export default function AdminPage() {
   const [lastQuotations, setLastQuotations] = useState<
     {
+      id: number;
       taskNumber: string;
       expirationDateTime: string;
-      buyerName: string;
-      clientName: string;
+      step: number;
     }[]
   >([]);
 
@@ -40,9 +40,8 @@ export default function AdminPage() {
   useEffect(() => {
     const fetchLastFiveQuotations = async () => {
       try {
-        const data = await QuotationsService.getLastFiveFinishedQuotations();
+        const data = await QuotationsService.getLastFiveQuotations();
         setLastQuotations(data);
-        console.log(lastQuotations);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -139,7 +138,7 @@ export default function AdminPage() {
           />
           <div className="h-full gap-3 flex flex-col">
             <CurrentQuotationCard />
-            <QuotationsList />
+            <QuotationsList quotations={lastQuotations} />
           </div>
         </div>
 

@@ -21,7 +21,7 @@ import { QuotationsService } from "@/services/QuotationsService";
 import PagesHeader from "./pagesHeader";
 import SearchInput from "@/components/SearchInput";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
-import QuotationsList from "../components/QuotationList";
+import QuotationsList from "../components/LastModifiedQuotationsList";
 
 export default function UserPage() {
   const { user, logout } = useAuth();

@@ -73,9 +73,9 @@ export const QuotationsService = {
     return await response.json();
   },
 
-  getLastFiveFinishedQuotations: async () => {
+  getLastFiveQuotations: async () => {
     const response = await fetch(
-      `${API_BASE_URL}/quotations/last-five-finished`,
+      `${API_BASE_URL}/quotations/last-five-modified`,
       {
         method: "GET",
       },
