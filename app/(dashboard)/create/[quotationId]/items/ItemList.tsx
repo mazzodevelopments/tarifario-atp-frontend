@@ -17,6 +17,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
+import { Toaster } from "@/components/ui/toaster";
 import type {
   CreateItem as CreateItemType,
   CreateMassiveLoadItems,
@@ -34,6 +36,7 @@ export default function ItemsList({ quotationId }: { quotationId: number }) {
   const [editingItem, setEditingItem] = useState<ListedItem | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (!shouldFetch) return;
@@ -49,11 +52,16 @@ export default function ItemsList({ quotationId }: { quotationId: number }) {
       } catch (error) {
         setIsLoading(false);
         console.error("Error fetching quotation items:", error);
+        toast({
+          title: "Error",
+          description: "No se pudieron cargar los items",
+          variant: "destructive",
+        });
       }
     };
 
     fetchQuotationItems();
-  }, [shouldFetch]);
+  }, [shouldFetch, toast]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -62,8 +70,18 @@ export default function ItemsList({ quotationId }: { quotationId: number }) {
       const item = await QuoteService.addItem(newItem, quotationId);
       setItems([...items, item]);
       setShouldFetch(true);
+      setIsDialogOpen(false);
+      toast({
+        title: "Item creado",
+        description: `El item "${newItem.detail}" ha sido creado exitosamente`,
+      });
     } catch (error) {
       console.error("Error adding item:", error);
+      toast({
+        title: "Error",
+        description: "No se pudo crear el item",
+        variant: "destructive",
+      });
     }
   };
 
@@ -77,8 +95,18 @@ export default function ItemsList({ quotationId }: { quotationId: number }) {
         items.map((item) => (item.id === updatedItem.id ? updatedItem : item)),
       );
       setShouldFetch(true);
+      setIsDialogOpen(false);
+      toast({
+        title: "Item actualizado",
+        description: "El item ha sido actualizado exitosamente",
+      });
     } catch (error) {
       console.error("Error updating item:", error);
+      toast({
+        title: "Error",
+        description: "No se pudo actualizar el item",
+        variant: "destructive",
+      });
     }
   };
 
@@ -86,8 +114,17 @@ export default function ItemsList({ quotationId }: { quotationId: number }) {
     try {
       await QuoteService.deleteItem(id);
       setItems(items.filter((item) => item.id !== id));
+      toast({
+        title: "Item eliminado",
+        description: "El item ha sido eliminado exitosamente",
+      });
     } catch (error) {
       console.error("Error deleting item:", error);
+      toast({
+        title: "Error",
+        description: "No se pudo eliminar el item",
+        variant: "destructive",
+      });
     }
   };
 
@@ -126,20 +163,29 @@ export default function ItemsList({ quotationId }: { quotationId: number }) {
           );
 
           if (validItems.length === 0) {
-            console.error(
-              "No se encontraron items válidos en el archivo Excel",
-            );
+            toast({
+              title: "Error",
+              description:
+                "No se encontraron items válidos en el archivo Excel",
+              variant: "destructive",
+            });
             return;
           }
 
           try {
             await QuoteService.addItems(validItems, quotationId);
             setShouldFetch(true);
-            console.log(
-              `Se agregaron ${validItems.length} items correctamente`,
-            );
+            toast({
+              title: "Items cargados",
+              description: `Se agregaron ${validItems.length} items correctamente`,
+            });
           } catch (error) {
             console.error("Error adding items:", error);
+            toast({
+              title: "Error",
+              description: "No se pudieron cargar los items",
+              variant: "destructive",
+            });
           }
 
           if (fileInputRef.current) {
@@ -147,7 +193,11 @@ export default function ItemsList({ quotationId }: { quotationId: number }) {
           }
         } catch (error) {
           console.error("Error processing Excel file:", error);
-          console.error("Error al procesar el archivo Excel");
+          toast({
+            title: "Error",
+            description: "Error al procesar el archivo Excel",
+            variant: "destructive",
+          });
         }
       };
       reader.readAsArrayBuffer(file);
@@ -200,7 +250,7 @@ export default function ItemsList({ quotationId }: { quotationId: number }) {
                 <TableRow className="h-36">
                   <TableCell
                     colSpan={10}
-                    className="text-sm m-auto h-full  text-center text-gray-500"
+                    className="text-sm m-auto h-full text-center text-gray-500"
                   >
                     {isLoading ? "Cargando..." : "No hay items agregados"}
                   </TableCell>
@@ -264,7 +314,7 @@ export default function ItemsList({ quotationId }: { quotationId: number }) {
             Cargar Items
           </Button>
           <DialogTrigger asChild>
-            <Button className=" bg-primary text-white flex items-center gap-1">
+            <Button className="bg-primary text-white flex items-center gap-1">
               <PlusCircle size={16} />
               <span className="mt-[1.5px]">Agregar Item</span>
             </Button>
@@ -274,7 +324,6 @@ export default function ItemsList({ quotationId }: { quotationId: number }) {
         <DialogContent className="h-[]">
           <DialogHeader>
             <DialogTitle className="text-2xl">
-              {" "}
               {editingItem ? "Editar Item" : "Agregar nuevo item"}
             </DialogTitle>
           </DialogHeader>
@@ -285,10 +334,11 @@ export default function ItemsList({ quotationId }: { quotationId: number }) {
               editingItem={editingItem}
               setEditingItem={setEditingItem}
               onDialogClose={handleDialogClose}
-            />{" "}
+            />
           </div>
         </DialogContent>
       </Dialog>
+      <Toaster />
     </div>
   );
 }

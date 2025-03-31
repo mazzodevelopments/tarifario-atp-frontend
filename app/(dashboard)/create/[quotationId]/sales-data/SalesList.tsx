@@ -25,6 +25,8 @@ import AddMarginForm from "./forms/AddMarginForm";
 import AddPaymentConditionForm from "./forms/AddPaymentConditionForm";
 import "@/utils/formatNumber";
 import { QuoteService } from "@/services/QuoteService";
+import { useToast } from "@/hooks/use-toast";
+import { Toaster } from "@/components/ui/toaster";
 
 export default function SalesList({ quotationId }: { quotationId: number }) {
   const [budgets, setBudgets] = useState<Budget[]>([]);
@@ -35,6 +37,7 @@ export default function SalesList({ quotationId }: { quotationId: number }) {
   const [selectedBudgetId, setSelectedBudgetId] = useState<number | null>(null);
   const [editingMargin, setEditingMargin] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
 
   // ROW SELECTION (EN PROCESO)
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
@@ -56,11 +59,16 @@ export default function SalesList({ quotationId }: { quotationId: number }) {
       } catch (error) {
         setIsLoading(false);
         console.error("Error fetching quotation budgets:", error);
+        toast({
+          title: "Error",
+          description: "No se pudieron cargar los presupuestos",
+          variant: "destructive",
+        });
       }
     };
 
     fetchQuotationBudgets();
-  }, [shouldFetch, quotationId]);
+  }, [shouldFetch, quotationId, toast]);
 
   const handleRowClick = (budgetId: number, event: React.MouseEvent) => {
     if (event.shiftKey && lastSelectedRow) {
@@ -104,9 +112,18 @@ export default function SalesList({ quotationId }: { quotationId: number }) {
         setBudgets(updatedBudgets);
         setShowSalesDataModal(false);
         setEditingMargin(null);
+        toast({
+          title: "Margen actualizado",
+          description: `El margen se ha establecido en ${salesData.margin}% correctamente`,
+        });
       }
     } catch (error) {
       console.log(error);
+      toast({
+        title: "Error",
+        description: "No se pudo actualizar el margen",
+        variant: "destructive",
+      });
     }
   };
 
@@ -141,9 +158,18 @@ export default function SalesList({ quotationId }: { quotationId: number }) {
 
         setBudgets(updatedBudgets);
         setShowPaymentConditionModal(false);
+        toast({
+          title: "Condición de pago actualizada",
+          description: `La condición de pago se ha establecido como "${paymentCondition}" correctamente`,
+        });
       }
     } catch (error) {
       console.log(error);
+      toast({
+        title: "Error",
+        description: "No se pudo actualizar la condición de pago",
+        variant: "destructive",
+      });
     }
   };
 
@@ -393,6 +419,7 @@ export default function SalesList({ quotationId }: { quotationId: number }) {
           </div>
         </DialogContent>
       </Dialog>
+      <Toaster />
     </div>
   );
 }

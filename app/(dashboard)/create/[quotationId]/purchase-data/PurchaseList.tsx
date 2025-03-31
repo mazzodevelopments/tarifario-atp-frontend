@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 import Button from "@/components/Button";
 import CreatePurchase from "./CreatePurchase";
@@ -16,6 +17,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
+import { Toaster } from "@/components/ui/toaster";
 import type { Budget } from "@/types/Budget";
 import type { Item } from "@/types/Item";
 import type { CreatePurchaseData } from "@/types/PurchaseData";
@@ -30,6 +33,7 @@ export default function PurchaseList({ quotationId }: { quotationId: number }) {
   const [shouldFetch, setShouldFetch] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (!shouldFetch) return;
@@ -47,6 +51,11 @@ export default function PurchaseList({ quotationId }: { quotationId: number }) {
       } catch (error) {
         setIsLoading(false);
         console.error("Error fetching quotation budgets:", error);
+        toast({
+          title: "Error",
+          description: "No se pudieron cargar los presupuestos",
+          variant: "destructive",
+        });
       }
     };
 
@@ -58,31 +67,54 @@ export default function PurchaseList({ quotationId }: { quotationId: number }) {
         setShouldFetch(false);
       } catch (error) {
         console.error("Error fetching quotation items:", error);
+        toast({
+          title: "Error",
+          description: "No se pudieron cargar los items",
+          variant: "destructive",
+        });
       }
     };
 
     fetchQuotationBudgets();
     fetchQuotationItems();
-  }, [shouldFetch]);
+  }, [shouldFetch, toast]);
 
   const onPurchaseCreated = async (newPurchase: CreatePurchaseData) => {
     try {
       await QuoteService.addPurchaseData(newPurchase, quotationId);
       setShowCreateModal(false);
       setShouldFetch(true);
+      toast({
+        title: "Presupuesto Creado",
+        description: `Los datos de compra para el item "${items.find((i) => i.id === newPurchase.itemId)?.detail}" se han creado exitosamente`,
+      });
     } catch (error) {
       console.error("Error creating Purchase Data:", error);
+      toast({
+        title: "Error",
+        description: "No se pudieron crear los datos de compra",
+        variant: "destructive",
+      });
     }
   };
 
   const handleDeleteBudget = async (id: number) => {
     try {
       await QuoteService.deletePurchaseData(id);
+      setBudgets(budgets.filter((budget) => budget.id !== id));
       setShouldFetch(true);
+      toast({
+        title: "Presupuesto eliminado",
+        description: "El presupuesto ha sido eliminado exitosamente",
+      });
     } catch (error) {
       console.error("Error deleting budget:", error);
+      toast({
+        title: "Error",
+        description: "No se pudo eliminar el presupuesto",
+        variant: "destructive",
+      });
     }
-    setBudgets(budgets.filter((budget) => budget.id !== id));
   };
 
   return (
@@ -171,12 +203,12 @@ export default function PurchaseList({ quotationId }: { quotationId: number }) {
                         : "-"}
                     </TableCell>
                     <TableCell>
-                      <button
+                      <Button
                         onClick={() => handleDeleteBudget(budget.id)}
-                        className="text-black hover:text-red-600 mx-2"
+                        className="bg-white border border-neutral-200 text-red-800 hover:text-red-600 hover:bg-red-50 mx-2"
                       >
                         <X className="w-4" />
-                      </button>
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))
@@ -188,7 +220,7 @@ export default function PurchaseList({ quotationId }: { quotationId: number }) {
       <Dialog open={showCreateModal} onOpenChange={setShowCreateModal}>
         <div className="flex justify-center items-center w-full mt-6">
           <DialogTrigger asChild>
-            <Button className=" bg-primary text-white flex items-center gap-1">
+            <Button className="bg-primary text-white flex items-center gap-1">
               <PlusCircle size={16} />
               <span className="mt-[1.5px]">Agregar Datos De Compra</span>
             </Button>
@@ -208,6 +240,7 @@ export default function PurchaseList({ quotationId }: { quotationId: number }) {
           </div>
         </DialogContent>
       </Dialog>
+      <Toaster />
     </div>
   );
 }
