@@ -24,6 +24,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 export default function Quotations() {
   const [unfinishedQuotations, setUnfinishedQuotations] = useState<
@@ -42,6 +50,8 @@ export default function Quotations() {
   const [timeFilter, setTimeFilter] = useState<"day" | "week" | "month" | null>(
     null,
   );
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const { user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -53,26 +63,30 @@ export default function Quotations() {
 
   useEffect(() => {
     const tab = searchParams.get("tab");
+    const page = parseInt(searchParams.get("page") || "1");
     if (!tab) {
-      router.replace(`/quotations?tab=${isAdmin ? "pending" : "assigned"}`);
+      router.replace(
+        `/quotations?tab=${isAdmin ? "pending" : "assigned"}&page=1`,
+      );
     } else if (tab === "pending" || tab === "assigned" || tab === "completed") {
       setActiveTab(tab);
     }
+    setCurrentPage(page);
   }, [searchParams, router, isAdmin]);
 
   const handleTabChange = (tab: "pending" | "completed" | "assigned") => {
-    if (tab === "pending" || tab === "assigned" || tab === "completed") {
-      setActiveTab(tab);
-    }
-    router.push(`/quotations?tab=${tab}`);
+    setCurrentPage(1);
+    setActiveTab(tab);
+    router.push(`/quotations?tab=${tab}&page=1`);
   };
 
   useEffect(() => {
     const fetchUnfinishedQuotations = async () => {
       try {
-        const unfinishedQuotations =
-          await QuotationsService.getAssignedQuotations();
-        setUnfinishedQuotations(unfinishedQuotations);
+        const { data, totalPages } =
+          await QuotationsService.getAssignedQuotations(currentPage);
+        setUnfinishedQuotations(data);
+        setTotalPages(totalPages);
       } catch (error) {
         console.error("Error fetching quotation items:", error);
       }
@@ -80,18 +94,30 @@ export default function Quotations() {
 
     const fetchFinishedQuotations = async () => {
       try {
-        const finishedQuotations = isAdmin
-          ? await QuotationsService.getFinishedQuotations()
-          : await QuotationsService.getUserFinishedQuotations();
-        setFinishedQuotations(finishedQuotations);
+        const { data, totalPages } = isAdmin
+          ? await QuotationsService.getFinishedQuotations(currentPage)
+          : await QuotationsService.getUserFinishedQuotations(
+              currentPage,
+              user?.id,
+            );
+        setFinishedQuotations(data);
+        setTotalPages(totalPages);
       } catch (error) {
         console.error("Error fetching quotation items:", error);
       }
     };
 
-    fetchUnfinishedQuotations();
-    fetchFinishedQuotations();
-  }, [isAdmin]);
+    if (activeTab === "pending" || activeTab === "assigned") {
+      fetchUnfinishedQuotations();
+    } else {
+      fetchFinishedQuotations();
+    }
+  }, [isAdmin, activeTab, currentPage, user?.id]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    router.push(`/quotations?tab=${activeTab}&page=${page}`);
+  };
 
   const requestSort = (key: string) => {
     let direction = "ascending";
@@ -441,6 +467,61 @@ export default function Quotations() {
               </TableBody>
             </Table>
           </div>
+        </div>
+
+        <div className="flex justify-between items-center mt-4 pb-4">
+          {totalPages !== 1 && (
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (currentPage > 1) {
+                        handlePageChange(currentPage - 1);
+                      }
+                    }}
+                    className={
+                      currentPage === 1 ? "pointer-events-none opacity-50" : ""
+                    }
+                  />
+                </PaginationItem>
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (page) => (
+                    <PaginationItem key={page}>
+                      <PaginationLink
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handlePageChange(page);
+                        }}
+                        isActive={page === currentPage}
+                      >
+                        {page}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ),
+                )}
+                <PaginationItem>
+                  <PaginationNext
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (currentPage < totalPages) {
+                        handlePageChange(currentPage + 1);
+                      }
+                    }}
+                    className={
+                      currentPage === totalPages
+                        ? "pointer-events-none opacity-50"
+                        : ""
+                    }
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          )}
         </div>
       </div>
     </div>
