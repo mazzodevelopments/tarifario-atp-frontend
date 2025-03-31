@@ -19,7 +19,7 @@ const stepTexts: Record<StepKeys, string> = {
 const getStepLink = (
   quotationId: number,
   taskNumber: string,
-  step: StepKeys,
+  step: StepKeys
 ): string => {
   const baseLinks = {
     1: `/create/${quotationId}/items`,
@@ -66,7 +66,7 @@ export default function LastModifiedQuotationsList({
             </div>
           </div>
         </div>
-        <ScrollArea className="h-full max-h-[calc(100vh-5vh)]">
+        <ScrollArea className="h-full max-h-[calc(100vh-36.5vh)]">
           <div className="w-full min-w-max">
             {/* Data Rows */}
             {quotations.map((quotation) => {
@@ -76,7 +76,7 @@ export default function LastModifiedQuotationsList({
               const link = getStepLink(
                 quotation.id,
                 quotation.taskNumber,
-                actualStep,
+                actualStep
               );
 
               return (
@@ -105,7 +105,7 @@ export default function LastModifiedQuotationsList({
                         day: "2-digit",
                         month: "2-digit",
                         year: "numeric",
-                      },
+                      }
                     )}
                   </div>
                   <div className="flex-1 flex justify-center">
