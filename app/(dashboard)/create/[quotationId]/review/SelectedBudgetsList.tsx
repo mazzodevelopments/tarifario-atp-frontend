@@ -170,8 +170,8 @@ export default function SelectedBudgetsList({
                         %
                       </TableCell>
                       <TableCell>
-                        {budget.salesData?.paymentCondition
-                          ? `${budget.salesData.paymentCondition}`
+                        {budget.salesData?.paymentCondition.name
+                          ? `${budget.salesData.paymentCondition.name}`
                           : "-"}
                       </TableCell>
                       <TableCell className="font-[600]">

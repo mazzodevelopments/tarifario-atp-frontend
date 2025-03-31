@@ -194,8 +194,8 @@ export default function SelectableBudgetsList({
                     </TableCell>
                     <TableCell>
                       {" "}
-                      {budget.salesData?.paymentCondition
-                        ? budget.salesData?.paymentCondition
+                      {budget.salesData?.paymentCondition.name
+                        ? budget.salesData?.paymentCondition.name
                         : "-"}
                     </TableCell>
                     <TableCell>

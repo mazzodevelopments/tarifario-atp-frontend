@@ -103,7 +103,10 @@ export default function SalesList({ quotationId }: { quotationId: number }) {
                   unitSalePrice: salesData.unitSalePrice,
                   margin: salesData.margin,
                   totalPrice: salesData.totalPrice,
-                  paymentCondition: budget.salesData?.paymentCondition || "",
+                  paymentCondition: budget.salesData?.paymentCondition || {
+                    id: 0,
+                    name: "",
+                  },
                 },
               }
             : budget,
@@ -142,14 +145,17 @@ export default function SalesList({ quotationId }: { quotationId: number }) {
             const currentSalesData = budget.salesData || {
               unitSalePrice: 0,
               totalPrice: 0,
-              paymentCondition: "",
+              paymentCondition: { id: 0, name: "" },
             };
 
             return {
               ...budget,
               salesData: {
                 ...currentSalesData,
-                paymentCondition,
+                paymentCondition: {
+                  id: paymentConditionId,
+                  name: paymentCondition,
+                },
               },
             };
           }
@@ -216,10 +222,10 @@ export default function SalesList({ quotationId }: { quotationId: number }) {
       setShowPaymentConditionModal(true);
     };
 
-    if (budget.salesData?.paymentCondition) {
+    if (budget.salesData?.paymentCondition?.name) {
       return (
         <div className="flex items-center justify-center gap-2">
-          {budget.salesData.paymentCondition}
+          {budget.salesData.paymentCondition.name}
           <Button
             onClick={handleClick}
             variant="secondary"
