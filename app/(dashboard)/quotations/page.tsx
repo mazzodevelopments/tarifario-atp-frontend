@@ -256,7 +256,7 @@ export default function Quotations() {
   };
 
   return (
-    <div className="flex justify-start w-full h-full flex-col bg-neutral-50">
+    <div className="flex flex-col h-full bg-neutral-50">
       <div className="w-full h-20 flex-shrink-0 border-b border-neutral-200">
         <div className="flex justify-between items-center h-full px-6 mb-4">
           <div className="flex flex-col justify-center items-start w-[16vw]">
@@ -276,7 +276,8 @@ export default function Quotations() {
           />
         </div>
       </div>
-      <div className="w-full px-[1vw] mt-[1vw]">
+
+      <div className="flex flex-col flex-grow px-[1vw] mt-[1vw]">
         <div className="flex justify-between items-center">
           <div className="flex space-x-[0.5vw]">
             <Button
@@ -337,7 +338,7 @@ export default function Quotations() {
         </div>
 
         <div className="w-auto h-auto overflow-hidden rounded-[12px] mt-[1vw] shadow-sm shadow-cyan-500/20">
-          <div className="border rounded-[12px] overflow-auto max-h-[70vh] relative w-full">
+          <div className="border rounded-[12px] max-h-[70vh] relative w-full">
             <Table className="w-full bg-white">
               <TableHeader>
                 <TableRow className="bg-primary/5">
@@ -468,61 +469,61 @@ export default function Quotations() {
             </Table>
           </div>
         </div>
+      </div>
 
-        <div className="flex justify-between items-center mt-4 pb-4">
-          {totalPages !== 1 && (
-            <Pagination>
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      if (currentPage > 1) {
-                        handlePageChange(currentPage - 1);
-                      }
-                    }}
-                    className={
-                      currentPage === 1 ? "pointer-events-none opacity-50" : ""
+      <div className="w-full px-[1vw] pb-4">
+        {totalPages !== 1 && (
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (currentPage > 1) {
+                      handlePageChange(currentPage - 1);
                     }
-                  />
-                </PaginationItem>
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                  (page) => (
-                    <PaginationItem key={page}>
-                      <PaginationLink
-                        href="#"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handlePageChange(page);
-                        }}
-                        isActive={page === currentPage}
-                      >
-                        {page}
-                      </PaginationLink>
-                    </PaginationItem>
-                  ),
-                )}
-                <PaginationItem>
-                  <PaginationNext
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      if (currentPage < totalPages) {
-                        handlePageChange(currentPage + 1);
-                      }
-                    }}
-                    className={
-                      currentPage === totalPages
-                        ? "pointer-events-none opacity-50"
-                        : ""
+                  }}
+                  className={
+                    currentPage === 1 ? "pointer-events-none opacity-50" : ""
+                  }
+                />
+              </PaginationItem>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                (page) => (
+                  <PaginationItem key={page}>
+                    <PaginationLink
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handlePageChange(page);
+                      }}
+                      isActive={page === currentPage}
+                    >
+                      {page}
+                    </PaginationLink>
+                  </PaginationItem>
+                ),
+              )}
+              <PaginationItem>
+                <PaginationNext
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (currentPage < totalPages) {
+                      handlePageChange(currentPage + 1);
                     }
-                  />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-          )}
-        </div>
+                  }}
+                  className={
+                    currentPage === totalPages
+                      ? "pointer-events-none opacity-50"
+                      : ""
+                  }
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        )}
       </div>
     </div>
   );
