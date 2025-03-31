@@ -2,14 +2,6 @@
 
 import Button from "@/components/Button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import Link from "next/link";
 
 type StepKeys = 1 | 2 | 3 | 4 | 5 | 6 | 7;
