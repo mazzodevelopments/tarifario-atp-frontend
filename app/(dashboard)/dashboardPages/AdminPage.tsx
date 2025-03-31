@@ -132,8 +132,8 @@ export default function AdminPage() {
         {/* PANEL COTIZACIONES */}
         <div className="w-full lg:w-1/3 h-full flex flex-col border-r border-neutral-200 relative p-[1vw]">
           <PagesHeader
-            title="Mis Cotizaciones"
-            subtitle="Vista general de mis cotizaciones"
+            title="Cotizaciones"
+            subtitle="Vista general de las cotizaciones más recientes"
           />
           <div className="h-full gap-3 flex flex-col">
             {/* <CurrentQuotationCard /> */}

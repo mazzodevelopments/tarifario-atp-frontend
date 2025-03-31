@@ -27,7 +27,7 @@ const stepTexts: Record<StepKeys, string> = {
 const getStepLink = (
   quotationId: number,
   taskNumber: string,
-  step: StepKeys
+  step: StepKeys,
 ): string => {
   const baseLinks = {
     1: `/create/${quotationId}/items`,
@@ -84,7 +84,7 @@ export default function LastModifiedQuotationsList({
               const link = getStepLink(
                 quotation.id,
                 quotation.taskNumber,
-                actualStep
+                actualStep,
               );
 
               return (
@@ -92,18 +92,18 @@ export default function LastModifiedQuotationsList({
                   key={quotation.id}
                   className="flex items-center border-b border-neutral-100 py-3 hover:bg-neutral-50"
                 >
-                  <div className="flex-1 font-[600] text-center text-md">
+                  <div className="flex-1 font-[600] text-center text-sm">
                     {quotation.taskNumber}
                   </div>
                   <div className="flex-1 flex justify-center">
                     <div
                       className={
                         isCompleted
-                          ? "bg-green-100 text-green-600 flex px-3 py-1 justify-center items-center rounded-2xl text-sm"
-                          : "bg-orange-100 text-orange-600 flex px-3 py-1 justify-center items-center rounded-2xl text-sm"
+                          ? "bg-green-100 text-green-600 flex px-2 py-1 justify-center items-center rounded-3xl"
+                          : "bg-orange-100 text-orange-600 flex px-2 py-1 justify-center items-center rounded-3xl"
                       }
                     >
-                      {stepText}
+                      <span className="text-sm font-semibold">{stepText}</span>
                     </div>
                   </div>
                   <div className="flex-1 text-center text-sm">
@@ -113,13 +113,13 @@ export default function LastModifiedQuotationsList({
                         day: "2-digit",
                         month: "2-digit",
                         year: "numeric",
-                      }
+                      },
                     )}
                   </div>
                   <div className="flex-1 flex justify-center">
                     <Link href={link} passHref>
                       <Button variant="secondary">
-                        {isCompleted ? "Ver cotización" : "Ir a cotizar"}
+                        {isCompleted ? "Ver Detalle" : "Ir a cotizar"}
                       </Button>
                     </Link>
                   </div>
