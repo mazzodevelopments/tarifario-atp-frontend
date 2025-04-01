@@ -2,6 +2,7 @@
 
 import Button from "@/components/Button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { ArrowUpRight, Info } from "lucide-react";
 import Link from "next/link";
 
 type StepKeys = 1 | 2 | 3 | 4 | 5 | 6 | 7;
@@ -111,7 +112,14 @@ export default function LastModifiedQuotationsList({
                   <div className="flex-1 flex justify-center">
                     <Link href={link} passHref>
                       <Button variant="secondary">
-                        {isCompleted ? "Ver Detalle" : "Ir a cotizar"}
+                        {isCompleted ? (
+                          <Info className="text-neutral-800" size={16} />
+                        ) : (
+                          <ArrowUpRight
+                            className="text-neutral-800"
+                            size={16}
+                          />
+                        )}
                       </Button>
                     </Link>
                   </div>
