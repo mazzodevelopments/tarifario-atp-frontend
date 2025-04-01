@@ -13,3 +13,8 @@ export interface CreateWeightUnit {
   name: string;
   kgValue: number;
 }
+
+export interface MeasurementUnit {
+  id: number;
+  name: string;
+}

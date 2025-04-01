@@ -227,7 +227,7 @@ export default function PurchaseList({ quotationId }: { quotationId: number }) {
           </DialogTrigger>
         </div>
 
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="max-w-5xl">
           <DialogHeader>
             <DialogTitle className="text-2xl">Agregar compra</DialogTitle>
           </DialogHeader>

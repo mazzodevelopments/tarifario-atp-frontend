@@ -4,6 +4,7 @@ export interface PurchaseData {
   date: string;
   item: Item | null;
   origin: string;
+  provenance: string;
   destination: string;
   supplier: string;
   currency: string;
@@ -17,6 +18,11 @@ export interface PurchaseData {
   incoterm: string;
   offeredCondition: string;
   additionalObservations: string;
+  height: number;
+  width: number;
+  length: number;
+  volume: number;
+  measurementUnit: string;
 }
 
 export interface CreatePurchaseData {
@@ -30,10 +36,16 @@ export interface CreatePurchaseData {
   productionTime: number;
   itemId: number | null;
   origin: string;
+  provenance: string;
   destination: string;
   supplierId: number | null;
   currencyId: number | null;
   weightUnitId: number | null;
   incotermId: number | null;
   offeredConditionId: number | null;
+  height: number;
+  width: number;
+  length: number;
+  volume: number;
+  measurementUnitId: number | null;
 }

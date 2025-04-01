@@ -394,6 +394,19 @@ export const CatalogService = {
     return data;
   },
 
+  // MEASUREMENT UNITS
+  listMeasurementUnits: async (): Promise<WeightUnit[]> => {
+    const response = await fetch(`${API_BASE_URL}/catalog/measurement-units`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al traer unidades de peso");
+    }
+
+    return await response.json();
+  },
+
   // WEIGHT UNITS
   listWeightUnits: async (): Promise<WeightUnit[]> => {
     const response = await fetch(`${API_BASE_URL}/catalog/weight-units`, {

@@ -43,6 +43,9 @@ interface CreatePurchaseDataForm {
   origin: string;
   originCity: string;
   originCountry: string;
+  provenance: string;
+  provenanceCity: string;
+  provenanceCountry: string;
   destination: string;
   destinationCity: string;
   destinationCountry: string;
@@ -52,12 +55,18 @@ interface CreatePurchaseDataForm {
   currencyId: number | null;
   weightUnit: string;
   weightUnitId: number | null;
+  measurementUnit: string;
+  measurementUnitId: number | null;
   incoterm: string;
   incotermId: number | null;
   offeredCondition: string;
   offeredConditionId: number | null;
   productionTime: number;
   dollarValue: number;
+  height: number;
+  width: number;
+  lenght: number;
+  volume: number;
 }
 
 export default function CreatePurchase({
@@ -72,6 +81,9 @@ export default function CreatePurchase({
     origin: "",
     originCity: "",
     originCountry: "",
+    provenance: "",
+    provenanceCity: "",
+    provenanceCountry: "",
     destination: "",
     destinationCity: "",
     destinationCountry: "",
@@ -88,16 +100,23 @@ export default function CreatePurchase({
     totalWeight: 0,
     weightUnit: "",
     weightUnitId: null,
+    measurementUnit: "",
+    measurementUnitId: null,
     incoterm: "",
     incotermId: null,
     offeredCondition: "",
     offeredConditionId: null,
     additionalObservations: "",
+    height: 0,
+    width: 0,
+    lenght: 0,
+    volume: 0,
   });
   const [errors, setErrors] = useState({
     date: "",
     item: "",
     origin: "",
+    provenance: "",
     destination: "",
     supplier: "",
     currency: "",
@@ -107,10 +126,15 @@ export default function CreatePurchase({
     unitWeight: "",
     weightUnit: "",
     incoterm: "",
+    measurementUnit: "",
     offeredCondition: "",
+    height: "",
+    width: "",
+    lenght: "",
   });
 
   const [isOriginModalOpen, setIsOriginModalOpen] = useState(false);
+  const [isProvenanceModalOpen, setIsProvenanceModalOpen] = useState(false);
   const [isDestinationModalOpen, setIsDestinationModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -134,6 +158,15 @@ export default function CreatePurchase({
     }
   }, [formData.itemId, formData.unitWeight, items]);
 
+  // CALCULO DEL VOLUMEN
+  useEffect(() => {
+    const volume = formData.height * formData.width * formData.lenght;
+    setFormData((prev) => ({
+      ...prev,
+      volume: volume,
+    }));
+  }, [formData.height, formData.width, formData.lenght]);
+
   // CALCULO TOTAL PRECIO UNITARIO
   useEffect(() => {
     setFormData((prev) => ({
@@ -148,6 +181,7 @@ export default function CreatePurchase({
       date: "",
       item: "",
       origin: "",
+      provenance: "",
       destination: "",
       supplier: "",
       currency: "",
@@ -158,7 +192,11 @@ export default function CreatePurchase({
       unitWeight: "",
       weightUnit: "",
       incoterm: "",
+      measurementUnit: "",
       offeredCondition: "",
+      height: "",
+      width: "",
+      lenght: "",
     };
     let isValid = true;
 
@@ -174,6 +212,11 @@ export default function CreatePurchase({
 
     if (!formData.origin) {
       newErrors.origin = "El origen es requerido";
+      isValid = false;
+    }
+
+    if (!formData.provenance) {
+      newErrors.provenance = "La procedencia es requerida";
       isValid = false;
     }
 
@@ -223,6 +266,26 @@ export default function CreatePurchase({
       isValid = false;
     }
 
+    if (!formData.measurementUnitId) {
+      newErrors.measurementUnit = "La unidad de peso es requerida";
+      isValid = false;
+    }
+
+    if (formData.height <= 0) {
+      newErrors.height = "La altura debe ser mayor a 0";
+      isValid = false;
+    }
+
+    if (formData.width <= 0) {
+      newErrors.width = "El ancho debe ser mayor a 0";
+      isValid = false;
+    }
+
+    if (formData.lenght <= 0) {
+      newErrors.lenght = "El largo debe ser mayor a 0";
+      isValid = false;
+    }
+
     if (!isWithinArgentina && !formData.incotermId) {
       newErrors.incoterm = "El incoterm es requerido";
       isValid = false;
@@ -255,12 +318,18 @@ export default function CreatePurchase({
       productionTime: formData.productionTime,
       itemId: formData.itemId,
       origin: formData.origin,
+      provenance: formData.provenance,
       destination: formData.destination,
       supplierId: formData.supplierId,
       currencyId: formData.currencyId,
       weightUnitId: formData.weightUnitId,
+      measurementUnitId: formData.measurementUnitId,
       incotermId: formData.incotermId,
       offeredConditionId: formData.offeredConditionId,
+      height: formData.height,
+      width: formData.width,
+      length: formData.lenght,
+      volume: formData.volume,
     };
     onPurchaseCreated(purchaseData);
   };
@@ -335,6 +404,11 @@ export default function CreatePurchase({
     }));
   }, []);
 
+  const fetchMeasurementUnits = useCallback(async () => {
+    const measurementUnits = await CatalogService.listMeasurementUnits();
+    return adaptToDropdown(measurementUnits, "id", "name");
+  }, []);
+
   const fetchWeightUnits = useCallback(async () => {
     const weightUnits = await CatalogService.listWeightUnits();
     return adaptToDropdown(weightUnits, "id", "name");
@@ -366,6 +440,20 @@ export default function CreatePurchase({
       originCountry: data.country,
     }));
     setIsOriginModalOpen(false);
+  };
+
+  const handleProvenanceSave = (data: { city: string; country: string }) => {
+    const newProvenance = data.city
+      ? `${data.city}, ${data.country}`
+      : data.country;
+
+    setFormData((prev) => ({
+      ...prev,
+      provenance: newProvenance,
+      provenanceCity: data.city,
+      provenanceCountry: data.country,
+    }));
+    setIsProvenanceModalOpen(false);
   };
 
   const handleDestinationSave = (data: { city: string; country: string }) => {
@@ -550,6 +638,63 @@ export default function CreatePurchase({
 
         <div className="flex flex-col">
           <label className="block text-sm font-[600] text-gray-700">
+            Procedencia
+          </label>
+          <Dialog
+            open={isProvenanceModalOpen}
+            onOpenChange={setIsProvenanceModalOpen}
+          >
+            <DialogTrigger asChild>
+              <Button
+                variant="primary"
+                className={`flex items-center gap-1 border ${formData.provenance ? "bg-white border-gray-300 rounded-md font-medium" : "text-primary  border-primary/20 bg-primary/5 hover:text-primary-dark"}`}
+                onClick={() => setIsProvenanceModalOpen(true)}
+              >
+                {formData.provenance ? (
+                  <span className="flex w-full justify-between mt-[1.5px]">
+                    {formData.provenance}
+                    <Pencil size={16} />
+                  </span>
+                ) : (
+                  <div className="flex gap-1 items-center mx-auto">
+                    <PlusCircle size={16} />
+                    <span className="mt-[1.5px]">
+                      {formData.provenance || "Agregar"}
+                    </span>
+                  </div>
+                )}
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Agregar Procedencia</DialogTitle>
+              </DialogHeader>
+              <CityForm
+                onSubmit={(data) => {
+                  setErrors((prevErrors) => ({
+                    ...prevErrors,
+                    provenance: "",
+                  }));
+                  handleProvenanceSave(data);
+                }}
+                isLoading={isLoading}
+                closeDialog={() => setIsProvenanceModalOpen(false)}
+                initialData={{
+                  city: formData.provenanceCity,
+                  country: formData.provenanceCountry,
+                }}
+              />
+            </DialogContent>
+          </Dialog>
+          {errors.provenance && (
+            <span className="text-xs mt-1 text-red-500">
+              {errors.provenance}
+            </span>
+          )}
+        </div>
+
+        <div className="flex flex-col">
+          <label className="block text-sm font-[600] text-gray-700">
             L. Entrega
           </label>
           <Dialog
@@ -604,17 +749,8 @@ export default function CreatePurchase({
             </span>
           )}
         </div>
-        <Input
-          type="number"
-          name="productionTime"
-          value={formData.productionTime}
-          onChange={handleChange}
-          label="Tiempo de Producción (Días)"
-          error={errors.productionTime}
-          min="0"
-        />
       </div>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-3 gap-4">
         <Dropdown
           value={formData.supplier}
           fetchItems={fetchSuppliers}
@@ -633,8 +769,17 @@ export default function CreatePurchase({
           label="Ofrecido"
           error={errors.offeredCondition}
         />
+        <Input
+          type="number"
+          name="productionTime"
+          value={formData.productionTime}
+          onChange={handleChange}
+          label="Tiempo de Producción (Días)"
+          error={errors.productionTime}
+          min="0"
+        />
       </div>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-4 gap-4">
         <Dropdown
           value={formData.currency}
           fetchItems={fetchCurrencies}
@@ -720,6 +865,58 @@ export default function CreatePurchase({
           />
         </div>
       </div>
+      <div className="grid grid-cols-5 gap-4">
+        <Input
+          type="number"
+          name="height"
+          value={formData.height}
+          onChange={handleChange}
+          label="Alto"
+          error={errors.height}
+        />
+        <Input
+          type="number"
+          name="width"
+          value={formData.width}
+          onChange={handleChange}
+          label="Ancho"
+          error={errors.width}
+        />
+        <Input
+          type="number"
+          name="lenght"
+          value={formData.lenght}
+          onChange={handleChange}
+          label="Largo"
+          error={errors.lenght}
+        />
+        <Dropdown
+          value={formData.measurementUnit}
+          fetchItems={fetchMeasurementUnits}
+          onSelect={handleSelect("measurementUnit")}
+          label="Unidad de Medida"
+          error={errors.measurementUnit}
+        />
+        <div className="flex flex-col">
+          <label className="block text-sm font-[600] text-gray-700">
+            Cubicaje
+          </label>
+          <Input
+            type="text"
+            name="volume"
+            value={`${formData.volume} ${formData.measurementUnit || ""}`.trim()}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              const numericValue = e.target.value.replace(/[^0-9.]/g, "");
+              setFormData((prev) => ({
+                ...prev,
+                volume: numericValue ? parseFloat(numericValue) : 0,
+              }));
+            }}
+            disabled
+          />
+        </div>
+      </div>
+
       <Dropdown
         value={formData.incoterm}
         fetchItems={fetchIncoterms}
