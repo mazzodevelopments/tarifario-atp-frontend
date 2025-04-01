@@ -47,7 +47,7 @@ export default function LastModifiedQuotationsList({
   quotations,
 }: QuotationListProps) {
   return (
-    <div className="flex flex-col relative bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full flex-grow overflow-hidden">
+    <div className="flex flex-col relative bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full overflow-hidden">
       <div className="flex-grow overflow-hidden relative">
         {/* Header Row */}
         <div className="border-b border-neutral-100 py-[1vw] ">

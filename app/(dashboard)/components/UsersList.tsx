@@ -149,7 +149,7 @@ export default function UsersList() {
   };
 
   return (
-    <div className="flex flex-col relative bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full flex-grow overflow-hidden">
+    <div className="flex flex-col relative bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full overflow-hidden">
       <div className="relative flex items-center justify-between p-[1vw] ">
         <div className="relative">
           <input
@@ -253,7 +253,7 @@ export default function UsersList() {
                         alt="Picture of the author"
                         className="w-8 h-8 rounded-full"
                       />
-                      <div className="flex flex-col items-start justify-start min-w-64">
+                      <div className="flex flex-col items-start justify-start min-w-52">
                         <h3 className="text-sm font-semibold">
                           {user.name + " " + user.lastname}
                         </h3>

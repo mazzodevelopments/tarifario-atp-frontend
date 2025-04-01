@@ -56,7 +56,7 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="flex justify-start w-full h-auto lg:h-screen flex-col bg-neutral-50">
+    <div className="flex justify-start w-full h-auto lg:h-screen flex-col">
       {/* Barra superior */}
       <div className="w-full h-20 flex-shrink-0 border-b border-neutral-200">
         <div className="flex justify-between items-center h-full px-6 mb-4">
@@ -128,14 +128,14 @@ export default function AdminPage() {
         </div>
       </div>
 
-      <div className="flex flex-col lg:flex-row items-start w-full h-[100vh]">
+      <div className="flex flex-col lg:flex-row items-start w-full h-[calc(100vh-5rem)]">
         {/* PANEL COTIZACIONES */}
         <div className="w-full lg:w-1/3 h-full flex flex-col border-r border-neutral-200 relative p-[1vw]">
           <PagesHeader
             title="Cotizaciones"
             subtitle="Vista general de las cotizaciones más recientes"
           />
-          <div className="h-full gap-3 flex flex-col">
+          <div className="h-[calc(90vh-12.5vh)] gap-3 flex flex-col">
             {/* <CurrentQuotationCard /> */}
             <QuotationsList quotations={lastQuotations} />
           </div>
@@ -147,7 +147,7 @@ export default function AdminPage() {
             title="Panel Administrador"
             subtitle="Panel de acciones de administrador"
           />
-          <div className="flex flex-row gap-3 h-full">
+          <div className="flex flex-row gap-3 h-[calc(90vh-12.5vh)]">
             <UsersList />
           </div>
         </div>
