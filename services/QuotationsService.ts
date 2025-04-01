@@ -1,16 +1,21 @@
 import { API_BASE_URL } from "@/utils/config";
 
 export const QuotationsService = {
-  getAssignedQuotations: async (page: number = 1, pageSize: number = 10) => {
-    const response = await fetch(
-      `${API_BASE_URL}/quotations/assigned?page=${page}&pageSize=${pageSize}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+  getAssignedQuotations: async (
+    page: number = 1,
+    pageSize: number = 10,
+    timeFilter?: "day" | "week" | "month",
+  ) => {
+    const url = `${API_BASE_URL}/quotations/assigned?page=${page}&pageSize=${pageSize}${
+      timeFilter ? `&timeFilter=${timeFilter}` : ""
+    }`;
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
-    );
+    });
 
     if (!response.ok) {
       throw new Error("Error al traer cotizaciones");
@@ -19,13 +24,18 @@ export const QuotationsService = {
     return await response.json();
   },
 
-  getFinishedQuotations: async (page: number = 1, pageSize: number = 10) => {
-    const response = await fetch(
-      `${API_BASE_URL}/quotations/finished?page=${page}&pageSize=${pageSize}`,
-      {
-        method: "GET",
-      },
-    );
+  getFinishedQuotations: async (
+    page: number = 1,
+    pageSize: number = 10,
+    timeFilter?: "day" | "week" | "month",
+  ) => {
+    const url = `${API_BASE_URL}/quotations/finished?page=${page}&pageSize=${pageSize}${
+      timeFilter ? `&timeFilter=${timeFilter}` : ""
+    }`;
+
+    const response = await fetch(url, {
+      method: "GET",
+    });
 
     if (!response.ok) {
       throw new Error("Error al traer cotizaciones");
@@ -38,18 +48,18 @@ export const QuotationsService = {
     page: number = 1,
     userId?: number,
     pageSize: number = 10,
+    timeFilter?: "day" | "week" | "month",
   ) => {
-    const response = await fetch(
-      `${API_BASE_URL}/quotations/user-finished?page=${page}&pageSize=${pageSize}${
-        userId ? `&userId=${userId}` : ""
-      }`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+    const url = `${API_BASE_URL}/quotations/user-finished?page=${page}&pageSize=${pageSize}${
+      userId ? `&userId=${userId}` : ""
+    }${timeFilter ? `&timeFilter=${timeFilter}` : ""}`;
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
-    );
+    });
 
     if (!response.ok) {
       throw new Error("Error al traer cotizaciones");

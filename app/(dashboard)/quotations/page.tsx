@@ -84,7 +84,11 @@ export default function Quotations() {
     const fetchUnfinishedQuotations = async () => {
       try {
         const { data, totalPages } =
-          await QuotationsService.getAssignedQuotations(currentPage);
+          await QuotationsService.getAssignedQuotations(
+            currentPage,
+            10,
+            timeFilter || undefined,
+          );
         setUnfinishedQuotations(data);
         setTotalPages(totalPages);
       } catch (error) {
@@ -95,10 +99,16 @@ export default function Quotations() {
     const fetchFinishedQuotations = async () => {
       try {
         const { data, totalPages } = isAdmin
-          ? await QuotationsService.getFinishedQuotations(currentPage)
+          ? await QuotationsService.getFinishedQuotations(
+              currentPage,
+              10,
+              timeFilter || undefined,
+            )
           : await QuotationsService.getUserFinishedQuotations(
               currentPage,
               user?.id,
+              10,
+              timeFilter || undefined,
             );
         setFinishedQuotations(data);
         setTotalPages(totalPages);
@@ -112,7 +122,7 @@ export default function Quotations() {
     } else {
       fetchFinishedQuotations();
     }
-  }, [isAdmin, activeTab, currentPage, user?.id]);
+  }, [isAdmin, activeTab, currentPage, user?.id, timeFilter]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -137,40 +147,14 @@ export default function Quotations() {
     setSortConfig({ key, direction });
   };
 
-  const filterQuotationsByTime = (quotations: HistoryQuotationCard[]) => {
-    if (!timeFilter) return quotations;
-
-    const now = new Date();
-    const filterDate = new Date();
-
-    switch (timeFilter) {
-      case "day":
-        filterDate.setDate(now.getDate() - 1);
-        break;
-      case "week":
-        filterDate.setDate(now.getDate() - 7);
-        break;
-      case "month":
-        filterDate.setMonth(now.getMonth() - 1);
-        break;
-      default:
-        return quotations;
-    }
-
-    return quotations.filter((quotation) => {
-      const modifiedDate = new Date(quotation.lastModifiedDate);
-      return modifiedDate > filterDate;
-    });
-  };
-
   const getSortedQuotations = (quotations: HistoryQuotationCard[]) => {
     if (!sortConfig) {
-      return filterQuotationsByTime(quotations);
+      return quotations;
     }
 
     const sortedQuotations = [...quotations];
     if (sortConfig.direction === "normal") {
-      return filterQuotationsByTime(sortedQuotations);
+      return sortedQuotations;
     }
 
     sortedQuotations.sort((a, b) => {
@@ -226,7 +210,7 @@ export default function Quotations() {
       return 0;
     });
 
-    return filterQuotationsByTime(sortedQuotations);
+    return sortedQuotations;
   };
 
   const sortedUnfinishedQuotations = getSortedQuotations(unfinishedQuotations);
@@ -240,6 +224,7 @@ export default function Quotations() {
 
   const handleTimeFilter = (filter: "day" | "week" | "month") => {
     setTimeFilter(timeFilter === filter ? null : filter);
+    setCurrentPage(1);
   };
 
   const getFilterLabel = () => {
@@ -259,7 +244,7 @@ export default function Quotations() {
     <div className="flex flex-col h-full bg-neutral-50">
       <div className="w-full h-20 flex-shrink-0 border-b border-neutral-200">
         <div className="flex justify-between items-center h-full px-6 mb-4">
-          <div className="flex flex-col justify-center items-start w-[16vw]">
+          <div className="flex flex-col justify-center items-start w-[18vw]">
             <h2 className="flex items-center text-xl leading-[1] p-0 font-[800] text-black mt-1">
               {activeTab === "pending" || activeTab === "assigned"
                 ? !isAdmin
@@ -337,7 +322,7 @@ export default function Quotations() {
           </DropdownMenu>
         </div>
 
-        <div className="w-auto h-auto overflow-hidden rounded-[12px] mt-[1vw] shadow-sm shadow-cyan-500/20">
+        <div className="w-auto h-auto overflow-auto rounded-[12px] mt-[1vw] shadow-sm shadow-cyan-500/20">
           <div className="border rounded-[12px] max-h-[70vh] relative w-full">
             <Table className="w-full bg-white">
               <TableHeader>
