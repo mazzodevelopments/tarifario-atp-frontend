@@ -457,7 +457,7 @@ export default function Quotations() {
       </div>
 
       <div className="w-full px-[1vw] pb-4">
-        {totalPages !== 1 && (
+        {totalPages > 1 && (
           <Pagination>
             <PaginationContent>
               <PaginationItem>
