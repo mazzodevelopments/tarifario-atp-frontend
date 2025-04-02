@@ -1,22 +1,15 @@
 "use client";
 
 import type React from "react";
-import { useState, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import Cropper, { Area } from "react-easy-crop";
+import Cropper, { type ReactCropperElement } from "react-cropper";
+import "cropperjs/dist/cropper.css";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import { AdminService } from "@/services/AdminService";
 import { useAuth } from "@/context/AuthContext";
 import type { AdminUpdateUser } from "@/types/User";
-import { convertImageToBase64 } from "@/utils/convertImageToBase64";
-
-interface CropArea {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
 
 export default function FirstLoginForm() {
   const [formData, setFormData] = useState({
@@ -29,11 +22,8 @@ export default function FirstLoginForm() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [showCropper, setShowCropper] = useState(false);
   const [imageToCrop, setImageToCrop] = useState<string | null>(null);
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<CropArea | null>(
-    null,
-  );
+
+  const cropperRef = useRef<ReactCropperElement>(null);
 
   const [errors, setErrors] = useState({
     phone: "",
@@ -44,6 +34,14 @@ export default function FirstLoginForm() {
   });
 
   const { user, login } = useAuth();
+
+  useEffect(() => {
+    return () => {
+      if (typeof imageToCrop === "string" && imageToCrop.startsWith("blob:")) {
+        URL.revokeObjectURL(imageToCrop);
+      }
+    };
+  }, [imageToCrop]);
 
   const validateForm = () => {
     const newErrors = {
@@ -97,12 +95,12 @@ export default function FirstLoginForm() {
     const file = e.target.files?.[0];
     if (file) {
       try {
-        const base64String = await convertImageToBase64(file);
-        setImageToCrop(base64String);
+        const imageUrl = URL.createObjectURL(file);
+        setImageToCrop(imageUrl);
         setShowCropper(true);
         setErrors((prevErrors) => ({ ...prevErrors, profilePic: "" }));
       } catch (error) {
-        console.error("Error al convertir la imagen:", error);
+        console.error("Error al procesar la imagen:", error);
         setErrors((prevErrors) => ({
           ...prevErrors,
           profilePic: "Error al procesar la imagen",
@@ -111,67 +109,26 @@ export default function FirstLoginForm() {
     }
   };
 
-  const onCropComplete = useCallback(
-    (croppedArea: Area, croppedAreaPixels: Area) => {
-      setCroppedAreaPixels(croppedAreaPixels);
-    },
-    [],
-  );
+  const handleCropConfirm = () => {
+    if (cropperRef.current?.cropper) {
+      const cropper = cropperRef.current.cropper;
 
-  const createImage = (url: string): Promise<HTMLImageElement> =>
-    new Promise((resolve, reject) => {
-      const image = new window.Image();
-      image.addEventListener("load", () => resolve(image));
-      image.addEventListener("error", (error) => reject(error));
-      image.crossOrigin = "anonymous";
-      image.src = url;
-    });
+      const croppedImage = cropper
+        .getCroppedCanvas({
+          width: 256,
+          height: 256,
+          imageSmoothingEnabled: true,
+          imageSmoothingQuality: "high",
+          fillColor: "#fff",
+        })
+        .toDataURL("image/jpeg", 0.95);
 
-  const getCroppedImg = async (
-    imageSrc: string,
-    pixelCrop: CropArea,
-  ): Promise<string> => {
-    const image = await createImage(imageSrc);
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
+      setFormData((prev) => ({ ...prev, profilePic: croppedImage }));
+      setPreviewUrl(croppedImage);
+      setShowCropper(false);
 
-    if (!ctx) {
-      throw new Error("No 2d context");
-    }
-
-    // Set canvas size to the cropped size
-    canvas.width = pixelCrop.width;
-    canvas.height = pixelCrop.height;
-
-    // Draw the cropped image onto the canvas
-    ctx.drawImage(
-      image,
-      pixelCrop.x,
-      pixelCrop.y,
-      pixelCrop.width,
-      pixelCrop.height,
-      0,
-      0,
-      pixelCrop.width,
-      pixelCrop.height,
-    );
-
-    // As Base64 string
-    return canvas.toDataURL("image/jpeg");
-  };
-
-  const handleCropConfirm = async () => {
-    if (imageToCrop && croppedAreaPixels) {
-      try {
-        const croppedImage = await getCroppedImg(
-          imageToCrop,
-          croppedAreaPixels,
-        );
-        setFormData((prev) => ({ ...prev, profilePic: croppedImage }));
-        setPreviewUrl(croppedImage);
-        setShowCropper(false);
-      } catch (e) {
-        console.error("Error al recortar la imagen:", e);
+      if (typeof imageToCrop === "string" && imageToCrop.startsWith("blob:")) {
+        URL.revokeObjectURL(imageToCrop);
       }
     }
   };
@@ -272,28 +229,25 @@ export default function FirstLoginForm() {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-lg p-4 w-full max-w-md">
               <h3 className="text-lg font-medium mb-2">Recortar imagen</h3>
-              <div className="relative h-80 w-full mb-4">
+              <div className="relative mb-4">
                 <Cropper
-                  image={imageToCrop}
-                  crop={crop}
-                  zoom={zoom}
-                  aspect={1}
-                  onCropChange={setCrop}
-                  onCropComplete={onCropComplete}
-                  onZoomChange={setZoom}
-                />
-              </div>
-              <div className="flex items-center mb-4">
-                <span className="mr-2 text-sm">Zoom:</span>
-                <input
-                  type="range"
-                  value={zoom}
-                  min={1}
-                  max={3}
-                  step={0.1}
-                  aria-labelledby="Zoom"
-                  onChange={(e) => setZoom(Number(e.target.value))}
-                  className="w-full"
+                  src={imageToCrop}
+                  style={{ height: 320, width: "100%" }}
+                  initialAspectRatio={1}
+                  aspectRatio={1}
+                  guides={true}
+                  viewMode={1}
+                  minCropBoxHeight={100}
+                  minCropBoxWidth={100}
+                  background={false}
+                  responsive={true}
+                  autoCropArea={1}
+                  checkOrientation={false}
+                  zoomable={true}
+                  scalable={true}
+                  movable={true}
+                  restore={true}
+                  ref={cropperRef}
                 />
               </div>
               <div className="flex justify-end gap-2">
