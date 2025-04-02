@@ -18,8 +18,8 @@ export interface ListedItem {
   family: string;
   subfamily: { id: number; name: string };
   detail: string;
-  brand: string;
-  model: { id: number; name: string };
+  brand: { id: number; name: string } | null;
+  model: { id: number; name: string } | null;
   quantity: number;
   unit: { id: number; name: string };
   partNumber: string;
@@ -32,6 +32,7 @@ export interface CreateItem {
   partNumber: string;
   productNumber: string;
   subfamilyId: number | null;
+  brandId: number | null;
   modelId: number | null;
   unitId: number | null;
 }
@@ -40,8 +41,8 @@ export interface CreateMassiveLoadItems {
   family: string;
   subfamily: string;
   detail: string;
-  brand: string;
-  model: string;
+  brand: string | null;
+  model: string | null;
   quantity: number;
   unit: string;
   partNumber: string;

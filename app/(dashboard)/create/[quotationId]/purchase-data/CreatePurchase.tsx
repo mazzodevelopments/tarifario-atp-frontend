@@ -139,7 +139,7 @@ export default function CreatePurchase({
   const [isLoading, setIsLoading] = useState(false);
 
   const isWithinArgentina =
-    formData.originCountry === "Argentina" &&
+    formData.provenanceCountry === "Argentina" &&
     formData.destinationCountry === "Argentina";
 
   // CALCULO DEL PESO
