@@ -59,7 +59,7 @@ export default function LastModifiedQuotationsList({
               Nombre
             </div>
             <div className="flex-1 text-center font-medium text-sm text-neutral-700">
-              Estado
+              Etapa
             </div>
             <div className="flex-1 text-center font-medium text-sm text-neutral-700">
               Fecha de Expiración
