@@ -123,7 +123,14 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
   const handleFreightUpdate = <
     T extends Transport | OriginExpenses | Custom | DestinationExpenses | null,
   >(
-    field: "transport" | "originExpenses" | "custom" | "destinationExpenses",
+    field:
+      | "transport"
+      | "originExpenses"
+      | "destinationExpenses"
+      | "custom"
+      | "taxWarehouse"
+      | "customBroker"
+      | "localTransport",
     value: T,
     setShowModal: (value: boolean) => void,
     setEditing: (value: T | null) => void,
@@ -354,10 +361,18 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
 
   const renderFreightActionCell = (
     freight: Freight,
-    type: "transport" | "custom" | "destinationExpenses" | "origin",
+    type:
+      | "transport"
+      | "originExpenses"
+      | "destinationExpenses"
+      | "custom"
+      | "taxWarehouse"
+      | "customBroker"
+      | "localTransport",
     setShowModal: (show: boolean) => void,
   ) => {
-    const data = type === "origin" ? freight.originExpenses : freight[type];
+    const data =
+      type === "originExpenses" ? freight.originExpenses : freight[type];
 
     if (data?.total) {
       return (
@@ -372,7 +387,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
               } else if (type === "transport") {
                 setEditingTransport(freight.transport as Transport);
                 setShowTransportModal(true);
-              } else if (type === "origin") {
+              } else if (type === "originExpenses") {
                 setEditingOriginExpenses(
                   freight.originExpenses as OriginExpenses,
                 );
@@ -429,10 +444,19 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
                 Transporte
               </TableHead>
               <TableHead className="text-primary font-[600] text-center">
+                Gastos Destino
+              </TableHead>
+              <TableHead className="text-primary font-[600] text-center">
+                Depósito Fiscal
+              </TableHead>
+              <TableHead className="text-primary font-[600] text-center">
                 Aduana
               </TableHead>
               <TableHead className="text-primary font-[600] text-center">
-                Gastos Destino
+                Despachante
+              </TableHead>
+              <TableHead className="text-primary font-[600] text-center">
+                Transporte Local
               </TableHead>
               <TableHead className="text-primary font-[600] text-center">
                 Total
@@ -447,7 +471,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
                 <TableCell>
                   {renderFreightActionCell(
                     freight,
-                    "origin",
+                    "originExpenses",
                     setShowOriginExpensesModal,
                   )}
                 </TableCell>
@@ -461,6 +485,20 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
                 <TableCell>
                   {renderFreightActionCell(
                     freight,
+                    "destinationExpenses",
+                    setShowDestinationExpensesModal,
+                  )}
+                </TableCell>
+                <TableCell>
+                  {renderFreightActionCell(
+                    freight,
+                    "taxWarehouse",
+                    setShowDestinationExpensesModal,
+                  )}
+                </TableCell>
+                <TableCell>
+                  {renderFreightActionCell(
+                    freight,
                     "custom",
                     setShowCustomModal,
                   )}
@@ -468,8 +506,15 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
                 <TableCell>
                   {renderFreightActionCell(
                     freight,
-                    "destinationExpenses",
-                    setShowDestinationExpensesModal,
+                    "customBroker",
+                    setShowCustomModal,
+                  )}
+                </TableCell>
+                <TableCell>
+                  {renderFreightActionCell(
+                    freight,
+                    "localTransport",
+                    setShowCustomModal,
                   )}
                 </TableCell>
                 <TableCell>${freight.total.formatNumber()}</TableCell>
