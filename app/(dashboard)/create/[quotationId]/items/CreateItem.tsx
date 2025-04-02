@@ -26,6 +26,7 @@ interface CreateItemForm {
   partNumber: string;
   productNumber: string;
   subfamilyId: number | null;
+  brandId: number | null;
   modelId: number | null;
   unitId: number | null;
   model?: string;
@@ -48,6 +49,7 @@ export default function CreateItem({
     subfamilyId: null,
     detail: "",
     brand: "",
+    brandId: null,
     model: "",
     modelId: null,
     quantity: 0,
@@ -79,14 +81,16 @@ export default function CreateItem({
         partNumber: editingItem.partNumber,
         productNumber: editingItem.productNumber,
         subfamilyId: editingItem.subfamily.id,
-        modelId: editingItem.model.id,
+        brandId: editingItem.brand?.id || null,
+        modelId: editingItem.model?.id || null,
         unitId: editingItem.unit.id,
         family: editingItem.family,
         subfamily: editingItem.subfamily.name,
-        brand: editingItem.brand,
-        model: editingItem.model.name,
+        brand: editingItem.brand?.name || "",
+        model: editingItem.model?.name || "",
         unit: editingItem.unit.name,
       });
+      setSelectedBrandId(editingItem.brand?.id || null);
     }
   }, [editingItem]);
 
@@ -119,13 +123,9 @@ export default function CreateItem({
       isValid = false;
     }
 
-    if (!formData.brand) {
-      newErrors.brand = "La marca es requerida";
-      isValid = false;
-    }
-
-    if (!formData.modelId) {
-      newErrors.model = "El modelo es requerido";
+    // Validar que si hay modelo, debe haber marca
+    if (formData.modelId && !formData.brandId) {
+      newErrors.brand = "Debe seleccionar una marca si especifica un modelo";
       isValid = false;
     }
 
@@ -167,7 +167,8 @@ export default function CreateItem({
       partNumber: formData.partNumber,
       productNumber: formData.productNumber,
       subfamilyId: formData.subfamilyId!,
-      modelId: formData.modelId!,
+      brandId: formData.brandId || null, // Permitir null
+      modelId: formData.modelId || null, // Permitir null
       unitId: formData.unitId!,
     };
 
@@ -192,25 +193,60 @@ export default function CreateItem({
     setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
 
-  const handleSelect = (field: keyof Item) => (item: DropdownItem) => {
+  const handleSelect = (field: keyof Item) => (item: DropdownItem | null) => {
+    // Permitir null para borrar la selección
+    if (item === null) {
+      if (field === "brand") {
+        setFormData((prev) => ({
+          ...prev,
+          brandId: null,
+          brand: "",
+          modelId: null,
+          model: "",
+        }));
+        setSelectedBrandId(null);
+      } else if (field === "model") {
+        setFormData((prev) => ({
+          ...prev,
+          modelId: null,
+          model: "",
+        }));
+      } else {
+        setFormData((prev) => ({
+          ...prev,
+          [`${field}Id`]: null,
+          [field]: "",
+        }));
+      }
+      return;
+    }
+
     if (field === "subfamily") {
-      setFormData((prev) => ({ ...prev, subfamilyId: item.id }));
+      setFormData((prev) => ({
+        ...prev,
+        subfamilyId: item.id,
+        subfamily: item.name,
+      }));
+    } else if (field === "brand") {
+      setFormData((prev) => ({
+        ...prev,
+        brandId: item.id,
+        brand: item.name,
+        modelId: null,
+        model: "",
+      }));
+      setSelectedBrandId(item.id);
     } else if (field === "model") {
-      setFormData((prev) => ({ ...prev, modelId: item.id }));
+      setFormData((prev) => ({ ...prev, modelId: item.id, model: item.name }));
     } else if (field === "unit") {
-      setFormData((prev) => ({ ...prev, unitId: item.id }));
+      setFormData((prev) => ({ ...prev, unitId: item.id, unit: item.name }));
     } else {
       setFormData((prev) => ({ ...prev, [field]: item.name }));
     }
 
-    if (field === "brand") {
-      setSelectedBrandId(item.id);
-      setFormData((prev) => ({ ...prev, modelId: null }));
-    }
-
     if (field === "family") {
       setSelectedFamilyId(item.id);
-      setFormData((prev) => ({ ...prev, subfamilyId: null }));
+      setFormData((prev) => ({ ...prev, subfamilyId: null, subfamily: "" }));
     }
 
     setErrors((prevErrors) => ({ ...prevErrors, [field]: "" }));
@@ -333,17 +369,25 @@ export default function CreateItem({
         onSelect={handleSelect("brand")}
         label="Marca"
         error={errors.brand}
+        placeholder="Seleccione o deje vacío"
       />
       <Dropdown
         value={formData.model}
         fetchItems={fetchModels}
         addItem={(name: string) =>
-          CatalogService.addModel(name, selectedBrandId!)
+          selectedBrandId
+            ? CatalogService.addModel(name, selectedBrandId)
+            : Promise.reject("Seleccione una marca primero")
         }
         onSelect={handleSelect("model")}
         label="Modelo"
         error={errors.model}
         disabled={!selectedBrandId}
+        placeholder={
+          !selectedBrandId
+            ? "Seleccione una marca primero"
+            : "Seleccione o deje vacío"
+        }
       />
       <div className="grid grid-cols-2 gap-4">
         <Input

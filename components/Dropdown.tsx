@@ -27,6 +27,7 @@ interface DropdownProps {
   fetchItems: () => Promise<DropdownItem[]>;
   addItem?: (name: string) => Promise<{ id: number }>;
   onSelect: (item: DropdownItem) => void;
+  placeholder?: string;
   value?: string;
   label?: string;
   required?: boolean;
@@ -42,6 +43,7 @@ export default function Dropdown({
   addItem,
   onSelect,
   label,
+  placeholder,
   value,
   error,
   disabled,
@@ -182,10 +184,10 @@ export default function Dropdown({
 
   const getDisplayValue = () => {
     if (multiple) {
-      if (selectedItems.length === 0) return "Seleccionar...";
+      if (selectedItems.length === 0) return placeholder || "Seleccionar...";
       return selectedItems.map((item) => item.name).join(", ");
     }
-    return selectedValue || "Seleccionar...";
+    return selectedValue || placeholder || "Seleccionar...";
   };
 
   return (

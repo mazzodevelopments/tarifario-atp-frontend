@@ -150,8 +150,8 @@ export default function ItemsList({ quotationId }: { quotationId: number }) {
               family: row[0]?.toString() || "",
               subfamily: row[1]?.toString() || "",
               detail: row[2]?.toString() || "",
-              brand: row[3]?.toString() || "",
-              model: row[4]?.toString() || "",
+              brand: row[3]?.toString() || null,
+              model: row[4]?.toString() || null,
               quantity: Number(row[5]) || 0,
               unit: row[6]?.toString() || "",
               partNumber: row[7]?.toString() || "",
@@ -265,8 +265,8 @@ export default function ItemsList({ quotationId }: { quotationId: number }) {
                     <TableCell>{item.detail}</TableCell>
                     <TableCell>{item.family}</TableCell>
                     <TableCell>{item.subfamily.name}</TableCell>
-                    <TableCell>{item.brand}</TableCell>
-                    <TableCell>{item.model.name}</TableCell>
+                    <TableCell>{item.brand ? item.brand?.name : "-"}</TableCell>
+                    <TableCell>{item.model ? item.model?.name : "-"}</TableCell>
                     <TableCell>
                       {item.quantity + " " + item.unit.name}
                     </TableCell>
