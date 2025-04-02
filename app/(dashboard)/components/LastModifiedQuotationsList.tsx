@@ -4,6 +4,7 @@ import Button from "@/components/Button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ArrowUpRight, Info } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 type StepKeys = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
@@ -20,7 +21,7 @@ const stepTexts: Record<StepKeys, string> = {
 const getStepLink = (
   quotationId: number,
   taskNumber: string,
-  step: StepKeys
+  step: StepKeys,
 ): string => {
   const baseLinks = {
     1: `/create/${quotationId}/items`,
@@ -47,6 +48,7 @@ interface QuotationListProps {
 export default function LastModifiedQuotationsList({
   quotations,
 }: QuotationListProps) {
+  const router = useRouter();
   return (
     <div className="flex flex-col relative bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-full overflow-hidden">
       <div className="flex-grow overflow-hidden relative">
@@ -77,7 +79,7 @@ export default function LastModifiedQuotationsList({
               const link = getStepLink(
                 quotation.id,
                 quotation.taskNumber,
-                actualStep
+                actualStep,
               );
 
               return (
@@ -106,7 +108,7 @@ export default function LastModifiedQuotationsList({
                         day: "2-digit",
                         month: "2-digit",
                         year: "numeric",
-                      }
+                      },
                     )}
                   </div>
                   <div className="flex-1 flex justify-center">
@@ -133,6 +135,7 @@ export default function LastModifiedQuotationsList({
         <Button
           variant="primary"
           className="px-3 py-2 bg-neutral-900 text-white text-sm mr-2"
+          onClick={() => router.push("/quotations")}
         >
           Ver cotizaciones
         </Button>
