@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown, LogOut, Settings } from "lucide-react";
+import { ChevronDown, ChevronRight, LogOut, Settings } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -161,28 +161,46 @@ export default function UserPage() {
             title="Panel de usuario"
             subtitle="Características generales del usuario."
           />
-          <div className="flex flex-col p-6 relative bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-[50%]">
-            <div className="flex flex-col h-full">
-              <div className="flex justify-between items-start">
-                <div className="flex flex-col">
-                  <span className="text-[0.85vw] text-neutral-500">
-                    Cotizaciones completadas
-                  </span>
-                  <h3 className="font-[700] text-[3vw] text-primary mt-1">
-                    {finishedQuotations || 0}
-                  </h3>
-                  <div className="mt-2">
-                    <Link href={`/quotations?tab=completed`}>
-                      <Button
-                        variant="primary"
-                        className="bg-primary/5 text-primary border border-primary/30 px-4 py-2 justify-center items-center flex"
-                      >
+          <div className="flex flex-col p-[1vw] relative bg-white border border-neutral-200 shadow-sm rounded-[18px] w-full h-[50%]">
+            <div className="flex flex-col h-full gap-3">
+              <div className="flex justify-between items-start h-full relative w-full gap-2">
+                <div className="w-full relative flex gap-2 h-full">
+                  <div className="flex flex-col max-w-80 w-full justify-between items-center bg-primary/5 rounded-[10px] h-full p-4">
+                    <span className="text-[1vw] font-[700] leading-[1] text-neutral-500 text-center">
+                      Cotizaciones completadas
+                    </span>
+                    <h3 className="font-[700] text-[4.5vw] text-primary mt-1">
+                      {finishedQuotations || 0}
+                    </h3>
+                    <Link
+                      href={`/quotations?tab=completed`}
+                      className="flex items-center"
+                    >
+                      <span className=" text-primary">
                         Ver mis cotizaciones
-                      </Button>
+                      </span>
+                      <ChevronRight className="text-primary" />
+                    </Link>
+                  </div>
+                  <div className="flex flex-col max-w-80 w-full justify-between items-center bg-primary/5 rounded-[10px] h-full p-4">
+                    <span className="text-[1vw] font-[700] leading-[1] text-neutral-500 text-center">
+                      Cotizaciones completadas
+                    </span>
+                    <h3 className="font-[700] text-[4.5vw] text-primary mt-1">
+                      {finishedQuotations || 0}
+                    </h3>
+                    <Link
+                      href={`/quotations?tab=completed`}
+                      className="flex items-center"
+                    >
+                      <span className=" text-primary">
+                        Ver mis cotizaciones
+                      </span>
+                      <ChevronRight className="text-primary" />
                     </Link>
                   </div>
                 </div>
-                <div className="flex flex-col items-end gap-2">
+                <div className="flex flex-col items-end gap-2 relative">
                   <div className="p-3 bg-green-50 rounded-lg border border-green-100">
                     <div className="text-sm font-medium text-green-800">
                       Rendimiento
@@ -194,7 +212,7 @@ export default function UserPage() {
                   </div>
                 </div>
               </div>
-              <div className="absolute bottom-4 right-4 w-auto flex justify-end gap-2 items-end h-auto">
+              <div className="relative w-auto flex justify-end gap-2 items-end h-auto">
                 <Button variant="secondary" className="px-3 py-2 text-sm">
                   Ver informe detallado
                 </Button>
