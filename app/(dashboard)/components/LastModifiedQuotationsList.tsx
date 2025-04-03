@@ -72,62 +72,71 @@ export default function LastModifiedQuotationsList({
         <ScrollArea className="h-full max-h-[calc(100vh-36.5vh)]">
           <div className="w-full min-w-max">
             {/* Data Rows */}
-            {quotations.map((quotation) => {
-              const actualStep = quotation.step as StepKeys;
-              const stepText = stepTexts[actualStep] || "Estado desconocido";
-              const isCompleted = quotation.step === 7;
-              const link = getStepLink(
-                quotation.id,
-                quotation.taskNumber,
-                actualStep,
-              );
+            {quotations.length === 0 ? (
+              <div className="flex items-center justify-center py-8">
+                <p className="text-neutral-500 text-sm">
+                  No hay cotizaciones recientes
+                </p>
+              </div>
+            ) : (
+              quotations.map((quotation) => {
+                const actualStep = quotation.step as StepKeys;
+                const stepText = stepTexts[actualStep] || "Estado desconocido";
+                const isCompleted = quotation.step === 7;
+                const link = getStepLink(
+                  quotation.id,
+                  quotation.taskNumber,
+                  actualStep,
+                );
 
-              return (
-                <div
-                  key={quotation.id}
-                  className="flex items-center border-b border-neutral-100 py-3 hover:bg-neutral-50"
-                >
-                  <div className="flex-1 font-[600] text-center text-sm">
-                    {quotation.taskNumber}
-                  </div>
-                  <div className="flex-1 flex justify-center">
-                    <div
-                      className={
-                        isCompleted
-                          ? "bg-green-100 text-green-600 flex px-2 py-1 justify-center items-center rounded-3xl"
-                          : "bg-orange-100 text-orange-600 flex px-2 py-1 justify-center items-center rounded-3xl"
-                      }
-                    >
-                      <span className="text-sm font-semibold">{stepText}</span>
+                return (
+                  <div
+                    key={quotation.id}
+                    className="flex items-center border-b border-neutral-100 py-3 hover:bg-neutral-50"
+                  >
+                    <div className="flex-1 font-[600] text-center text-sm">
+                      {quotation.taskNumber}
                     </div>
-                  </div>
-                  <div className="flex-1 text-center text-sm">
-                    {new Date(quotation.expirationDateTime).toLocaleDateString(
-                      "es-ES",
-                      {
+                    <div className="flex-1 flex justify-center">
+                      <div
+                        className={
+                          isCompleted
+                            ? "bg-green-100 text-green-600 flex px-2 py-1 justify-center items-center rounded-3xl"
+                            : "bg-orange-100 text-orange-600 flex px-2 py-1 justify-center items-center rounded-3xl"
+                        }
+                      >
+                        <span className="text-sm font-semibold">
+                          {stepText}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex-1 text-center text-sm">
+                      {new Date(
+                        quotation.expirationDateTime,
+                      ).toLocaleDateString("es-ES", {
                         day: "2-digit",
                         month: "2-digit",
                         year: "numeric",
-                      },
-                    )}
+                      })}
+                    </div>
+                    <div className="flex-1 flex justify-center">
+                      <Link href={link} passHref>
+                        <Button variant="secondary">
+                          {isCompleted ? (
+                            <Info className="text-neutral-800" size={16} />
+                          ) : (
+                            <ArrowUpRight
+                              className="text-neutral-800"
+                              size={16}
+                            />
+                          )}
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
-                  <div className="flex-1 flex justify-center">
-                    <Link href={link} passHref>
-                      <Button variant="secondary">
-                        {isCompleted ? (
-                          <Info className="text-neutral-800" size={16} />
-                        ) : (
-                          <ArrowUpRight
-                            className="text-neutral-800"
-                            size={16}
-                          />
-                        )}
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })
+            )}
           </div>
         </ScrollArea>
       </div>

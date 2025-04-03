@@ -33,13 +33,13 @@ export default function Input({
       {isTextArea ? (
         <textarea
           {...(props as TextareaHTMLAttributes<HTMLTextAreaElement>)}
-          className={`w-full px-2 py-2 text-sm border rounded-md focus:outline-none resize-y min-h-[70px] 
+          className={`w-full px-2 py-2 text-sm border border-gray-300 rounded-md focus:outline-none resize-y min-h-[70px] 
             ${className} ${error ? "border-red-500" : ""}`}
         />
       ) : (
         <input
           {...(props as InputHTMLAttributes<HTMLInputElement>)}
-          className={`w-full px-2 py-2 text-sm border rounded-md focus:outline-none 
+          className={`w-full px-2 py-2 text-sm border border-gray-300 rounded-md focus:outline-none 
             ${className} ${error ? "border-red-500" : ""}`}
         />
       )}
