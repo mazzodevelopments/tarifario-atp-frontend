@@ -17,41 +17,63 @@ export default function OriginExpensesForm({
 }: CreateOriginExpensesProps) {
   const [formData, setFormData] = useState<OriginExpenses>(
     existingExpenses || {
-      pickup: 0,
-      repackaging: false,
-      palletFumigation: false,
+      pickUpValue: 0,
+      repackagingValue: 0,
+      palletFumigationValue: 0,
+      certificatesValue: 0,
+      haulageValue: 0,
       customExpenses: [],
       total: 0,
     },
   );
 
   const [includePickup, setIncludePickup] = useState(
-    existingExpenses?.pickup ? existingExpenses.pickup > 0 : false,
+    existingExpenses?.pickUpValue ? existingExpenses.pickUpValue > 0 : false,
+  );
+  const [includeHaulage, setIncludeHaulage] = useState(
+    existingExpenses?.haulageValue ? existingExpenses.haulageValue > 0 : false,
+  );
+  const [includeCertificates, setIncludeCertificates] = useState(
+    existingExpenses?.certificatesValue
+      ? existingExpenses.certificatesValue > 0
+      : false,
   );
   const [newExpenseName, setNewExpenseName] = useState("");
   const [newExpenseValue, setNewExpenseValue] = useState("");
 
   useEffect(() => {
-    if (includePickup && formData.pickup === 0) {
-      setFormData((prev) => ({ ...prev, pickup: 180 }));
+    if (includePickup && formData.pickUpValue === 0) {
+      setFormData((prev) => ({ ...prev, pickUpValue: 180 }));
     } else if (!includePickup) {
-      setFormData((prev) => ({ ...prev, pickup: 0 }));
+      setFormData((prev) => ({ ...prev, pickUpValue: 0 }));
     }
-  }, [includePickup, formData.pickup]);
+  }, [includePickup, formData.pickUpValue]);
+
+  useEffect(() => {
+    if (includeHaulage && formData.haulageValue === 0) {
+      setFormData((prev) => ({ ...prev, haulageValue: 0 }));
+    } else if (!includeHaulage) {
+      setFormData((prev) => ({ ...prev, haulageValue: 0 }));
+    }
+  }, [includeHaulage, formData.haulageValue]);
+
+  useEffect(() => {
+    if (includeCertificates && formData.certificatesValue === 0) {
+      setFormData((prev) => ({ ...prev, certificatesValue: 0 }));
+    } else if (!includeCertificates) {
+      setFormData((prev) => ({ ...prev, certificatesValue: 0 }));
+    }
+  }, [includeCertificates, formData.certificatesValue]);
 
   useEffect(() => {
     const calculateTotal = () => {
       let total = 0;
 
-      if (includePickup) {
-        total += formData.pickup;
-      }
-      if (formData.repackaging) {
-        total += 190;
-      }
-      if (formData.palletFumigation) {
-        total += 250;
-      }
+      total += formData.pickUpValue;
+      total += formData.repackagingValue;
+      total += formData.palletFumigationValue;
+      total += formData.certificatesValue;
+      total += formData.haulageValue;
 
       formData.customExpenses.forEach((expense) => {
         total += expense.value;
@@ -62,18 +84,49 @@ export default function OriginExpensesForm({
 
     calculateTotal();
   }, [
-    formData.pickup,
-    formData.repackaging,
-    formData.palletFumigation,
+    formData.pickUpValue,
+    formData.repackagingValue,
+    formData.palletFumigationValue,
+    formData.certificatesValue,
+    formData.haulageValue,
     formData.customExpenses,
-    includePickup,
   ]);
 
   const handlePickupChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value);
     if (value >= 180 && value <= 650) {
-      setFormData((prev) => ({ ...prev, pickup: value }));
+      setFormData((prev) => ({ ...prev, pickUpValue: value }));
     }
+  };
+
+  const handleHaulageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Number(e.target.value);
+    if (value >= 0) {
+      setFormData((prev) => ({ ...prev, haulageValue: value }));
+    }
+  };
+
+  const handleCertificatesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Number(e.target.value);
+    if (value >= 0) {
+      setFormData((prev) => ({ ...prev, certificatesValue: value }));
+    }
+  };
+
+  const handleRepackagingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({
+      ...prev,
+      repackagingValue: e.target.checked ? 190 : 0,
+    }));
+  };
+
+  const handlePalletFumigationChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      palletFumigationValue: e.target.checked ? 250 : 0,
+    }));
   };
 
   const addCustomExpense = () => {
@@ -116,13 +169,8 @@ export default function OriginExpensesForm({
           <input
             type="checkbox"
             id="repackaging"
-            checked={formData.repackaging}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setFormData((prev) => ({
-                ...prev,
-                repackaging: e.target.checked,
-              }))
-            }
+            checked={formData.repackagingValue > 0}
+            onChange={handleRepackagingChange}
             className="rounded"
           />
           <label htmlFor="repackaging" className="font-[600]">
@@ -134,13 +182,8 @@ export default function OriginExpensesForm({
           <input
             type="checkbox"
             id="palletFumigation"
-            checked={formData.palletFumigation}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setFormData((prev) => ({
-                ...prev,
-                palletFumigation: e.target.checked,
-              }))
-            }
+            checked={formData.palletFumigationValue > 0}
+            onChange={handlePalletFumigationChange}
             className="rounded"
           />
           <label htmlFor="palletFumigation" className="font-[600]">
@@ -165,11 +208,61 @@ export default function OriginExpensesForm({
         {includePickup && (
           <Input
             type="number"
-            value={formData.pickup}
+            value={formData.pickUpValue}
             onChange={handlePickupChange}
             min={180}
             max={650}
             placeholder="USD 180 - 650"
+            className="w-40"
+          />
+        )}
+      </div>
+
+      <div className="flex items-center space-x-4">
+        <input
+          type="checkbox"
+          id="haulage"
+          checked={includeHaulage}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setIncludeHaulage(e.target.checked)
+          }
+          className="rounded"
+        />
+        <label htmlFor="haulage" className="font-[600]">
+          Acarreo
+        </label>
+        {includeHaulage && (
+          <Input
+            type="number"
+            value={formData.haulageValue}
+            onChange={handleHaulageChange}
+            min={0}
+            placeholder="Valor acarreo"
+            className="w-40"
+          />
+        )}
+      </div>
+
+      <div className="flex items-center space-x-4">
+        <input
+          type="checkbox"
+          id="certificates"
+          checked={includeCertificates}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setIncludeCertificates(e.target.checked)
+          }
+          className="rounded"
+        />
+        <label htmlFor="certificates" className="font-[600]">
+          Certificados
+        </label>
+        {includeCertificates && (
+          <Input
+            type="number"
+            value={formData.certificatesValue}
+            onChange={handleCertificatesChange}
+            min={0}
+            placeholder="Valor certificados"
             className="w-40"
           />
         )}
@@ -231,7 +324,7 @@ export default function OriginExpensesForm({
       </div>
 
       <div className="text-xl font-bold mt-4">
-        Total: {formData.total.toFixed(2)}
+        Total: USD {formData.total.toFixed(2)}
       </div>
 
       <div className="flex justify-end gap-2">

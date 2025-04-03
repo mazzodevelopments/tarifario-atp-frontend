@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback, ChangeEvent } from "react";
 import Button from "@/components/Button";
 import Dropdown, { type DropdownItem } from "@/components/Dropdown";
 import type { Transport } from "@/types/Transport";
-import { LogisticDataService } from "@/services/LogisticDataService";
 import Input from "@/components/Input";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 import { QuoteService } from "@/services/QuoteService";

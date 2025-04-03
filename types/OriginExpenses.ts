@@ -1,7 +1,9 @@
 export interface OriginExpenses {
-  pickup: number;
-  repackaging: boolean;
-  palletFumigation: boolean;
+  pickUpValue: number;
+  repackagingValue: number;
+  palletFumigationValue: number;
+  certificatesValue: number;
+  haulageValue: number;
   customExpenses: CustomExpense[];
   total: number;
 }
