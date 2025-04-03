@@ -193,6 +193,21 @@ export const QuoteService = {
   },
 
   // ETAPA 4
+  getTransportTypes: async () => {
+    const response = await fetch(`${API_BASE_URL}/quote/transportTypes`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al traer budgets");
+    }
+
+    return await response.json();
+  },
+
   // TODO
 
   // ETAPA 5

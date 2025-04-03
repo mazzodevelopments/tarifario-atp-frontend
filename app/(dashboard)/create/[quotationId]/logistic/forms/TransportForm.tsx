@@ -5,6 +5,7 @@ import type { Transport } from "@/types/Transport";
 import { LogisticDataService } from "@/services/LogisticDataService";
 import Input from "@/components/Input";
 import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
+import { QuoteService } from "@/services/QuoteService";
 
 interface CreateTransportProps {
   onTransportCreated: (transport: Transport | null) => void;
@@ -46,7 +47,7 @@ export default function TransportForm({
 
   useEffect(() => {
     const fetchOptions = async () => {
-      const options = await LogisticDataService.fetchTransportOptions();
+      const options = await QuoteService.getTransportTypes();
       setTransportOptions(options);
     };
     fetchOptions();
