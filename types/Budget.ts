@@ -7,6 +7,6 @@ export interface Budget {
   numbering: string;
   purchaseData?: PurchaseData | null;
   salesData?: SalesData | null;
-  freight: Freight | null;
+  freight?: Freight | null;
   stage: string;
 }

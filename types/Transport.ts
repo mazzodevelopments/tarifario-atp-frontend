@@ -1,4 +1,4 @@
 export interface Transport {
-  type: string;
+  transportType: { id: number; type: string; category: string };
   total: number;
 }

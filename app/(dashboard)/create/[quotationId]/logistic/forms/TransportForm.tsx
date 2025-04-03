@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, ChangeEvent } from "react";
 import Button from "@/components/Button";
 import Dropdown, { type DropdownItem } from "@/components/Dropdown";
 import type { Transport } from "@/types/Transport";
 import { LogisticDataService } from "@/services/LogisticDataService";
 import Input from "@/components/Input";
+import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 
 interface CreateTransportProps {
   onTransportCreated: (transport: Transport | null) => void;
@@ -11,30 +12,51 @@ interface CreateTransportProps {
   existingTransport?: Transport | null;
 }
 
+interface TranslatedDropdownItem extends DropdownItem {
+  originalValue?: string;
+}
+
 export default function TransportForm({
   onTransportCreated,
   onCancel,
   existingTransport,
 }: CreateTransportProps) {
-  const [selectedTransport, setSelectedTransport] = useState<string>(
-    existingTransport?.type || "",
+  const [selectedCategory, setSelectedCategory] = useState<string>(
+    existingTransport?.transportType.type || "",
   );
+  const [selectedTransportType, setSelectedTransportType] = useState<{
+    id: number;
+    type: string;
+    category: string;
+  }>(existingTransport?.transportType || { id: 0, type: "", category: "" });
   const [transportValue, setTransportValue] = useState<number>(
     existingTransport?.total || 0,
   );
+  const [transportOptions, setTransportOptions] = useState<
+    { id: number; type: string; category: string }[]
+  >([]);
 
   useEffect(() => {
     if (existingTransport) {
-      setSelectedTransport(existingTransport.type);
+      setSelectedCategory(existingTransport.transportType.type);
+      setSelectedTransportType(existingTransport.transportType);
       setTransportValue(existingTransport.total);
     }
   }, [existingTransport]);
 
+  useEffect(() => {
+    const fetchOptions = async () => {
+      const options = await LogisticDataService.fetchTransportOptions();
+      setTransportOptions(options);
+    };
+    fetchOptions();
+  }, []);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (selectedTransport) {
+    if (selectedTransportType.id && selectedTransportType.category) {
       const newTransport: Transport = {
-        type: selectedTransport,
+        transportType: selectedTransportType,
         total: transportValue,
       };
       onTransportCreated(newTransport);
@@ -45,58 +67,90 @@ export default function TransportForm({
     onTransportCreated(null);
   };
 
-  const handleTransportChange = (item: DropdownItem) => {
-    setSelectedTransport(item.name);
-    switch (item.name) {
-      case "Air":
-      case "DHL":
-      case "DHL #":
-        setTransportValue(1500);
-        break;
-      case "LCL":
-      case "FCL 20'":
-      case "FCL 40'":
-        setTransportValue(1000);
-        break;
-      case "Road":
-        setTransportValue(500);
-        break;
-      default:
-        setTransportValue(2000);
+  const handleCategoryChange = (item: TranslatedDropdownItem) => {
+    const originalValue = item.originalValue || item.name;
+    setSelectedCategory(originalValue);
+    setSelectedTransportType({ id: 0, type: originalValue, category: "" });
+    setTransportValue(0);
+  };
+
+  const handleTransportTypeChange = (item: DropdownItem) => {
+    const selectedOption = transportOptions.find((opt) => opt.id === item.id);
+    if (selectedOption) {
+      const newTransportType = {
+        id: selectedOption.id,
+        type: selectedOption.type,
+        category: selectedOption.category,
+      };
+      setSelectedTransportType(newTransportType);
     }
+  };
+
+  const fetchTransportOptions = useCallback(async () => {
+    if (!selectedCategory) return [];
+
+    const filteredOptions = transportOptions.filter(
+      (option) => option.type === selectedCategory,
+    );
+
+    return adaptToDropdown(filteredOptions, "id", "category");
+  }, [selectedCategory, transportOptions]);
+
+  const fetchCategoryOptions = useCallback(async () => {
+    const types = Array.from(new Set(transportOptions.map((opt) => opt.type)));
+
+    const typeTranslations: Record<string, string> = {
+      National: "Nacional",
+      International: "Internacional",
+    };
+
+    return types.map((type, index) => ({
+      id: index + 1,
+      name: typeTranslations[type] || type,
+      originalValue: type,
+    }));
+  }, [transportOptions]);
+
+  const getTranslatedCategory = (type: string) => {
+    const translations: Record<string, string> = {
+      National: "Nacional",
+      International: "Internacional",
+    };
+    return translations[type] || type;
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <Dropdown
-        label="Opción de Transporte"
-        fetchItems={LogisticDataService.fetchTransportOptions}
-        onSelect={handleTransportChange}
+        label="Tipo de Transporte"
+        fetchItems={fetchCategoryOptions}
+        onSelect={handleCategoryChange}
         required
-        value={selectedTransport}
+        value={getTranslatedCategory(selectedCategory)}
       />
-      {/*CODIGO EJEMPLO*/}
+
+      <Dropdown
+        label="Categoría de Transporte"
+        onSelect={handleTransportTypeChange}
+        fetchItems={fetchTransportOptions}
+        required
+        value={selectedTransportType.category}
+        disabled={!selectedCategory}
+      />
+
       <Input
         type="number"
-        name="value"
-        value={10000}
-        label="Valor Flete"
-        placeholder="Valor Flete"
+        name="total"
+        value={transportValue}
+        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+          setTransportValue(Number(e.target.value))
+        }
+        label="Valor Total"
+        placeholder="Ingrese el valor"
+        required
+        min={0}
       />
-      <div className="ml-2 flex items-center space-x-2">
-        <input type="checkbox" id="pickup" className="rounded" />
-        <label htmlFor="pickup" className="font-[600]">
-          Seguro
-        </label>
-        <Input
-          type="number"
-          min={0}
-          value={200}
-          placeholder="Valor Seguro"
-          className="w-40"
-        />
-      </div>
-      {/* CODIGO EJEMPLO*/}
+
       <div className="flex justify-end gap-2">
         {existingTransport && (
           <Button type="button" onClick={handleDelete} variant="danger">
@@ -115,7 +169,7 @@ export default function TransportForm({
           type="submit"
           variant="primary"
           className="px-4 bg-primary text-white"
-          disabled={!selectedTransport}
+          disabled={!selectedTransportType.category || transportValue <= 0}
         >
           {existingTransport ? "Actualizar" : "Guardar"}
         </Button>

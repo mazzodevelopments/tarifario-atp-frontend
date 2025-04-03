@@ -10,15 +10,15 @@ export const LogisticDataService = {
       { id: 5, name: "Contenedor" },
     ];
   },
-  fetchTransportOptions: async (): Promise<DropdownItem[]> => {
+  fetchTransportOptions: async () => {
     return [
-      { id: 1, name: "Air" },
-      { id: 2, name: "DHL" },
-      { id: 3, name: "DHL #" },
-      { id: 4, name: "LCL" },
-      { id: 5, name: "FCL 20'" },
-      { id: 6, name: "FCL 40'" },
-      { id: 7, name: "Road" },
+      { id: 1, category: "Air", type: "National" },
+      { id: 2, category: "DHL", type: "National" },
+      { id: 3, category: "DHL #", type: "International" },
+      { id: 4, category: "LCL", type: "National" },
+      { id: 5, category: "FCL 20'", type: "International" },
+      { id: 6, category: "FCL 40'", type: "National" },
+      { id: 7, category: "Road", type: "International" },
     ];
   },
 };

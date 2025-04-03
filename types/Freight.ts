@@ -7,8 +7,23 @@ export interface Freight {
   id: string;
   name: string;
   originExpenses?: OriginExpenses | null;
-  transport: Transport | null;
-  custom: Custom | null;
+  transport?: Transport | null;
   destinationExpenses?: DestinationExpenses | null;
+  taxWarehouse?: TaxWarehouse | null;
+  custom?: Custom | null;
+  customBroker?: CustomBroker | null;
+  localTransport?: LocalTransport | null;
+  total: number;
+}
+
+interface TaxWarehouse {
+  total: number;
+}
+
+interface CustomBroker {
+  total: number;
+}
+
+interface LocalTransport {
   total: number;
 }
