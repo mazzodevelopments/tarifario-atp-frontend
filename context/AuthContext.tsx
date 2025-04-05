@@ -127,9 +127,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setToken(newToken);
       setIsAuthenticated(true);
 
-      if (!refreshTimerRef.current) {
-        scheduleTokenRefresh();
-      }
+      scheduleTokenRefresh();
 
       return data;
     } catch (error) {
@@ -137,6 +135,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       clearAuthData();
       router.push("/login");
       throw error;
+    } finally {
+      isRefreshingRef.current = false;
     }
   };
 
