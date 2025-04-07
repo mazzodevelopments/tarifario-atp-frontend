@@ -7,12 +7,13 @@ import Link from "next/link";
 interface SearchResult {
   id: number;
   name: string;
+  step?: number;
 }
 
 interface SearchInputProps {
   placeholder: string;
   onSearch: (query: string) => Promise<SearchResult[]>;
-  link: string;
+  link: string | ((result: SearchResult) => string);
   linkWithName?: boolean;
 }
 
@@ -48,6 +49,13 @@ export default function SearchInput({
     return () => clearTimeout(debounceTimer);
   }, [query, onSearch]);
 
+  const getResultLink = (result: SearchResult) => {
+    if (typeof link === "function") {
+      return link(result);
+    }
+    return `${link}/${linkWithName ? result.name : result.id}`;
+  };
+
   return (
     <div className="flex items-center gap-2 h-9">
       <div className="relative w-[22vw] h-full">
@@ -72,7 +80,7 @@ export default function SearchInput({
                 <Link
                   key={result.id}
                   className="block px-4 py-2 hover:bg-neutral-50 text-sm"
-                  href={`${link}/${linkWithName ? result.name : result.id}`}
+                  href={getResultLink(result)}
                 >
                   {result.name}
                 </Link>

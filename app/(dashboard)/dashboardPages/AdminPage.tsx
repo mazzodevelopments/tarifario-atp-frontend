@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { QuotationsService } from "@/services/QuotationsService";
 import { useAuth } from "@/context/AuthContext";
-import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 import SearchInput from "@/components/SearchInput";
 import PagesHeader from "./pagesHeader";
 import UsersList from "@/app/(dashboard)/components/UsersList";
@@ -50,9 +49,16 @@ export default function AdminPage() {
   }, []);
 
   const fetchSearchResults = async (searchTerm: string) => {
-    const data: { id: number; taskNumber: string }[] =
+    const data =
       await QuotationsService.searchQuotationByTaskNumber(searchTerm);
-    return adaptToDropdown(data, "id", "taskNumber");
+
+    return data.map(
+      (item: { id: number; taskNumber: string; step: number }) => ({
+        id: item.id,
+        name: item.taskNumber,
+        step: item.step,
+      }),
+    );
   };
 
   return (
@@ -68,8 +74,21 @@ export default function AdminPage() {
           <SearchInput
             placeholder="Buscar cotización"
             onSearch={fetchSearchResults}
-            link="/quotations"
-            linkWithName
+            link={(result) => {
+              const baseLinks = {
+                1: `/create/${result.id}/items`,
+                2: `/create/${result.id}/purchase-data`,
+                3: `/create/${result.id}/logistic`,
+                4: `/create/${result.id}/sales-data`,
+                5: `/create/${result.id}/select-budgets`,
+                6: `/create/${result.id}/review`,
+                7: `/quotations/${result.name}`,
+              };
+
+              return result.step
+                ? baseLinks[result.step as keyof typeof baseLinks]
+                : `/quotations/${result.name}`;
+            }}
           />
           <div className="flex items-center gap-2 h-14 hover:cursor-pointer">
             <div className="relative w-auto">

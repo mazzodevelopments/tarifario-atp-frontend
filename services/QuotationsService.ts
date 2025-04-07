@@ -157,7 +157,9 @@ export const QuotationsService = {
 
     return await response.json();
   },
-  searchQuotationByTaskNumber: async (term: string) => {
+  searchQuotationByTaskNumber: async (
+    term: string,
+  ): Promise<{ id: number; taskNumber: string; step: number }[]> => {
     const response = await fetch(`${API_BASE_URL}/quotations/search/${term}`, {
       method: "GET",
     });

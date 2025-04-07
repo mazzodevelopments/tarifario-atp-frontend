@@ -14,7 +14,6 @@ import { QuotationTableRow } from "@/app/(dashboard)/quotations/QuotationTableRo
 import { QuotationsService } from "@/services/QuotationsService";
 import type { HistoryQuotationCard } from "@/types/Quotations";
 import SearchInput from "@/components/SearchInput";
-import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 import { ArrowUp, ArrowDown, ArrowUpDown, Filter } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
@@ -217,9 +216,16 @@ export default function Quotations() {
   const sortedFinishedQuotations = getSortedQuotations(finishedQuotations);
 
   const fetchSearchResults = async (searchTerm: string) => {
-    const data: { id: number; taskNumber: string }[] =
+    const data =
       await QuotationsService.searchQuotationByTaskNumber(searchTerm);
-    return adaptToDropdown(data, "id", "taskNumber");
+
+    return data.map(
+      (item: { id: number; taskNumber: string; step: number }) => ({
+        id: item.id,
+        name: item.taskNumber,
+        step: item.step,
+      }),
+    );
   };
 
   const handleTimeFilter = (filter: "day" | "week" | "month") => {
@@ -256,8 +262,21 @@ export default function Quotations() {
           <SearchInput
             placeholder="Buscar cotización"
             onSearch={fetchSearchResults}
-            link="/quotations"
-            linkWithName
+            link={(result) => {
+              const baseLinks = {
+                1: `/create/${result.id}/items`,
+                2: `/create/${result.id}/purchase-data`,
+                3: `/create/${result.id}/logistic`,
+                4: `/create/${result.id}/sales-data`,
+                5: `/create/${result.id}/select-budgets`,
+                6: `/create/${result.id}/review`,
+                7: `/quotations/${result.name}`,
+              };
+
+              return result.step
+                ? baseLinks[result.step as keyof typeof baseLinks]
+                : `/quotations/${result.name}`;
+            }}
           />
         </div>
       </div>
