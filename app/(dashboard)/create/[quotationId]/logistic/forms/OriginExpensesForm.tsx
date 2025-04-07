@@ -57,7 +57,7 @@ export default function OriginExpensesForm({
     } else if (!includeHaulage) {
       setFormData((prev) => ({ ...prev, haulageValue: 0 }));
     }
-  }, [includeHaulage, formData.haulageValue]);
+  }, [includeHaulage]);
 
   useEffect(() => {
     if (includeCertificates && formData.certificatesValue === 0) {
@@ -65,7 +65,7 @@ export default function OriginExpensesForm({
     } else if (!includeCertificates) {
       setFormData((prev) => ({ ...prev, certificatesValue: 0 }));
     }
-  }, [includeCertificates, formData.certificatesValue]);
+  }, [includeCertificates]);
 
   useEffect(() => {
     const calculateTotal = () => {
@@ -95,10 +95,11 @@ export default function OriginExpensesForm({
   ]);
 
   const handlePickupChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number(e.target.value);
-    if (value >= 180 && value <= 650) {
-      setFormData((prev) => ({ ...prev, pickUpValue: value }));
-    }
+    const inputValue = e.target.value;
+    setFormData((prev) => ({
+      ...prev,
+      pickUpValue: inputValue === "" ? 0 : Number(inputValue),
+    }));
   };
 
   const handleHaulageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -158,6 +159,7 @@ export default function OriginExpensesForm({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onOriginExpensesCreated(formData);
+    console.log(formData);
   };
 
   const handleDelete = () => {
@@ -345,7 +347,17 @@ export default function OriginExpensesForm({
         <Button
           type="submit"
           className="bg-primary text-white"
-          disabled={formData.total === 0}
+          disabled={
+            formData.total === 0 ||
+            (formData.pickUpValue === 0 &&
+              formData.repackagingValue === 0 &&
+              formData.palletFumigationValue === 0 &&
+              formData.certificatesValue === 0 &&
+              formData.haulageValue === 0 &&
+              formData.customExpenses.length === 0) ||
+            (includePickup &&
+              (formData.pickUpValue < 180 || formData.pickUpValue > 650))
+          }
         >
           {existingExpenses ? "Actualizar" : "Guardar"}
         </Button>
