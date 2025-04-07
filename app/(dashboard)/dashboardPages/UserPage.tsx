@@ -65,15 +65,16 @@ export default function UserPage() {
   }, [shouldFetch]);
 
   const fetchSearchResults = async (searchTerm: string) => {
-    const data =
-      await QuotationsService.searchQuotationByTaskNumber(searchTerm);
+    const data = await QuotationsService.searchQuotationByTaskNumber(
+      searchTerm
+    );
 
     return data.map(
       (item: { id: number; taskNumber: string; step: number }) => ({
         id: item.id,
         name: item.taskNumber,
         step: item.step,
-      }),
+      })
     );
   };
 
@@ -184,9 +185,9 @@ export default function UserPage() {
             <div className="flex flex-col h-full gap-3">
               <div className="flex justify-between items-start h-full relative w-full gap-2">
                 <div className="w-full relative flex gap-2 h-full">
-                  <div className="flex flex-col max-w-80 w-full justify-between items-center bg-primary/5 rounded-[10px] h-full p-4">
-                    <span className="text-[1vw] font-[700] leading-[1] text-neutral-500 text-center">
-                      Cotizaciones completadas
+                  <div className="flex flex-col max-w-80 w-full justify-between items-center bg-primary/10 rounded-[10px] h-full p-4">
+                    <span className="text-[1vw] font-[700] leading-[1] text-primary text-center">
+                      Cotizaciones modificadas
                     </span>
                     <h3 className="font-[700] text-[4.5vw] text-primary mt-1">
                       {finishedQuotations || 0}
@@ -201,33 +202,39 @@ export default function UserPage() {
                       <ChevronRight className="text-primary" />
                     </Link>
                   </div>
-                  <div className="flex flex-col max-w-80 w-full justify-between items-center bg-primary/5 rounded-[10px] h-full p-4">
-                    <span className="text-[1vw] font-[700] leading-[1] text-neutral-500 text-center">
-                      Cotizaciones completadas
+                  <div className="flex flex-col max-w-80 w-full justify-between items-center bg-orange-100 rounded-[10px] h-full p-4">
+                    <span className="text-[1vw] font-[700] leading-[1] text-orange-600 text-center">
+                      Cotizaciones pendientes
                     </span>
-                    <h3 className="font-[700] text-[4.5vw] text-primary mt-1">
+                    <h3 className="font-[700] text-[4.5vw] text-orange-600 mt-1">
                       {finishedQuotations || 0}
                     </h3>
                     <Link
                       href={`/quotations?tab=completed`}
                       className="flex items-center"
                     >
-                      <span className=" text-primary">
+                      <span className=" text-orange-600">
                         Ver mis cotizaciones
                       </span>
-                      <ChevronRight className="text-primary" />
+                      <ChevronRight className="text-orange-600" />
                     </Link>
                   </div>
-                </div>
-                <div className="flex flex-col items-end gap-2 relative">
-                  <div className="p-3 bg-green-50 rounded-lg border border-green-100">
-                    <div className="text-sm font-medium text-green-800">
-                      Rendimiento
-                    </div>
-                    <div className="text-2xl font-bold text-green-700">85%</div>
-                    <div className="text-xs text-green-600">
-                      +5% desde el mes pasado
-                    </div>
+                  <div className="flex flex-col max-w-80 w-full justify-between items-center bg-green-100 rounded-[10px] h-full p-4">
+                    <span className="text-[1vw] font-[700] leading-[1] text-neutral-500 text-center">
+                      Cotizaciones completadas
+                    </span>
+                    <h3 className="font-[700] text-[4.5vw] text-green-600 mt-1">
+                      {finishedQuotations || 0}
+                    </h3>
+                    <Link
+                      href={`/quotations?tab=completed`}
+                      className="flex items-center"
+                    >
+                      <span className=" text-green-600">
+                        Ver mis cotizaciones
+                      </span>
+                      <ChevronRight className="text-green-600" />
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -259,7 +266,7 @@ export default function UserPage() {
                 <h3 className="text-left text-[1.2vw] font-[800]">
                   Roles de usuario
                 </h3>
-                <p className="text-left text-[0.85vw] max-w-md">
+                <p className="text-left text-[0.85vw] max-w-md pr-8">
                   Te han asignado{" "}
                   {roles?.length > 1 ? "los roles de" : "el rol de"}{" "}
                   <strong>{roles?.join(", ")}</strong>. Solo podrás participar
