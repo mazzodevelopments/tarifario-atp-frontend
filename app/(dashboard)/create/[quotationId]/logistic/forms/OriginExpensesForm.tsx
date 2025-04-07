@@ -1,3 +1,5 @@
+"use client";
+
 import type React from "react";
 import { useState, useEffect } from "react";
 import Button from "@/components/Button";
@@ -192,45 +194,47 @@ export default function OriginExpensesForm({
         </div>
       </div>
 
-      <div className="flex items-center space-x-4">
-        <input
-          type="checkbox"
-          id="pickup"
-          checked={includePickup}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setIncludePickup(e.target.checked)
-          }
-          className="rounded"
-        />
-        <label htmlFor="pickup" className="font-[600]">
-          PickUp (USD 180 - 650)
-        </label>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-4">
+          <input
+            type="checkbox"
+            id="pickup"
+            checked={includePickup}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setIncludePickup(e.target.checked)
+            }
+            className="rounded"
+          />
+          <label htmlFor="pickup" className="font-[600]">
+            PickUp (USD 180 - 650)
+          </label>
+        </div>
         {includePickup && (
           <Input
             type="number"
             value={formData.pickUpValue}
             onChange={handlePickupChange}
-            min={180}
-            max={650}
             placeholder="USD 180 - 650"
-            className="w-40"
+            className="w-full max-w-xs"
           />
         )}
       </div>
 
-      <div className="flex items-center space-x-4">
-        <input
-          type="checkbox"
-          id="haulage"
-          checked={includeHaulage}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setIncludeHaulage(e.target.checked)
-          }
-          className="rounded"
-        />
-        <label htmlFor="haulage" className="font-[600]">
-          Acarreo
-        </label>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-4">
+          <input
+            type="checkbox"
+            id="haulage"
+            checked={includeHaulage}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setIncludeHaulage(e.target.checked)
+            }
+            className="rounded"
+          />
+          <label htmlFor="haulage" className="font-[600]">
+            Acarreo
+          </label>
+        </div>
         {includeHaulage && (
           <Input
             type="number"
@@ -238,24 +242,26 @@ export default function OriginExpensesForm({
             onChange={handleHaulageChange}
             min={0}
             placeholder="Valor acarreo"
-            className="w-40"
+            className="w-full max-w-xs"
           />
         )}
       </div>
 
-      <div className="flex items-center space-x-4">
-        <input
-          type="checkbox"
-          id="certificates"
-          checked={includeCertificates}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setIncludeCertificates(e.target.checked)
-          }
-          className="rounded"
-        />
-        <label htmlFor="certificates" className="font-[600]">
-          Certificados
-        </label>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-4">
+          <input
+            type="checkbox"
+            id="certificates"
+            checked={includeCertificates}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setIncludeCertificates(e.target.checked)
+            }
+            className="rounded"
+          />
+          <label htmlFor="certificates" className="font-[600]">
+            Certificados
+          </label>
+        </div>
         {includeCertificates && (
           <Input
             type="number"
@@ -263,7 +269,7 @@ export default function OriginExpensesForm({
             onChange={handleCertificatesChange}
             min={0}
             placeholder="Valor certificados"
-            className="w-40"
+            className="w-full max-w-xs"
           />
         )}
       </div>
