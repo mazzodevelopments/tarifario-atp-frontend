@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Home,
   PlusSquare,
@@ -13,7 +13,6 @@ import {
   ListTodo,
   LogOut,
   ChevronDown,
-  ChevronsUpDown,
 } from "lucide-react";
 
 import {
@@ -44,6 +43,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
   const { state } = useSidebar();
   const { user, logout } = useAuth();
+  const router = useRouter();
 
   const userRoles = user?.roles?.map((role) => role.name) || [];
 
@@ -97,7 +97,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton
                   size="lg"
-                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground pl-1"
+                  className="pl-1"
+                  onClick={() => router.push("/")}
                 >
                   <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
                     <Image
