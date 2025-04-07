@@ -147,8 +147,8 @@ export default function UserPage() {
       <div className="flex flex-row items-start w-full h-[100vh]">
         <div className="w-1/2 h-full flex flex-col justify-center items-center relative p-[1vw] border-r border-neutral-200 ">
           <PagesHeader
-            title="Mis Cotizaciones"
-            subtitle="Vista general de mis cotizaciones"
+            title="Cotizaciones"
+            subtitle="Vista general de las cotizaciones más recientes"
           />
           <div className="w-full h-full flex flex-col">
             {/* <CurrentQuotationCard userId={user ? user.id : 0} /> */}
