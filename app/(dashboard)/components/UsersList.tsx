@@ -65,7 +65,7 @@ export default function UsersList() {
 
   const filteredUsers = users
     .filter((user) =>
-      user.email.toLowerCase().includes(searchQuery.toLowerCase())
+      user.email.toLowerCase().includes(searchQuery.toLowerCase()),
     )
     .filter((user) => {
       if (sortBy === "all") return true;
@@ -160,7 +160,7 @@ export default function UsersList() {
           />
           <Search
             size={18}
-            className="absolute left-2 top-1/2 transform -translate-y-1/2 text-neutral-400 z-10"
+            className="absolute left-2 top-1/2 transform -translate-y-1/2 text-neutral-400 z-5"
           />
         </div>
         <div className="flex items-center gap-2">
@@ -174,16 +174,16 @@ export default function UsersList() {
                 {sortBy === "all"
                   ? "Todos"
                   : sortBy === "Superadmin"
-                  ? "Superadmin"
-                  : sortBy === "Admin"
-                  ? "Admin"
-                  : sortBy === "Compras"
-                  ? "Compras"
-                  : sortBy === "Ventas"
-                  ? "Ventas"
-                  : sortBy === "Logística"
-                  ? "Logística"
-                  : "Todos"}
+                    ? "Superadmin"
+                    : sortBy === "Admin"
+                      ? "Admin"
+                      : sortBy === "Compras"
+                        ? "Compras"
+                        : sortBy === "Ventas"
+                          ? "Ventas"
+                          : sortBy === "Logística"
+                            ? "Logística"
+                            : "Todos"}
                 <ChevronDown className="ml-2 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -267,13 +267,13 @@ export default function UsersList() {
                         .sort(
                           (a, b) =>
                             roleOrder.indexOf(a.name) -
-                            roleOrder.indexOf(b.name)
+                            roleOrder.indexOf(b.name),
                         )
                         .map((role) => (
                           <div
                             key={role.id}
                             className={`px-2 py-0.5 rounded-3xl ${getRoleColor(
-                              role.name
+                              role.name,
                             )}`}
                           >
                             <span className="text-sm font-semibold">
