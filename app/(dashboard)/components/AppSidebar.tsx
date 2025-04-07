@@ -113,16 +113,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       <span className="text-primary">Tarifario Web</span>
                     </span>
                   </div>
-                  <ChevronsUpDown className="ml-auto" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="w-[--radix-dropdown-menu-trigger-width]"
-                align="start"
-              >
-                <DropdownMenuItem>Importar</DropdownMenuItem>
-                <DropdownMenuItem>Exportar</DropdownMenuItem>
-              </DropdownMenuContent>
             </DropdownMenu>
             {state === "expanded" && <SidebarTrigger />}
           </SidebarMenuItem>
