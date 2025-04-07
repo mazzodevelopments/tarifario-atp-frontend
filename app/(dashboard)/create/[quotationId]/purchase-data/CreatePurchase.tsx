@@ -904,7 +904,7 @@ export default function CreatePurchase({
           <Input
             type="text"
             name="volume"
-            value={`${formData.volume} ${formData.measurementUnit || ""}`.trim()}
+            value={`${formData.volume} ${formData.measurementUnit || ""}³`.trim()}
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
               const numericValue = e.target.value.replace(/[^0-9.]/g, "");
               setFormData((prev) => ({
