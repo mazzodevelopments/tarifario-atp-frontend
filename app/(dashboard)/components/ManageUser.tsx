@@ -37,6 +37,13 @@ export default function ManageUser({
   const { toast } = useToast();
   const { user } = useAuth();
 
+  const isCurrentUserSuperadmin = user?.roles.some(
+    (r) => r.name === "Superadmin",
+  );
+  const isUserToManageSuperadmin = userToManage.roles.some(
+    (r) => r.name === "Superadmin",
+  );
+
   useEffect(() => {
     setSelectedRoles(
       userToManage.roles.map((role) => ({
@@ -159,10 +166,11 @@ export default function ManageUser({
                 setIsRoleModalOpen(true);
               }}
               disabled={
-                !user?.roles.some((r) => r.name === "Superadmin") &&
-                userToManage.roles.some(
-                  (r) => r.name === "Superadmin" || r.name === "Admin",
-                )
+                (isCurrentUserSuperadmin && isUserToManageSuperadmin) ||
+                (!user?.roles.some((r) => r.name === "Superadmin") &&
+                  userToManage.roles.some(
+                    (r) => r.name === "Superadmin" || r.name === "Admin",
+                  ))
               }
             >
               Gestionar roles
@@ -173,6 +181,7 @@ export default function ManageUser({
                 setIsManageModalOpen(false);
                 setIsDeleteModalOpen(true);
               }}
+              disabled={isCurrentUserSuperadmin && isUserToManageSuperadmin}
             >
               Eliminar usuario
             </Button>
@@ -186,8 +195,13 @@ export default function ManageUser({
           <DialogHeader>
             <DialogTitle>Gestionar roles del usuario</DialogTitle>
             <DialogDescription>
-              Selecciona los roles que deseas asignar al usuario. Puedes
-              seleccionar múltiples roles.
+              {isCurrentUserSuperadmin && isUserToManageSuperadmin ? (
+                <span className="text-red-500">
+                  No puedes modificar los roles de otro Superadmin.
+                </span>
+              ) : (
+                "Selecciona los roles que deseas asignar al usuario. Puedes seleccionar múltiples roles."
+              )}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
@@ -201,6 +215,7 @@ export default function ManageUser({
               label="Seleccionar roles"
               multiple
               selectedItems={selectedRoles}
+              disabled={isCurrentUserSuperadmin && isUserToManageSuperadmin}
             />
           </div>
           <DialogFooter>
@@ -214,7 +229,10 @@ export default function ManageUser({
               variant="primary"
               className="text-white"
               onClick={handleRolesChange}
-              disabled={selectedRoles.length === 0}
+              disabled={
+                selectedRoles.length === 0 ||
+                (isCurrentUserSuperadmin && isUserToManageSuperadmin)
+              }
             >
               Confirmar
             </Button>
@@ -233,11 +251,19 @@ export default function ManageUser({
               Confirmar eliminación
             </DialogTitle>
             <DialogDescription className="text-center">
-              ¿Estás seguro de eliminar el usuario{" "}
-              <span className="font-medium">
-                {userToManage.name} {userToManage.lastname}
-              </span>
-              ?
+              {isCurrentUserSuperadmin && isUserToManageSuperadmin ? (
+                <span className="text-red-500">
+                  No puedes eliminar a otro Superadmin.
+                </span>
+              ) : (
+                <>
+                  ¿Estás seguro de eliminar el usuario{" "}
+                  <span className="font-medium">
+                    {userToManage.name} {userToManage.lastname}
+                  </span>
+                  ?
+                </>
+              )}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex flex-row justify-center gap-2 sm:gap-0 mt-2">
@@ -252,6 +278,7 @@ export default function ManageUser({
               variant="primary"
               onClick={handleDeleteUser}
               className="flex-1 sm:flex-none bg-red-100 text-red-500"
+              disabled={isCurrentUserSuperadmin && isUserToManageSuperadmin}
             >
               Eliminar
             </Button>
