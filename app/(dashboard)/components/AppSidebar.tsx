@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   Home,
   PlusSquare,
@@ -13,6 +13,7 @@ import {
   ListTodo,
   LogOut,
   ChevronDown,
+  ChevronsUpDown,
 } from "lucide-react";
 
 import {
@@ -43,7 +44,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
   const { state } = useSidebar();
   const { user, logout } = useAuth();
-  const router = useRouter();
 
   const userRoles = user?.roles?.map((role) => role.name) || [];
 
@@ -97,8 +97,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton
                   size="lg"
-                  className="pl-1"
-                  onClick={() => router.push("/")}
+                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground pl-1"
                 >
                   <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
                     <Image
@@ -114,8 +113,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       <span className="text-primary">Tarifario Web</span>
                     </span>
                   </div>
+                  <ChevronsUpDown className="ml-auto" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
+              <DropdownMenuContent
+                className="w-[--radix-dropdown-menu-trigger-width]"
+                align="start"
+              >
+                <DropdownMenuItem>Importar</DropdownMenuItem>
+                <DropdownMenuItem>Exportar</DropdownMenuItem>
+              </DropdownMenuContent>
             </DropdownMenu>
             {state === "expanded" && <SidebarTrigger />}
           </SidebarMenuItem>
