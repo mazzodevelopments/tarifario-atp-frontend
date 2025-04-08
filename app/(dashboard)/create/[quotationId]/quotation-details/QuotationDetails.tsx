@@ -28,7 +28,6 @@ export default function QuotationDetails({
     expirationDateTime: `${new Date().toISOString().split("T")[0]}T00:00`,
     materialsNeededDate: new Date().toISOString().split("T")[0],
     customerRequestNumber: "",
-    stageId: 1,
     items: null,
     budgets: null,
   });
@@ -167,7 +166,6 @@ export default function QuotationDetails({
         expirationDateTime: formData.expirationDateTime,
         materialsNeededDate: formData.materialsNeededDate,
         customerRequestNumber: formData.customerRequestNumber,
-        stageId: formData.stageId,
       };
 
       const quotationId =

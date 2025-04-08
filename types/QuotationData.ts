@@ -12,7 +12,6 @@ export interface QuotationData {
   materialsNeededDate: string;
   customerRequestNumber: string;
   step?: number;
-  stageId: number;
   budgets: Budget[] | null;
   items: Item[] | null;
 }
@@ -25,5 +24,4 @@ export interface CreateQuotationData {
   expirationDateTime: string;
   materialsNeededDate: string;
   customerRequestNumber: string;
-  stageId: number;
 }
