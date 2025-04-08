@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams, usePathname } from "next/navigation";
 import Header from "@/app/(dashboard)/components/Header";
 import ProgressBar from "@/app/(dashboard)/create/ProgressBar";
+import { useExpo } from "@/context/ExpoContext";
 
 const steps = [
   { title: "Cargar Datos", path: "/create" },
@@ -25,13 +26,14 @@ export default function CreateLayout({
 
   const pathname = usePathname();
   const { quotationId } = useParams();
+  const { isExpo } = useExpo();
 
   useEffect(() => {
     const findCurrentStepIndex = () => {
       return steps.findIndex((step) => {
         const dynamicPath = step.path.replace(
           "[quotationId]",
-          quotationId?.toString() || ""
+          quotationId?.toString() || "",
         );
         return pathname === dynamicPath;
       });
@@ -52,9 +54,16 @@ export default function CreateLayout({
           <div className="flex w-full flex-col h-full">
             <div className="flex w-full justify-center items-center h-full">
               <div className="w-full h-full relative flex flex-col">
-                <h3 className="text-xl font-[800]">{`Etapa ${
-                  currentStep + 1
-                } - ${steps[currentStep].title}`}</h3>
+                <div className="flex justify-between items-center w-full">
+                  <h3 className="text-xl font-[800]">
+                    {`Etapa ${currentStep + 1} - ${steps[currentStep].title}`}
+                  </h3>
+                  {isExpo && (
+                    <span className="text-lg text-purple-800 font-[800]">
+                      EXPO
+                    </span>
+                  )}
+                </div>
                 <div className="flex justify-center relative h-full items-center">
                   {children}
                 </div>

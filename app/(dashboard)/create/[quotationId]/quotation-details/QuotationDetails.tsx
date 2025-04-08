@@ -36,6 +36,7 @@ export default function QuotationDetails({
   const [selectedBuyerId, setSelectedBuyerId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isClientLoading, setIsClientLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({
     client: "",
     buyer: "",
@@ -148,6 +149,8 @@ export default function QuotationDetails({
       e.preventDefault();
     }
 
+    if (isSubmitting) return;
+
     if (!validateForm()) {
       return;
     }
@@ -158,6 +161,8 @@ export default function QuotationDetails({
     }
 
     try {
+      setIsSubmitting(true);
+
       const createQuotationData: CreateQuotationData = {
         taskNumber: formData.taskNumber,
         buyerId: selectedBuyerId,
@@ -173,6 +178,10 @@ export default function QuotationDetails({
       onSubmitSuccess(quotationId);
     } catch (error) {
       console.error("Error creating quotation:", error);
+    } finally {
+      setTimeout(() => {
+        setIsSubmitting(false);
+      }, 1000);
     }
   };
 
@@ -342,8 +351,9 @@ export default function QuotationDetails({
         type="submit"
         variant="primary"
         className="flex w-full mt-4 text-white items-center justify-center"
+        disabled={isSubmitting}
       >
-        Iniciar Cotización
+        {isSubmitting ? "Procesando..." : "Iniciar Cotización"}
       </Button>
     </form>
   );
