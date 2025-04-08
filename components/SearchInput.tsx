@@ -72,7 +72,9 @@ export default function SearchInput({
 
         {(results.length > 0 || isLoading) && (
           <div className="absolute w-full mt-1 bg-white border border-neutral-200 rounded-2xl shadow-lg z-10 overflow-hidden">
-            <div className={`py-1 ${isLoading && "text-center"}`}>
+            <div
+              className={`overflow-y-auto max-h-[60vh] ${isLoading && "text-center"}`}
+            >
               {isLoading && (
                 <span className="px-4 py-2 text-xs">Cargando...</span>
               )}
