@@ -27,6 +27,7 @@ import type { DestinationExpenses } from "@/types/DestinationExpenses";
 import type { Freight } from "@/types/Freight";
 import "@/utils/formatNumber";
 import { QuoteService } from "@/services/QuoteService";
+import { useExpo } from "@/context/ExpoContext";
 
 export default function LogisticList({ quotationId }: { quotationId: number }) {
   // BUDGETS
@@ -65,6 +66,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
     useState<DestinationExpenses | null>(null);
   // LOADING
   const [isLoading, setIsLoading] = useState(true);
+  const { isExpo } = useExpo();
 
   useEffect(() => {
     if (!shouldFetch) return;
@@ -374,11 +376,21 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
     const data =
       type === "originExpenses" ? freight.originExpenses : freight[type];
 
+    const disabledTypes = [
+      "custom",
+      "taxWarehouse",
+      "customBroker",
+      "transport",
+      "destinationExpenses",
+    ];
+    const shouldDisable = isExpo && disabledTypes.includes(type);
+
     if (data?.total) {
       return (
         <div className="flex justify-center w-full ml-1 items-center gap-2">
           <span className="font-[600]">${data.total.formatNumber()}</span>
           <Button
+            disabled={shouldDisable}
             onClick={() => {
               setSelectedFreightId(freight.id);
               if (type === "custom") {
@@ -411,6 +423,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
     return (
       <div className="w-full justify-center flex">
         <Button
+          disabled={shouldDisable}
           onClick={() => {
             setSelectedFreightId(freight.id);
             setShowModal(true);
