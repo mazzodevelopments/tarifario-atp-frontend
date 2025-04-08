@@ -80,6 +80,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     return baseItems;
   }, [userRoles]);
 
+  const handleExpoChange = (value: boolean) => {
+    if (pathname === "/") {
+      setIsExpo(value);
+    }
+  };
+
   return (
     <Sidebar collapsible="icon" {...props} className="border-neutral-200">
       {state === "expanded" && (
@@ -120,20 +126,22 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       </span>
                     )}
                   </div>
-                  <ChevronsUpDown className="ml-auto" />
+                  {pathname === "/" && <ChevronsUpDown className="ml-auto" />}
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="w-[--radix-dropdown-menu-trigger-width]"
-                align="start"
-              >
-                <DropdownMenuItem onClick={() => setIsExpo(false)}>
-                  Importar
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setIsExpo(true)}>
-                  Exportar
-                </DropdownMenuItem>
-              </DropdownMenuContent>
+              {pathname === "/" && (
+                <DropdownMenuContent
+                  className="w-[--radix-dropdown-menu-trigger-width]"
+                  align="start"
+                >
+                  <DropdownMenuItem onClick={() => handleExpoChange(false)}>
+                    Importar
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleExpoChange(true)}>
+                    Exportar
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              )}
             </DropdownMenu>
             {state === "expanded" && <SidebarTrigger />}
           </SidebarMenuItem>
