@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react"; // Importamos el icono X
 import Link from "next/link";
 
 interface SearchResult {
@@ -26,12 +26,20 @@ export default function SearchInput({
   const [query, setQuery] = useState<string>("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [hasSearched, setHasSearched] = useState<boolean>(false);
+
+  const clearInput = () => {
+    setQuery("");
+    setResults([]);
+    setHasSearched(false);
+  };
 
   useEffect(() => {
     const debounceTimer = setTimeout(() => {
       if (query.length > 0) {
         setIsLoading(true);
         setResults([]);
+        setHasSearched(true);
         onSearch(query)
           .then((data: SearchResult[]) => {
             setResults(data);
@@ -43,6 +51,7 @@ export default function SearchInput({
           });
       } else {
         setResults([]);
+        setHasSearched(false);
       }
     }, 500);
 
@@ -70,13 +79,28 @@ export default function SearchInput({
           onChange={(e) => setQuery(e.target.value)}
         />
 
-        {(results.length > 0 || isLoading) && (
+        {query.length > 0 && (
+          <button
+            onClick={clearInput}
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 hover:text-neutral-600 z-10"
+            aria-label="Clear search"
+          >
+            <X size={14} />
+          </button>
+        )}
+
+        {(isLoading ||
+          (hasSearched && results.length === 0) ||
+          results.length > 0) && (
           <div className="absolute w-full mt-1 bg-white border border-neutral-200 rounded-2xl shadow-lg z-10 overflow-hidden">
             <div
-              className={`overflow-y-auto max-h-[60vh] ${isLoading && "text-center"}`}
+              className={`overflow-y-auto max-h-[60vh] ${(isLoading || (hasSearched && results.length === 0)) && "text-center"}`}
             >
               {isLoading && (
                 <span className="px-4 py-2 text-xs">Cargando...</span>
+              )}
+              {!isLoading && hasSearched && results.length === 0 && (
+                <span className="px-4 py-2 text-xs">No hay resultados</span>
               )}
               {results.map((result) => (
                 <Link
