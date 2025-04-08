@@ -39,11 +39,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
+import { useExpo } from "@/context/ExpoContext";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
   const { state } = useSidebar();
   const { user, logout } = useAuth();
+  const { isExpo, setIsExpo } = useExpo();
 
   const userRoles = user?.roles?.map((role) => role.name) || [];
 
@@ -112,6 +114,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       <span className="font-[800]">ATP</span>{" "}
                       <span className="text-primary">Tarifario Web</span>
                     </span>
+                    {isExpo && (
+                      <span className="text-xs text-purple-800 font-[600]">
+                        EXPO
+                      </span>
+                    )}
                   </div>
                   <ChevronsUpDown className="ml-auto" />
                 </SidebarMenuButton>
@@ -120,8 +127,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 className="w-[--radix-dropdown-menu-trigger-width]"
                 align="start"
               >
-                <DropdownMenuItem>Importar</DropdownMenuItem>
-                <DropdownMenuItem>Exportar</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setIsExpo(false)}>
+                  Importar
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setIsExpo(true)}>
+                  Exportar
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             {state === "expanded" && <SidebarTrigger />}
