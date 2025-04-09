@@ -28,9 +28,10 @@ export const QuotationsService = {
   getFinishedQuotations: async (
     page: number = 1,
     pageSize: number = 10,
+    isExpo: boolean = false,
     timeFilter?: "day" | "week" | "month",
   ) => {
-    const url = `${API_BASE_URL}/quotations/finished?page=${page}&pageSize=${pageSize}${
+    const url = `${API_BASE_URL}/quotations/finished?page=${page}&pageSize=${pageSize}&isExpo=${isExpo}${
       timeFilter ? `&timeFilter=${timeFilter}` : ""
     }`;
 

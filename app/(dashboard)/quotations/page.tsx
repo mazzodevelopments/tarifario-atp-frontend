@@ -104,6 +104,7 @@ export default function Quotations() {
           ? await QuotationsService.getFinishedQuotations(
               currentPage,
               10,
+              isExpo,
               timeFilter || undefined,
             )
           : await QuotationsService.getUserFinishedQuotations(
