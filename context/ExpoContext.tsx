@@ -23,9 +23,12 @@ export function ExpoProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const setIsExpo = (value: boolean) => {
-    setIsExpoState(value);
-    if (mounted) {
-      localStorage.setItem("isExpo", value.toString());
+    if (isExpo !== value) {
+      setIsExpoState(value);
+      if (mounted) {
+        localStorage.setItem("isExpo", value.toString());
+      }
+      window.location.reload();
     }
   };
 
