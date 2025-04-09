@@ -1,7 +1,7 @@
 "use client";
 
-import * as React from "react";
-import { createContext, useContext, useState } from "react";
+import type * as React from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
 type ExpoContextType = {
   isExpo: boolean;
@@ -11,7 +11,23 @@ type ExpoContextType = {
 const ExpoContext = createContext<ExpoContextType | undefined>(undefined);
 
 export function ExpoProvider({ children }: { children: React.ReactNode }) {
-  const [isExpo, setIsExpo] = useState(false);
+  const [isExpo, setIsExpoState] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    const storedValue = localStorage.getItem("isExpo");
+    if (storedValue !== null) {
+      setIsExpoState(storedValue === "true");
+    }
+    setMounted(true);
+  }, []);
+
+  const setIsExpo = (value: boolean) => {
+    setIsExpoState(value);
+    if (mounted) {
+      localStorage.setItem("isExpo", value.toString());
+    }
+  };
 
   return (
     <ExpoContext.Provider value={{ isExpo, setIsExpo }}>

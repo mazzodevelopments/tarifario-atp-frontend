@@ -7,6 +7,7 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AnimatePresence } from "framer-motion";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { useRouter } from "next/navigation";
+import { ExpoProvider } from "@/context/ExpoContext";
 
 export default function DashboardLayout({
   children,
@@ -23,16 +24,18 @@ export default function DashboardLayout({
 
   return (
     <ProtectedRoute>
-      <SidebarProvider>
-        <AppSidebar />
-        <SidebarInset>
-          <div className="flex flex-1 flex-col gap-4 overflow-hidden bg-neutral-50">
-            <AnimatePresence mode="wait">
-              <PageTransition>{children}</PageTransition>
-            </AnimatePresence>
-          </div>
-        </SidebarInset>
-      </SidebarProvider>
+      <ExpoProvider>
+        <SidebarProvider>
+          <AppSidebar />
+          <SidebarInset>
+            <div className="flex flex-1 flex-col gap-4 overflow-hidden bg-neutral-50">
+              <AnimatePresence mode="wait">
+                <PageTransition>{children}</PageTransition>
+              </AnimatePresence>
+            </div>
+          </SidebarInset>
+        </SidebarProvider>
+      </ExpoProvider>
     </ProtectedRoute>
   );
 }
