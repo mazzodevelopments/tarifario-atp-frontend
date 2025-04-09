@@ -50,9 +50,10 @@ export const QuotationsService = {
     page: number = 1,
     userId?: number,
     pageSize: number = 10,
+    isExpo: boolean = false,
     timeFilter?: "day" | "week" | "month",
   ) => {
-    const url = `${API_BASE_URL}/quotations/user-finished?page=${page}&pageSize=${pageSize}${
+    const url = `${API_BASE_URL}/quotations/user-finished?page=${page}&pageSize=${pageSize}&isExpo=${isExpo}${
       userId ? `&userId=${userId}` : ""
     }${timeFilter ? `&timeFilter=${timeFilter}` : ""}`;
 

@@ -111,6 +111,7 @@ export default function Quotations() {
               currentPage,
               user?.id,
               10,
+              isExpo,
               timeFilter || undefined,
             );
         setFinishedQuotations(data);
