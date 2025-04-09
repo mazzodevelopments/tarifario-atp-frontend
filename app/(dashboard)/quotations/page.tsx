@@ -31,6 +31,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { useExpo } from "@/context/ExpoContext";
 
 export default function Quotations() {
   const [unfinishedQuotations, setUnfinishedQuotations] = useState<
@@ -52,6 +53,7 @@ export default function Quotations() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const { user } = useAuth();
+  const { isExpo } = useExpo();
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -86,6 +88,7 @@ export default function Quotations() {
           await QuotationsService.getAssignedQuotations(
             currentPage,
             10,
+            isExpo,
             timeFilter || undefined,
           );
         setUnfinishedQuotations(data);
