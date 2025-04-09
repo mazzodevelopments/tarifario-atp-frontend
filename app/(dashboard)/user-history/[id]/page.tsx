@@ -18,6 +18,7 @@ import { AdminService } from "@/services/AdminService";
 import Image from "next/image";
 import { ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react";
 import RoleProtectedRoute from "@/components/RoleProtectedRoute";
+import { useExpo } from "@/context/ExpoContext";
 
 export default function UserHistory() {
   const [userQuotations, setUserQuotations] = useState<HistoryQuotationCard[]>(
@@ -30,12 +31,14 @@ export default function UserHistory() {
   } | null>({ key: "stage", direction: "ascending" });
 
   const { id } = useParams();
+  const { isExpo } = useExpo();
 
   useEffect(() => {
     const fetchUserQuotations = async () => {
       try {
         const quotations = await QuotationsService.getQuotationsByUserId(
           Number(id),
+          isExpo,
         );
         setUserQuotations(quotations);
       } catch (error) {
@@ -54,7 +57,7 @@ export default function UserHistory() {
 
     fetchUserQuotations();
     getUser();
-  });
+  }, []);
 
   const requestSort = (key: string) => {
     let direction = "ascending";

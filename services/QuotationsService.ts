@@ -114,38 +114,6 @@ export const QuotationsService = {
     return await response.json();
   },
 
-  getLastModifiedQuotation: async () => {
-    const response = await fetch(
-      `${API_BASE_URL}/quotations/last-modified-quotation`,
-      {
-        method: "GET",
-      },
-    );
-
-    if (!response.ok) {
-      throw new Error("Error al traer las ultimas cotizaciones");
-    }
-
-    return await response.json();
-  },
-
-  getUserLastModifiedQuotation: async () => {
-    const response = await fetch(
-      `${API_BASE_URL}/quotations/user-last-modified`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      },
-    );
-
-    if (!response.ok) {
-      throw new Error("Error al traer las ultimas cotizaciones");
-    }
-
-    return await response.json();
-  },
   searchQuotationByTaskNumber: async (
     term: string,
     isExpo: boolean = false,
@@ -163,13 +131,16 @@ export const QuotationsService = {
 
     return await response.json();
   },
-  getQuotationsByUserId: async (userId: number) => {
-    const response = await fetch(`${API_BASE_URL}/quotations/user/${userId}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+  getQuotationsByUserId: async (userId: number, isExpo: boolean = false) => {
+    const response = await fetch(
+      `${API_BASE_URL}/quotations/user/${userId}?isExpo=${isExpo}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       },
-    });
+    );
 
     if (!response.ok) {
       throw new Error("Error al traer las ultimas cotizaciones");
