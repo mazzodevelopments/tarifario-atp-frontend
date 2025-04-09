@@ -20,6 +20,7 @@ import { QuotationsService } from "@/services/QuotationsService";
 import PagesHeader from "./pagesHeader";
 import SearchInput from "@/components/SearchInput";
 import QuotationsList from "../components/LastModifiedQuotationsList";
+import { useExpo } from "@/context/ExpoContext";
 
 export default function UserPage() {
   const { user, logout } = useAuth();
@@ -33,6 +34,7 @@ export default function UserPage() {
   >([]);
   const [finishedQuotations, setFinishedQuotations] = useState<number>(0);
   const [shouldFetch, setShouldFetch] = useState(false);
+  const { isExpo } = useExpo();
 
   useEffect(() => {
     const fetchLastModifiedQuotations = async () => {
@@ -66,7 +68,8 @@ export default function UserPage() {
 
   const fetchSearchResults = async (searchTerm: string) => {
     const data = await QuotationsService.searchQuotationByTaskNumber(
-      searchTerm
+      searchTerm,
+      isExpo,
     );
 
     return data.map(
@@ -74,7 +77,7 @@ export default function UserPage() {
         id: item.id,
         name: item.taskNumber,
         step: item.step,
-      })
+      }),
     );
   };
 

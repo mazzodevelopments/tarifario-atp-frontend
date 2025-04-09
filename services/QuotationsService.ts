@@ -146,10 +146,14 @@ export const QuotationsService = {
   },
   searchQuotationByTaskNumber: async (
     term: string,
+    isExpo: boolean = false,
   ): Promise<{ id: number; taskNumber: string; step: number }[]> => {
-    const response = await fetch(`${API_BASE_URL}/quotations/search/${term}`, {
-      method: "GET",
-    });
+    const response = await fetch(
+      `${API_BASE_URL}/quotations/search/${term}?isExpo=${isExpo}`,
+      {
+        method: "GET",
+      },
+    );
 
     if (!response.ok) {
       throw new Error("Error al traer las ultimas cotizaciones");

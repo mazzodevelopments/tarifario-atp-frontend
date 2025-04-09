@@ -219,8 +219,10 @@ export default function Quotations() {
   const sortedFinishedQuotations = getSortedQuotations(finishedQuotations);
 
   const fetchSearchResults = async (searchTerm: string) => {
-    const data =
-      await QuotationsService.searchQuotationByTaskNumber(searchTerm);
+    const data = await QuotationsService.searchQuotationByTaskNumber(
+      searchTerm,
+      isExpo,
+    );
 
     return data.map(
       (item: { id: number; taskNumber: string; step: number }) => ({

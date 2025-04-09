@@ -51,8 +51,10 @@ export default function AdminPage() {
   }, []);
 
   const fetchSearchResults = async (searchTerm: string) => {
-    const data =
-      await QuotationsService.searchQuotationByTaskNumber(searchTerm);
+    const data = await QuotationsService.searchQuotationByTaskNumber(
+      searchTerm,
+      isExpo,
+    );
 
     return data.map(
       (item: { id: number; taskNumber: string; step: number }) => ({
