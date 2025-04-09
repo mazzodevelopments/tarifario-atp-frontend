@@ -19,8 +19,14 @@ export const QuoteService = {
 
     return await response.text();
   },
-  createQuotation: async (quotationData: CreateQuotationData) => {
-    const response = await fetch(`${API_BASE_URL}/quote`, {
+  createQuotation: async (
+    quotationData: CreateQuotationData,
+    isExpo: boolean = false,
+  ) => {
+    const url = new URL(`${API_BASE_URL}/quote`);
+    url.searchParams.append("isExpo", String(isExpo));
+
+    const response = await fetch(url.toString(), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -30,7 +36,7 @@ export const QuoteService = {
     });
 
     if (!response.ok) {
-      throw new Error("Error al agregar el item");
+      throw new Error("Error al crear la cotización");
     }
 
     return await response.json();

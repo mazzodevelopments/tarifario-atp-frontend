@@ -11,6 +11,7 @@ import { adaptToDropdown } from "@/app/adapters/adaptToDropdown";
 import BuyerForm from "@/app/(dashboard)/create/[quotationId]/quotation-details/forms/BuyerForm";
 import ClientForm from "@/app/(dashboard)/create/[quotationId]/quotation-details/forms/ClientForm";
 import Button from "@/components/Button";
+import { useExpo } from "@/context/ExpoContext";
 
 interface QuotationDetailsProps {
   onSubmitSuccess: (quotationId: number) => void;
@@ -31,7 +32,7 @@ export default function QuotationDetails({
     items: null,
     budgets: null,
   });
-
+  const { isExpo } = useExpo();
   const [selectedClientId, setSelectedClientId] = useState<number | null>(null);
   const [selectedBuyerId, setSelectedBuyerId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -173,8 +174,10 @@ export default function QuotationDetails({
         customerRequestNumber: formData.customerRequestNumber,
       };
 
-      const quotationId =
-        await QuoteService.createQuotation(createQuotationData);
+      const quotationId = await QuoteService.createQuotation(
+        createQuotationData,
+        isExpo,
+      );
       onSubmitSuccess(quotationId);
     } catch (error) {
       console.error("Error creating quotation:", error);
