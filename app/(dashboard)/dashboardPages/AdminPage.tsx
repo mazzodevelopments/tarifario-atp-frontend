@@ -22,6 +22,7 @@ import { ChevronDown, LogOut, Settings } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import QuotationsList from "../components/LastModifiedQuotationsList";
+import { useExpo } from "@/context/ExpoContext";
 
 export default function AdminPage() {
   const [lastQuotations, setLastQuotations] = useState<
@@ -34,11 +35,12 @@ export default function AdminPage() {
   >([]);
 
   const { user, logout } = useAuth();
+  const { isExpo } = useExpo();
 
   useEffect(() => {
     const fetchLastFiveQuotations = async () => {
       try {
-        const data = await QuotationsService.getLastModifiedQuotations();
+        const data = await QuotationsService.getLastModifiedQuotations(isExpo);
         setLastQuotations(data);
       } catch (error) {
         console.error("Error:", error);

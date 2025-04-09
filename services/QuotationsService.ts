@@ -98,28 +98,11 @@ export const QuotationsService = {
     return await response.json();
   },
 
-  getLastModifiedQuotations: async () => {
-    const response = await fetch(`${API_BASE_URL}/quotations/last-modified`, {
+  getLastModifiedQuotations: async (isExpo = false) => {
+    const url = `${API_BASE_URL}/quotations/last-modified${isExpo ? "?isExpo=true" : ""}`;
+    const response = await fetch(url, {
       method: "GET",
     });
-
-    if (!response.ok) {
-      throw new Error("Error al traer las ultimas cotizaciones");
-    }
-
-    return await response.json();
-  },
-
-  getUserLastFiveFinishedQuotations: async () => {
-    const response = await fetch(
-      `${API_BASE_URL}/quotations/user-last-five-finished`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      },
-    );
 
     if (!response.ok) {
       throw new Error("Error al traer las ultimas cotizaciones");
