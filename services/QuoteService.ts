@@ -86,15 +86,22 @@ export const QuoteService = {
     console.log("Item agregado:", data);
     return data;
   },
-  addItems: async (newItems: CreateMassiveLoadItems[], quotationId: number) => {
-    const response = await fetch(`${API_BASE_URL}/quote/${quotationId}/items`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+  addItems: async (
+    newItems: CreateMassiveLoadItems[],
+    quotationId: number,
+    isExpo: boolean,
+  ) => {
+    const response = await fetch(
+      `${API_BASE_URL}/quote/${quotationId}/items?isExpo=${isExpo}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(newItems),
       },
-      body: JSON.stringify(newItems),
-    });
+    );
 
     if (!response.ok) {
       throw new Error("Error al agregar los items");

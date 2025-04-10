@@ -178,7 +178,7 @@ export default function ItemsList({ quotationId }: { quotationId: number }) {
           }
 
           try {
-            await QuoteService.addItems(validItems, quotationId);
+            await QuoteService.addItems(validItems, quotationId, isExpo);
             setShouldFetch(true);
             toast({
               title: "Items cargados",
