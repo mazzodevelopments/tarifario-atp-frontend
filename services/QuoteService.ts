@@ -104,15 +104,22 @@ export const QuoteService = {
     console.log("Item agregado:", data);
     return data;
   },
-  updateItem: async (editedItem: CreateItem, itemToEditId: number) => {
-    const response = await fetch(`${API_BASE_URL}/quote/item`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+  updateItem: async (
+    editedItem: CreateItem,
+    itemToEditId: number,
+    isExpo: boolean = false,
+  ) => {
+    const response = await fetch(
+      `${API_BASE_URL}/quote/item?isExpo=${isExpo}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ ...editedItem, id: itemToEditId }),
       },
-      body: JSON.stringify({ ...editedItem, id: itemToEditId }),
-    });
+    );
 
     if (!response.ok) {
       throw new Error("Error al editar el item");

@@ -94,6 +94,7 @@ export default function ItemsList({ quotationId }: { quotationId: number }) {
       const updatedItem = await QuoteService.updateItem(
         newUpdatedItem,
         editingItem!.id,
+        isExpo,
       );
       setItems(
         items.map((item) => (item.id === updatedItem.id ? updatedItem : item)),
