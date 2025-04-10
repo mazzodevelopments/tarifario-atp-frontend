@@ -158,9 +158,13 @@ export const QuoteService = {
   },
 
   // ETAPA 3
-  getQuotationBudgets: async (quotationId: number, query: string) => {
+  getQuotationBudgets: async (
+    quotationId: number,
+    isExpo: boolean = false,
+    query: string,
+  ) => {
     const response = await fetch(
-      `${API_BASE_URL}/quote/${quotationId}/budgets?includes=${query}`,
+      `${API_BASE_URL}/quote/${quotationId}/budgets?isExpo=${isExpo}&includes=${query}`,
       {
         method: "GET",
         headers: {
@@ -178,6 +182,7 @@ export const QuoteService = {
   addPurchaseData: async (
     newPurchaseData: CreatePurchaseData,
     quotationId: number,
+    isExpo: boolean = false,
   ) => {
     console.log(
       "LLAMADO A LA API PARA AGREGAR PURCHASE DATA",
@@ -185,7 +190,7 @@ export const QuoteService = {
       quotationId,
     );
     const response = await fetch(
-      `${API_BASE_URL}/quote/${quotationId}/budgets`,
+      `${API_BASE_URL}/quote/${quotationId}/budgets?isExpo=${isExpo}`,
       {
         method: "POST",
         headers: {
@@ -210,9 +215,12 @@ export const QuoteService = {
       editedPurchaseData,
     );
   },
-  deletePurchaseData: async (purchaseDataId: number) => {
+  deletePurchaseData: async (
+    purchaseDataId: number,
+    isExpo: boolean = false,
+  ) => {
     const response = await fetch(
-      `${API_BASE_URL}/quote/purchaseData/${purchaseDataId}`,
+      `${API_BASE_URL}/quote/purchaseData/${purchaseDataId}?isExpo=${isExpo}`,
       {
         method: "DELETE",
         headers: {

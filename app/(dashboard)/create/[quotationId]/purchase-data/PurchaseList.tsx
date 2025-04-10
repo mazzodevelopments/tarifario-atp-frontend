@@ -45,6 +45,7 @@ export default function PurchaseList({ quotationId }: { quotationId: number }) {
         setIsLoading(true);
         const quotationBudgets = await QuoteService.getQuotationBudgets(
           quotationId,
+          isExpo,
           "purchase-data",
         );
         setBudgets(quotationBudgets);
@@ -85,7 +86,7 @@ export default function PurchaseList({ quotationId }: { quotationId: number }) {
 
   const onPurchaseCreated = async (newPurchase: CreatePurchaseData) => {
     try {
-      await QuoteService.addPurchaseData(newPurchase, quotationId);
+      await QuoteService.addPurchaseData(newPurchase, quotationId, isExpo);
       setShowCreateModal(false);
       setShouldFetch(true);
       toast({
@@ -104,7 +105,7 @@ export default function PurchaseList({ quotationId }: { quotationId: number }) {
 
   const handleDeleteBudget = async (id: number) => {
     try {
-      await QuoteService.deletePurchaseData(id);
+      await QuoteService.deletePurchaseData(id, isExpo);
       setBudgets(budgets.filter((budget) => budget.id !== id));
       setShouldFetch(true);
       toast({
