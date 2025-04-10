@@ -29,6 +29,7 @@ import { useEffect, useRef, useState } from "react";
 import * as XLSX from "xlsx";
 import type React from "react";
 import { QuoteService } from "@/services/QuoteService";
+import { useExpo } from "@/context/ExpoContext";
 
 export default function ItemsList({ quotationId }: { quotationId: number }) {
   const [items, setItems] = useState<ListedItem[]>([]);
@@ -37,6 +38,7 @@ export default function ItemsList({ quotationId }: { quotationId: number }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
+  const { isExpo } = useExpo();
 
   useEffect(() => {
     if (!shouldFetch) return;
@@ -44,8 +46,10 @@ export default function ItemsList({ quotationId }: { quotationId: number }) {
     const fetchQuotationItems = async () => {
       try {
         setIsLoading(true);
-        const quotationItems =
-          await QuoteService.getQuotationItems(quotationId);
+        const quotationItems = await QuoteService.getQuotationItems(
+          quotationId,
+          isExpo,
+        );
         setItems(quotationItems);
         setIsLoading(false);
         setShouldFetch(false);
@@ -67,7 +71,7 @@ export default function ItemsList({ quotationId }: { quotationId: number }) {
 
   const handleItemCreated = async (newItem: CreateItemType) => {
     try {
-      const item = await QuoteService.addItem(newItem, quotationId);
+      const item = await QuoteService.addItem(newItem, quotationId, isExpo);
       setItems([...items, item]);
       setShouldFetch(true);
       setIsDialogOpen(false);

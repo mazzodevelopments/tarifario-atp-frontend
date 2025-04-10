@@ -43,13 +43,16 @@ export const QuoteService = {
   },
 
   // ETAPA 2
-  getQuotationItems: async (quotationId: number) => {
-    const response = await fetch(`${API_BASE_URL}/quote/${quotationId}/items`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+  getQuotationItems: async (quotationId: number, isExpo: boolean = false) => {
+    const response = await fetch(
+      `${API_BASE_URL}/quote/${quotationId}/items?isExpo=${isExpo}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       },
-    });
+    );
 
     if (!response.ok) {
       throw new Error("Error al traer el task-number");
@@ -57,16 +60,23 @@ export const QuoteService = {
 
     return await response.json();
   },
-  addItem: async (newItem: CreateItem, quotationId: number) => {
+  addItem: async (
+    newItem: CreateItem,
+    quotationId: number,
+    isExpo: boolean = true,
+  ) => {
     console.log("LLAMADO A LA API PARA AGREGAR ITEM", newItem, quotationId);
-    const response = await fetch(`${API_BASE_URL}/quote/${quotationId}/item`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+    const response = await fetch(
+      `${API_BASE_URL}/quote/${quotationId}/item?isExpo=${isExpo}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(newItem),
       },
-      body: JSON.stringify(newItem),
-    });
+    );
 
     if (!response.ok) {
       throw new Error("Error al agregar el item");

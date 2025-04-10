@@ -26,6 +26,7 @@ import { X } from "react-feather";
 import "@/utils/formatNumber";
 import { PlusCircle } from "lucide-react";
 import { QuoteService } from "@/services/QuoteService";
+import { useExpo } from "@/context/ExpoContext";
 
 export default function PurchaseList({ quotationId }: { quotationId: number }) {
   const [items, setItems] = useState<Item[]>([]);
@@ -34,6 +35,7 @@ export default function PurchaseList({ quotationId }: { quotationId: number }) {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
+  const { isExpo } = useExpo();
 
   useEffect(() => {
     if (!shouldFetch) return;
@@ -61,8 +63,10 @@ export default function PurchaseList({ quotationId }: { quotationId: number }) {
 
     const fetchQuotationItems = async () => {
       try {
-        const quotationItems =
-          await QuoteService.getQuotationItems(quotationId);
+        const quotationItems = await QuoteService.getQuotationItems(
+          quotationId,
+          isExpo,
+        );
         setItems(quotationItems);
         setShouldFetch(false);
       } catch (error) {
