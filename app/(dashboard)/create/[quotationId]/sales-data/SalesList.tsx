@@ -27,6 +27,7 @@ import "@/utils/formatNumber";
 import { QuoteService } from "@/services/QuoteService";
 import { useToast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
+import { useExpo } from "@/context/ExpoContext";
 
 export default function SalesList({ quotationId }: { quotationId: number }) {
   const [budgets, setBudgets] = useState<Budget[]>([]);
@@ -38,6 +39,7 @@ export default function SalesList({ quotationId }: { quotationId: number }) {
   const [editingMargin, setEditingMargin] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
+  const { isExpo } = useExpo();
 
   // ROW SELECTION (EN PROCESO)
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
@@ -51,6 +53,7 @@ export default function SalesList({ quotationId }: { quotationId: number }) {
         setIsLoading(true);
         const quotationBudgets = await QuoteService.getQuotationBudgets(
           quotationId,
+          isExpo,
           "sales-data",
         );
         setBudgets(quotationBudgets);

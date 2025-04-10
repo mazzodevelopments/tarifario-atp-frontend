@@ -76,6 +76,7 @@ export default function LogisticList({ quotationId }: { quotationId: number }) {
         setIsLoading(true);
         const quotationBudgets = await QuoteService.getQuotationBudgets(
           quotationId,
+          isExpo,
           "freight",
         );
         setBudgets(quotationBudgets);

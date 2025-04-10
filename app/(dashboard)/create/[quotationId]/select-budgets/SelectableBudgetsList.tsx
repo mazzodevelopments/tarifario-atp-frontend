@@ -11,6 +11,7 @@ import type { Budget } from "@/types/Budget";
 import "@/utils/formatNumber";
 import React, { useEffect, useState } from "react";
 import { QuoteService } from "@/services/QuoteService";
+import { useExpo } from "@/context/ExpoContext";
 
 interface SelectableSalesListProps {
   quotationId: number;
@@ -25,6 +26,7 @@ export default function SelectableBudgetsList({
   const [selectedBudgets, setSelectedBudgets] = useState<Budget[]>([]);
   const [shouldFetch, setShouldFetch] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
+  const { isExpo } = useExpo();
 
   useEffect(() => {
     if (!shouldFetch) return;
@@ -34,6 +36,7 @@ export default function SelectableBudgetsList({
         setIsLoading(true);
         const quotationBudgets = await QuoteService.getQuotationBudgets(
           quotationId,
+          isExpo,
           "sales-data",
         );
         setBudgets(quotationBudgets);
