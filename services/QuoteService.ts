@@ -129,13 +129,19 @@ export const QuoteService = {
     console.log("Item editado:", data);
     return data;
   },
-  deleteItem: async (itemId: number): Promise<{ message: string }> => {
-    const response = await fetch(`${API_BASE_URL}/quote/items/${itemId}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+  deleteItem: async (
+    itemId: number,
+    isExpo: boolean = false,
+  ): Promise<{ message: string }> => {
+    const response = await fetch(
+      `${API_BASE_URL}/quote/items/${itemId}?isExpo=${isExpo}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       },
-    });
+    );
 
     if (!response.ok) {
       throw new Error("Error al eliminar el item");

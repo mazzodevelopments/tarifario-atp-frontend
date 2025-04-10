@@ -117,7 +117,7 @@ export default function ItemsList({ quotationId }: { quotationId: number }) {
 
   const handleDeleteItem = async (id: number) => {
     try {
-      await QuoteService.deleteItem(id);
+      await QuoteService.deleteItem(id, isExpo);
       setItems(items.filter((item) => item.id !== id));
       toast({
         title: "Item eliminado",
