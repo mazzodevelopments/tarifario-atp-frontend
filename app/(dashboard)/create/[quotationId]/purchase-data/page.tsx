@@ -3,13 +3,15 @@ import { useParams, useRouter } from "next/navigation";
 import PurchaseList from "@/app/(dashboard)/create/[quotationId]/purchase-data/PurchaseList";
 import Button from "@/components/Button";
 import { QuoteService } from "@/services/QuoteService";
+import { useExpo } from "@/context/ExpoContext";
 
 export default function PurchaseDataStep() {
   const router = useRouter();
   const { quotationId } = useParams();
+  const { isExpo } = useExpo();
 
   const handleNext = async () => {
-    await QuoteService.updateQuotationStep(Number(quotationId), 3);
+    await QuoteService.updateQuotationStep(Number(quotationId), 3, isExpo);
     router.push(`/create/${quotationId}/logistic`);
   };
 

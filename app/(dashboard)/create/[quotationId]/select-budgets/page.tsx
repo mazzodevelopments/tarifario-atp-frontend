@@ -5,10 +5,12 @@ import Button from "@/components/Button";
 import { useState } from "react";
 import { Budget } from "@/types/Budget";
 import { QuoteService } from "@/services/QuoteService";
+import { useExpo } from "@/context/ExpoContext";
 
 export default function SelectBudgetsStep() {
   const router = useRouter();
   const { quotationId } = useParams();
+  const { isExpo } = useExpo();
   const [budgets, setBudgets] = useState<Budget[]>([]);
 
   const handleNext = async () => {
@@ -16,7 +18,7 @@ export default function SelectBudgetsStep() {
       const budgetIds = budgets.map((budget) => budget.id);
 
       await QuoteService.selectBudgets(budgetIds, Number(quotationId));
-      await QuoteService.updateQuotationStep(Number(quotationId), 6);
+      await QuoteService.updateQuotationStep(Number(quotationId), 6, isExpo);
       router.push(`/create/${quotationId}/review`);
     } catch (error) {
       console.error("Error al seleccionar presupuestos:", error);

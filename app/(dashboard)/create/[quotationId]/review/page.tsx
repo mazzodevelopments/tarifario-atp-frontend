@@ -3,14 +3,15 @@ import { useParams, useRouter } from "next/navigation";
 import SelectedBudgetsList from "@/app/(dashboard)/create/[quotationId]/review/SelectedBudgetsList";
 import Button from "@/components/Button";
 import { QuoteService } from "@/services/QuoteService";
+import { useExpo } from "@/context/ExpoContext";
 
 export default function ReviewStep() {
   const router = useRouter();
-
   const { quotationId } = useParams();
+  const { isExpo } = useExpo();
 
   const handleCreate = async () => {
-    await QuoteService.updateQuotationStep(Number(quotationId), 7);
+    await QuoteService.updateQuotationStep(Number(quotationId), 7, isExpo);
     router.push(`/create/${quotationId}/confirm`);
   };
 

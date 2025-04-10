@@ -360,9 +360,13 @@ export const QuoteService = {
   },
 
   // TODAS LAS ETAPAS
-  updateQuotationStep: async (quotationId: number, step: number) => {
+  updateQuotationStep: async (
+    quotationId: number,
+    step: number,
+    isExpo: boolean = false,
+  ) => {
     const response = await fetch(
-      `${API_BASE_URL}/quote/${quotationId}/update-step`,
+      `${API_BASE_URL}/quote/${quotationId}/update-step?isExpo=${isExpo}`,
       {
         method: "PUT",
         headers: {
